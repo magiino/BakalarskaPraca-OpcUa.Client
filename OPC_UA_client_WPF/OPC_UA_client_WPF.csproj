@@ -93,5 +93,15 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="Client\UA Client Library.csproj">
+      <Project>{42e9198c-ed2c-4bc8-b0a1-55d91d8f1e90}</Project>
+      <Name>UA Client Library</Name>
+    </ProjectReference>
+    <ProjectReference Include="Stack\Core\UA Core Library.csproj">
+      <Project>{7543afcb-f5af-44af-83c9-23164474c1e9}</Project>
+      <Name>UA Core Library</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
