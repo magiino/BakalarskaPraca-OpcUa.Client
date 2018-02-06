@@ -5532,7 +5532,7 @@ namespace Opc.Ua
         /// <summary>
         /// A description for the DeleteFileMethodType Method.
         /// </summary>
-        public DeleteFileMethodState Delete
+        public new DeleteFileMethodState Delete
         {
             get
             {

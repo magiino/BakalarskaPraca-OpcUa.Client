@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.IO;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
@@ -36,6 +37,11 @@ namespace OPC_UA_client_WPF
         /// <param name="e"></param>
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            foreach (var drive in Directory.GetLogicalDrives())
+            {
+                var item = new TreeViewItem();
+                NodeView.Items.Add(item);
+            } 
 
         }
     }
