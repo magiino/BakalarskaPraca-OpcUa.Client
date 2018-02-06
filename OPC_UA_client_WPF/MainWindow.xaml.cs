@@ -20,9 +20,23 @@ namespace OPC_UA_client_WPF
     /// </summary>
     public partial class MainWindow : Window
     {
+        #region Constructor
+
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        #endregion
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

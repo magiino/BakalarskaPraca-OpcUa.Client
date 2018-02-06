@@ -4,9 +4,27 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:OPC_UA_client_WPF"
+        Loaded="Window_Loaded"
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525">
     <Grid>
-        
+        <TreeView x:Name="NodeView">
+            <TreeView.Resources>
+                
+                <Style TargetType="{x:Type TreeViewItem}">
+                    <Setter Property="HeaderTemplate">
+                        <Setter.Value>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <Image Width="20" Margin="3" Source="Images/drive.png"/>
+                                    <TextBlock VerticalAlignment="Center" Text="Some Folder"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+                
+            </TreeView.Resources>
+        </TreeView>
     </Grid>
 </Window>
