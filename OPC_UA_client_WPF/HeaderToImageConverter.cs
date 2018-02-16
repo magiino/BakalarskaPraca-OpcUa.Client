@@ -17,20 +17,6 @@ namespace OPC_UA_client_WPF
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-             /*       
-            // By default, we presume an image
-            var image = "Images/file.png";
-
-            switch ((DirectoryItemType)value)
-            {
-                case DirectoryItemType.Drive:
-                    image = "Images/drive.png";
-                    break;
-                case DirectoryItemType.Folder:
-                    image = "Images/folder-closed.png";
-                    break;
-            }
-            */
             return new BitmapImage(new Uri($"pack://application:,,,/Images/{value}.png"));
         }
 
