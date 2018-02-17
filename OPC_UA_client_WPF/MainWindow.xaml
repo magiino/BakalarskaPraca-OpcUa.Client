@@ -5,8 +5,16 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:OPC_UA_client_WPF"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
-    <Grid>
+        WindowStartupLocation="CenterScreen"
+        Title="OPC UA Client" Height="600" Width="900">
+    <Border Background="{StaticResource BackgroundGreyBrush}">
+        <Frame Source=""></Frame>
+    </Border>
+
+</Window>
+
+
+<!-- Pred pripravené treeView
         <TreeView x:Name="FolderView" ItemsSource="{Binding Items}">
 
             <TreeView.ItemContainerStyle>
@@ -27,5 +35,4 @@
             </TreeView.ItemTemplate>
 
         </TreeView>
-    </Grid>
-</Window>
+        -->

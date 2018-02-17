@@ -1,17 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.IO;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
+﻿using System.Windows;
+
 using Siemens.UAClientHelper;
 using Opc.Ua;
 using Opc.Ua.Client;
@@ -35,7 +23,7 @@ namespace OPC_UA_client_WPF
         public MainWindow()
         {
             InitializeComponent();
-            this.DataContext = new DirectoryStructureViewModel();
+            //this.DataContext = new DirectoryStructureViewModel();
 
             //myClientHelperAPI = new UAClientHelperAPI();
             //Connect();

@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Globalization;
-using System.IO;
 using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Media.Imaging;
 
 namespace OPC_UA_client_WPF
@@ -17,7 +15,7 @@ namespace OPC_UA_client_WPF
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return new BitmapImage(new Uri($"pack://application:,,,/Images/{value}.png"));
+            return new BitmapImage(new Uri($"pack://application:,,,/Resources/Images/{value}.png"));
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

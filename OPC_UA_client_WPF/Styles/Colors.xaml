@@ -2,6 +2,11 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:OPC_UA_client_WPF">
 
+
+
+    <Color x:Key="BackgroundGrey">#3c3c3c</Color>
+    <SolidColorBrush x:Key="BackgroundGreyBrush" Color="{StaticResource BackgroundGrey}" />
+
     <Color x:Key="BackgroundLight">#efefef</Color>
     <SolidColorBrush x:Key="BackgroundLightBrush" Color="{StaticResource BackgroundLight}" />
 

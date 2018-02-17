@@ -1,0 +1,64 @@
+﻿<Page x:Class="OPC_UA_client_WPF.WelcomePage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:OPC_UA_client_WPF"
+      mc:Ignorable="d" 
+      d:DesignHeight="500" d:DesignWidth="600"
+      Title="WelcomePage">
+
+    <Border>
+        <Grid>
+            <!-- Main content scroll -->
+            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                <StackPanel 
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="Center"
+                    TextBlock.TextAlignment="Center">
+
+                    <!-- Welcome main content white box -->
+                    <Border Background="{StaticResource ForegroundLightBrush}" 
+                            CornerRadius="10"
+                            Padding="15 50 15 15"
+                            Width="330"
+                            Margin="50 50 50 50">
+
+                        <StackPanel>
+
+                            <!-- Welcome header -->
+                            <TextBlock Text="Welcome!" 
+                                   FontSize="{StaticResource FontSizeXXLarge}" 
+                                   FontFamily="{StaticResource LatoRegular}"
+                                   Foreground="{StaticResource WordBlueBrush}" />
+                            <!-- Welcome multiline text -->
+                            <StackPanel Orientation="Vertical" Width="250" Margin="0 10 0 40">
+                                <TextBlock FontSize="{StaticResource FontSizeRegular}"
+                                           FontFamily="{StaticResource LatoRegular}"
+                                           TextWrapping="Wrap" 
+                                           Text="Lorem ipsum dolor, lorem isum dolor,Lorem ipsum dolor sit amet, lorem ipsum dolor sit amet " />
+                            </StackPanel>
+
+                            <!-- New setting button -->
+                            <Button Content="New Session" 
+                                    IsDefault="True"
+                                    Command="{Binding NewSessionCommand}"
+                                    HorizontalAlignment="Center" />
+
+                            <!-- Load setting button -->
+                            <Button Content="Load Session" 
+                                    IsDefault="True"
+                                    Command="{Binding LoadSessionCommand}"
+                                    HorizontalAlignment="Center" />
+
+                        </StackPanel>
+
+                    </Border>
+
+
+
+                </StackPanel>
+            </ScrollViewer>
+        </Grid>
+    </Border>
+</Page>
