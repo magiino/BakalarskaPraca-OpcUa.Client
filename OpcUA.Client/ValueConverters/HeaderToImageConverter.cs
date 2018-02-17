@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.Windows.Data;
 using System.Windows.Media.Imaging;
+using OpcUA.Client.Core;
 
 namespace OpcUA.Client
 {

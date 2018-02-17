@@ -2,7 +2,7 @@
 using System.IO;
 using System.Linq;
 
-namespace OpcUA.Client
+namespace OpcUA.Client.Core
 {
     /// <summary>
     /// A helper class to query information about directories

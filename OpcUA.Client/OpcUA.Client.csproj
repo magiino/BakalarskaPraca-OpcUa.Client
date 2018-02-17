@@ -70,14 +70,7 @@
     <Compile Include="Controls\MenuToolBar.xaml.cs">
       <DependentUpon>MenuToolBar.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Directory\Data\DirectoryItem.cs" />
-    <Compile Include="Directory\Data\DirectoryItemType.cs" />
-    <Compile Include="Directory\DirectoryStructure.cs" />
-    <Compile Include="Directory\ViewModels\Base\BaseViewModel.cs" />
-    <Compile Include="Directory\ViewModels\Base\RelayCommand.cs" />
-    <Compile Include="Directory\ViewModels\DirectoryItemViewModel.cs" />
-    <Compile Include="Directory\ViewModels\DirectoryStructureViewModel.cs" />
-    <Compile Include="HeaderToImageConverter.cs" />
+    <Compile Include="ValueConverters\HeaderToImageConverter.cs" />
     <Compile Include="Controls\MenuBar.xaml.cs">
       <DependentUpon>MenuBar.xaml</DependentUpon>
     </Compile>
@@ -151,7 +144,6 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <Resource Include="Resources\Fonts\fontawesome-webfont.ttf" />
     <Resource Include="Resources\Fonts\Lato-Black.ttf" />
     <Resource Include="Resources\Fonts\Lato-BlackItalic.ttf" />
     <Resource Include="Resources\Fonts\Lato-Bold.ttf" />
@@ -180,6 +172,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\OpcUA.Client.Core\OpcUA.Client.Core.csproj">
+      <Project>{694dec57-6b2f-44e9-a4b8-72995b23a129}</Project>
+      <Name>OpcUA.Client.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="Client\UA Client Library.csproj">
       <Project>{42e9198c-ed2c-4bc8-b0a1-55d91d8f1e90}</Project>
       <Name>UA Client Library</Name>

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Input;
 
-namespace OpcUA.Client
+namespace OpcUA.Client.Core
 {
     /// <summary>
     /// A basic command that runs an Action

@@ -1,4 +1,4 @@
-﻿namespace OpcUA.Client
+﻿namespace OpcUA.Client.Core
 {
     /// <summary>
     /// The type of a directory item

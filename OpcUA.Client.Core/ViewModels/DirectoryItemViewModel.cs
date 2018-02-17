@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Windows.Input;
 
-namespace OpcUA.Client
+namespace OpcUA.Client.Core
 {
     /// <summary>
     /// A view model for each directory item

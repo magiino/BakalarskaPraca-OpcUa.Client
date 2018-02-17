@@ -1,9 +1,5 @@
 ﻿using System.Windows;
 
-using Siemens.UAClientHelper;
-using Opc.Ua;
-using Opc.Ua.Client;
-
 namespace OpcUA.Client
 {
     /// <summary>

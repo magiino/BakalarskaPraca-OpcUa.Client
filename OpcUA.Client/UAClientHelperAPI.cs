@@ -28,8 +28,7 @@ using System.Xml;
 using Opc.Ua;
 using Opc.Ua.Client;
 
-
-namespace Siemens.UAClientHelper
+namespace OpcUA.Client
 {
     public class UAClientHelperAPI
     {

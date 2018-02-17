@@ -1,4 +1,4 @@
-﻿namespace OpcUA.Client
+﻿namespace OpcUA.Client.Core
 {
     /// <summary>
     /// Information about a directory item such as a drive, a file or a folder

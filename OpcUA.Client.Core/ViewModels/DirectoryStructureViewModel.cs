@@ -1,7 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.Linq;
 
-namespace OpcUA.Client
+namespace OpcUA.Client.Core
 {
     /// <summary>
     /// The view model for the applications main Directory view

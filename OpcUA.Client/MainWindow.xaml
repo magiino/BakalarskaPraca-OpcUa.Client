@@ -8,7 +8,6 @@
         WindowStartupLocation="CenterScreen"
         Title="OPC UA Client" Height="600" Width="900">
     <Border Background="{StaticResource BackgroundGreyBrush}">
-        <Frame Source=""></Frame>
     </Border>
 
 </Window>
