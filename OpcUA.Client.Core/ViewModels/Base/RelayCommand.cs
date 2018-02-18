@@ -3,6 +3,7 @@ using System.Windows.Input;
 
 namespace OpcUA.Client.Core
 {
+    /// <inheritdoc />
     /// <summary>
     /// A basic command that runs an Action
     /// </summary>
@@ -13,7 +14,7 @@ namespace OpcUA.Client.Core
         /// <summary>
         /// The action to run
         /// </summary>
-        private Action mAction;
+        private readonly Action _action;
 
         #endregion
 
@@ -33,7 +34,7 @@ namespace OpcUA.Client.Core
         /// </summary>
         public RelayCommand(Action action)
         {
-            mAction = action;
+            _action = action;
         }
 
         #endregion
@@ -56,7 +57,7 @@ namespace OpcUA.Client.Core
         /// <param name="parameter"></param>
         public void Execute(object parameter)
         {
-            mAction();
+            _action();
         }
 
         #endregion

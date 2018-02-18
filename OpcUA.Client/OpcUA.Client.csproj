@@ -69,6 +69,9 @@
     <Compile Include="Controls\MenuToolBar.xaml.cs">
       <DependentUpon>MenuToolBar.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\BasePage.cs" />
+    <Compile Include="ValueConverters\ApplicationPageValueConverter.cs" />
+    <Compile Include="ValueConverters\BaseValueConverter.cs" />
     <Compile Include="ValueConverters\HeaderToImageConverter.cs" />
     <Compile Include="Controls\MenuBar.xaml.cs">
       <DependentUpon>MenuBar.xaml</DependentUpon>

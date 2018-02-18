@@ -4,6 +4,7 @@ using System.Windows.Input;
 
 namespace OpcUA.Client.Core
 {
+    /// <inheritdoc />
     /// <summary>
     /// A view model for each directory item
     /// </summary>

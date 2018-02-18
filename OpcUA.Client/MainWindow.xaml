@@ -4,11 +4,15 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:OpcUA.Client"
+        xmlns:core="clr-namespace:OpcUA.Client.Core;assembly=OpcUA.Client.Core"
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
         Title="OPC UA Client" Height="600" Width="900">
-    <Border Background="{StaticResource BackgroundGreyBrush}">
-    </Border>
+
+    <Frame Content="{Binding ApplicationViewModel.CurrentPage,
+                                      Source={x:Static core:ViewModelLocator.Instance},
+                                      Converter={local:ApplicationPageValueConverter}}"
+               Background="Transparent"/>
 
 </Window>
 
@@ -34,4 +38,4 @@
             </TreeView.ItemTemplate>
 
         </TreeView>
-        -->
+-->

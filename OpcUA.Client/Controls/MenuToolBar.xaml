@@ -7,8 +7,9 @@
              xmlns:local="clr-namespace:OpcUA.Client"
              mc:Ignorable="d"
              x:Name="Toolbar"
+             Height="30"
              d:DesignHeight="30" d:DesignWidth="500">
-    <ToolBar Height="30">
+    <ToolBar>
         <Button x:Name="TbStart" ToolTip="Start communication">
             <fa:ImageAwesome Icon="PlayCircle"/>
         </Button>

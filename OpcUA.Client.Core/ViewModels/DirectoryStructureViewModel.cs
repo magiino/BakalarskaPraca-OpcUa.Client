@@ -3,6 +3,7 @@ using System.Linq;
 
 namespace OpcUA.Client.Core
 {
+    /// <inheritdoc />
     /// <summary>
     /// The view model for the applications main Directory view
     /// </summary>
