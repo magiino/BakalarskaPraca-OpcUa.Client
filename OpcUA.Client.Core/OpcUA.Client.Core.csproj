@@ -37,6 +37,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -49,6 +50,7 @@
     <Compile Include="Directory\Data\DirectoryItemType.cs" />
     <Compile Include="Directory\DirectoryStructure.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UAClientHelperAPI.cs" />
     <Compile Include="ViewModels\Base\BaseViewModel.cs" />
     <Compile Include="ViewModels\Base\RelayCommand.cs" />
     <Compile Include="ViewModels\DirectoryItemViewModel.cs" />
@@ -59,6 +61,16 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="FodyWeavers.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Client\UA Client Library.csproj">
+      <Project>{42e9198c-ed2c-4bc8-b0a1-55d91d8f1e90}</Project>
+      <Name>UA Client Library</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Stack\Core\UA Core Library.csproj">
+      <Project>{7543afcb-f5af-44af-83c9-23164474c1e9}</Project>
+      <Name>UA Core Library</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Fody.2.4.1\build\Fody.targets" Condition="Exists('..\packages\Fody.2.4.1\build\Fody.targets')" />
