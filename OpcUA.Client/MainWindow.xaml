@@ -9,10 +9,15 @@
         WindowStartupLocation="CenterScreen"
         Title="OPC UA Client" Height="600" Width="900">
 
-    <Frame Content="{Binding ApplicationViewModel.CurrentPage,
+    <Frame 
+        local:NoFrameHistory.Value="True"
+        d:DataContext=""
+        DataContext="{Binding ApplicationViewModel.CurrentPage,
                                       Source={x:Static core:ViewModelLocator.Instance},
                                       Converter={local:ApplicationPageValueConverter}}"
-               Background="Transparent"/>
+        Content="{Binding}"
+        Background="Transparent"
+               />
 
 </Window>
 

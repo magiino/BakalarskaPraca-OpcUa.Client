@@ -18,7 +18,10 @@
                 <TabItem Header="TreeView">
 
                 </TabItem>
-                <TabItem Header="TreeView">
+                <TabItem Header="PLC info">
+
+                </TabItem>
+                <TabItem Header="Server info">
 
                 </TabItem>
             </TabControl>
