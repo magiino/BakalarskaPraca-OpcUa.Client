@@ -1,6 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
+using Opc.Ua;
 
 namespace OpcUA.Client.Core
 {
@@ -8,36 +9,37 @@ namespace OpcUA.Client.Core
     /// <summary>
     /// A view model for each directory item
     /// </summary>
-    public class DirectoryItemViewModel : BaseViewModel
+    public class NodeItemViewModel : BaseViewModel
     {
         #region Public Properties
 
         /// <summary>
         /// The type of this item
         /// </summary>
-        public DirectoryItemType Type { get; set; }
+        public NodeClass Type => Node.NodeClass;
 
-        public string ImageName => Type == DirectoryItemType.Drive ? "drive" : (Type == DirectoryItemType.File ? "file" : (IsExpanded ? "folder-open" : "folder-closed"));
+        public string ImageName => Node.NodeClass.ToString();
+        // TODO NodeClass
 
         /// <summary>
-        /// The full path to the item
+        /// A current node
         /// </summary>
-        public string FullPath { get; set; }
+        public ReferenceDescription Node { get; set; }
 
         /// <summary>
         /// The name of this directory item
         /// </summary>
-        public string Name { get { return this.Type == DirectoryItemType.Drive ? this.FullPath : DirectoryStructure.GetFileFolderName(this.FullPath); } }
+        public string Name => Node.DisplayName.ToString();
 
         /// <summary>
         /// A list of all children contained inside this item
         /// </summary>
-        public ObservableCollection<DirectoryItemViewModel> Children { get; set; }
+        public ObservableCollection<NodeItemViewModel> Children { get; set; }
 
         /// <summary>
         /// Indicates if this item can be expanded
         /// </summary>
-        public bool CanExpand { get { return this.Type != DirectoryItemType.File; } }
+        public bool CanExpand => Type != NodeClass.Unspecified;
 
         /// <summary>
         /// Indicates if the current item is expanded or not
@@ -46,17 +48,17 @@ namespace OpcUA.Client.Core
         {
             get
             {
-                return this.Children?.Count(f => f != null) > 0;
+                return Children?.Count(f => f != null) > 0;
             }
             set
             {
                 // If the UI tells us to expand...
-                if (value == true)
+                if (value)
                     // Find all children
                     Expand();
                 // If the UI tells us to close
                 else
-                    this.ClearChildren();
+                    ClearChildren();
             }
         }
 
@@ -76,16 +78,15 @@ namespace OpcUA.Client.Core
         /// <summary>
         /// Default constructor
         /// </summary>
-        /// <param name="fullPath">The full path of this item</param>
-        /// <param name="type">The type of item</param>
-        public DirectoryItemViewModel(string fullPath, DirectoryItemType type)
+        /// <param name="node"></param>
+        public NodeItemViewModel(ReferenceDescription node)
         {
             // Create commands
             this.ExpandCommand = new RelayCommand(Expand);
 
             // Set path and type
-            this.FullPath = fullPath;
-            this.Type = type;
+            //this.FullPath = fullPath;
+            this.Node = node;
 
             // Setup the children as needed
             this.ClearChildren();
@@ -101,10 +102,10 @@ namespace OpcUA.Client.Core
         private void ClearChildren()
         {
             // Clear items
-            this.Children = new ObservableCollection<DirectoryItemViewModel>();
+            this.Children = new ObservableCollection<NodeItemViewModel>();
 
             // Show the expand arrow if we are not a file
-            if (this.Type != DirectoryItemType.File)
+            if (this.Type != NodeClass.Unspecified)
                 this.Children.Add(null);
         }
 
@@ -116,13 +117,13 @@ namespace OpcUA.Client.Core
         private void Expand()
         {
             // We cannot expand a file
-            if (this.Type == DirectoryItemType.File)
+            if (this.Type == NodeClass.Unspecified)
                 return;
 
             // Find all children
-            var children = DirectoryStructure.GetDirectoryContents(this.FullPath);
-            this.Children = new ObservableCollection<DirectoryItemViewModel>(
-                                children.Select(content => new DirectoryItemViewModel(content.FullPath, content.Type)));
+            var children = IoC.Get<UAClientHelperAPI>().BrowseNode(this.Node);
+            this.Children = new ObservableCollection<NodeItemViewModel>(
+                                children.Select(content => new NodeItemViewModel(content)));
         }
     }
 }

@@ -7,14 +7,14 @@ namespace OpcUA.Client.Core
     /// <summary>
     /// The view model for the applications main Directory view
     /// </summary>
-    public class DirectoryStructureViewModel : BaseViewModel
+    public class NodeStructureViewModel : BaseViewModel
     {
         #region Public Properties
 
         /// <summary>
         /// A list of all directories on the machine
         /// </summary>
-        public ObservableCollection<DirectoryItemViewModel> Items { get; set; }
+        public ObservableCollection<NodeItemViewModel> Items { get; set; }
 
         #endregion
 
@@ -23,14 +23,14 @@ namespace OpcUA.Client.Core
         /// <summary>
         /// Default constructor
         /// </summary>
-        public DirectoryStructureViewModel()
+        public NodeStructureViewModel()
         {
             // Get the logical drives
-            var children = DirectoryStructure.GetLogicalDrives();
+            var children = IoC.Get<UAClientHelperAPI>().BrowseRoot();
 
             // Create the view models from the data
-            this.Items = new ObservableCollection<DirectoryItemViewModel>(
-                children.Select(drive => new DirectoryItemViewModel(drive.FullPath, DirectoryItemType.Drive)));
+            Items = new ObservableCollection<NodeItemViewModel>(
+                children.Select(content => new NodeItemViewModel(content)));
         }
 
         #endregion

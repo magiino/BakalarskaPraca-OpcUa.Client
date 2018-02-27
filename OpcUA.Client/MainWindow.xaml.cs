@@ -1,4 +1,9 @@
-﻿using System.Windows;
+﻿using System;
+using System.ComponentModel;
+using System.Windows;
+using Opc.Ua;
+using Opc.Ua.Client;
+using OpcUA.Client.Core;
 
 namespace OpcUA.Client
 {
@@ -8,10 +13,7 @@ namespace OpcUA.Client
     public partial class MainWindow : Window
     {
         #region Private Members
-        //private UAClientHelperAPI myClientHelperAPI;
-        //private Session mySession;
-        //private Subscription mySubscription;
-        //private ReferenceDescriptionCollection referenceDescriptionCollection;
+        private Session _mySession;
 
         #endregion
 
@@ -19,49 +21,39 @@ namespace OpcUA.Client
         public MainWindow()
         {
             InitializeComponent();
-            //this.DataContext = new DirectoryStructureViewModel();
+            Connect();
+        }
 
-            //myClientHelperAPI = new UAClientHelperAPI();
-            //Connect();
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            IoC.Get<UAClientHelperAPI>().Disconnect();
         }
 
         #endregion
-    }
-}
-
-
-
-/*
-private void Connect()
-{
-    if (mySession != null && !mySession.Disposed)
-    {
-        try
+        private void Connect()
         {
-            mySubscription.Delete(true);
-        }
-        catch
-        {
-            ;
-        }
+            var client = IoC.Get<UAClientHelperAPI>();
+            if (_mySession != null && !_mySession.Disposed)
+            {
 
-        myClientHelperAPI.Disconnect();
-        mySession = myClientHelperAPI.Session;
-    }
-    else
-    {
-        try
-        {
+                client.Disconnect();
+                _mySession = IoC.Get<UAClientHelperAPI>().Session;
+            }
+            else
+            {
+                try
+                {
+                    EndpointDescription mySelectedEndpoint = new EndpointDescription("opc.tcp://A05-226b:48010");
 
-            EndpointDescription mySelectedEndpoint = new EndpointDescription("opc.tcp://A05-226b:53530/OPCUA/SimulationServer");
-
-            myClientHelperAPI.Connect(mySelectedEndpoint, false, "", "");
-            mySession = myClientHelperAPI.Session;
-        }
-        catch (Exception ex)
-        {
-            MessageBox.Show(ex.Message, "Error");
+                    client.Connect(mySelectedEndpoint, false, "", "");
+                    _mySession = client.Session;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Error");
+                }
+            }
         }
     }
 }
-*/
+
