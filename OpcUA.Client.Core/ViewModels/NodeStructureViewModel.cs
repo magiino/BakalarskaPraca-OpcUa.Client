@@ -5,14 +5,14 @@ namespace OpcUA.Client.Core
 {
     /// <inheritdoc />
     /// <summary>
-    /// The view model for the applications main Directory view
+    /// The view model for the address space tab item
     /// </summary>
     public class NodeStructureViewModel : BaseViewModel
     {
         #region Public Properties
 
         /// <summary>
-        /// A list of all directories on the machine
+        /// A list of root nodes in the address space
         /// </summary>
         public ObservableCollection<NodeItemViewModel> Items { get; set; }
 
@@ -25,12 +25,12 @@ namespace OpcUA.Client.Core
         /// </summary>
         public NodeStructureViewModel()
         {
-            // Get the logical drives
+            // Get the root nodes
             var children = IoC.Get<UAClientHelperAPI>().BrowseRoot();
 
-            // Create the view models from the data
-            Items = new ObservableCollection<NodeItemViewModel>(
-                children.Select(content => new NodeItemViewModel(content)));
+            // Create the view models from the root ndoes
+            //Items = new ObservableCollection<NodeItemViewModel>(
+            //    children.Select(content => new NodeItemViewModel(content)));
         }
 
         #endregion

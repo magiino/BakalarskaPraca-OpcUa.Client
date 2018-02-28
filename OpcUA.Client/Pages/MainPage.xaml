@@ -14,18 +14,42 @@
                 <local:MenuBar/>
                 <local:MenuToolBar/>
             </StackPanel>
-            <TabControl HorizontalAlignment="Left" DockPanel.Dock="Left" Width="323">
-                <TabItem Header="TreeView">
-                    <local:TreeView/>
-                </TabItem>
-                <TabItem Header="PLC info">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
 
-                </TabItem>
-                <TabItem Header="Server info">
+                <TabControl
+                    Grid.Column="0"
+                    HorizontalAlignment="Left" 
+                    DockPanel.Dock="Left">
 
-                </TabItem>
-            </TabControl>
+                    <TabItem Header="TreeView">
+                        <local:TreeView/>
+                    </TabItem>
+                    <TabItem Header="PLC info">
 
+                    </TabItem>
+                    <TabItem Header="Server info">
+
+                    </TabItem>
+                </TabControl>
+                <TabControl Grid.Column="1">
+                    <TabItem Header="Node Attributes">
+                        <!-- ItemsSource="{Binding NodeItem}-->
+                        <DataGrid HorizontalAlignment="Left" 
+                                  Width="auto" 
+                                  AutoGenerateColumns="true"
+                                  ItemsSource="{Binding SelectedNodes}">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Attribute" Binding="{Binding DisplayName}"></DataGridTextColumn>
+                                <DataGridTextColumn Header="Value" Binding="{Binding NodeClass}"></DataGridTextColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </TabItem>
+                </TabControl>
+            </Grid>
         </DockPanel>
     </Border>
 </local:BasePage>

@@ -7,6 +7,8 @@
         xmlns:core="clr-namespace:OpcUA.Client.Core;assembly=OpcUA.Client.Core"
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
+        MinWidth="600"
+        MinHeight="300"
         Title="OPC UA Client" Height="600" Width="900">
 
     <Frame 
@@ -17,6 +19,6 @@
                                       Converter={local:ApplicationPageValueConverter}}"
         Content="{Binding}"
         Background="Transparent"
-               />
+    />
 
 </Window>

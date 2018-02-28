@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
 using Opc.Ua;
@@ -13,13 +14,17 @@ namespace OpcUA.Client.Core
     {
         #region Public Properties
 
+        private IsSelected IsSelectedDelegate { get; }
+
         /// <summary>
-        /// The type of this item
+        /// The type of this node
         /// </summary>
         public NodeClass Type => Node.NodeClass;
 
-        public string ImageName => Node.NodeClass.ToString();
-        // TODO NodeClass
+        /// <summary>
+        /// The name of this node
+        /// </summary>
+        public string Name => Node.DisplayName.ToString();
 
         /// <summary>
         /// A current node
@@ -27,29 +32,21 @@ namespace OpcUA.Client.Core
         public ReferenceDescription Node { get; set; }
 
         /// <summary>
-        /// The name of this directory item
-        /// </summary>
-        public string Name => Node.DisplayName.ToString();
-
-        /// <summary>
-        /// A list of all children contained inside this item
+        /// A list of all children contained inside this node
         /// </summary>
         public ObservableCollection<NodeItemViewModel> Children { get; set; }
 
         /// <summary>
         /// Indicates if this item can be expanded
         /// </summary>
-        public bool CanExpand => Type != NodeClass.Unspecified;
+        public bool CanExpand => Type != NodeClass.Unspecified;       
 
         /// <summary>
         /// Indicates if the current item is expanded or not
         /// </summary>
         public bool IsExpanded
         {
-            get
-            {
-                return Children?.Count(f => f != null) > 0;
-            }
+            get => Children?.Count(f => f != null) > 0;
             set
             {
                 // If the UI tells us to expand...
@@ -59,6 +56,27 @@ namespace OpcUA.Client.Core
                 // If the UI tells us to close
                 else
                     ClearChildren();
+            }
+        }
+
+        public ReferenceDescription SelectedNode { get; set; }
+
+
+        /// <summary>
+        /// Indicates if current item is selected or not
+        /// </summary>
+        public bool IsSelected
+        {
+            get => SelectedNode != null;
+            set
+            {
+                if (!value)
+                {
+                    SelectedNode = null;
+                    return;
+                }
+                SelectedNode = Node;
+                IsSelectedDelegate(SelectedNode);
             }
         }
 
@@ -79,17 +97,16 @@ namespace OpcUA.Client.Core
         /// Default constructor
         /// </summary>
         /// <param name="node"></param>
-        public NodeItemViewModel(ReferenceDescription node)
+        public NodeItemViewModel(ReferenceDescription node, IsSelected nodeIsSelected)
         {
             // Create commands
-            this.ExpandCommand = new RelayCommand(Expand);
-
-            // Set path and type
-            //this.FullPath = fullPath;
-            this.Node = node;
-
+            ExpandCommand = new RelayCommand(Expand);
+            // Set delegate
+            IsSelectedDelegate = nodeIsSelected;
+            // Set node item
+            Node = node;
             // Setup the children as needed
-            this.ClearChildren();
+            ClearChildren();
         }
 
         #endregion
@@ -102,11 +119,11 @@ namespace OpcUA.Client.Core
         private void ClearChildren()
         {
             // Clear items
-            this.Children = new ObservableCollection<NodeItemViewModel>();
+            Children = new ObservableCollection<NodeItemViewModel>();
 
             // Show the expand arrow if we are not a file
-            if (this.Type != NodeClass.Unspecified)
-                this.Children.Add(null);
+            if (Type != NodeClass.Unspecified)
+                Children.Add(null);
         }
 
         #endregion
@@ -117,13 +134,13 @@ namespace OpcUA.Client.Core
         private void Expand()
         {
             // We cannot expand a file
-            if (this.Type == NodeClass.Unspecified)
+            if (Type == NodeClass.Unspecified)
                 return;
 
             // Find all children
-            var children = IoC.Get<UAClientHelperAPI>().BrowseNode(this.Node);
-            this.Children = new ObservableCollection<NodeItemViewModel>(
-                                children.Select(content => new NodeItemViewModel(content)));
+            var children = IoC.Get<UAClientHelperAPI>().BrowseNode(Node);
+            Children = new ObservableCollection<NodeItemViewModel>(
+                                children.Select(content => new NodeItemViewModel(content, IsSelectedDelegate)));
         }
     }
 }

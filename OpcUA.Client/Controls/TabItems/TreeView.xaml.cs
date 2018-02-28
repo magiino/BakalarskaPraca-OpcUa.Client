@@ -1,5 +1,4 @@
 ﻿using System.Windows.Controls;
-using OpcUA.Client.Core;
 
 namespace OpcUA.Client
 {
@@ -11,7 +10,6 @@ namespace OpcUA.Client
         public TreeView()
         {
             InitializeComponent();
-            this.DataContext = new NodeStructureViewModel();
         }
     }
 }

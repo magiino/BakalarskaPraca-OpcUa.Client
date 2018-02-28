@@ -57,6 +57,7 @@
     <Compile Include="ViewModels\Application\MainViewModel.cs" />
     <Compile Include="ViewModels\Application\ViewModelLocator.cs" />
     <Compile Include="ViewModels\Application\WelcomeViewModel.cs" />
+    <Compile Include="ViewModels\Application\WindowViewModel.cs" />
     <Compile Include="ViewModels\Base\BaseViewModel.cs" />
     <Compile Include="ViewModels\Base\RelayCommand.cs" />
     <Compile Include="ViewModels\NodeItemViewModel.cs" />

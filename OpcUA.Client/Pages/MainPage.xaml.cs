@@ -4,7 +4,6 @@ using OpcUA.Client.Core;
 
 namespace OpcUA.Client
 {
-    /// <inheritdoc />
     /// <summary>
     /// Interaction logic for MainPage.xaml
     /// </summary>
