@@ -50,9 +50,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataModels\ApplicationPage.cs" />
-    <Compile Include="Directory\Data\DirectoryItem.cs" />
-    <Compile Include="Directory\Data\DirectoryItemType.cs" />
-    <Compile Include="Directory\DirectoryStructure.cs" />
     <Compile Include="IoC\IoC.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UAClientHelperAPI.cs" />
@@ -60,10 +57,11 @@
     <Compile Include="ViewModels\Application\MainViewModel.cs" />
     <Compile Include="ViewModels\Application\ViewModelLocator.cs" />
     <Compile Include="ViewModels\Application\WelcomeViewModel.cs" />
+    <Compile Include="ViewModels\Application\WindowViewModel.cs" />
     <Compile Include="ViewModels\Base\BaseViewModel.cs" />
     <Compile Include="ViewModels\Base\RelayCommand.cs" />
-    <Compile Include="ViewModels\DirectoryItemViewModel.cs" />
-    <Compile Include="ViewModels\DirectoryStructureViewModel.cs" />
+    <Compile Include="ViewModels\NodeItemViewModel.cs" />
+    <Compile Include="ViewModels\NodeStructureViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

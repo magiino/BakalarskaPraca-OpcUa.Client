@@ -15,6 +15,16 @@ namespace OpcUA.Client.Core
         /// <summary>
         /// The current page of the application
         /// </summary>
-        public ApplicationPage CurrentPage { get; set; } = ApplicationPage.Welcome;
+        public ApplicationPage CurrentPage { get; private set; } = ApplicationPage.Welcome;
+
+        /// <summary>
+        /// Navigates to the specified page
+        /// </summary>
+        /// <param name="page">The page to go to</param>
+        public void GoToPage(ApplicationPage page)
+        {
+            // Set the current page
+            CurrentPage = page;
+        }
     }
 }

@@ -7,35 +7,18 @@
         xmlns:core="clr-namespace:OpcUA.Client.Core;assembly=OpcUA.Client.Core"
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
+        MinWidth="600"
+        MinHeight="300"
         Title="OPC UA Client" Height="600" Width="900">
 
-    <Frame Content="{Binding ApplicationViewModel.CurrentPage,
+    <Frame 
+        local:NoFrameHistory.Value="True"
+        d:DataContext=""
+        DataContext="{Binding ApplicationViewModel.CurrentPage,
                                       Source={x:Static core:ViewModelLocator.Instance},
                                       Converter={local:ApplicationPageValueConverter}}"
-               Background="Transparent"/>
+        Content="{Binding}"
+        Background="Transparent"
+    />
 
 </Window>
-
-
-<!-- Pred pripravené treeView
-        <TreeView x:Name="FolderView" ItemsSource="{Binding Items}">
-
-            <TreeView.ItemContainerStyle>
-                <Style TargetType="{x:Type TreeViewItem}">
-                    <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
-                </Style>
-            </TreeView.ItemContainerStyle>
-
-            <TreeView.ItemTemplate>
-                <HierarchicalDataTemplate ItemsSource="{Binding Children}">
-                    <StackPanel Orientation="Horizontal">
-                        <Image Width="20" Margin="3"
-                               Source="{Binding ImageName,
-                                        Converter={x:Static local:HeaderToImageConverter.Instance}}" />
-                        <TextBlock VerticalAlignment="Center" Text="{Binding Name}" />
-                    </StackPanel>
-                </HierarchicalDataTemplate>
-            </TreeView.ItemTemplate>
-
-        </TreeView>
--->

@@ -27,6 +27,7 @@ namespace OpcUA.Client.Core
         {
             // Bind all required view models
             BindViewModels();
+            BindUaApi();
         }
 
         /// <summary>
@@ -36,6 +37,12 @@ namespace OpcUA.Client.Core
         {
             // Bind to a single instance of Application view model
             Kernel.Bind<ApplicationViewModel>().ToConstant(new ApplicationViewModel());
+        }
+
+        private static void BindUaApi()
+        {
+            // Bind to a single instance of UaClientHelperApi
+            Kernel.Bind<UAClientHelperAPI>().ToConstant(new UAClientHelperAPI());
         }
 
         #endregion
