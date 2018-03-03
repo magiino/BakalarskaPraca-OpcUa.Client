@@ -119,7 +119,9 @@
         </Setter>
     </Style>
 
+    
     <!-- Regular button -->
+    <!--
     <Style TargetType="{x:Type Button}" BasedOn="{StaticResource BaseStyle}">
         <Setter Property="Background" Value="{StaticResource WordOrangeBrush}" />
         <Setter Property="Foreground" Value="{StaticResource ForegroundLightBrush}" />
@@ -173,5 +175,6 @@
             </Setter.Value>
         </Setter>
     </Style>
+    -->
 
 </ResourceDictionary>

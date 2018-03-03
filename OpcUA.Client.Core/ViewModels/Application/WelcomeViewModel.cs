@@ -27,7 +27,7 @@ namespace OpcUA.Client.Core
 
         public WelcomeViewModel()
         {
-            //NewSessionCommand = new RelayCommand();
+            NewSessionCommand = new RelayCommand(() => IoC.Get<ApplicationViewModel>().GoToPage(ApplicationPage.Endpoints));
             LoadSessionCommand = new RelayCommand(() => IoC.Get<ApplicationViewModel>().GoToPage(ApplicationPage.Main));
         }
     }

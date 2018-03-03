@@ -19,6 +19,12 @@ namespace OpcUA.Client
                 case ApplicationPage.Main:
                     return new MainPage();
 
+                case ApplicationPage.Endpoints:
+                    return new DiscoverEndpoints();
+
+                case ApplicationPage.ClientSettings:
+                    return new UaClientSettings();
+
                 case ApplicationPage.Welcome:
                     return new WelcomePage();
                 default:
