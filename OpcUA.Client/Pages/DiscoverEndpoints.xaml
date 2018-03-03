@@ -1,23 +1,130 @@
-﻿<Page x:Class="OpcUA.Client.Pages.DiscoverEndpoints"
+﻿<local:BasePage x:TypeArguments="core:DiscoverEndpointsViewModel" x:Class="OpcUA.Client.DiscoverEndpoints"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:OpcUA.Client.Pages"
+      xmlns:local="clr-namespace:OpcUA.Client"
+      xmlns:core="clr-namespace:OpcUA.Client.Core;assembly=OpcUA.Client.Core"
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
-      Title="DiscoverEndpoints">
+      d:DesignHeight="450" d:DesignWidth="800">
 
-    <Grid>
-        <TextBox VerticalAlignment="Top"></TextBox>
-        <Button HorizontalAlignment="right" VerticalAlignment="Top">Search</Button>
-        <ListView Height="200px"  VerticalAlignment="Center">
-            <ListItem></ListItem>
-            <ListItem></ListItem>
-            <ListItem></ListItem>
-            <ListItem></ListItem>
-        </ListView>
-        <TextBox VerticalAlignment="Bottom" HorizontalAlignment="Left"></TextBox>
-        <TextBox VerticalAlignment="Bottom" HorizontalAlignment="center"></TextBox>
-    </Grid>
-</Page>
+    <!-- -->
+    <Border  Background="{StaticResource BackgroundLightBrush}"
+             Padding="5">
+        <Grid>
+            <Grid.RowDefinitions>
+                <!-- First Row -->
+                <RowDefinition Height="auto"/>
+                <!-- Second Row -->
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <!-- First Row -->
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <!-- Text box for URL -->
+                    <ColumnDefinition Width="3*"/>
+                    <!-- Search Button -->
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Text box for URL -->
+                <TextBox Grid.Column="0"
+                         Grid.Row="0"/>
+
+                <!-- Search Button -->
+                <Button Grid.Column="1"
+                        Grid.Row="0"
+                        Content="Search"/>
+            </Grid>
+
+            <!-- Second Row -->
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <!-- Endpoints List -->
+                    <ColumnDefinition Width="*"/>
+                    <!-- Filter -->
+                    <ColumnDefinition Width="auto"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Endpoints List -->
+                <GroupBox Grid.Column="0"
+                          Header="Endpoints" 
+                          Padding="5px" >
+                    <ScrollViewer 
+                        Height="auto" 
+                        VerticalScrollBarVisibility="auto">
+
+                        <ListView VerticalAlignment="Stretch"/>
+
+                    </ScrollViewer>
+                </GroupBox>
+
+                <Grid Grid.Column="1">
+                    <Grid.RowDefinitions>
+                        <!-- First Row -->
+                        <RowDefinition Height="auto"/>
+                        <!-- Second Row -->
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Filter -->
+                    <GroupBox  Grid.Row="0"
+                               Header="Filter" 
+                               Padding="5px" >
+                        <StackPanel>
+                            <TextBlock Text="Session Name"/>
+                            <TextBox/>
+                            <!-- Protocol Combo Box -->
+                            <TextBlock Text="Protocol"/>
+                            <ComboBox SelectedIndex="0">
+                                <ComboBoxItem Content="UA Tcp"></ComboBoxItem>
+                                <ComboBoxItem Content="UA Https"></ComboBoxItem>
+                            </ComboBox>
+                            <!-- Security Modes/Policies -->
+                            <Grid Margin="0 10 0 0">
+                                <Grid.ColumnDefinitions>
+                                    <!-- Security Modes -->
+                                    <ColumnDefinition Width="*"/>
+                                    <!-- Security Policies -->
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <!-- Security Modes -->
+                                <StackPanel Grid.Column="0">
+                                    <TextBlock Text="Security Modes"/>
+                                    <CheckBox Content="None"/>
+                                    <CheckBox Content="Sign"/>
+                                    <CheckBox Content="Sign&amp;Encrypt"/>
+                                </StackPanel>
+                                <!-- Security Policies -->
+                                <StackPanel Grid.Column="1">
+                                    <TextBlock Text="Security Policies"/>
+                                    <CheckBox Content="Basic128Rsa15"></CheckBox>
+                                    <CheckBox Content="Basic256"></CheckBox>
+                                    <CheckBox Content="Basic256Sha256"></CheckBox>
+                                </StackPanel>
+                            </Grid>
+                            <TextBlock Text="Message Encoding"/>
+                            <ComboBox SelectedIndex="0">
+                                <ComboBoxItem Content="UA Tcp"></ComboBoxItem>
+                                <ComboBoxItem Content="UA Https"></ComboBoxItem>
+                            </ComboBox>
+                        </StackPanel>
+                    </GroupBox>
+
+                    <!-- User Authentication -->
+                    <GroupBox Grid.Row="1" 
+                              Header="User Authentication">
+                        <StackPanel >
+                            <CheckBox Content="Anonymous"/>
+                            <CheckBox Content="User/Password"/>
+                            <TextBox/>
+                            <TextBox/>
+                        </StackPanel>
+                    </GroupBox>
+                   
+
+                </Grid>
+            </Grid>
+        </Grid>
+    </Border>
+</local:BasePage>
