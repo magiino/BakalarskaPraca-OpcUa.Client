@@ -8,57 +8,52 @@
                 mc:Ignorable="d" 
       d:DesignHeight="500" d:DesignWidth="600">
 
-    <Border>
-        <Grid>
-            <!-- Main content scroll -->
-            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
-                <StackPanel 
+    <Grid>
+        <!-- Main content scroll -->
+        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+            <StackPanel 
                     VerticalAlignment="Center"
                     HorizontalAlignment="Center"
                     TextBlock.TextAlignment="Center">
 
-                    <!-- Welcome main content white box -->
-                    <Border Background="{StaticResource ForegroundLightBrush}" 
+                <!-- Welcome main content white box -->
+                <Border Background="{StaticResource ForegroundLightBrush}" 
                             CornerRadius="10"
                             Padding="15 50 15 15"
                             Width="330"
                             Margin="50 50 50 50">
 
-                        <StackPanel>
+                    <StackPanel>
 
-                            <!-- Welcome header -->
-                            <TextBlock Text="Welcome!" 
+                        <!-- Welcome header -->
+                        <TextBlock Text="Welcome!" 
                                    FontSize="{StaticResource FontSizeXXLarge}" 
                                    FontFamily="{StaticResource LatoRegular}"
                                    Foreground="{StaticResource WordBlueBrush}" />
-                            <!-- Welcome multiline text -->
-                            <StackPanel Orientation="Vertical" Width="250" Margin="0 10 0 40">
-                                <TextBlock FontSize="{StaticResource FontSizeRegular}"
+                        <!-- Welcome multiline text -->
+                        <StackPanel Orientation="Vertical" Width="250" Margin="0 10 0 40">
+                            <TextBlock FontSize="{StaticResource FontSizeRegular}"
                                            FontFamily="{StaticResource LatoRegular}"
                                            TextWrapping="Wrap" 
                                            Text="{Binding WelcomeText, FallbackValue=Loreipsum}" />
-                            </StackPanel>
+                        </StackPanel>
 
-                            <!-- New setting button -->
-                            <Button Content="New Session" 
+                        <!-- New setting button -->
+                        <Button Content="New Session" 
                                     IsDefault="True"
                                     Command="{Binding NewSessionCommand}"
                                     HorizontalAlignment="Center" />
 
-                            <!-- Load setting button -->
-                            <Button Content="Load Session" 
+                        <!-- Load setting button -->
+                        <Button Content="Load Session" 
                                     IsDefault="True"
                                     Command="{Binding LoadSessionCommand}"
                                     HorizontalAlignment="Center" />
 
-                        </StackPanel>
+                    </StackPanel>
 
-                    </Border>
-
-
-
-                </StackPanel>
-            </ScrollViewer>
-        </Grid>
-    </Border>
+                </Border>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
 </local:BasePage>

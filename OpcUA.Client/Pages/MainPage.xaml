@@ -37,14 +37,13 @@
                 </TabControl>
                 <TabControl Grid.Column="1">
                     <TabItem Header="Node Attributes">
-                        <!-- ItemsSource="{Binding NodeItem}-->
                         <DataGrid HorizontalAlignment="Left" 
-                                  Width="auto" 
-                                  AutoGenerateColumns="true"
-                                  ItemsSource="{Binding SelectedNodes}">
+                                  Width="300px" 
+                                  AutoGenerateColumns="false"
+                                  ItemsSource="{Binding SelectedNode}">
                             <DataGrid.Columns>
-                                <DataGridTextColumn Header="Attribute" Binding="{Binding DisplayName}"></DataGridTextColumn>
-                                <DataGridTextColumn Header="Value" Binding="{Binding NodeClass}"></DataGridTextColumn>
+                                <DataGridTextColumn Width="*" Header="Attribute" Binding="{Binding Attribute}"></DataGridTextColumn>
+                                <DataGridTextColumn Width="*" Header="Value" Binding="{Binding Value}"></DataGridTextColumn>
                             </DataGrid.Columns>
                         </DataGrid>
                     </TabItem>

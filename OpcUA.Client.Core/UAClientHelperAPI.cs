@@ -32,43 +32,36 @@ namespace OpcUA.Client.Core
         public UAClientHelperAPI()
         {
             // Creats the application configuration (containing the certificate) on construction
-            mApplicationConfig = CreateClientConfiguration();
+            _mApplicationConfig = CreateClientConfiguration();
         }
         #endregion
 
         #region Properties
-        /// <summary> 
-        /// Keeps a session with an UA server.
-        /// </summary>
-        private Session mSession = null;
 
         /// <summary> 
         /// Specifies this application.
         /// </summary>
-        private ApplicationConfiguration mApplicationConfig = null;
+        private readonly ApplicationConfiguration _mApplicationConfig;
 
         /// <summary>
         /// Provides the session being established with an OPC UA server.
         /// </summary>
-        public Session Session
-        {
-            get { return mSession; }
-        }
+        public Session Session { get; private set; }
 
         /// <summary>
         /// Provides the event handling for server certificates.
         /// </summary>
-        public CertificateValidationEventHandler CertificateValidationNotification = null;
+        public CertificateValidationEventHandler CertificateValidationNotification;
 
         /// <summary>
         /// Provides the event for value changes of a monitored item.
         /// </summary>
-        public MonitoredItemNotificationEventHandler ItemChangedNotification = null;
+        public MonitoredItemNotificationEventHandler ItemChangedNotification;
 
         /// <summary>
         /// Provides the event for KeepAliveNotifications.
         /// </summary>
-        public KeepAliveEventHandler KeepAliveNotification = null;
+        public KeepAliveEventHandler KeepAliveNotification;
         #endregion
 
         #region Discovery
@@ -135,10 +128,10 @@ namespace OpcUA.Client.Core
             try
             {
                 //Secify application configuration
-                ApplicationConfiguration ApplicationConfig = mApplicationConfig;
+                ApplicationConfiguration ApplicationConfig = _mApplicationConfig;
 
                 //Hook up a validator function for a CertificateValidation event
-                mApplicationConfig.CertificateValidator.CertificateValidation += Notificatio_CertificateValidation;
+                _mApplicationConfig.CertificateValidator.CertificateValidation += Notificatio_CertificateValidation;
 
                 //Create EndPoint description
                 EndpointDescription EndpointDescription = CreateEndpointDescription(url, secPolicy, msgSecMode);
@@ -164,7 +157,7 @@ namespace OpcUA.Client.Core
                 ApplicationConfig.CertificateValidator.Update(ApplicationConfig);
 
                 //Create and connect session
-                mSession = Session.Create(
+                Session = Session.Create(
                     ApplicationConfig,
                     Endpoint,
                     true,
@@ -174,7 +167,7 @@ namespace OpcUA.Client.Core
                     null
                     );
 
-                mSession.KeepAlive += new KeepAliveEventHandler(Notification_KeepAlive);                
+                Session.KeepAlive += new KeepAliveEventHandler(Notification_KeepAlive);                
             }
             catch (Exception e)
             {
@@ -194,7 +187,7 @@ namespace OpcUA.Client.Core
             try
             {
                 //Secify application configuration
-                ApplicationConfiguration ApplicationConfig = mApplicationConfig;
+                ApplicationConfiguration ApplicationConfig = _mApplicationConfig;
 
                 //Hook up a validator function for a CertificateValidation event
                 ApplicationConfig.CertificateValidator.CertificateValidation += Notificatio_CertificateValidation;
@@ -206,7 +199,7 @@ namespace OpcUA.Client.Core
                 ConfiguredEndpoint mEndpoint = new ConfiguredEndpoint(null, endpointDescription, EndpointConfiguration);
 
                 //Create the binding factory.
-                BindingFactory bindingFactory = BindingFactory.Create(mApplicationConfig, ServiceMessageContext.GlobalContext);
+                BindingFactory bindingFactory = BindingFactory.Create(_mApplicationConfig, ServiceMessageContext.GlobalContext);
 
                 //Creat a session name
                 String sessionName = "MySession";
@@ -226,7 +219,7 @@ namespace OpcUA.Client.Core
                 ApplicationConfig.CertificateValidator.Update(ApplicationConfig);
 
                 //Create and connect session
-                mSession = Session.Create(
+                Session = Session.Create(
                     ApplicationConfig,
                     mEndpoint,
                     true,
@@ -236,7 +229,7 @@ namespace OpcUA.Client.Core
                     null
                     );
 
-                mSession.KeepAlive += new KeepAliveEventHandler(Notification_KeepAlive);
+                Session.KeepAlive += new KeepAliveEventHandler(Notification_KeepAlive);
             }
             catch (Exception e)
             {
@@ -252,8 +245,8 @@ namespace OpcUA.Client.Core
             // Close the session.
             try
             {
-                mSession.Close(10000);
-                mSession.Dispose();
+                Session.Close(10000);
+                Session.Dispose();
             }
             catch (Exception e)
             {
@@ -276,7 +269,7 @@ namespace OpcUA.Client.Core
             try
             {
                 //Browse the RootFolder for variables, objects and methods
-                mSession.Browse(null, null, ObjectIds.RootFolder, 0u, BrowseDirection.Forward, ReferenceTypeIds.HierarchicalReferences, true, (uint)NodeClass.Variable | (uint)NodeClass.Object | (uint)NodeClass.Method, out continuationPoint, out referenceDescriptionCollection);
+                Session.Browse(null, null, ObjectIds.RootFolder, 0u, BrowseDirection.Forward, ReferenceTypeIds.HierarchicalReferences, true, (uint)NodeClass.Variable | (uint)NodeClass.Object | (uint)NodeClass.Method, out continuationPoint, out referenceDescriptionCollection);
                 return referenceDescriptionCollection;
             }
             catch (Exception e)
@@ -302,7 +295,7 @@ namespace OpcUA.Client.Core
             try
             {
                 //Browse from starting point for all object types
-                mSession.Browse(null, null, nodeId, 0u, BrowseDirection.Forward, ReferenceTypeIds.HierarchicalReferences, true, 0, out continuationPoint, out referenceDescriptionCollection);
+                Session.Browse(null, null, nodeId, 0u, BrowseDirection.Forward, ReferenceTypeIds.HierarchicalReferences, true, 0, out continuationPoint, out referenceDescriptionCollection);
                 return referenceDescriptionCollection;
             }
             catch (Exception e)
@@ -322,13 +315,13 @@ namespace OpcUA.Client.Core
         public Subscription Subscribe(int publishingInterval)
         {
             //Create a Subscription object
-            Subscription subscription = new Subscription(mSession.DefaultSubscription);
+            Subscription subscription = new Subscription(Session.DefaultSubscription);
             //Enable publishing
             subscription.PublishingEnabled = true;
             //Set the publishing interval
             subscription.PublishingInterval = publishingInterval;
             //Add the subscription to the session
-            mSession.AddSubscription(subscription);
+            Session.AddSubscription(subscription);
             try
             {
                 //Create/Activate the subscription
@@ -437,7 +430,7 @@ namespace OpcUA.Client.Core
             try
             {
                 //Read the dataValue
-                node = mSession.ReadNode(nodeId);
+                node = Session.ReadNode(nodeId);
                 return node;
             }
             catch (Exception e)
@@ -467,7 +460,7 @@ namespace OpcUA.Client.Core
             try
             {
                 //Read the dataValues
-                mSession.ReadValues(nodeIds, types, out values, out serviceResults);
+                Session.ReadValues(nodeIds, types, out values, out serviceResults);
                 //check ServiceResults to 
                 foreach (ServiceResult svResult in serviceResults)
                 {
@@ -595,7 +588,7 @@ namespace OpcUA.Client.Core
                 //Read the dataValue
                 try
                 {
-                    dataValue = mSession.ReadValue(nodeId);
+                    dataValue = Session.ReadValue(nodeId);
                 }
                 catch (Exception e)
                 {
@@ -622,7 +615,7 @@ namespace OpcUA.Client.Core
             try
             {
                 //Write the collection to the server
-                mSession.Write(null, valuesToWrite, out result, out diagnostics);
+                Session.Write(null, valuesToWrite, out result, out diagnostics);
             }
             catch (Exception e)
             {
@@ -644,7 +637,7 @@ namespace OpcUA.Client.Core
 
             //Get the type dictionary of desired struct/UDT and the name of desired var to parse
             String parseString;
-            String xmlString = GetTypeDictionary(nodeIdString, mSession, out parseString);
+            String xmlString = GetTypeDictionary(nodeIdString, Session, out parseString);
 
             //Parse xmlString to create objects of the struct/UDT containing var name and var data type
             List<object> varList = new List<object>();
@@ -660,7 +653,7 @@ namespace OpcUA.Client.Core
             types.Add(null);
             try
             {
-                mSession.ReadValues(nodeIds, types, out values, out serviceResults);
+                Session.ReadValues(nodeIds, types, out values, out serviceResults);
             }
             catch (Exception e)
             {
@@ -747,7 +740,7 @@ namespace OpcUA.Client.Core
 
             try
             {
-                mSession.Write(null, valuesToWrite, out results, out diag);
+                Session.Write(null, valuesToWrite, out results, out diag);
             }
             catch (Exception e)
             {
@@ -785,7 +778,7 @@ namespace OpcUA.Client.Core
             try
             {
                 //Register nodes
-                mSession.RegisterNodes(null, nodesToRegister, out registeredNodes);
+                Session.RegisterNodes(null, nodesToRegister, out registeredNodes);
 
                 foreach (NodeId nodeId in registeredNodes)
                 {
@@ -816,7 +809,7 @@ namespace OpcUA.Client.Core
             try
             {
                 //Register nodes                
-                mSession.UnregisterNodes(null, nodesToUnregister);
+                Session.UnregisterNodes(null, nodesToUnregister);
             }
             catch (Exception e)
             {
@@ -842,7 +835,10 @@ namespace OpcUA.Client.Core
         /// <summary>Eventhandler for KeepAlive forwards this event</summary>
         private void Notification_KeepAlive(Session session, KeepAliveEventArgs e)
         {
-            KeepAliveNotification(session, e);
+            if (e != null)
+            {
+                KeepAliveNotification(session, e);
+            }
         }
         #endregion
 
