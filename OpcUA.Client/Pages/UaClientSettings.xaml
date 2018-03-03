@@ -1,0 +1,25 @@
+﻿<Page x:Class="OpcUA.Client.Pages.UaClientSettings"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:OpcUA.Client.Pages"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="UaClientSettings">
+
+    <Grid Width="700" Background="Azure">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <StackPanel Grid.Column="0"
+                    Orientation="Vertical"
+                    TextBlock.TextAlignment="Center">
+            <TextBlock Text="Session Name"  Margin="0,0,263,0" />
+            <ComboBox HorizontalAlignment="Right"  Width="210"/>
+
+
+        </StackPanel>
+    </Grid>
+</Page>

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
@@ -6,11 +7,10 @@ using Opc.Ua;
 
 namespace OpcUA.Client.Core
 {
-    /// <inheritdoc />
     /// <summary>
     /// A view model for each directory item
     /// </summary>
-    public class NodeItemViewModel : BaseViewModel
+    public class NodeItemViewModel : BaseViewModel // IComparer<ReferenceDescription>
     {
         #region Public Properties
 
@@ -97,6 +97,7 @@ namespace OpcUA.Client.Core
         /// Default constructor
         /// </summary>
         /// <param name="node"></param>
+        /// <param name="nodeIsSelected"></param>
         public NodeItemViewModel(ReferenceDescription node, IsSelected nodeIsSelected)
         {
             // Create commands
@@ -140,7 +141,7 @@ namespace OpcUA.Client.Core
             // Find all children
             var children = IoC.Get<UAClientHelperAPI>().BrowseNode(Node);
             Children = new ObservableCollection<NodeItemViewModel>(
-                                children.Select(content => new NodeItemViewModel(content, IsSelectedDelegate)));
+                                children.Select(content => new NodeItemViewModel(content, IsSelectedDelegate)).OrderBy(x => x.Name));
         }
     }
 }

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
 using Opc.Ua;
@@ -18,23 +17,9 @@ namespace OpcUA.Client.Core
         public ObservableCollection<NodeItemViewModel> Items { get; set; }
 
         /// <summary>
-        /// Selected Node in tree view
+        /// A list of attributes and values of <see cref="ReferenceDescription"/> object
         /// </summary>
-        public ReferenceDescription SelectedNode { get; set; }
-
-        private ObservableCollection<ReferenceDescription> _selectedNodes = new ObservableCollection<ReferenceDescription>();
-
-        public ObservableCollection<ReferenceDescription> SelectedNodes
-        {
-            get => _selectedNodes;
-            set => _selectedNodes = value;
-        }
-
-        public void SetSelectedNode(ReferenceDescription selectedNode)
-        {
-            SelectedNode = selectedNode;
-            _selectedNodes.Add(selectedNode);
-        }
+        public ObservableCollection<AttributeDataGridModel> SelectedNode { get; set; } = new ObservableCollection<AttributeDataGridModel>();
 
         #endregion
 
@@ -79,7 +64,7 @@ namespace OpcUA.Client.Core
         #endregion
 
         #endregion
-        // IsSelected h = SetSelectedNode;
+
         public MainViewModel()
         {
             NewSessionCommand = new RelayCommand(NewSession);
@@ -96,7 +81,7 @@ namespace OpcUA.Client.Core
 
             // Create the view models from the root ndoes
             Items = new ObservableCollection<NodeItemViewModel>(
-                children.Select(content => new NodeItemViewModel(content, isSelectedDelegate)));
+                children.Select(content => new NodeItemViewModel(content, isSelectedDelegate)).OrderBy(x => x.Name));
         }
 
         private void NewSession()
@@ -127,5 +112,48 @@ namespace OpcUA.Client.Core
         {
             return;
         }
+
+        /// <summary>
+        /// Callback method for set up selected node
+        /// </summary>
+        /// <param name="selectedNode"></param>
+        public void SetSelectedNode(ReferenceDescription selectedNode)
+        {
+            SelectedNode = new ObservableCollection<AttributeDataGridModel>(GetDataGridModel(selectedNode));
+        }
+
+        #region Private Helpers
+
+        /// <summary>
+        /// Takes attributes and values of <see cref="ReferenceDescription"/> object
+        /// </summary>
+        /// <param name="referenceDescription"></param>
+        /// <returns></returns>
+        private ObservableCollection<AttributeDataGridModel> GetDataGridModel(ReferenceDescription referenceDescription)
+        {
+            var data = new ObservableCollection<AttributeDataGridModel>();
+
+            foreach (var propertyInfo in referenceDescription.GetType().GetProperties())
+            {
+                var value = propertyInfo.GetValue(referenceDescription);
+
+                if (value is NodeId)
+                    value.GetType().GetProperties().ToList().ForEach(property => data.Add(new AttributeDataGridModel(property.Name, property.GetValue(value).ToString())));
+
+                data.Add(new AttributeDataGridModel(propertyInfo.Name, value.ToString()));
+            }
+
+            var node = IoC.Get<UAClientHelperAPI>().ReadNode(referenceDescription.NodeId.ToString());
+            node.GetType().GetProperties().ToList().ForEach(property => data.Add(new AttributeDataGridModel(property.Name, property.GetValue(node)?.ToString())));
+
+            if (node.NodeClass != NodeClass.Variable) return data;
+
+            var variableNode = (VariableNode) node.DataLock;
+            variableNode.GetType().GetProperties().ToList().ForEach(property =>
+            data.Add(new AttributeDataGridModel(property.Name, property.GetValue(variableNode)?.ToString())));
+
+            return data;
+        }
+        #endregion
     }
 }
