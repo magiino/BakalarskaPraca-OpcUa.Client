@@ -51,8 +51,12 @@
   <ItemGroup>
     <Compile Include="DataModels\ApplicationPage.cs" />
     <Compile Include="DataModels\AttributeDataGridModel.cs" />
+    <Compile Include="DataModels\EndpointDataGridModel.cs" />
+    <Compile Include="EMessageEncoding.cs" />
+    <Compile Include="EProtocol.cs" />
     <Compile Include="IoC\IoC.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Security\SecurityStringHelpers.cs" />
     <Compile Include="UAClientHelperAPI.cs" />
     <Compile Include="ViewModels\Application\ApplicationViewModel.cs" />
     <Compile Include="ViewModels\Application\UaClientSettingsViewModel.cs" />
@@ -62,7 +66,9 @@
     <Compile Include="ViewModels\Application\WelcomeViewModel.cs" />
     <Compile Include="ViewModels\Application\WindowViewModel.cs" />
     <Compile Include="ViewModels\Base\BaseViewModel.cs" />
+    <Compile Include="ViewModels\Base\IHavePassword.cs" />
     <Compile Include="ViewModels\Base\RelayCommand.cs" />
+    <Compile Include="ViewModels\Base\RelayParameterizedCommand.cs" />
     <Compile Include="ViewModels\NodeItemViewModel.cs" />
     <Compile Include="ViewModels\NodeStructureViewModel.cs" />
   </ItemGroup>

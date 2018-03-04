@@ -6,6 +6,7 @@
       xmlns:local="clr-namespace:OpcUA.Client"
       xmlns:core="clr-namespace:OpcUA.Client.Core;assembly=OpcUA.Client.Core"
       mc:Ignorable="d" 
+      x:Name="Page"
       d:DesignHeight="450" d:DesignWidth="800">
 
     <!-- -->
@@ -29,12 +30,14 @@
 
                 <!-- Text box for URL -->
                 <TextBox Grid.Column="0"
-                         Grid.Row="0"/>
+                         Grid.Row="0"
+                         Text="{Binding DiscoveryUrl}"/>
 
                 <!-- Search Button -->
                 <Button Grid.Column="1"
                         Grid.Row="0"
-                        Content="Search"/>
+                        Content="Search"
+                        Command="{Binding SearchCommand}"/>
             </Grid>
 
             <!-- Second Row -->
@@ -53,33 +56,48 @@
                     <ScrollViewer 
                         Height="auto" 
                         VerticalScrollBarVisibility="auto">
-
-                        <ListView VerticalAlignment="Stretch"/>
+                        <DataGrid VerticalAlignment="Stretch"
+                                  HorizontalAlignment="Stretch"
+                                  AutoGenerateColumns="false"
+                                  IsReadOnly="True"
+                                  ItemsSource="{Binding DiscoveredEndpoints}">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Width="*" Header="Application Name" Binding="{Binding ApplicationName}"/>
+                                <DataGridTextColumn Width="*" Header="Security Mode" Binding="{Binding SecurityMode}"/>
+                                <DataGridTextColumn Width="*" Header="Security Policy" Binding="{Binding SecurityPolicy}"/>
+                                <DataGridTextColumn Width="*" Header="Endpoint Url" Binding="{Binding EndpointUrl}"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
 
                     </ScrollViewer>
                 </GroupBox>
 
                 <Grid Grid.Column="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="22*"/>
+                        <ColumnDefinition Width="15*"/>
+                    </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
                         <!-- First Row -->
                         <RowDefinition Height="auto"/>
                         <!-- Second Row -->
                         <RowDefinition Height="*"/>
+                        <!-- Third Row -->
+                        <RowDefinition Height="auto"/>
                     </Grid.RowDefinitions>
 
                     <!-- Filter -->
-                    <GroupBox  Grid.Row="0"
-                               Header="Filter" 
-                               Padding="5px" >
+                    <GroupBox Grid.Row="0"
+                              Header="Filter" 
+                              Padding="5px" Grid.ColumnSpan="2" >
                         <StackPanel>
                             <TextBlock Text="Session Name"/>
-                            <TextBox/>
+                            <TextBox Text="{Binding SessionName}"/>
                             <!-- Protocol Combo Box -->
                             <TextBlock Text="Protocol"/>
-                            <ComboBox SelectedIndex="0">
-                                <ComboBoxItem Content="UA Tcp"></ComboBoxItem>
-                                <ComboBoxItem Content="UA Https"></ComboBoxItem>
-                            </ComboBox>
+                            <ComboBox SelectedIndex="0"
+                                      ItemsSource="{Binding EProtocols}"
+                                      SelectedItem="{Binding SelectedProtocol, Mode=TwoWay}"/>
                             <!-- Security Modes/Policies -->
                             <Grid Margin="0 10 0 0">
                                 <Grid.ColumnDefinitions>
@@ -91,38 +109,60 @@
                                 <!-- Security Modes -->
                                 <StackPanel Grid.Column="0">
                                     <TextBlock Text="Security Modes"/>
-                                    <CheckBox Content="None"/>
-                                    <CheckBox Content="Sign"/>
-                                    <CheckBox Content="Sign&amp;Encrypt"/>
+                                    <CheckBox Content="None"
+                                              IsChecked="{Binding NoneIsSelected}"/>
+                                    <CheckBox Content="Sign"
+                                              IsChecked="{Binding SignIsSelected}"/>
+                                    <CheckBox Content="Sign&amp;Encrypt"
+                                              IsChecked="{Binding SignEncryptIsSelected}"/>
                                 </StackPanel>
                                 <!-- Security Policies -->
                                 <StackPanel Grid.Column="1">
                                     <TextBlock Text="Security Policies"/>
-                                    <CheckBox Content="Basic128Rsa15"></CheckBox>
-                                    <CheckBox Content="Basic256"></CheckBox>
-                                    <CheckBox Content="Basic256Sha256"></CheckBox>
+                                    <CheckBox Content="Basic128Rsa15"
+                                              IsChecked="{Binding Basic128Rsa15IsSelected}"/>
+                                    <CheckBox Content="Basic256"
+                                              IsChecked="{Binding Basic256IsSelected}"/>
+                                    <CheckBox Content="Basic256Sha256"
+                                              IsChecked="{Binding Basic256Sha256IsSelected}"/>
                                 </StackPanel>
                             </Grid>
                             <TextBlock Text="Message Encoding"/>
-                            <ComboBox SelectedIndex="0">
-                                <ComboBoxItem Content="UA Tcp"></ComboBoxItem>
-                                <ComboBoxItem Content="UA Https"></ComboBoxItem>
-                            </ComboBox>
+                            <ComboBox SelectedIndex="0"
+                                      ItemsSource="{Binding EMessageEncodings}"
+                                      SelectedItem="{Binding SelectedEncoding, Mode=TwoWay}"/>
                         </StackPanel>
                     </GroupBox>
 
                     <!-- User Authentication -->
                     <GroupBox Grid.Row="1" 
-                              Header="User Authentication">
-                        <StackPanel >
-                            <CheckBox Content="Anonymous"/>
-                            <CheckBox Content="User/Password"/>
-                            <TextBox/>
-                            <TextBox/>
+                              Header="User Authentication"
+                              Grid.ColumnSpan="2" 
+                              Grid.Column="0">
+                        <StackPanel>
+                            <RadioButton Content="Anonymous"
+                                         GroupName="Group1"
+                                         IsChecked="{Binding AnonymousIsSelected}"
+                                         />
+                            <RadioButton Content="User/Password"
+                                         GroupName="Group1"
+                                         x:Name="UserPasswordChBox"
+                                         IsChecked="{Binding UserPwIsSelected}"/>
+                            <TextBlock Text="User Name"/>
+                            <TextBox Text="{Binding UserName}"
+                                     Tag="User Name"
+                                     IsEnabled="{Binding IsChecked, ElementName=UserPasswordChBox}"/>
+                            <TextBlock Text="Passord"/>
+                            <PasswordBox x:Name="PasswordText"   
+                                         Tag="Password"
+                                         IsEnabled="{Binding IsChecked, ElementName=UserPasswordChBox}"/>
+                            <Button Margin="0 30 0 0"
+                                    Content="Connect"
+                                    IsDefault="True"
+                                    Command="{Binding ConnectCommand}" 
+                                    CommandParameter="{Binding ElementName=Page}"/>
                         </StackPanel>
                     </GroupBox>
-                   
-
                 </Grid>
             </Grid>
         </Grid>

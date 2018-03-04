@@ -40,10 +40,10 @@
                         <DataGrid HorizontalAlignment="Left" 
                                   Width="300px" 
                                   AutoGenerateColumns="false"
-                                  ItemsSource="{Binding SelectedNode}">
+                                  ItemsSource="{Binding SelectedNode}" Margin="0,1,0,-1">
                             <DataGrid.Columns>
-                                <DataGridTextColumn Width="*" Header="Attribute" Binding="{Binding Attribute}"></DataGridTextColumn>
-                                <DataGridTextColumn Width="*" Header="Value" Binding="{Binding Value}"></DataGridTextColumn>
+                                <DataGridTextColumn Width="*" Header="Attribute" Binding="{Binding Attribute}"/>
+                                <DataGridTextColumn Width="*" Header="Value" Binding="{Binding Value}"/>
                             </DataGrid.Columns>
                         </DataGrid>
                     </TabItem>
