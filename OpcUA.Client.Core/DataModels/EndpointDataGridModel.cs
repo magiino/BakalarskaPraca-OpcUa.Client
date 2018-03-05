@@ -1,6 +1,6 @@
 ﻿using Opc.Ua;
 
-namespace OpcUA.Client.Core.DataModels
+namespace OpcUA.Client.Core
 {
     public class EndpointDataGridModel
     {
