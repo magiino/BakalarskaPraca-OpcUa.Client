@@ -29,7 +29,8 @@ namespace OpcUA.Client.Core
 {
     public class UaClient
     {
-        #region Construction
+        #region Constructors
+
         public UaClient()
         {
             // Creats the application configuration (containing the certificate) on construction
@@ -96,6 +97,8 @@ namespace OpcUA.Client.Core
         /// <exception cref="Exception">Throws and forwards any exception with short error description.</exception>
         public EndpointDescriptionCollection GetEndpoints(string serverUrl)
         {
+            if (serverUrl.StartsWith("https")) return new EndpointDescriptionCollection();
+
             //Create a URI using the server's URL
             Uri uri = new Uri(serverUrl);
             try
