@@ -15,7 +15,7 @@ namespace OpcUA.Client.Core
         /// <summary>
         /// Ua client
         /// </summary>
-        private readonly UAClientHelperAPI _uaClient; 
+        private readonly UaClient _uaClient; 
 
         #endregion
 
@@ -25,6 +25,19 @@ namespace OpcUA.Client.Core
         /// Url of server for discover endpoints
         /// </summary>
         public string DiscoveryUrl { get; set; }
+
+
+        public ObservableCollection<ApplicationDescription> FoundedServers { get; set; }
+
+        public ApplicationDescription SelectedServer { get; set; }
+
+
+        public EndpointDescription SelectedEndpoint { get; set; }
+
+        public EndpointDataGridModel SelectedEndpointDataGridModel
+        {
+            set => SelectedEndpoint = value?.EndpointDesciption;
+        }
 
         /// <summary>
         /// A list of discovered endpoints
@@ -46,17 +59,17 @@ namespace OpcUA.Client.Core
         /// </summary>
         public EProtocol SelectedProtocol { get; set; }
 
-        public bool? NoneIsSelected { get; set; } = true;
+        public bool NoneIsSelected { get; set; } = true;
 
-        public bool? SignIsSelected { get; set; } = false;
+        public bool SignIsSelected { get; set; } = true;
 
-        public bool? SignEncryptIsSelected { get; set; } = false;
+        public bool SignEncryptIsSelected { get; set; } = true;
 
-        public bool? Basic128Rsa15IsSelected { get; set; } = false;
+        public bool Basic128Rsa15IsSelected { get; set; } = true;
 
-        public bool? Basic256IsSelected { get; set; } = false;
+        public bool Basic256IsSelected { get; set; } = true;
 
-        public bool? Basic256Sha256IsSelected { get; set; } = false;
+        public bool Basic256Sha256IsSelected { get; set; } = true;
         
         /// <summary>
         /// Protocols in combo box
@@ -68,13 +81,11 @@ namespace OpcUA.Client.Core
         /// </summary>
         public EMessageEncoding SelectedEncoding { get; set; }
 
-        public bool? AnonymousIsSelected { get; set; } = true;
+        public bool AnonymousIsSelected { get; set; } = true;
         
-        public bool? UserPwIsSelected { get; set; } = false;
+        public bool UserPwIsSelected { get; set; } = false;
 
         public string UserName { get; set; }
-
-        public string UserPassword { get; set; }
 
         #endregion
 
@@ -84,6 +95,11 @@ namespace OpcUA.Client.Core
         /// The command for search endpoints
         /// </summary>
         public ICommand SearchCommand { get; set; }
+
+        /// <summary>
+        /// The command for search endpoints
+        /// </summary>
+        public ICommand SearchServersCommand { get; set; }
 
         /// <summary>
         /// The command for search all endpoints in network
@@ -96,22 +112,50 @@ namespace OpcUA.Client.Core
 
         public DiscoverEndpointsViewModel()
         {
-            _uaClient = IoC.Get<UAClientHelperAPI>();
+            _uaClient = IoC.UaClient;
 
             SearchCommand = new RelayCommand(SearchEndpoints);
+            SearchServersCommand = new RelayCommand(SearchServers);
             ConnectCommand = new RelayParameterizedCommand(ConnectToServer);
-        }
-
-        private void ConnectToServer(object parameter)
-        {
-            var userName = UserName;
-            var pass = (parameter as IHavePassword)?.SecurePassword.Unsecure();
         }
 
         #endregion
 
+        #region Command Methods
+
+        private void ConnectToServer(object parameter)
+        {
+            if (UserPwIsSelected)
+            {
+                var userName = UserName;
+                var pass = (parameter as IHavePassword)?.SecurePassword.Unsecure();
+            }
+            else
+            {
+                _uaClient.Connect(SelectedEndpoint, UserPwIsSelected, null, null);
+                IoC.Application.GoToPage(ApplicationPage.Main);
+            }
+        }
+
+        private void SearchServers()
+        {
+            FoundedServers = new ObservableCollection<ApplicationDescription>(_uaClient.FindServers("opc.tcp://localhost"));
+        }
+
         private void SearchEndpoints()
         {
+            DiscoveredEndpoints.Clear();
+
+            foreach (var url in SelectedServer.DiscoveryUrls)
+            {
+                var endpoints = _uaClient.GetEndpoints(url);
+                foreach (var ep in endpoints)
+                {
+                    DiscoveredEndpoints.Add(new EndpointDataGridModel(ep));
+                }
+            }
+
+            /*
             var servers = _uaClient.FindServers(DiscoveryUrl);
           
             foreach (ApplicationDescription ad in servers)
@@ -125,6 +169,29 @@ namespace OpcUA.Client.Core
                     }
                 }
             }
+            */
         }
+
+        #endregion
     }
 }
+
+/*
+
+     <!-- App type -->
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="Application Type"/>
+                                            <TextBlock VerticalAlignment="Center" Text="{Binding ApplicationType}"/>
+                                        </StackPanel>
+                                        <!-- App uri -->
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="Application Uri"/>
+                                            <TextBlock VerticalAlignment="Center" Text="{Binding ApplicationUri}"/>
+                                        </StackPanel>
+                                        <!-- Product uri -->
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="Product Uri"/>
+                                            <TextBlock VerticalAlignment="Center" Text="{Binding ProductUri}"/>
+                                        </StackPanel>
+
+ */

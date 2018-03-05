@@ -12,6 +12,7 @@
 // 01.00.00 31.08.2016 (Siemens) First released version
 // 01.01.00 22.02.2017 (Siemens) Implement user authentication, SHA256 Cert, Basic256Rsa256 connection,
 // Basic256Rsa256 connections, read/write structs/UDTs
+// 01.02.00 04.03.2018 (Marek Magáth)
 //=============================================================================
 
 using System;
@@ -26,13 +27,13 @@ using Opc.Ua.Client;
 
 namespace OpcUA.Client.Core
 {
-    public class UAClientHelperAPI
+    public class UaClient
     {
         #region Construction
-        public UAClientHelperAPI()
+        public UaClient()
         {
             // Creats the application configuration (containing the certificate) on construction
-            _mApplicationConfig = CreateClientConfiguration();
+            _applicationConfig = CreateClientConfiguration();
         }
         #endregion
 
@@ -41,7 +42,7 @@ namespace OpcUA.Client.Core
         /// <summary> 
         /// Specifies this application.
         /// </summary>
-        private readonly ApplicationConfiguration _mApplicationConfig;
+        private readonly ApplicationConfiguration _applicationConfig;
 
         /// <summary>
         /// Provides the session being established with an OPC UA server.
@@ -128,10 +129,10 @@ namespace OpcUA.Client.Core
             try
             {
                 //Secify application configuration
-                ApplicationConfiguration ApplicationConfig = _mApplicationConfig;
+                ApplicationConfiguration ApplicationConfig = _applicationConfig;
 
                 //Hook up a validator function for a CertificateValidation event
-                _mApplicationConfig.CertificateValidator.CertificateValidation += Notificatio_CertificateValidation;
+                _applicationConfig.CertificateValidator.CertificateValidation += Notificatio_CertificateValidation;
 
                 //Create EndPoint description
                 EndpointDescription EndpointDescription = CreateEndpointDescription(url, secPolicy, msgSecMode);
@@ -187,7 +188,7 @@ namespace OpcUA.Client.Core
             try
             {
                 //Secify application configuration
-                ApplicationConfiguration ApplicationConfig = _mApplicationConfig;
+                ApplicationConfiguration ApplicationConfig = _applicationConfig;
 
                 //Hook up a validator function for a CertificateValidation event
                 ApplicationConfig.CertificateValidator.CertificateValidation += Notificatio_CertificateValidation;
@@ -199,7 +200,7 @@ namespace OpcUA.Client.Core
                 ConfiguredEndpoint mEndpoint = new ConfiguredEndpoint(null, endpointDescription, EndpointConfiguration);
 
                 //Create the binding factory.
-                BindingFactory bindingFactory = BindingFactory.Create(_mApplicationConfig, ServiceMessageContext.GlobalContext);
+                BindingFactory bindingFactory = BindingFactory.Create(_applicationConfig, ServiceMessageContext.GlobalContext);
 
                 //Creat a session name
                 String sessionName = "MySession";
@@ -243,6 +244,7 @@ namespace OpcUA.Client.Core
         public void Disconnect()
         {
             // Close the session.
+            if (Session == null) return;
             try
             {
                 Session.Close(10000);

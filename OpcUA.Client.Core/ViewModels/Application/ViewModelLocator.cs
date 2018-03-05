@@ -10,12 +10,12 @@
         /// <summary>
         /// Singleton instance of the locator
         /// </summary>
-        public static ViewModelLocator Instance { get; private set; } = new ViewModelLocator();
+        public static ViewModelLocator Instance { get; } = new ViewModelLocator();
         
         /// <summary>
         /// The application view model
         /// </summary>
-        public static ApplicationViewModel ApplicationViewModel => IoC.Get<ApplicationViewModel>();
+        public static ApplicationViewModel ApplicationViewModel => IoC.Application;
 
         #endregion
     }

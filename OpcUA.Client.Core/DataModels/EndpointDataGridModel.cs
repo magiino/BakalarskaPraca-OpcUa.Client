@@ -6,20 +6,20 @@ namespace OpcUA.Client.Core.DataModels
     {
         #region Private Fields
 
-        private readonly EndpointDescription _endpointDesciption;
+        public EndpointDescription EndpointDesciption { get; set; }
 
         #endregion
 
         #region Public Properties
 
-        public string ApplicationName => _endpointDesciption.Server.ApplicationName.ToString();
+        public string ApplicationName => EndpointDesciption.Server.ApplicationName.ToString();
 
         // TODO find or create enums for security
-        public MessageSecurityMode SecurityMode => _endpointDesciption.SecurityMode;
+        public MessageSecurityMode SecurityMode => EndpointDesciption.SecurityMode;
 
-        public string SecurityPolicy => SecurityPolicies.GetDisplayName(_endpointDesciption.SecurityPolicyUri);
+        public string SecurityPolicy => SecurityPolicies.GetDisplayName(EndpointDesciption.SecurityPolicyUri);
 
-        public string EndpointUrl => _endpointDesciption.EndpointUrl;
+        public string EndpointUrl => EndpointDesciption.EndpointUrl;
 
         #endregion
 
@@ -27,7 +27,7 @@ namespace OpcUA.Client.Core.DataModels
 
         public EndpointDataGridModel(EndpointDescription endpointDesciption)
         {
-            _endpointDesciption = endpointDesciption;
+            EndpointDesciption = endpointDesciption;
         }
 
         #endregion

@@ -21,23 +21,22 @@ namespace OpcUA.Client
         public MainWindow()
         {
             InitializeComponent();
-            Connect();
         }
 
         protected override void OnClosing(CancelEventArgs e)
         {
-            IoC.Get<UAClientHelperAPI>().Disconnect();
+            IoC.UaClient.Disconnect();
         }
 
         #endregion
         private void Connect()
         {
-            var client = IoC.Get<UAClientHelperAPI>();
+            var client = IoC.UaClient;
             if (_mySession != null && !_mySession.Disposed)
             {
 
                 client.Disconnect();
-                _mySession = IoC.Get<UAClientHelperAPI>().Session;
+                _mySession = IoC.UaClient.Session;
             }
             else
             {

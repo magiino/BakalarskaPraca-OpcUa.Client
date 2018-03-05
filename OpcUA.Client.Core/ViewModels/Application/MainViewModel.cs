@@ -75,7 +75,7 @@ namespace OpcUA.Client.Core
             DisconnectSessionCommand = new RelayCommand(DisconnectSession);
 
             // Get the root nodes
-            var children = IoC.Get<UAClientHelperAPI>().BrowseRoot();
+            var children = IoC.UaClient.BrowseRoot();
 
             IsSelected isSelectedDelegate = SetSelectedNode;
 
@@ -86,7 +86,7 @@ namespace OpcUA.Client.Core
 
         private void NewSession()
         {
-            IoC.Get<ApplicationViewModel>().GoToPage(ApplicationPage.Welcome);
+            IoC.Application.GoToPage(ApplicationPage.Welcome);
         }
 
         private void SaveSession()
@@ -143,7 +143,7 @@ namespace OpcUA.Client.Core
                 data.Add(new AttributeDataGridModel(propertyInfo.Name, value.ToString()));
             }
 
-            var node = IoC.Get<UAClientHelperAPI>().ReadNode(referenceDescription.NodeId.ToString());
+            var node = IoC.UaClient.ReadNode(referenceDescription.NodeId.ToString());
             node.GetType().GetProperties().ToList().ForEach(property => data.Add(new AttributeDataGridModel(property.Name, property.GetValue(node)?.ToString())));
 
             if (node.NodeClass != NodeClass.Variable) return data;

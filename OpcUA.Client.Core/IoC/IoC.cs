@@ -19,6 +19,11 @@ namespace OpcUA.Client.Core
         /// </summary>
         public static ApplicationViewModel Application => IoC.Get<ApplicationViewModel>();
 
+        /// <summary>
+        /// A shortcut to access the <see cref="UaClient"/>
+        /// </summary>
+        public static UaClient UaClient => IoC.Get<UaClient>();
+
         #endregion
 
         #region Setup
@@ -42,7 +47,7 @@ namespace OpcUA.Client.Core
         private static void BindUaApi()
         {
             // Bind to a single instance of UaClientHelperApi
-            Kernel.Bind<UAClientHelperAPI>().ToConstant(new UAClientHelperAPI());
+            Kernel.Bind<UaClient>().ToConstant(new UaClient());
         }
 
         #endregion

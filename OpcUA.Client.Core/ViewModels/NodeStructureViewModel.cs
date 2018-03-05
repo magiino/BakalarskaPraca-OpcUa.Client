@@ -26,11 +26,12 @@ namespace OpcUA.Client.Core
         public NodeStructureViewModel()
         {
             // Get the root nodes
-            var children = IoC.Get<UAClientHelperAPI>().BrowseRoot();
+            var children = IoC.UaClient.BrowseRoot();
 
             // Create the view models from the root ndoes
             //Items = new ObservableCollection<NodeItemViewModel>(
             //    children.Select(content => new NodeItemViewModel(content)));
+
         }
 
         #endregion

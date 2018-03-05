@@ -32,7 +32,7 @@
 
                     </TabItem>
                     <TabItem Header="Server info">
-
+                        <TextBlock Text="{Binding SelectedNode}"></TextBlock>
                     </TabItem>
                 </TabControl>
                 <TabControl Grid.Column="1">
@@ -40,7 +40,7 @@
                         <DataGrid HorizontalAlignment="Left" 
                                   Width="300px" 
                                   AutoGenerateColumns="false"
-                                  ItemsSource="{Binding SelectedNode}" Margin="0,1,0,-1">
+                                  ItemsSource="{Binding SelectedNode}">
                             <DataGrid.Columns>
                                 <DataGridTextColumn Width="*" Header="Attribute" Binding="{Binding Attribute}"/>
                                 <DataGridTextColumn Width="*" Header="Value" Binding="{Binding Value}"/>
