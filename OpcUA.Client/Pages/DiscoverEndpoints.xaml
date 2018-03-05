@@ -5,9 +5,10 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:OpcUA.Client"
       xmlns:core="clr-namespace:OpcUA.Client.Core;assembly=OpcUA.Client.Core"
+      xmlns:fa="http://schemas.fontawesome.io/icons/"
       mc:Ignorable="d" 
       x:Name="Page"
-      d:DesignHeight="450" d:DesignWidth="800">
+      d:DesignHeight="600" d:DesignWidth="800">
 
     <!-- -->
     <Border  Background="{StaticResource BackgroundLightBrush}"
@@ -19,6 +20,7 @@
                 <!-- Second Row -->
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
+
             <!-- First Row -->
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -31,36 +33,122 @@
                 <!-- Text box for URL -->
                 <TextBox Grid.Column="0"
                          Grid.Row="0"
-                         Text="{Binding DiscoveryUrl}"/>
+                         Text="{Binding DiscoveryUrl, Mode=TwoWay}"/>
 
                 <!-- Search Button -->
                 <Button Grid.Column="1"
                         Grid.Row="0"
                         Content="Search"
+                        Padding="10 5"
                         Command="{Binding SearchCommand}"/>
             </Grid>
 
             <!-- Second Row -->
             <Grid Grid.Row="1">
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
                 <Grid.ColumnDefinitions>
-                    <!-- Endpoints List -->
                     <ColumnDefinition Width="*"/>
-                    <!-- Filter -->
                     <ColumnDefinition Width="auto"/>
                 </Grid.ColumnDefinitions>
 
+                <!-- Server Info -->
+                <GroupBox Grid.Row="0"
+                          Grid.Column="0"
+                          Header="Endpoint Info" 
+                          Padding="5px">
+                    <Grid DataContext="{Binding SelectedEndpoint}">
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel Grid.Column="0">
+                            <TextBlock Text="Application Name: "/>
+                            <TextBlock Text="Application Type: "/>
+                            <TextBlock Text="Application Uri: "/>
+                            <TextBlock Text="Product Uri: "/>
+                            <TextBlock Text="Transport Profile Uri:"/>
+                            <TextBlock Text="Security Level :"/>
+                            <TextBlock Text="User token types :"/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="1" >
+                            <StackPanel DataContext="{Binding Server}">
+                                <TextBlock  Text="{Binding ApplicationName}"/>
+                                <TextBlock  Text="{Binding ApplicationType}"/>
+                                <TextBlock  Text="{Binding ApplicationUri}"/>
+                                <TextBlock  Text="{Binding ProductUri}"/>
+                            </StackPanel>
+                            <TextBlock  Text="{Binding TransportProfileUri}"/>
+                            <TextBlock  Text="{Binding SecurityLevel}"/>
+                            <ListView ItemsSource="{Binding UserIdentityTokens}"
+                                      Background="{StaticResource BackgroundLightBrush}"
+                                      HorizontalAlignment="Left"
+                                      BorderThickness="0">
+                                <ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <fa:ImageAwesome 
+                                                Width="10" 
+                                                Margin="3"
+                                                Foreground="{StaticResource WordBlueBrush}"
+                                                Icon="Server"/>
+                                            <TextBlock VerticalAlignment="Center" Text="{Binding TokenType}" />
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
+                        </StackPanel>
+                    </Grid>
+                </GroupBox>
+
+                <!-- Server List -->
+                <GroupBox Grid.Row="0"
+                            Grid.Column="1"
+                            Header="Servers" 
+                            Padding="5px">
+                    <ListView ItemsSource="{Binding FoundedServers}"
+                              SelectedItem="{Binding SelectedServer, Mode=TwoWay}"
+                              Background="{StaticResource BackgroundLightBrush}"
+                              SelectionMode="Single">
+
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <fa:ImageAwesome 
+                                        Width="10" 
+                                        Margin="3"
+                                        Foreground="{StaticResource WordBlueBrush}"
+                                        Icon="Server"/>
+                                    <TextBlock VerticalAlignment="Center" Text="{Binding ApplicationName}" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </GroupBox>
+
                 <!-- Endpoints List -->
-                <GroupBox Grid.Column="0"
-                          Header="Endpoints" 
-                          Padding="5px" >
+                <GroupBox Grid.Row="1"
+                            Grid.Column="0"
+                            Header="Endpoints" 
+                            Padding="5px" >
                     <ScrollViewer 
                         Height="auto" 
                         VerticalScrollBarVisibility="auto">
+
                         <DataGrid VerticalAlignment="Stretch"
                                   HorizontalAlignment="Stretch"
                                   AutoGenerateColumns="false"
+                                  Background="{StaticResource BackgroundLightBrush}"
                                   IsReadOnly="True"
-                                  ItemsSource="{Binding DiscoveredEndpoints}">
+                                  ItemsSource="{Binding DiscoveredEndpoints}"
+                                  SelectedItem="{Binding SelectedEndpointDataGridModel, Mode=TwoWay}"
+                                  SelectionMode="Single">
                             <DataGrid.Columns>
                                 <DataGridTextColumn Width="*" Header="Application Name" Binding="{Binding ApplicationName}"/>
                                 <DataGridTextColumn Width="*" Header="Security Mode" Binding="{Binding SecurityMode}"/>
@@ -72,32 +160,33 @@
                     </ScrollViewer>
                 </GroupBox>
 
-                <Grid Grid.Column="1">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="22*"/>
-                        <ColumnDefinition Width="15*"/>
-                    </Grid.ColumnDefinitions>
+                <!-- Filter -->
+                <Grid Grid.Row="1" 
+                      Grid.Column="1">
+
                     <Grid.RowDefinitions>
                         <!-- First Row -->
                         <RowDefinition Height="auto"/>
                         <!-- Second Row -->
                         <RowDefinition Height="*"/>
-                        <!-- Third Row -->
-                        <RowDefinition Height="auto"/>
                     </Grid.RowDefinitions>
 
-                    <!-- Filter -->
                     <GroupBox Grid.Row="0"
                               Header="Filter" 
                               Padding="5px" Grid.ColumnSpan="2" >
+
                         <StackPanel>
+
+                            <!-- Session Name -->
                             <TextBlock Text="Session Name"/>
                             <TextBox Text="{Binding SessionName}"/>
+
                             <!-- Protocol Combo Box -->
                             <TextBlock Text="Protocol"/>
                             <ComboBox SelectedIndex="0"
                                       ItemsSource="{Binding EProtocols}"
                                       SelectedItem="{Binding SelectedProtocol, Mode=TwoWay}"/>
+
                             <!-- Security Modes/Policies -->
                             <Grid Margin="0 10 0 0">
                                 <Grid.ColumnDefinitions>
@@ -106,6 +195,7 @@
                                     <!-- Security Policies -->
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
+
                                 <!-- Security Modes -->
                                 <StackPanel Grid.Column="0">
                                     <TextBlock Text="Security Modes"/>
@@ -116,6 +206,7 @@
                                     <CheckBox Content="Sign&amp;Encrypt"
                                               IsChecked="{Binding SignEncryptIsSelected}"/>
                                 </StackPanel>
+
                                 <!-- Security Policies -->
                                 <StackPanel Grid.Column="1">
                                     <TextBlock Text="Security Policies"/>
@@ -127,6 +218,8 @@
                                               IsChecked="{Binding Basic256Sha256IsSelected}"/>
                                 </StackPanel>
                             </Grid>
+
+                            <!-- Message Encoding -->
                             <TextBlock Text="Message Encoding"/>
                             <ComboBox SelectedIndex="0"
                                       ItemsSource="{Binding EMessageEncodings}"
@@ -137,9 +230,9 @@
                     <!-- User Authentication -->
                     <GroupBox Grid.Row="1" 
                               Header="User Authentication"
-                              Grid.ColumnSpan="2" 
                               Grid.Column="0">
                         <StackPanel>
+                            <!-- Radio Buttons -->
                             <RadioButton Content="Anonymous"
                                          GroupName="Group1"
                                          IsChecked="{Binding AnonymousIsSelected}"
@@ -148,23 +241,30 @@
                                          GroupName="Group1"
                                          x:Name="UserPasswordChBox"
                                          IsChecked="{Binding UserPwIsSelected}"/>
+
+                            <!-- User Name -->
                             <TextBlock Text="User Name"/>
                             <TextBox Text="{Binding UserName}"
                                      Tag="User Name"
                                      IsEnabled="{Binding IsChecked, ElementName=UserPasswordChBox}"/>
                             <TextBlock Text="Passord"/>
+
+                            <!-- User Password -->
                             <PasswordBox x:Name="PasswordText"   
                                          Tag="Password"
                                          IsEnabled="{Binding IsChecked, ElementName=UserPasswordChBox}"/>
-                            <Button Margin="0 30 0 0"
-                                    Content="Connect"
+                            <Button Content="Connect"
                                     IsDefault="True"
                                     Command="{Binding ConnectCommand}" 
                                     CommandParameter="{Binding ElementName=Page}"/>
                         </StackPanel>
                     </GroupBox>
+
                 </Grid>
+                <!-- End Filter -->
             </Grid>
+            <!-- End Second Row -->
         </Grid>
+        <!-- End main Grid -->
     </Border>
 </local:BasePage>

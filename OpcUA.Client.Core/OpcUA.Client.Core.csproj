@@ -57,7 +57,7 @@
     <Compile Include="IoC\IoC.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Security\SecurityStringHelpers.cs" />
-    <Compile Include="UAClientHelperAPI.cs" />
+    <Compile Include="UaClient.cs" />
     <Compile Include="ViewModels\Application\ApplicationViewModel.cs" />
     <Compile Include="ViewModels\Application\UaClientSettingsViewModel.cs" />
     <Compile Include="ViewModels\Application\MainViewModel.cs" />

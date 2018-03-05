@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
+using Ninject.Infrastructure.Language;
 using Opc.Ua;
 using OpcUA.Client.Core.DataModels;
 
@@ -13,9 +14,9 @@ namespace OpcUA.Client.Core
         #region Private Fields
 
         /// <summary>
-        /// Ua client
+        /// Ua Client API
         /// </summary>
-        private readonly UAClientHelperAPI _uaClient; 
+        private readonly UaClient _uaClient; 
 
         #endregion
 
@@ -24,7 +25,17 @@ namespace OpcUA.Client.Core
         /// <summary>
         /// Url of server for discover endpoints
         /// </summary>
-        public string DiscoveryUrl { get; set; }
+        public string DiscoveryUrl { get; set; } = "opc.tcp://localhost";
+
+        /// <summary>
+        /// Founded servers from search
+        /// </summary>
+        public ObservableCollection<ApplicationDescription> FoundedServers { get; set; }
+
+        /// <summary>
+        /// Selected server from <see cref="FoundedServers"/>
+        /// </summary>
+        public ApplicationDescription SelectedServer { get; set; }
 
         /// <summary>
         /// A list of discovered endpoints
@@ -32,49 +43,63 @@ namespace OpcUA.Client.Core
         public ObservableCollection<EndpointDataGridModel> DiscoveredEndpoints { get; set; } = new ObservableCollection<EndpointDataGridModel>();
 
         /// <summary>
-        /// Url of server for discover endpoints
+        /// Getting selected endpoint description from data grid model
         /// </summary>
-        public string SessionName { get; set; }
+        public EndpointDataGridModel SelectedEndpointDataGridModel
+        {
+            set => SelectedEndpoint = value?.EndpointDesciption;
+        }
 
         /// <summary>
-        /// Protocols in combo box
+        /// Selected endpoint description
         /// </summary>
-        public IEnumerable<EProtocol> EProtocols { get; set; } = Enum.GetValues(typeof(EProtocol)).Cast<EProtocol>();
+        public EndpointDescription SelectedEndpoint { get; set; }
 
-        /// <summary>
-        /// Selected protocol form combo box
-        /// </summary>
-        public EProtocol SelectedProtocol { get; set; }
+            #region Filter
+            /// <summary>
+            /// Url of server for discover endpoints
+            /// </summary>
+            public string SessionName { get; set; }
 
-        public bool? NoneIsSelected { get; set; } = true;
+            /// <summary>
+            /// Protocols in combo box
+            /// </summary>
+            public IEnumerable<EProtocol> EProtocols { get; set; } = Enum.GetValues(typeof(EProtocol)).Cast<EProtocol>();
 
-        public bool? SignIsSelected { get; set; } = false;
+            /// <summary>
+            /// Selected protocol from combo box
+            /// </summary>
+            public EProtocol SelectedProtocol { get; set; }
 
-        public bool? SignEncryptIsSelected { get; set; } = false;
+            public bool NoneIsSelected { get; set; } = true;
 
-        public bool? Basic128Rsa15IsSelected { get; set; } = false;
+            public bool SignIsSelected { get; set; } = true;
 
-        public bool? Basic256IsSelected { get; set; } = false;
+            public bool SignEncryptIsSelected { get; set; } = true;
 
-        public bool? Basic256Sha256IsSelected { get; set; } = false;
-        
-        /// <summary>
-        /// Protocols in combo box
-        /// </summary>
-        public IEnumerable<EMessageEncoding> EMessageEncodings { get; set; } = Enum.GetValues(typeof(EMessageEncoding)).Cast<EMessageEncoding>();
+            public bool Basic128Rsa15IsSelected { get; set; } = true;
 
-        /// <summary>
-        /// Selected protocol form combo box
-        /// </summary>
-        public EMessageEncoding SelectedEncoding { get; set; }
+            public bool Basic256IsSelected { get; set; } = true;
 
-        public bool? AnonymousIsSelected { get; set; } = true;
-        
-        public bool? UserPwIsSelected { get; set; } = false;
+            public bool Basic256Sha256IsSelected { get; set; } = true;
 
-        public string UserName { get; set; }
+            /// <summary>
+            /// Protocols in combo box
+            /// </summary>
+            public IEnumerable<EMessageEncoding> EMessageEncodings { get; set; } = Enum.GetValues(typeof(EMessageEncoding)).Cast<EMessageEncoding>();
 
-        public string UserPassword { get; set; }
+            /// <summary>
+            /// Selected protocol form combo box
+            /// </summary>
+            public EMessageEncoding SelectedEncoding { get; set; }
+
+            public bool AnonymousIsSelected { get; set; } = true;
+
+            public bool UserPwIsSelected { get; set; } = false;
+
+            public string UserName { get; set; } 
+
+            #endregion
 
         #endregion
 
@@ -96,35 +121,52 @@ namespace OpcUA.Client.Core
 
         public DiscoverEndpointsViewModel()
         {
-            _uaClient = IoC.Get<UAClientHelperAPI>();
-
+            _uaClient = IoC.UaClient;
+            
             SearchCommand = new RelayCommand(SearchEndpoints);
             ConnectCommand = new RelayParameterizedCommand(ConnectToServer);
         }
 
+        #endregion
+
+        #region Command Methods
+
         private void ConnectToServer(object parameter)
         {
-            var userName = UserName;
-            var pass = (parameter as IHavePassword)?.SecurePassword.Unsecure();
+            if (UserPwIsSelected)
+            {
+                var userName = UserName;
+                var pass = (parameter as IHavePassword)?.SecurePassword.Unsecure();
+            }
+            else
+            {
+                _uaClient.Connect(SelectedEndpoint, UserPwIsSelected, null, null);
+                IoC.Application.GoToPage(ApplicationPage.Main);
+            }
         }
-
-        #endregion
 
         private void SearchEndpoints()
         {
-            var servers = _uaClient.FindServers(DiscoveryUrl);
-          
-            foreach (ApplicationDescription ad in servers)
+            DiscoveredEndpoints.Clear();
+
+            FoundedServers = new ObservableCollection<ApplicationDescription>(_uaClient.FindServers(DiscoveryUrl)); 
+
+            foreach (ApplicationDescription ad in FoundedServers)
             {
                 foreach (string url in ad.DiscoveryUrls)
                 {
-                    var endpoints = _uaClient.GetEndpoints(DiscoveryUrl);
+                    var endpoints = _uaClient.GetEndpoints(url);
                     foreach (EndpointDescription ep in endpoints)
                     {
+                        var b = ep.EncodingSupport;
+                        var c = ep.SecurityLevel;
+                        var d = ep.UserIdentityTokens;
                         DiscoveredEndpoints.Add(new EndpointDataGridModel(ep));
                     }
                 }
             }
         }
+
+        #endregion
     }
 }
