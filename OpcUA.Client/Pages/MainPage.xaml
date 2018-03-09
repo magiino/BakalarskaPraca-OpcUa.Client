@@ -19,14 +19,44 @@
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
-
                 <TabControl
                     Grid.Column="0"
                     HorizontalAlignment="Left" 
                     DockPanel.Dock="Left">
 
                     <TabItem Header="TreeView">
-                        <local:TreeView/>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <local:TreeView MinWidth="200"/>
+
+                            <TabControl Grid.Column="1">
+                                <TabItem Header="Node Attributes"
+                                         VerticalAlignment="Top" Height="26">
+                                    <DataGrid Grid.Column="1"
+                                              HorizontalAlignment="Left" 
+                                              Width="300px" 
+                                              AutoGenerateColumns="false"
+                                              ItemsSource="{Binding SelectedNode}">
+
+                                        <DataGrid.Columns>
+                                            <DataGridTextColumn Width="*" Header="Attribute" Binding="{Binding Attribute}"/>
+                                            <DataGridTextColumn Width="*" Header="Value" Binding="{Binding Value}"/>
+                                        </DataGrid.Columns>
+                                    </DataGrid>
+                                </TabItem>
+
+                                <TabItem Header="Node References"
+                                         VerticalAlignment="Top" Height="26">
+
+                                </TabItem>
+                            </TabControl>
+                        </Grid>
+                        
+                        
                     </TabItem>
                     <TabItem Header="PLC info">
 
@@ -36,17 +66,27 @@
                     </TabItem>
                 </TabControl>
                 <TabControl Grid.Column="1">
-                    <TabItem Header="Node Attributes">
-                        <DataGrid HorizontalAlignment="Left" 
-                                  Width="300px" 
-                                  AutoGenerateColumns="false"
-                                  ItemsSource="{Binding SelectedNode}">
-                            <DataGrid.Columns>
-                                <DataGridTextColumn Width="*" Header="Attribute" Binding="{Binding Attribute}"/>
-                                <DataGridTextColumn Width="*" Header="Value" Binding="{Binding Value}"/>
-                            </DataGrid.Columns>
-                        </DataGrid>
-                    </TabItem>
+                    <StackPanel>
+                        <Button Content="Add read value"
+                                Command="{Binding AddVariable}"
+                                IsEnabled="{Binding AddIsEnabled}"/>
+
+                        <ListView ItemsSource="{Binding VariablesToRead}"
+                                  Background="{StaticResource BackgroundLightBrush}"
+                                  HorizontalAlignment="Left"
+                                  BorderThickness="0">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock VerticalAlignment="Center" Text="{Binding Name}" />
+                                        <TextBlock VerticalAlignment="Center" Text="{Binding Value}" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+
+                    </StackPanel>
+                 
                 </TabControl>
             </Grid>
         </DockPanel>

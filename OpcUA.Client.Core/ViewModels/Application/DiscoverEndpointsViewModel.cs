@@ -14,7 +14,7 @@ namespace OpcUA.Client.Core
         /// <summary>
         /// Ua Client API
         /// </summary>
-        private readonly UaClient _uaClient; 
+        private readonly UaClientApi _uaClientApi; 
 
         #endregion
 
@@ -119,7 +119,7 @@ namespace OpcUA.Client.Core
 
         public DiscoverEndpointsViewModel()
         {
-            _uaClient = IoC.UaClient;
+            _uaClientApi = IoC.UaClientApi;
             
             SearchCommand = new RelayCommand(SearchEndpoints);
             ConnectCommand = new RelayParameterizedCommand(ConnectToServer);
@@ -138,7 +138,8 @@ namespace OpcUA.Client.Core
             }
             else
             {
-                _uaClient.Connect(SelectedEndpoint, UserPwIsSelected, null, null);
+                _uaClientApi.SaveConfiguration();
+                _uaClientApi.Connect(SelectedEndpoint, UserPwIsSelected, null, null);
                 IoC.Application.GoToPage(ApplicationPage.Main);
             }
         }
@@ -147,13 +148,13 @@ namespace OpcUA.Client.Core
         {
             DiscoveredEndpoints.Clear();
 
-            FoundedServers = new ObservableCollection<ApplicationDescription>(_uaClient.FindServers(DiscoveryUrl)); 
+            FoundedServers = new ObservableCollection<ApplicationDescription>(_uaClientApi.FindServers(DiscoveryUrl)); 
 
             foreach (ApplicationDescription ad in FoundedServers)
             {
                 foreach (string url in ad.DiscoveryUrls)
                 {
-                    var endpoints = _uaClient.GetEndpoints(url);
+                    var endpoints = _uaClientApi.GetEndpoints(url);
                     foreach (EndpointDescription ep in endpoints)
                     {
                         var b = ep.EncodingSupport;

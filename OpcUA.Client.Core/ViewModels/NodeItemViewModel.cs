@@ -137,7 +137,7 @@ namespace OpcUA.Client.Core
                 return;
 
             // Find all children
-            var children = IoC.UaClient.BrowseNode(Node);
+            var children = IoC.UaClientApi.BrowseNode(Node);
             Children = new ObservableCollection<NodeItemViewModel>(
                                 children.Select(content => new NodeItemViewModel(content, IsSelectedDelegate)).OrderBy(x => x.Name));
         }

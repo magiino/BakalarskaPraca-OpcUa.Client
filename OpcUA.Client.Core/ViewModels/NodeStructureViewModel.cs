@@ -26,7 +26,7 @@ namespace OpcUA.Client.Core
         public NodeStructureViewModel()
         {
             // Get the root nodes
-            var children = IoC.UaClient.BrowseRoot();
+            var children = IoC.UaClientApi.BrowseRoot();
 
             // Create the view models from the root ndoes
             //Items = new ObservableCollection<NodeItemViewModel>(
