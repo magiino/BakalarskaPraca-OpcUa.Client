@@ -1,7 +1,10 @@
 ﻿using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using Opc.Ua;
+using Opc.Ua.Client;
 
 namespace OpcUA.Client.Core
 {
@@ -9,6 +12,10 @@ namespace OpcUA.Client.Core
 
     public class MainViewModel : BaseViewModel
     {
+        private NodeIdCollection _nodeIdsToRead = new NodeIdCollection();
+
+        public ObservableCollection<Variable> VariablesToRead { get; set; } = new ObservableCollection<Variable>();
+
         #region Public Properties
 
         /// <summary>
@@ -20,6 +27,11 @@ namespace OpcUA.Client.Core
         /// A list of attributes and values of <see cref="ReferenceDescription"/> object
         /// </summary>
         public ObservableCollection<AttributeDataGridModel> SelectedNode { get; set; } = new ObservableCollection<AttributeDataGridModel>();
+
+        private ReferenceDescription _refDiscOfSelectedNode;
+
+        private UaClientApi _uaClientApi;
+        //private ApplicationManager _applicationManager;
 
         #endregion
 
@@ -46,6 +58,13 @@ namespace OpcUA.Client.Core
         /// The command for exit application
         /// </summary>
         public ICommand ExitApplicationCommand { get; set; }
+
+        /// <summary>
+        /// The command for exit application
+        /// </summary>
+        public ICommand AddVariable { get; set; }
+
+        public bool AddIsEnabled => SelectedNode != null;
 
         #endregion
 
@@ -74,14 +93,66 @@ namespace OpcUA.Client.Core
             ConnectSessionCommand = new RelayCommand(ConnectSession);
             DisconnectSessionCommand = new RelayCommand(DisconnectSession);
 
-            // Get the root nodes
-            var children = IoC.UaClient.BrowseRoot();
 
+            _uaClientApi = IoC.UaClientApi;
+
+
+            // Get the root nodes
+            var children = _uaClientApi.BrowseRoot();
+
+            
+            VariablesToRead.CollectionChanged += (s, e) =>
+            {
+                if ( VariablesToRead.Count == 1 && e.Action == NotifyCollectionChangedAction.Add)
+                {
+                    Task.Run(() =>
+                    {
+                        while (true)
+                        {
+                            _uaClientApi.ReadValues(VariablesToRead.Select(x => x.NodeId.ToString()).ToList());
+                        }
+                    });
+                }
+            };
+            
             IsSelected isSelectedDelegate = SetSelectedNode;
+
+            AddVariable = new RelayCommand(Add);
 
             // Create the view models from the root ndoes
             Items = new ObservableCollection<NodeItemViewModel>(
                 children.Select(content => new NodeItemViewModel(content, isSelectedDelegate)).OrderBy(x => x.Name));
+        }
+
+        private void VariablesToRead_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        private void Add()
+        {
+            var nodeId = new NodeId(_refDiscOfSelectedNode.NodeId.ToString());
+            _nodeIdsToRead.Add(nodeId);
+
+            //_refDiscOfSelectedNode.TypeId
+            VariablesToRead.Add(new Variable()
+            {
+                NodeId = nodeId
+            });
+
+            _uaClientApi.AddMonitoredItem(nodeId, 1).Notification += new MonitoredItemNotificationEventHandler(Notification_MonitoredItem);
+
+            // ClientUtils.GetDataType(IoC.UaClientApi.Session, nodeId);
+        }
+        private void Notification_MonitoredItem(MonitoredItem monitoredItem, MonitoredItemNotificationEventArgs e)
+        {
+            var notification = e.NotificationValue as MonitoredItemNotification;
+            if (notification == null)
+            {
+                return;
+            }
+            //monitoredItem.
+            VariablesToRead.First(x => x.Name == monitoredItem.DisplayName).Value = notification.Value.Value;
         }
 
         private void NewSession()
@@ -110,7 +181,8 @@ namespace OpcUA.Client.Core
 
         private void DisconnectSession()
         {
-            return;
+            _uaClientApi.Subscribe(2000);
+            _uaClientApi.ItemChangedNotification += new MonitoredItemNotificationEventHandler(Notification_MonitoredItem);
         }
 
         /// <summary>
@@ -119,6 +191,7 @@ namespace OpcUA.Client.Core
         /// <param name="selectedNode"></param>
         public void SetSelectedNode(ReferenceDescription selectedNode)
         {
+            _refDiscOfSelectedNode = selectedNode;
             SelectedNode = new ObservableCollection<AttributeDataGridModel>(GetDataGridModel(selectedNode));
         }
 
@@ -143,7 +216,7 @@ namespace OpcUA.Client.Core
                 data.Add(new AttributeDataGridModel(propertyInfo.Name, value.ToString()));
             }
 
-            var node = IoC.UaClient.ReadNode(referenceDescription.NodeId.ToString());
+            var node = IoC.UaClientApi.ReadNode(referenceDescription.NodeId.ToString());
             node.GetType().GetProperties().ToList().ForEach(property => data.Add(new AttributeDataGridModel(property.Name, property.GetValue(node)?.ToString())));
 
             if (node.NodeClass != NodeClass.Variable) return data;

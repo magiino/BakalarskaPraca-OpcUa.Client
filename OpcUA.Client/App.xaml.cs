@@ -17,12 +17,17 @@ namespace OpcUA.Client
         {
             base.OnStartup(e);
 
-            // Configure IoC
-            IoC.Configure();
+            ConfigureIoc();
 
             // Show the main window
             Current.MainWindow = new MainWindow();
             Current.MainWindow.Show();
+        }
+
+        private static void ConfigureIoc()
+        {
+            // Configure IoC
+            IoC.Configure();
         }
     }
 }

@@ -13,7 +13,8 @@
         <Button x:Name="TbStart" ToolTip="Start communication">
             <fa:ImageAwesome Icon="PlayCircle"/>
         </Button>
-        <Button x:Name="TbStop" ToolTip="Stop communication">
+        <Button x:Name="TbStop" ToolTip="Stop communication"
+                Command="{Binding DisconnectSessionCommand}">
             <fa:ImageAwesome Icon="StopCircle"/>
         </Button>
     </ToolBar>

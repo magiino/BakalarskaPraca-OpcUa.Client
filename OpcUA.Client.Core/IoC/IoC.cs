@@ -12,7 +12,7 @@ namespace OpcUA.Client.Core
         /// <summary>
         /// The kernel for our IoC container
         /// </summary>
-        public static IKernel Kernel { get; private set; } = new StandardKernel();
+        public static IKernel Kernel { get; } = new StandardKernel();
 
         /// <summary>
         /// A shortcut to access the <see cref="ApplicationViewModel"/>
@@ -20,9 +20,14 @@ namespace OpcUA.Client.Core
         public static ApplicationViewModel Application => IoC.Get<ApplicationViewModel>();
 
         /// <summary>
-        /// A shortcut to access the <see cref="UaClient"/>
+        /// A shortcut to access the <see cref="UaClientApi"/>
         /// </summary>
-        public static UaClient UaClient => IoC.Get<UaClient>();
+        public static UaClientApi UaClientApi => IoC.Get<UaClientApi>();
+
+        /// <summary>
+        /// A shortcut to access the <see cref="UaClientApi"/>
+        /// </summary>
+        //public static ApplicationManager ApplicationManager => IoC.Get<ApplicationManager>();
 
         #endregion
 
@@ -47,7 +52,8 @@ namespace OpcUA.Client.Core
         private static void BindUaApi()
         {
             // Bind to a single instance of UaClientHelperApi
-            Kernel.Bind<UaClient>().ToConstant(new UaClient());
+            Kernel.Bind<UaClientApi>().ToConstant(new UaClientApi());
+            //Kernel.Bind<ApplicationManager>().ToConstant(new ApplicationManager(new UaClientApi()));
         }
 
         #endregion
