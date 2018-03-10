@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
 using Opc.Ua;
@@ -8,11 +9,25 @@ namespace OpcUA.Client.Core
     /// <summary>
     /// A view model for each directory item
     /// </summary>
-    public class NodeItemViewModel : BaseViewModel
+    public class NodeTreeItemViewModel : BaseViewModel
     {
+        #region Private Fields
+
+        /// <summary>
+        /// The Action for sending selected node to parent view model
+        /// </summary>
+        private readonly Action<ReferenceDescription> _setSelectedNode;
+
+        private bool _isSelected;
+
+        #endregion
+
         #region Public Properties
 
-        private IsSelected IsSelectedDelegate { get; }
+        /// <summary>
+        /// A current node
+        /// </summary>
+        public ReferenceDescription Node { get; set; }
 
         /// <summary>
         /// The type of this node
@@ -25,14 +40,9 @@ namespace OpcUA.Client.Core
         public string Name => Node.DisplayName.ToString();
 
         /// <summary>
-        /// A current node
-        /// </summary>
-        public ReferenceDescription Node { get; set; }
-
-        /// <summary>
         /// A list of all children contained inside this node
         /// </summary>
-        public ObservableCollection<NodeItemViewModel> Children { get; set; }
+        public ObservableCollection<NodeTreeItemViewModel> Children { get; set; }
 
         /// <summary>
         /// Indicates if this item can be expanded
@@ -57,24 +67,18 @@ namespace OpcUA.Client.Core
             }
         }
 
-        public ReferenceDescription SelectedNode { get; set; }
-
-
         /// <summary>
         /// Indicates if current item is selected or not
         /// </summary>
         public bool IsSelected
         {
-            get => SelectedNode != null;
+            get => _isSelected;
             set
             {
-                if (!value)
-                {
-                    SelectedNode = null;
-                    return;
-                }
-                SelectedNode = Node;
-                IsSelectedDelegate(SelectedNode);
+                _isSelected = value;
+
+                if (_isSelected)
+                    _setSelectedNode(Node);
             }
         }
 
@@ -95,38 +99,22 @@ namespace OpcUA.Client.Core
         /// Default constructor
         /// </summary>
         /// <param name="node"></param>
-        /// <param name="nodeIsSelected"></param>
-        public NodeItemViewModel(ReferenceDescription node, IsSelected nodeIsSelected)
+        /// <param name="setSelectedNode"></param>
+        public NodeTreeItemViewModel(ReferenceDescription node, Action<ReferenceDescription> setSelectedNode)
         {
-            // Create commands
             ExpandCommand = new RelayCommand(Expand);
-            // Set delegate
-            IsSelectedDelegate = nodeIsSelected;
-            // Set node item
+
             Node = node;
+
+            _setSelectedNode = setSelectedNode;
+
             // Setup the children as needed
             ClearChildren();
         }
 
         #endregion
 
-        #region Helper Methods
-
-        /// <summary>
-        /// Removes all children from the list, adding a dummy item to show the expand icon if required
-        /// </summary>
-        private void ClearChildren()
-        {
-            // Clear items
-            Children = new ObservableCollection<NodeItemViewModel>();
-
-            // Show the expand arrow if we are not a file
-            if (Type != NodeClass.Unspecified)
-                Children.Add(null);
-        }
-
-        #endregion
-
+        #region Command Methods
         /// <summary>
         ///  Expands this directory and finds all children
         /// </summary>
@@ -138,8 +126,26 @@ namespace OpcUA.Client.Core
 
             // Find all children
             var children = IoC.UaClientApi.BrowseNode(Node);
-            Children = new ObservableCollection<NodeItemViewModel>(
-                                children.Select(content => new NodeItemViewModel(content, IsSelectedDelegate)).OrderBy(x => x.Name));
+            Children = new ObservableCollection<NodeTreeItemViewModel>(
+                                children.Select(content => new NodeTreeItemViewModel(content, _setSelectedNode)).OrderBy(x => x.Name));
         }
+        #endregion
+
+        #region Helper Methods
+
+        /// <summary>
+        /// Removes all children from the list, adding a dummy item to show the expand icon if required
+        /// </summary>
+        private void ClearChildren()
+        {
+            // Clear items
+            Children = new ObservableCollection<NodeTreeItemViewModel>();
+
+            // Show the expand arrow if we are not a file
+            if (Type != NodeClass.Unspecified)
+                Children.Add(null);
+        }
+
+        #endregion
     }
 }

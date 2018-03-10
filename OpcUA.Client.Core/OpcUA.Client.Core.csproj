@@ -62,6 +62,7 @@
     <Compile Include="UaClientApi.cs" />
     <Compile Include="Variable.cs" />
     <Compile Include="ViewModels\Application\ApplicationViewModel.cs" />
+    <Compile Include="ViewModels\Application\NodeAttributesVM\NodeAttributesViewModel.cs" />
     <Compile Include="ViewModels\Application\UaClientSettingsViewModel.cs" />
     <Compile Include="ViewModels\Application\MainViewModel.cs" />
     <Compile Include="ViewModels\Application\ViewModelLocator.cs" />
@@ -72,8 +73,8 @@
     <Compile Include="ViewModels\Base\IHavePassword.cs" />
     <Compile Include="ViewModels\Base\RelayCommand.cs" />
     <Compile Include="ViewModels\Base\RelayParameterizedCommand.cs" />
-    <Compile Include="ViewModels\NodeItemViewModel.cs" />
-    <Compile Include="ViewModels\NodeStructureViewModel.cs" />
+    <Compile Include="ViewModels\Application\TreeViewVM\NodeTreeItemViewModel.cs" />
+    <Compile Include="ViewModels\Application\TreeViewVM\NodeTreeViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -91,6 +92,7 @@
       <Name>UA Core Library</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Fody.2.4.1\build\Fody.targets" Condition="Exists('..\packages\Fody.2.4.1\build\Fody.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

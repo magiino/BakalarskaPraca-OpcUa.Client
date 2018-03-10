@@ -1,37 +1,43 @@
 ﻿using System.Collections.ObjectModel;
-using System.Collections.Specialized;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using Opc.Ua;
 using Opc.Ua.Client;
 
 namespace OpcUA.Client.Core
 {
-    public delegate void IsSelected(ReferenceDescription selectedNode);
-
     public class MainViewModel : BaseViewModel
     {
+        #region PrivateFields
+
+        private readonly UaClientApi _uaClientApi;
+
         private NodeIdCollection _nodeIdsToRead = new NodeIdCollection();
 
-        public ObservableCollection<Variable> VariablesToRead { get; set; } = new ObservableCollection<Variable>();
+        #endregion
 
         #region Public Properties
 
+        public NodeTreeViewModel NodetreeViewModel { get; set; }
+
+        public NodeAttributesViewModel NodeAttributesViewModel { get; set; }
+
         /// <summary>
-        /// A list of root nodes in the address space
+        /// Selected node from node tree view
         /// </summary>
-        public ObservableCollection<NodeItemViewModel> Items { get; set; }
+        private ReferenceDescription _refDiscOfSelectedNode;
 
         /// <summary>
         /// A list of attributes and values of <see cref="ReferenceDescription"/> object
         /// </summary>
         public ObservableCollection<AttributeDataGridModel> SelectedNode { get; set; } = new ObservableCollection<AttributeDataGridModel>();
 
-        private ReferenceDescription _refDiscOfSelectedNode;
+        /// <summary>
+        /// Allowing to add variable to list only if node is selected
+        /// </summary>
+        public bool AddIsEnabled => SelectedNode != null;
 
-        private UaClientApi _uaClientApi;
-        //private ApplicationManager _applicationManager;
+        public ObservableCollection<Variable> VariablesToRead { get; set; } = new ObservableCollection<Variable>();
 
         #endregion
 
@@ -64,8 +70,6 @@ namespace OpcUA.Client.Core
         /// </summary>
         public ICommand AddVariable { get; set; }
 
-        public bool AddIsEnabled => SelectedNode != null;
-
         #endregion
 
         #region ToolBar Commands
@@ -93,40 +97,12 @@ namespace OpcUA.Client.Core
             ConnectSessionCommand = new RelayCommand(ConnectSession);
             DisconnectSessionCommand = new RelayCommand(DisconnectSession);
 
+            AddVariable = new RelayCommand(Add);
 
             _uaClientApi = IoC.UaClientApi;
 
+            NodetreeViewModel = new NodeTreeViewModel(SetSelectedNode);
 
-            // Get the root nodes
-            var children = _uaClientApi.BrowseRoot();
-
-            
-            VariablesToRead.CollectionChanged += (s, e) =>
-            {
-                if ( VariablesToRead.Count == 1 && e.Action == NotifyCollectionChangedAction.Add)
-                {
-                    Task.Run(() =>
-                    {
-                        while (true)
-                        {
-                            _uaClientApi.ReadValues(VariablesToRead.Select(x => x.NodeId.ToString()).ToList());
-                        }
-                    });
-                }
-            };
-            
-            IsSelected isSelectedDelegate = SetSelectedNode;
-
-            AddVariable = new RelayCommand(Add);
-
-            // Create the view models from the root ndoes
-            Items = new ObservableCollection<NodeItemViewModel>(
-                children.Select(content => new NodeItemViewModel(content, isSelectedDelegate)).OrderBy(x => x.Name));
-        }
-
-        private void VariablesToRead_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-        {
-            throw new System.NotImplementedException();
         }
 
         private void Add()
@@ -189,7 +165,7 @@ namespace OpcUA.Client.Core
         /// Callback method for set up selected node
         /// </summary>
         /// <param name="selectedNode"></param>
-        public void SetSelectedNode(ReferenceDescription selectedNode)
+        private void SetSelectedNode(ReferenceDescription selectedNode)
         {
             _refDiscOfSelectedNode = selectedNode;
             SelectedNode = new ObservableCollection<AttributeDataGridModel>(GetDataGridModel(selectedNode));
@@ -230,3 +206,20 @@ namespace OpcUA.Client.Core
         #endregion
     }
 }
+
+
+
+
+//VariablesToRead.CollectionChanged += (s, e) =>
+//{
+//if (VariablesToRead.Count == 1 && e.Action == NotifyCollectionChangedAction.Add)
+//{
+//Task.Run(() =>
+//{
+//    while (true)
+//    {
+//        _uaClientApi.ReadValues(VariablesToRead.Select(x => x.NodeId.ToString()).ToList());
+//    }
+//});
+//}
+//};
