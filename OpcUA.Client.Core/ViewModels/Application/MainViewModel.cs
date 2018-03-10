@@ -12,8 +12,6 @@ namespace OpcUA.Client.Core
 
         private readonly UaClientApi _uaClientApi;
 
-        private NodeIdCollection _nodeIdsToRead = new NodeIdCollection();
-
         #endregion
 
         #region Public Properties
@@ -22,9 +20,6 @@ namespace OpcUA.Client.Core
 
         public NodeAttributesViewModel NodeAttributesViewModel { get; set; }
 
-        /// <summary>
-        /// Selected node from node tree view
-        /// </summary>
         private ReferenceDescription _refDiscOfSelectedNode;
 
         /// <summary>
@@ -43,53 +38,34 @@ namespace OpcUA.Client.Core
 
         #region Commands
 
-        #region MenuBar Commands
+            #region MenuBar Commands
 
-        /// <summary>
-        /// The command for creating new session
-        /// </summary>
-        public ICommand NewSessionCommand { get; set; }
+            public ICommand NewSessionCommand { get; set; }
+            public ICommand SaveSessionCommand { get; set; }
+            public ICommand OpenSessionCommand { get; set; }
+            public ICommand ExitApplicationCommand { get; set; }
 
-        /// <summary>
-        /// The command for saving session
-        /// </summary>
-        public ICommand SaveSessionCommand { get; set; }
+            #endregion
 
-        /// <summary>
-        /// The command for opening exsisting session
-        /// </summary>
-        public ICommand OpenSessionCommand { get; set; }
+            #region ToolBar Commands
 
-        /// <summary>
-        /// The command for exit application
-        /// </summary>
-        public ICommand ExitApplicationCommand { get; set; }
+            public ICommand ConnectSessionCommand { get; set; }
+            public ICommand DisconnectSessionCommand { get; set; }
 
-        /// <summary>
-        /// The command for exit application
-        /// </summary>
-        public ICommand AddVariable { get; set; }
+            #endregion
+
+        public ICommand AddVariableToSubscriptionCommand { get; set; }
+
+        public ICommand CreateSubscriptionCommand { get; set; }
 
         #endregion
 
-        #region ToolBar Commands
-
-        /// <summary>
-        /// The command for connecting session
-        /// </summary>
-        public ICommand ConnectSessionCommand { get; set; }
-
-        /// <summary>
-        /// The command for disconnecting from session
-        /// </summary>
-        public ICommand DisconnectSessionCommand { get; set; }
-
-        #endregion
-
-        #endregion
+        #region Constructor
 
         public MainViewModel()
         {
+            _uaClientApi = IoC.UaClientApi;
+
             NewSessionCommand = new RelayCommand(NewSession);
             SaveSessionCommand = new RelayCommand(SaveSession);
             OpenSessionCommand = new RelayCommand(OpenSession);
@@ -97,38 +73,28 @@ namespace OpcUA.Client.Core
             ConnectSessionCommand = new RelayCommand(ConnectSession);
             DisconnectSessionCommand = new RelayCommand(DisconnectSession);
 
-            AddVariable = new RelayCommand(Add);
-
-            _uaClientApi = IoC.UaClientApi;
+            AddVariableToSubscriptionCommand = new RelayCommand(AddVariableToSubscription);
+            CreateSubscriptionCommand = new RelayCommand(CreateSubscription);
 
             NodetreeViewModel = new NodeTreeViewModel(SetSelectedNode);
 
         }
 
-        private void Add()
+        #endregion
+
+        #region Command Methods
+
+        private void CreateSubscription()
+        {
+            _uaClientApi.Subscribe(2000);
+            //_uaClientApi.ItemChangedNotification += new MonitoredItemNotificationEventHandler(Notification_MonitoredItem);
+        }
+
+        private void AddVariableToSubscription()
         {
             var nodeId = new NodeId(_refDiscOfSelectedNode.NodeId.ToString());
-            _nodeIdsToRead.Add(nodeId);
-
-            //_refDiscOfSelectedNode.TypeId
-            VariablesToRead.Add(new Variable()
-            {
-                NodeId = nodeId
-            });
-
+            VariablesToRead.Add(new Variable(nodeId));
             _uaClientApi.AddMonitoredItem(nodeId, 1).Notification += new MonitoredItemNotificationEventHandler(Notification_MonitoredItem);
-
-            // ClientUtils.GetDataType(IoC.UaClientApi.Session, nodeId);
-        }
-        private void Notification_MonitoredItem(MonitoredItem monitoredItem, MonitoredItemNotificationEventArgs e)
-        {
-            var notification = e.NotificationValue as MonitoredItemNotification;
-            if (notification == null)
-            {
-                return;
-            }
-            //monitoredItem.
-            VariablesToRead.First(x => x.Name == monitoredItem.DisplayName).Value = notification.Value.Value;
         }
 
         private void NewSession()
@@ -136,29 +102,31 @@ namespace OpcUA.Client.Core
             IoC.Application.GoToPage(ApplicationPage.Welcome);
         }
 
-        private void SaveSession()
-        {
-            return;
-        }
+        private void SaveSession() {}
 
-        private void OpenSession()
-        {
-            return;
-        }
+        private void OpenSession() {}
 
-        private void ExitApplication()
-        {
-            return;
-        }
-        private void ConnectSession()
-        {
-            return;
-        }
+        private void ExitApplication() {}
+        private void ConnectSession() {}
 
-        private void DisconnectSession()
+        private void DisconnectSession() {}
+        #endregion
+
+        #region CallBack Methods
+
+        /// <summary>
+        /// Callback method for updating values of subscibed nodes
+        /// </summary>
+        /// <param name="monitoredItem"></param>
+        /// <param name="e"></param>
+        private void Notification_MonitoredItem(MonitoredItem monitoredItem, MonitoredItemNotificationEventArgs e)
         {
-            _uaClientApi.Subscribe(2000);
-            _uaClientApi.ItemChangedNotification += new MonitoredItemNotificationEventHandler(Notification_MonitoredItem);
+            var notification = e.NotificationValue as MonitoredItemNotification;
+            if (notification == null)
+            {
+                return;
+            }
+            VariablesToRead.First(x => x.Name == monitoredItem.DisplayName).Value = notification.Value.Value;
         }
 
         /// <summary>
@@ -169,7 +137,8 @@ namespace OpcUA.Client.Core
         {
             _refDiscOfSelectedNode = selectedNode;
             SelectedNode = new ObservableCollection<AttributeDataGridModel>(GetDataGridModel(selectedNode));
-        }
+        } 
+        #endregion
 
         #region Private Helpers
 

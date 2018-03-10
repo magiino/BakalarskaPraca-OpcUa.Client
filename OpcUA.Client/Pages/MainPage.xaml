@@ -36,6 +36,7 @@
                     <TabItem Header="PLC info">
 
                     </TabItem>
+
                     <TabItem Header="Server info">
                         <TextBlock Text="{Binding SelectedNode}"></TextBlock>
                     </TabItem>
@@ -43,8 +44,7 @@
 
                 <!-- Second Column-->
                 <TabControl Grid.Column="1">
-                    <TabItem Header="Node Attributes"
-                             VerticalAlignment="Top" Height="26">
+                    <TabItem Header="Node Attributes">
                         <DataGrid Grid.Column="1"
                                   HorizontalAlignment="Left" 
                                   Width="300px" 
@@ -61,25 +61,33 @@
 
                 <!-- Third Column-->
                 <TabControl Grid.Column="2">
-                    <StackPanel>
-                        <Button Content="Add read value"
-                                Command="{Binding AddVariable}"
-                                IsEnabled="{Binding AddIsEnabled}"/>
+                    <TabItem Header="Subscribed Nodes">
+                        <StackPanel>
+                            <Button Content="Add read value"
+                                    Command="{Binding AddVariableToSubscriptionCommand}"
+                                    IsEnabled="{Binding AddIsEnabled}"/>
+                            <StackPanel Orientation="Horizontal">
+                                <Button Content="Create subscription"
+                                        Padding="10 5"
+                                        Command="{Binding CreateSubscriptionCommand}"/>
+                                <TextBox Width="100px"/>
+                            </StackPanel>
 
-                        <ListView ItemsSource="{Binding VariablesToRead}"
-                                  Background="{StaticResource BackgroundLightBrush}"
-                                  HorizontalAlignment="Left"
-                                  BorderThickness="0">
-                            <ListView.ItemTemplate>
-                                <DataTemplate>
-                                    <StackPanel Orientation="Horizontal">
-                                        <TextBlock VerticalAlignment="Center" Text="{Binding Name}" />
-                                        <TextBlock VerticalAlignment="Center" Text="{Binding Value}" />
-                                    </StackPanel>
-                                </DataTemplate>
-                            </ListView.ItemTemplate>
-                        </ListView>
-                    </StackPanel>
+                            <ListView ItemsSource="{Binding VariablesToRead}"
+                                      Background="{StaticResource BackgroundLightBrush}"
+                                      HorizontalAlignment="Left"
+                                      BorderThickness="0">
+                                <ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="{Binding Name}"/>
+                                            <TextBlock Margin="20 0 0 0" Text="{Binding Value}"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
+                        </StackPanel>
+                    </TabItem>
                 </TabControl>
 
             </Grid>

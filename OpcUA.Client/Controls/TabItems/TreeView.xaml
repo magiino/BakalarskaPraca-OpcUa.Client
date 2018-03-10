@@ -28,7 +28,7 @@
                             Width="10" 
                             Margin="3"
                             Foreground="LightSkyBlue"
-                            Icon="{Binding Type, Converter={x:Static local:HeaderToImageConverter.Instance}}"/>
+                            Icon="{Binding Type, Converter={local:HeaderToImageConverter}}"/>
                         <TextBlock VerticalAlignment="Center" Text="{Binding Name}" />
                     </StackPanel>
                 </HierarchicalDataTemplate>

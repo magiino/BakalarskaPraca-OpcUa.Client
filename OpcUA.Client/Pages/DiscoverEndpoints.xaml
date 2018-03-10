@@ -77,6 +77,7 @@
                             <TextBlock Text="Security Level :"/>
                             <TextBlock Text="User token types :"/>
                         </StackPanel>
+
                         <StackPanel Grid.Column="1" >
                             <StackPanel DataContext="{Binding Server}">
                                 <TextBlock  Text="{Binding ApplicationName}"/>

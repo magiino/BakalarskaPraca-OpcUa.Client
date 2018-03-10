@@ -23,7 +23,7 @@ namespace OpcUA.Client.Core
         /// <summary>
         /// Url of server for discover endpoints
         /// </summary>
-        public string DiscoveryUrl { get; set; } = "opc.tcp://localhost";
+        public string DiscoveryUrl { get; set; } = "opc.tcp://A05-226b:48010";
 
         /// <summary>
         /// Founded servers from search

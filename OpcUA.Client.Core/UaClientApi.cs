@@ -41,13 +41,23 @@ namespace OpcUA.Client.Core
         /// <summary>
         /// Provides the event for value changes of a monitored item.
         /// </summary>
-        public MonitoredItemNotificationEventHandler ItemChangedNotification;
+        //public MonitoredItemNotificationEventHandler ItemChangedNotification;
 
         /// <summary>
         /// Provides the event for KeepAliveNotifications.
         /// </summary>
         public KeepAliveEventHandler KeepAliveNotification;
         #endregion
+
+
+        public Node GetDataType(NodeId nodeId)
+        {
+            var node = Session.ReadNode(nodeId);
+            var dataTypeNodeId = (node.DataLock as VariableNode)?.DataType;
+            var dataTypeNode = Session.ReadNode(dataTypeNodeId);
+            return dataTypeNode;
+        }
+
 
         #region Constructors
 
@@ -218,7 +228,7 @@ namespace OpcUA.Client.Core
                     null
                     );
 
-                Session.KeepAlive += new KeepAliveEventHandler(Notification_KeepAlive);
+                //Session.KeepAlive += new KeepAliveEventHandler(Notification_KeepAlive);
             }
             catch (Exception e)
             {
@@ -587,7 +597,8 @@ namespace OpcUA.Client.Core
             ItemChangedNotification(monitoredItem, e);
         }
         */
-        /// <summary>Eventhandler for KeepAlive forwards this event</summary>
+
+        ///// <summary>Eventhandler for KeepAlive forwards this event</summary>
         private void Notification_KeepAlive(Session session, KeepAliveEventArgs e)
         {
             if (e != null)
