@@ -57,6 +57,7 @@
     <Compile Include="EMessageEncoding.cs" />
     <Compile Include="EndpointUtils.cs" />
     <Compile Include="EProtocol.cs" />
+    <Compile Include="ESecurityPolicy.cs" />
     <Compile Include="IoC\IoC.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Security\SecurityStringHelpers.cs" />

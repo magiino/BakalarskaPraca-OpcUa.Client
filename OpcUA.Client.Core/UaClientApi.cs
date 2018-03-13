@@ -51,6 +51,7 @@ namespace OpcUA.Client.Core
         {
             // Creats the application configuration (containing the certificate) on construction
             _applicationConfig = CreateClientConfiguration();
+            CheckApplicationInstanceCertificate(false, 2048);
         }
         #endregion
 
@@ -421,7 +422,7 @@ namespace OpcUA.Client.Core
         /// <summary>Creats a minimal required ApplicationConfiguration</summary>
         /// <returns>The ApplicationConfiguration</returns>
         /// <exception cref="Exception">Throws and forwards any exception with short error description.</exception>
-        private static ApplicationConfiguration CreateClientConfiguration()
+        private ApplicationConfiguration CreateClientConfiguration()
         {
             // The application configuration can be loaded from any file.
             // ApplicationConfiguration.Load() method loads configuration by looking up a file path in the App.config.
@@ -429,10 +430,10 @@ namespace OpcUA.Client.Core
             // This example creates a minimum ApplicationConfiguration using its default constructor.
             ApplicationConfiguration configuration = new ApplicationConfiguration
             {
-                ApplicationName = "UaClientApi",
+                ApplicationName = "UaClient",
                 ApplicationType = ApplicationType.Client,
-                ApplicationUri = "urn:UaClientApi",
-                ProductUri = "SiemensAG.IndustryOnlineSupport"
+                ApplicationUri = "urn:UaClient",
+                ProductUri = "VutBrno.SchoolProject"
             };
 
             // Step 2 - Specify the client's application instance certificate.
@@ -462,8 +463,10 @@ namespace OpcUA.Client.Core
             };
 
             // find the client certificate in the store.
-            var clientCertificate = configuration.SecurityConfiguration.ApplicationCertificate.Find(true);
 
+           
+
+            /*
             // create a new self signed certificate if not found.
             if (clientCertificate == null)
             {
@@ -487,13 +490,10 @@ namespace OpcUA.Client.Core
                     lifeTime,
                     algorithm);
             }
+            */
 
 
 
-            //configuration.SecurityConfiguration.ApplicationCertificate.Certificate = clientCertificate;
-
-            // check the application certificate.
-            //application.CheckApplicationInstanceCertificate(false, 2048);
 
             // Step 3 - Specify the supported transport quotas.
             // The transport quotas are used to set limits on the contents of messages and are

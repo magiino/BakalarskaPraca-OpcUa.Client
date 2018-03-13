@@ -1,7 +1,7 @@
 ﻿namespace OpcUA.Client.Core
 {
     /// <summary>
-    /// Enum of transport protocol
+    /// Enum of transport protocol supported by Opc Ua
     /// </summary>
     public enum EProtocol
     {
@@ -13,6 +13,11 @@
         /// <summary>
         /// Ua Https
         /// </summary>
-        UaHttps = 1
+        UaHttp = 1,
+
+        /// <summary>
+        /// Ua Https
+        /// </summary>
+        UaHttps = 2
     }
 }

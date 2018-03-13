@@ -61,7 +61,7 @@
                           Grid.Column="0"
                           Header="Server Info" 
                           Padding="5px">
-                    <Grid DataContext="{Binding SelectedEndpoint}">
+                    <Grid DataContext="{Binding SelectedServer}">
 
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="auto"/>
@@ -75,8 +75,7 @@
                             <TextBlock Text="Product Uri: "/>
                         </StackPanel>
   
-                        <StackPanel DataContext="{Binding Server}"
-                                    Grid.Column="1" >
+                        <StackPanel Grid.Column="1" >
                             <TextBlock  Text="{Binding ApplicationName}"/>
                             <TextBlock  Text="{Binding ApplicationType}"/>
                             <TextBlock  Text="{Binding ApplicationUri}"/>
@@ -94,7 +93,8 @@
                     <ListView ItemsSource="{Binding FoundedServers}"
                               SelectedItem="{Binding SelectedServer, Mode=TwoWay}"
                               Background="{StaticResource BackgroundLightBrush}"
-                              SelectionMode="Single">
+                              SelectionMode="Single"
+                              SelectedIndex="0">
 
                         <ListView.ItemTemplate>
                             <DataTemplate>
@@ -126,8 +126,9 @@
                                   CanUserReorderColumns="False"
                                   Background="{StaticResource BackgroundLightBrush}"
                                   IsReadOnly="True"
-                                  ItemsSource="{Binding DiscoveredEndpoints}"
+                                  ItemsSource="{Binding FilteredEndpoints}"
                                   SelectedItem="{Binding SelectedEndpointGridViewModel, Mode=TwoWay}"
+                                  SelectedIndex="0"
                                   SelectionMode="Single"
                                   IsManipulationEnabled="False"
                                   CanUserAddRows="False">
@@ -182,22 +183,28 @@
                                 <StackPanel Grid.Column="0">
                                     <TextBlock Text="Security Modes"/>
                                     <CheckBox Content="None"
-                                              IsChecked="{Binding NoneIsSelected}"/>
+                                              IsChecked="{Binding NoneIsSelected}"
+                                              Command="{Binding StartFilterCommand}"/>
                                     <CheckBox Content="Sign"
-                                              IsChecked="{Binding SignIsSelected}"/>
+                                              IsChecked="{Binding SignIsSelected}"
+                                              Command="{Binding StartFilterCommand}"/>
                                     <CheckBox Content="Sign&amp;Encrypt"
-                                              IsChecked="{Binding SignEncryptIsSelected}"/>
+                                              IsChecked="{Binding SignEncryptIsSelected}"
+                                              Command="{Binding StartFilterCommand}"/>
                                 </StackPanel>
 
                                 <!-- Security Policies -->
                                 <StackPanel Grid.Column="1">
                                     <TextBlock Text="Security Policies"/>
                                     <CheckBox Content="Basic128Rsa15"
-                                              IsChecked="{Binding Basic128Rsa15IsSelected}"/>
+                                              IsChecked="{Binding Basic128Rsa15IsSelected}"
+                                              Command="{Binding StartFilterCommand}"/>
                                     <CheckBox Content="Basic256"
-                                              IsChecked="{Binding Basic256IsSelected}"/>
+                                              IsChecked="{Binding Basic256IsSelected}"
+                                              Command="{Binding StartFilterCommand}"/>
                                     <CheckBox Content="Basic256Sha256"
-                                              IsChecked="{Binding Basic256Sha256IsSelected}"/>
+                                              IsChecked="{Binding Basic256Sha256IsSelected}"
+                                              Command="{Binding StartFilterCommand}"/>
                                 </StackPanel>
                             </Grid>
 

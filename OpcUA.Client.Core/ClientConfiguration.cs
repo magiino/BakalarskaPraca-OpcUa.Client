@@ -5,13 +5,13 @@ using Opc.Ua;
 
 namespace OpcUA.Client.Core
 {
-    public class ClientConfiguration
+    public class ApplicationInstance
     {
         #region Constructors
 
-        public ClientConfiguration() { }
+        public ApplicationInstance() { }
 
-        public ClientConfiguration(ApplicationConfiguration applicationConfiguration)
+        public ApplicationInstance(ApplicationConfiguration applicationConfiguration)
         {
             ApplicationConfiguration = applicationConfiguration;
         }
