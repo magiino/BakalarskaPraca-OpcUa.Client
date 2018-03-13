@@ -38,12 +38,12 @@ namespace OpcUA.Client.Core
         /// <summary>
         /// A list of discovered endpoints
         /// </summary>
-        public ObservableCollection<EndpointDataGridModel> DiscoveredEndpoints { get; set; } = new ObservableCollection<EndpointDataGridModel>();
+        public ObservableCollection<EndpointGridViewModel> DiscoveredEndpoints { get; set; } = new ObservableCollection<EndpointGridViewModel>();
 
         /// <summary>
         /// Getting selected endpoint description from data grid model
         /// </summary>
-        public EndpointDataGridModel SelectedEndpointDataGridModel
+        public EndpointGridViewModel SelectedEndpointGridViewModel
         {
             set => SelectedEndpoint = value?.EndpointDesciption;
         }
@@ -150,17 +150,14 @@ namespace OpcUA.Client.Core
 
             FoundedServers = new ObservableCollection<ApplicationDescription>(_uaClientApi.FindServers(DiscoveryUrl)); 
 
-            foreach (ApplicationDescription ad in FoundedServers)
+            foreach (var ad in FoundedServers)
             {
-                foreach (string url in ad.DiscoveryUrls)
+                foreach (var url in ad.DiscoveryUrls)
                 {
                     var endpoints = _uaClientApi.GetEndpoints(url);
-                    foreach (EndpointDescription ep in endpoints)
+                    foreach (var ep in endpoints)
                     {
-                        var b = ep.EncodingSupport;
-                        var c = ep.SecurityLevel;
-                        var d = ep.UserIdentityTokens;
-                        DiscoveredEndpoints.Add(new EndpointDataGridModel(ep));
+                        DiscoveredEndpoints.Add(new EndpointGridViewModel(ep));
                     }
                 }
             }

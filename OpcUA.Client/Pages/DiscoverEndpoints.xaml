@@ -59,7 +59,7 @@
                 <!-- Server Info -->
                 <GroupBox Grid.Row="0"
                           Grid.Column="0"
-                          Header="Endpoint Info" 
+                          Header="Server Info" 
                           Padding="5px">
                     <Grid DataContext="{Binding SelectedEndpoint}">
 
@@ -73,38 +73,16 @@
                             <TextBlock Text="Application Type: "/>
                             <TextBlock Text="Application Uri: "/>
                             <TextBlock Text="Product Uri: "/>
-                            <TextBlock Text="Transport Profile Uri:"/>
-                            <TextBlock Text="Security Level :"/>
-                            <TextBlock Text="User token types :"/>
                         </StackPanel>
-
-                        <StackPanel Grid.Column="1" >
-                            <StackPanel DataContext="{Binding Server}">
-                                <TextBlock  Text="{Binding ApplicationName}"/>
-                                <TextBlock  Text="{Binding ApplicationType}"/>
-                                <TextBlock  Text="{Binding ApplicationUri}"/>
-                                <TextBlock  Text="{Binding ProductUri}"/>
-                            </StackPanel>
-                            <TextBlock  Text="{Binding TransportProfileUri}"/>
-                            <TextBlock  Text="{Binding SecurityLevel}"/>
-                            <ListView ItemsSource="{Binding UserIdentityTokens}"
-                                      Background="{StaticResource BackgroundLightBrush}"
-                                      HorizontalAlignment="Left"
-                                      BorderThickness="0">
-                                <ListView.ItemTemplate>
-                                    <DataTemplate>
-                                        <StackPanel Orientation="Horizontal">
-                                            <fa:ImageAwesome 
-                                                Width="10" 
-                                                Margin="3"
-                                                Foreground="{StaticResource WordBlueBrush}"
-                                                Icon="Server"/>
-                                            <TextBlock VerticalAlignment="Center" Text="{Binding TokenType}" />
-                                        </StackPanel>
-                                    </DataTemplate>
-                                </ListView.ItemTemplate>
-                            </ListView>
+  
+                        <StackPanel DataContext="{Binding Server}"
+                                    Grid.Column="1" >
+                            <TextBlock  Text="{Binding ApplicationName}"/>
+                            <TextBlock  Text="{Binding ApplicationType}"/>
+                            <TextBlock  Text="{Binding ApplicationUri}"/>
+                            <TextBlock  Text="{Binding ProductUri}"/>
                         </StackPanel>
+                            
                     </Grid>
                 </GroupBox>
 
@@ -137,27 +115,30 @@
                 <GroupBox Grid.Row="1"
                             Grid.Column="0"
                             Header="Endpoints" 
-                            Padding="5px" >
+                            Padding="0 5 0 0" >
                     <ScrollViewer 
                         Height="auto" 
                         VerticalScrollBarVisibility="auto">
 
-                        <DataGrid VerticalAlignment="Stretch"
-                                  HorizontalAlignment="Stretch"
-                                  AutoGenerateColumns="false"
+                        <DataGrid AutoGenerateColumns="false"
+                                  RowHeaderWidth="0"
+                                  CanUserResizeColumns="False"
+                                  CanUserReorderColumns="False"
                                   Background="{StaticResource BackgroundLightBrush}"
                                   IsReadOnly="True"
                                   ItemsSource="{Binding DiscoveredEndpoints}"
-                                  SelectedItem="{Binding SelectedEndpointDataGridModel, Mode=TwoWay}"
-                                  SelectionMode="Single">
+                                  SelectedItem="{Binding SelectedEndpointGridViewModel, Mode=TwoWay}"
+                                  SelectionMode="Single"
+                                  IsManipulationEnabled="False"
+                                  CanUserAddRows="False">
                             <DataGrid.Columns>
-                                <DataGridTextColumn Width="*" Header="Application Name" Binding="{Binding ApplicationName}"/>
-                                <DataGridTextColumn Width="*" Header="Security Mode" Binding="{Binding SecurityMode}"/>
-                                <DataGridTextColumn Width="*" Header="Security Policy" Binding="{Binding SecurityPolicy}"/>
                                 <DataGridTextColumn Width="*" Header="Endpoint Url" Binding="{Binding EndpointUrl}"/>
+                                <DataGridTextColumn Width="auto" Header="Sec. Mode" Binding="{Binding SecurityMode}"/>
+                                <DataGridTextColumn Width="auto" Header="Sec. Policy" Binding="{Binding SecurityPolicy}"/>
+                                <DataGridTextColumn Width="auto" Header="Sec. level" Binding="{Binding SecurityLevel}"/>
+                                <DataGridTextColumn Width="*" Header="Transport profile" Binding="{Binding TransportProfileUri}"/>
                             </DataGrid.Columns>
                         </DataGrid>
-
                     </ScrollViewer>
                 </GroupBox>
 

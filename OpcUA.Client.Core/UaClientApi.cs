@@ -19,6 +19,8 @@ namespace OpcUA.Client.Core
         /// </summary>
         private ApplicationConfiguration _applicationConfig;
 
+        private static CertificateValidator m_validator;
+
         #endregion
 
         #region public Properties
@@ -32,23 +34,7 @@ namespace OpcUA.Client.Core
 
         private ICollection<MonitoredItem> myMonitoredItem = new List<MonitoredItem>();
 
-
-        /// <summary>
-        /// Provides the event handling for server certificates.
-        /// </summary>
-        public CertificateValidationEventHandler CertificateValidationNotification;
-
-        /// <summary>
-        /// Provides the event for value changes of a monitored item.
-        /// </summary>
-        //public MonitoredItemNotificationEventHandler ItemChangedNotification;
-
-        /// <summary>
-        /// Provides the event for KeepAliveNotifications.
-        /// </summary>
-        public KeepAliveEventHandler KeepAliveNotification;
         #endregion
-
 
         public Node GetDataType(NodeId nodeId)
         {
@@ -360,6 +346,7 @@ namespace OpcUA.Client.Core
             {
                 //Delete the subscription and all items submitted
                 subscription.Delete(true);
+                Session.RemoveSubscription(subscription);
             }
             catch (Exception e)
             {
@@ -368,8 +355,6 @@ namespace OpcUA.Client.Core
             }
         }
         #endregion
-
-
 
         #region Read/Write
         /// <summary>Reads a node by node Id</summary>
@@ -394,190 +379,7 @@ namespace OpcUA.Client.Core
                 throw e;
             }
         }
-
-        /// <summary>Reads values from node Ids</summary>
-        /// <param name="nodeIdStrings">The node Ids as strings</param>
-        /// <returns>The read values as strings</returns>
-        /// <exception cref="Exception">Throws and forwards any exception with short error description.</exception>
-        public List<string> ReadValues(List<String> nodeIdStrings)
-        {
-            List<NodeId> nodeIds = new List<NodeId>();
-            List<Type> types = new List<Type>();
-            List<object> values = new List<object>();
-            List<ServiceResult> serviceResults = new List<ServiceResult>();
-            foreach (string str in nodeIdStrings)
-            {
-                //Create a nodeId using the identifier string and add to list
-                nodeIds.Add(new NodeId(str));
-                //No need for types
-                types.Add(null);
-            }
-            try
-            {
-                //Read the dataValues
-                Session.ReadValues(nodeIds, types, out values, out serviceResults);
-                //check ServiceResults to 
-                foreach (ServiceResult svResult in serviceResults)
-                {
-                    if (svResult.ToString() != "Good")
-                    {
-                        Exception e = new Exception(svResult.ToString());
-                        throw e;
-                    }
-                }
-                List<string> resultStrings = new List<string>();
-                foreach (object result in values)
-                {
-                    if (result != null)
-                    {
-                        if (result.ToString() == "System.Byte[]")
-                        {
-                            string str = "";
-                            str = BitConverter.ToString((byte[])result).Replace("-", ";");
-                            resultStrings.Add(str);
-                        }
-                        if (result.ToString() == "System.String[]")
-                        {
-                            string str = "";
-                            str = String.Join(";", (string[])result);
-                            resultStrings.Add(str);
-                        }
-                        else if (result.ToString() == "System.Boolean[]")
-                        {
-                            string str = "";
-                            foreach (Boolean intVar in (Boolean[])result)
-                            {
-                                str = str + ";" + intVar.ToString();
-                            }
-                            str = str.Remove(0, 1);
-                            resultStrings.Add(str);
-                        }
-                        else if (result.ToString() == "System.Int16[]")
-                        {
-                            string str = "";
-                            foreach (Int16 intVar in (Int16[])result)
-                            {
-                                str = str + ";" + intVar.ToString();
-                            }
-                            str = str.Remove(0, 1);
-                            resultStrings.Add(str);
-                        }
-                        else if (result.ToString() == "System.UInt16[]")
-                        {
-                            string str = "";
-                            foreach (UInt16 intVar in (UInt16[])result)
-                            {
-                                str = str + ";" + intVar.ToString();
-                            }
-                            str = str.Remove(0, 1);
-                            resultStrings.Add(str);
-                        }
-                        else if (result.ToString() == "System.Int64[]")
-                        {
-                            string str = "";
-                            foreach (Int64 intVar in (Int64[])result)
-                            {
-                                str = str + ";" + intVar.ToString();
-                            }
-                            str = str.Remove(0, 1);
-                            resultStrings.Add(str);
-                        }
-                        else if (result.ToString() == "System.Single[]")
-                        {
-                            string str = "";
-                            foreach (float intVar in (float[])result)
-                            {
-                                str = str + ";" + intVar.ToString();
-                            }
-                            str = str.Remove(0, 1);
-                            resultStrings.Add(str);
-                        }
-                        else if (result.ToString() == "System.Double[]")
-                        {
-                            string str = "";
-                            foreach (double intVar in (double[])result)
-                            {
-                                str = str + ";" + intVar.ToString();
-                            }
-                            str = str.Remove(0, 1);
-                            resultStrings.Add(str);
-                        }
-                        else
-                        {
-                            resultStrings.Add(result.ToString());
-                        }
-                    }
-                    else
-                    {
-                        resultStrings.Add("(null)");
-                    }
-                }
-                return resultStrings;
-            }
-            catch (Exception e)
-            {
-                //handle Exception here
-                throw e;
-            }
-        }
-
-        /// <summary>Writes values to node Ids</summary>
-        /// <param name="value">The values as strings</param>
-        /// <param name="nodeIdString">The node Ids as strings</param>
-        /// <exception cref="Exception">Throws and forwards any exception with short error description.</exception>
-        public void WriteValues(List<String> values, List<String> nodeIdStrings)
-        {
-            //Create a collection of values to write
-            WriteValueCollection valuesToWrite = new WriteValueCollection();
-            //Create a collection for StatusCodes
-            StatusCodeCollection result = new StatusCodeCollection();
-            //Create a collection for DiagnosticInfos
-            DiagnosticInfoCollection diagnostics = new DiagnosticInfoCollection();
-
-            foreach (String str in nodeIdStrings)
-            {
-                //Create a nodeId
-                NodeId nodeId = new NodeId(str);
-                //Create a dataValue
-                DataValue dataValue = new DataValue();
-                //Read the dataValue
-                try
-                {
-                    dataValue = Session.ReadValue(nodeId);
-                }
-                catch (Exception e)
-                {
-                    //handle Exception here
-                    throw e;
-                }
-
-                //Get the data type of the read dataValue
-                //Handle Arrays here: TBD
-                Variant variant = new Variant(Convert.ChangeType(values[nodeIdStrings.IndexOf(str)], dataValue.Value.GetType()));
-
-                //Overwrite the dataValue with a new constructor using read dataType
-                dataValue = new DataValue(variant);
-
-                //Create a WriteValue using the NodeId, dataValue and attributeType
-                WriteValue valueToWrite = new WriteValue();
-                valueToWrite.Value = dataValue;
-                valueToWrite.NodeId = nodeId;
-                valueToWrite.AttributeId = Attributes.Value;
-
-                //Add the dataValues to the collection
-                valuesToWrite.Add(valueToWrite);
-            }
-            try
-            {
-                //Write the collection to the server
-                Session.Write(null, valuesToWrite, out result, out diagnostics);
-            }
-            catch (Exception e)
-            {
-                //handle Exception here
-                throw e;
-            }
-        }
+        
         #endregion
 
 
@@ -585,27 +387,33 @@ namespace OpcUA.Client.Core
 
         #region EventHandling
         /// <summary>Eventhandler to validate the server certificate forwards this event</summary>
-        private void Notificatio_CertificateValidation(CertificateValidator certificate, CertificateValidationEventArgs e)
+        private static void Notificatio_CertificateValidation(CertificateValidator certificate, CertificateValidationEventArgs e)
         {
-            CertificateValidationNotification(certificate, e);
-        }
-
-        /*
-        /// <summary>Eventhandler for MonitoredItemNotifications forwards this event</summary>
-        private void Notification_MonitoredItem(MonitoredItem monitoredItem, MonitoredItemNotificationEventArgs e)
-        {
-            ItemChangedNotification(monitoredItem, e);
-        }
-        */
-
-        ///// <summary>Eventhandler for KeepAlive forwards this event</summary>
-        private void Notification_KeepAlive(Session session, KeepAliveEventArgs e)
-        {
-            if (e != null)
+            try
             {
-                KeepAliveNotification(session, e);
+                if (e.Error != null && e.Error.Code == StatusCodes.BadCertificateUntrusted)
+                {
+                    e.Accept = true;
+                    Utils.Trace((int)Utils.TraceMasks.Security, "Automatically accepted certificate: {0}", e.Certificate.Subject);
+                }
             }
+            catch (Exception exception)
+            {
+                Utils.Trace(exception, "Error accepting certificate.");
+            }
+
+            // TODO save to trusted store
+            /*
+            // Always accept
+            e.Accept = true;
+            // Always save to store
+            X509Store store = new X509Store(StoreName.Root, StoreLocation.CurrentUser);
+            store.Open(OpenFlags.ReadWrite);
+            if (!store.Certificates.Contains(e.Certificate))
+                store.Add(e.Certificate);
+                */
         }
+
         #endregion
 
         #region Private methods
@@ -619,13 +427,13 @@ namespace OpcUA.Client.Core
             // ApplicationConfiguration.Load() method loads configuration by looking up a file path in the App.config.
             // This approach allows applications to share configuration files and to update them.
             // This example creates a minimum ApplicationConfiguration using its default constructor.
-            ApplicationConfiguration configuration = new ApplicationConfiguration();
-
-            // Step 1 - Specify the client identity.
-            configuration.ApplicationName = "UaClientApi";
-            configuration.ApplicationType = ApplicationType.Client;
-            configuration.ApplicationUri = "urn:UaClientApi"; //Kepp this syntax
-            configuration.ProductUri = "SiemensAG.IndustryOnlineSupport";
+            ApplicationConfiguration configuration = new ApplicationConfiguration
+            {
+                ApplicationName = "UaClientApi",
+                ApplicationType = ApplicationType.Client,
+                ApplicationUri = "urn:UaClientApi",
+                ProductUri = "SiemensAG.IndustryOnlineSupport"
+            };
 
             // Step 2 - Specify the client's application instance certificate.
             // Application instance certificates must be placed in a windows certficate store because that is 
@@ -639,9 +447,9 @@ namespace OpcUA.Client.Core
                 {
                     StoreType = CertificateStoreType.Windows,
                     StorePath = "CurrentUser\\My",
-                    SubjectName = configuration.ApplicationName
+                    SubjectName = configuration.ApplicationName,
                 },
-                TrustedIssuerCertificates =
+                TrustedIssuerCertificates = 
                 {
                     StoreType = CertificateStoreType.Windows,
                     StorePath = "CurrentUser\\Root"
@@ -680,6 +488,13 @@ namespace OpcUA.Client.Core
                     algorithm);
             }
 
+
+
+            //configuration.SecurityConfiguration.ApplicationCertificate.Certificate = clientCertificate;
+
+            // check the application certificate.
+            //application.CheckApplicationInstanceCertificate(false, 2048);
+
             // Step 3 - Specify the supported transport quotas.
             // The transport quotas are used to set limits on the contents of messages and are
             // used to protect against DOS attacks and rogue clients. They should be set to
@@ -688,14 +503,16 @@ namespace OpcUA.Client.Core
             {
                 OperationTimeout = 360000,
                 MaxStringLength = 67108864,
-                MaxByteStringLength = 16777216
+                MaxByteStringLength = 16777216 // Needed, i.e. for large TypeDictionarys
             };
-            //Needed, i.e. for large TypeDictionarys
+            
 
 
             // Step 4 - Specify the client specific configuration.
-            configuration.ClientConfiguration = new ClientConfiguration();
-            configuration.ClientConfiguration.DefaultSessionTimeout = 360000;
+            configuration.ClientConfiguration = new ClientConfiguration
+            {
+                DefaultSessionTimeout = 360000
+            };
 
 
 
@@ -707,6 +524,14 @@ namespace OpcUA.Client.Core
                 TraceMasks = Utils.TraceMasks.All
             };
 
+            configuration.CertificateValidator = new CertificateValidator();
+
+            configuration.CertificateValidator.Update(configuration.SecurityConfiguration);
+            configuration.CertificateValidator.CertificateValidation += Notificatio_CertificateValidation;
+
+            m_validator = configuration.CertificateValidator;
+            ServicePointManager.ServerCertificateValidationCallback = HttpsCertificateValidation;
+
             // Step 5 - Validate the configuration.
             // This step checks if the configuration is consistent and assigns a few internal variables
             // that are used by the SDK. This is called automatically if the configuration is loaded from
@@ -716,29 +541,8 @@ namespace OpcUA.Client.Core
             return configuration;
         }
 
-        /// <summary>Creats an EndpointDescription</summary>
-        /// <param name="url">The endpoint url</param>
-        /// <param name="security">Use security or not</param>
-        /// <returns>The EndpointDescription</returns>
-        /// <exception cref="Exception">Throws and forwards any exception with short error description.</exception>
-        private static EndpointDescription CreateEndpointDescription(string url, string secPolicy, MessageSecurityMode msgSecMode)
-        {
-            // create the endpoint description.
-            EndpointDescription endpointDescription = new EndpointDescription();
+        
 
-            // submit the url of the endopoint
-            endpointDescription.EndpointUrl = url;
-
-            // specify the security policy to use.
-
-            endpointDescription.SecurityPolicyUri = secPolicy;
-            endpointDescription.SecurityMode = msgSecMode;
-
-            // specify the transport profile.
-            endpointDescription.TransportProfileUri = Profiles.UaTcpTransport;
-
-            return endpointDescription;
-        }
 
         /// <summary>Gets the local IP addresses and the DNS name</summary>
         /// <returns>The list of IPs and names</returns>
@@ -762,6 +566,418 @@ namespace OpcUA.Client.Core
             return localIps;
         }
 
+
+        /// <summary>
+        /// Remotes the certificate validate.
+        /// </summary>
+        private static bool HttpsCertificateValidation(
+            object sender,
+            X509Certificate cert,
+            X509Chain chain,
+            System.Net.Security.SslPolicyErrors error)
+        {
+            try
+            {
+                m_validator.Validate(new X509Certificate2(cert.GetRawCertData()));
+                return true;
+            }
+            catch (Exception e)
+            {
+                Utils.Trace(e, "Could not verify SSL certificate: {0}", cert.Subject);
+                return false;
+            }
+        }
         #endregion
+
+        #region Tmp certificates
+        /// <summary>
+        /// Creates the application instance certificate.
+        /// </summary>
+        /// <param name="configuration">The configuration.</param>
+        /// <param name="keySize">Size of the key.</param>
+        /// <param name="lifetimeInMonths">The lifetime in months.</param>
+        /// <returns>The new certificate</returns>
+        private static X509Certificate2 CreateApplicationInstanceCertificate(
+            ApplicationConfiguration configuration,
+            ushort keySize,
+            ushort lifetimeInMonths)
+        {
+            Utils.Trace(Utils.TraceMasks.Information, "Creating application instance certificate. KeySize={0}, Lifetime={1}", keySize, lifetimeInMonths);
+
+            // delete existing any existing certificate.
+            DeleteApplicationInstanceCertificate(configuration);
+
+            CertificateIdentifier id = configuration.SecurityConfiguration.ApplicationCertificate;
+
+            // get the domains from the configuration file.
+            IList<string> serverDomainNames = configuration.GetServerDomainNames();
+
+            if (serverDomainNames.Count == 0)
+            {
+                serverDomainNames.Add(System.Net.Dns.GetHostName());
+            }
+
+            // ensure the certificate store directory exists.
+            if (id.StoreType == CertificateStoreType.Directory)
+            {
+                Utils.GetAbsoluteDirectoryPath(id.StorePath, true, true, true);
+            }
+
+            X509Certificate2 certificate = Opc.Ua.CertificateFactory.CreateCertificate(
+                id.StoreType,
+                id.StorePath,
+                configuration.ApplicationUri,
+                configuration.ApplicationName,
+                null,
+                serverDomainNames,
+                keySize,
+                lifetimeInMonths);
+
+            id.Certificate = certificate;
+            AddToTrustedStore(configuration, certificate);
+
+            
+
+            configuration.CertificateValidator.Update(configuration.SecurityConfiguration);
+
+            Utils.Trace(Utils.TraceMasks.Information, "Certificate created. Thumbprint={0}", certificate.Thumbprint);
+
+            // reload the certificate from disk.
+            return configuration.SecurityConfiguration.ApplicationCertificate.LoadPrivateKey(null);
+        }
+
+        /// <summary>
+        /// Adds the certificate to the Trusted Certificate Store
+        /// </summary>
+        /// <param name="configuration">The application's configuration which specifies the location of the TrustedStore.</param>
+        /// <param name="certificate">The certificate to register.</param>
+        private static void AddToTrustedStore(ApplicationConfiguration configuration, X509Certificate2 certificate)
+        {
+            string storePath = null;
+
+            if (configuration != null && configuration.SecurityConfiguration != null && configuration.SecurityConfiguration.TrustedPeerCertificates != null)
+            {
+                storePath = configuration.SecurityConfiguration.TrustedPeerCertificates.StorePath;
+            }
+
+            if (String.IsNullOrEmpty(storePath))
+            {
+                Utils.Trace(Utils.TraceMasks.Information, "WARNING: Trusted peer store not specified.");
+                return;
+            }
+
+            try
+            {
+                ICertificateStore store = configuration.SecurityConfiguration.TrustedPeerCertificates.OpenStore();
+
+                if (store == null)
+                {
+                    Utils.Trace("Could not open trusted peer store. StorePath={0}", storePath);
+                    return;
+                }
+
+                try
+                {
+                    // check if it already exists.
+                    X509Certificate2 certificate2 = store.FindByThumbprint(certificate.Thumbprint);
+
+                    if (certificate2 != null)
+                    {
+                        return;
+                    }
+
+                    Utils.Trace(Utils.TraceMasks.Information, "Adding certificate to trusted peer store. StorePath={0}", storePath);
+
+                    List<string> subjectName = Utils.ParseDistinguishedName(certificate.Subject);
+
+                    // check for old certificate.
+                    X509Certificate2Collection certificates = store.Enumerate();
+
+                    for (int ii = 0; ii < certificates.Count; ii++)
+                    {
+                        if (Utils.CompareDistinguishedName(certificates[ii], subjectName))
+                        {
+                            if (certificates[ii].Thumbprint == certificate.Thumbprint)
+                            {
+                                return;
+                            }
+
+                            store.Delete(certificates[ii].Thumbprint);
+                            break;
+                        }
+                    }
+
+                    // add new certificate.
+                    X509Certificate2 publicKey = new X509Certificate2(certificate.GetRawCertData());
+                    store.Add(publicKey);
+                }
+                finally
+                {
+                    store.Close();
+                }
+            }
+            catch (Exception e)
+            {
+                Utils.Trace(e, "Could not add certificate to trusted peer store. StorePath={0}", storePath);
+            }
+        }
+
+        /// <summary>
+        /// Deletes an existing application instance certificate.
+        /// </summary>
+        /// <param name="configuration">The configuration instance that stores the configurable information for a UA application.</param>
+        private static void DeleteApplicationInstanceCertificate(ApplicationConfiguration configuration)
+        {
+            Utils.Trace(Utils.TraceMasks.Information, "Deleting application instance certificate.");
+
+            // create a default certificate id none specified.
+            CertificateIdentifier id = configuration.SecurityConfiguration.ApplicationCertificate;
+
+            if (id == null)
+            {
+                return;
+            }
+
+            // delete private key.
+            X509Certificate2 certificate = id.Find();
+
+            // delete trusted peer certificate.
+            if (configuration.SecurityConfiguration != null && configuration.SecurityConfiguration.TrustedPeerCertificates != null)
+            {
+                string thumbprint = id.Thumbprint;
+
+                if (certificate != null)
+                {
+                    thumbprint = certificate.Thumbprint;
+                }
+
+                using (ICertificateStore store = configuration.SecurityConfiguration.TrustedPeerCertificates.OpenStore())
+                {
+                    store.Delete(thumbprint);
+                }
+            }
+
+            // delete private key.
+            if (certificate != null)
+            {
+                using (ICertificateStore store = id.OpenStore())
+                {
+                    store.Delete(certificate.Thumbprint);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Adds an application certificate to a store.
+        /// </summary>
+        private static void AddApplicationCertificateToStore(
+            CertificateStoreIdentifier csid,
+            X509Certificate2 certificate,
+            string oldThumbprint)
+        {
+            ICertificateStore store = csid.OpenStore();
+
+            try
+            {
+                // delete the old certificate.
+                if (oldThumbprint != null)
+                {
+                    store.Delete(oldThumbprint);
+                }
+
+                // delete certificates with the same application uri.
+                if (store.FindByThumbprint(certificate.Thumbprint) == null)
+                {
+                    string applicationUri = Utils.GetApplicationUriFromCertficate(certificate);
+
+                    // delete any existing certificates.
+                    foreach (X509Certificate2 target in store.Enumerate())
+                    {
+                        if (Utils.CompareDistinguishedName(target.Subject, certificate.Subject))
+                        {
+                            if (Utils.GetApplicationUriFromCertficate(target) == applicationUri)
+                            {
+                                store.Delete(target.Thumbprint);
+                            }
+                        }
+                    }
+
+                    // add new certificate.
+                    store.Add(new X509Certificate2(certificate.RawData));
+                }
+            }
+            finally
+            {
+                store.Close();
+            }
+        }
+
+        /// <summary>
+        /// Checks for a valid application instance certificate.
+        /// </summary>
+        /// <param name="silent">if set to <c>true</c> no dialogs will be displayed.</param>
+        /// <param name="minimumKeySize">Minimum size of the key.</param>
+        public void CheckApplicationInstanceCertificate(
+            bool silent,
+            ushort minimumKeySize)
+        {
+            Utils.Trace(Utils.TraceMasks.Information, "Checking application instance certificate.");
+
+            ApplicationConfiguration configuration = null;
+
+            configuration = _applicationConfig;
+            bool createNewCertificate = true;
+
+            // find the existing certificate.
+            CertificateIdentifier id = configuration.SecurityConfiguration.ApplicationCertificate;
+
+            if (id == null)
+            {
+                throw ServiceResultException.Create(StatusCodes.BadConfigurationError, "Configuration file does not specify a certificate.");
+            }
+
+            X509Certificate2 certificate = id.Find(true);
+
+            // check that it is ok.
+            if (certificate != null)
+            {
+                createNewCertificate = !CheckApplicationInstanceCertificate(configuration, certificate, silent, minimumKeySize);
+            }
+            else
+            {
+                // check for missing private key.
+                certificate = id.Find(false);
+
+                if (certificate != null)
+                {
+                    throw ServiceResultException.Create(StatusCodes.BadConfigurationError, "Cannot access certificate private key. Subject={0}", certificate.Subject);
+                }
+
+                // check for missing thumbprint.
+                if (!String.IsNullOrEmpty(id.Thumbprint))
+                {
+                    if (!String.IsNullOrEmpty(id.SubjectName))
+                    {
+                        CertificateIdentifier id2 = new CertificateIdentifier();
+                        id2.StoreType = id.StoreType;
+                        id2.StorePath = id.StorePath;
+                        id2.SubjectName = id.SubjectName;
+
+                        certificate = id2.Find(true);
+                    }
+
+                    if (certificate != null)
+                    {
+                        string message = Utils.Format(
+                            "Thumbprint was explicitly specified in the configuration." +
+                            "\r\nAnother certificate with the same subject name was found." +
+                            "\r\nUse it instead?\r\n" +
+                            "\r\nRequested: {0}" +
+                            "\r\nFound: {1}",
+                            id.SubjectName,
+                            certificate.Subject);
+
+                        throw ServiceResultException.Create(StatusCodes.BadConfigurationError, message);
+                    }
+                    else
+                    {
+                        string message = Utils.Format("Thumbprint was explicitly specified in the configuration. Cannot generate a new certificate.");
+                        throw ServiceResultException.Create(StatusCodes.BadConfigurationError, message);
+                    }
+                }
+                else
+                {
+                    if (String.IsNullOrEmpty(id.SubjectName))
+                    {
+                        string message = Utils.Format("Both SubjectName and Thumbprint are not specified in the configuration. Cannot generate a new certificate.");
+                        throw ServiceResultException.Create(StatusCodes.BadConfigurationError, message);
+                    }
+                }
+            }
+
+            // create a new certificate.
+            if (createNewCertificate)
+            {
+                certificate = CreateApplicationInstanceCertificate(configuration, minimumKeySize, 600);
+            }
+
+            // ensure it is trusted.
+            else
+            {
+                AddToTrustedStore(configuration, certificate);
+            }  
+        }
+
+        /// <summary>
+        /// Creates an application instance certificate if one does not already exist.
+        /// </summary>
+        private static bool CheckApplicationInstanceCertificate(
+            ApplicationConfiguration configuration,
+            X509Certificate2 certificate,
+            bool silent,
+            ushort minimumKeySize)
+        {
+            if (certificate == null)
+            {
+                return false;
+            }
+
+            Utils.Trace(Utils.TraceMasks.Information, "Checking application instance certificate. {0}", certificate.Subject);
+
+            // validate certificate.
+            configuration.CertificateValidator.Validate(certificate);
+
+            // check key size.
+            if (minimumKeySize > certificate.PublicKey.Key.KeySize)
+            {
+                bool valid = false;
+
+                string message = Utils.Format(
+                    "The key size ({0}) in the certificate is less than the minimum provided ({1}). Update certificate?",
+                    certificate.PublicKey.Key.KeySize,
+                    minimumKeySize);
+
+                Utils.Trace(message);
+
+                if (!valid)
+                {
+                    return false;
+                }
+            }
+
+            //// check domains.
+            //if (configuration.ApplicationType != ApplicationType.Client)
+            //{
+            //    if (!CheckDomainsInCertificate(configuration, certificate, silent))
+            //    {
+            //        return false;
+            //    }
+            //}
+
+            // update uri.
+            string applicationUri = Utils.GetApplicationUriFromCertficate(certificate);
+
+            if (String.IsNullOrEmpty(applicationUri))
+            {
+                bool valid = false;
+
+                string message = "The Application URI is not specified in the certificate. Update certificate?";
+
+                Utils.Trace(message);
+
+                if (!valid)
+                {
+                    return false;
+                }
+            }
+
+            // update configuration.
+            configuration.ApplicationUri = applicationUri;
+            configuration.SecurityConfiguration.ApplicationCertificate.Certificate = certificate;
+
+            return true;
+        }
+        #endregion
+
     }
 }

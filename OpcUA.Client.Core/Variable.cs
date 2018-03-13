@@ -12,10 +12,5 @@ namespace OpcUA.Client.Core
 
         public string DataType { get; set; }
 
-        public Variable(NodeId nodeId)
-        {
-            NodeId = nodeId;
-            DataType = IoC.Get<UaClientApi>().GetDataType(NodeId).ToString();
-        }
     }
 }

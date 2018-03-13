@@ -93,7 +93,12 @@ namespace OpcUA.Client.Core
         private void AddVariableToSubscription()
         {
             var nodeId = new NodeId(_refDiscOfSelectedNode.NodeId.ToString());
-            VariablesToRead.Add(new Variable(nodeId));
+            VariablesToRead.Add(new Variable()
+            {
+                NodeId = nodeId,
+                DataType = _uaClientApi.GetDataType(nodeId).ToString()
+            });
+
             _uaClientApi.AddMonitoredItem(nodeId, 1).Notification += new MonitoredItemNotificationEventHandler(Notification_MonitoredItem);
         }
 
