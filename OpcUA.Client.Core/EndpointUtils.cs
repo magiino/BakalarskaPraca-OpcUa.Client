@@ -6,7 +6,7 @@ namespace OpcUA.Client.Core
 {
     public static class EndpointUtils
     {
-        private static readonly string[] Protocol = { "opc.tcp", "http", "https"};
+        private static readonly string[] Protocol = { "opc.tcp://", "http://", "https://"};
 
         public static string EProtocolToString(EProtocol protocol)
         {

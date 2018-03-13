@@ -92,7 +92,7 @@ namespace OpcUA.Client.Core
             var uri = new Uri(serverUrl);
             try
             {
-                //Create a DiscoveryClient
+                ////Create a DiscoveryClient
                 using (var discoveryClient = DiscoveryClient.Create(uri))
                 {
                     //Search for available endpoints

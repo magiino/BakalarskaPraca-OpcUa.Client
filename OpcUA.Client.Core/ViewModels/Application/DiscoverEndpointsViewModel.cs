@@ -139,16 +139,23 @@ namespace OpcUA.Client.Core
         {
             _discoveredEndpoints.Clear();
 
-            FoundedServers = new ObservableCollection<ApplicationDescription>(_uaClientApi.FindServers(DiscoveryUrl)); 
-
-            foreach (var server in FoundedServers)
+            try
             {
-                foreach (var url in server.DiscoveryUrls)
+                FoundedServers = new ObservableCollection<ApplicationDescription>(_uaClientApi.FindServers(DiscoveryUrl));
+
+                foreach (var server in FoundedServers)
                 {
-                    var endpoints = _uaClientApi.GetEndpoints(url);
-                    foreach (var endpoint in endpoints)
-                        _discoveredEndpoints.Add(endpoint);
+                    foreach (var url in server.DiscoveryUrls)
+                    {
+                        var endpoints = _uaClientApi.GetEndpoints(url);
+                        foreach (var endpoint in endpoints)
+                            _discoveredEndpoints.Add(endpoint);
+                    }
                 }
+            }
+            catch (Exception e)
+            {
+                System.Windows.MessageBox.Show(e.Message, "Error");
             }
 
             SelectedServer = FoundedServers?.First();
