@@ -20,11 +20,6 @@ namespace OpcUA.Client.Core
 
         #endregion
 
-        #region public Properties
-
-
-        #endregion
-
         #region Constructors
 
         public UaClientApi()
@@ -33,6 +28,7 @@ namespace OpcUA.Client.Core
             _applicationConfig = CreateClientConfiguration();
             CertificateUtils.CheckApplicationInstanceCertificate(_applicationConfig, false, 2048);
         }
+
         #endregion
 
         #region Discovery Client
@@ -93,17 +89,19 @@ namespace OpcUA.Client.Core
 
         public void CreateDefaultConfiguration()
         {
+            if (_applicationConfig != null) return;
             _applicationConfig = CreateClientConfiguration();
         }
 
         public void SaveConfiguration()
         {
-            _applicationConfig.SaveToFile("C:\\Users\\Marek\\UaClient\\test.xml");
+            _applicationConfig?.SaveToFile(Path.Combine(Environment.ExpandEnvironmentVariables("%userprofile%"), "Documents\\UaClient\\Configuration.xml"));
         }
 
         #endregion
 
         #region Browse
+
         /// <summary>Browses the root folder of an OPC UA server.</summary>
         /// <returns>ReferenceDescriptionCollection of found nodes</returns>
         /// <exception cref="Exception">Throws and forwards any exception with short error description.</exception>
@@ -112,7 +110,17 @@ namespace OpcUA.Client.Core
             try
             {
                 //Browse the RootFolder for variables, objects and methods
-                _session.Browse(null, null, ObjectIds.RootFolder, 0u, BrowseDirection.Forward, ReferenceTypeIds.HierarchicalReferences, true, (uint)NodeClass.Variable | (uint)NodeClass.Object | (uint)NodeClass.Method, out var continuationPoint, out var referenceDescriptionCollection);
+                _session.Browse(null,
+                                null,
+                                ObjectIds.RootFolder,
+                                0u,
+                                BrowseDirection.Forward,
+                                ReferenceTypeIds.HierarchicalReferences,
+                                true,
+                                (uint)NodeClass.Variable | (uint)NodeClass.Object | (uint)NodeClass.Method,
+                                out var continuationPoint,
+                                out var referenceDescriptionCollection);
+
                 return referenceDescriptionCollection;
             }
             catch (Exception e)
@@ -124,21 +132,26 @@ namespace OpcUA.Client.Core
         }
 
         /// <summary>Browses a node ID provided by a ReferenceDescription</summary>
-        /// <param name="refDesc">The ReferenceDescription</param>
+        /// <param name="referenceDescription">The ReferenceDescription</param>
         /// <returns>ReferenceDescriptionCollection of found nodes</returns>
         /// <exception cref="Exception">Throws and forwards any exception with short error description.</exception>
-        public ReferenceDescriptionCollection BrowseNode(ReferenceDescription refDesc)
+        public ReferenceDescriptionCollection BrowseNode(ReferenceDescription referenceDescription)
         {
-            //Create a collection for the browse results
-            ReferenceDescriptionCollection referenceDescriptionCollection;
-            //Create a continuationPoint
-            byte[] continuationPoint;
-            //Create a NodeId using the selected ReferenceDescription as browsing starting point
-            NodeId nodeId = ExpandedNodeId.ToNodeId(refDesc.NodeId, null);
+            var nodeId = ExpandedNodeId.ToNodeId(referenceDescription.NodeId, null);
             try
             {
                 //Browse from starting point for all object types
-                _session.Browse(null, null, nodeId, 0u, BrowseDirection.Forward, ReferenceTypeIds.HierarchicalReferences, true, 0, out continuationPoint, out referenceDescriptionCollection);
+                _session.Browse(null, 
+                                null, 
+                                nodeId, 
+                                0u, 
+                                BrowseDirection.Forward,
+                                ReferenceTypeIds.HierarchicalReferences, 
+                                true, 
+                                0,
+                                out var continuationPoint,
+                                out var referenceDescriptionCollection);
+
                 return referenceDescriptionCollection;
             }
             catch (Exception e)
@@ -150,44 +163,29 @@ namespace OpcUA.Client.Core
         }
         #endregion
 
+        #region Connect / Disconnect
         /// <summary>Establishes the connection to an OPC UA server and creates a session using an EndpointDescription.</summary>
         /// <param name="endpointDescription">The EndpointDescription of the server's endpoint</param>
-        /// <param name="userAuth">Autheticate anonymous or with username and password</param>
         /// <param name="userName">The user name</param>
         /// <param name="password">The password</param>
+        /// <param name="sessionName">Name of the session</param>
         /// <exception cref="Exception">Throws and forwards any exception with short error description.</exception>
-        public void Connect(EndpointDescription endpointDescription, bool userAuth, string userName, string password)
+        public void Connect(EndpointDescription endpointDescription, string userName, string password, string sessionName)
         {
             try
             {
-                //Secify application configuration
-                var applicationConfig = _applicationConfig;
+                var endpointConfiguration = EndpointConfiguration.Create(_applicationConfig);
+                var endpoint = new ConfiguredEndpoint(null, endpointDescription, endpointConfiguration);
 
-                //Hook up a validator function for a CertificateValidation event
-                //applicationConfig.CertificateValidator.CertificateValidation += CertificateValidation;
 
-                //Create EndPoint configuration
-                var endpointConfiguration = EndpointConfiguration.Create(applicationConfig);
+                _applicationConfig.CertificateValidator.CertificateValidation += CertificateValidation;
+                _applicationConfig.CertificateValidator.Update(_applicationConfig);
 
-                //Connect to server and get endpoints
-                var mEndpoint = new ConfiguredEndpoint(null, endpointDescription, endpointConfiguration);
+                var userIdentity = new UserIdentity(userName, password);
 
-                //Create the binding factory.
-                //var bindingFactory = BindingFactory.Create(_applicationConfig, ServiceMessageContext.GlobalContext);
-
-                //Creat a session name
-                String sessionName = "MySession";
-
-                //Create user identity
-                var userIdentity = userAuth ? new UserIdentity(userName, password) : new UserIdentity();
-
-                //Update certificate store before connection attempt
-                applicationConfig.CertificateValidator.Update(applicationConfig);
-
-                //Create and connect session
                 _session = Session.Create(
-                    applicationConfig,
-                    mEndpoint,
+                    _applicationConfig,
+                    endpoint,
                     true,
                     sessionName,
                     60000,
@@ -202,41 +200,71 @@ namespace OpcUA.Client.Core
             }
         }
 
+        /// <summary>Establishes the connection to an OPC UA server and creates a session using an EndpointDescription.</summary>
+        /// <param name="endpointDescription">The EndpointDescription of the server's endpoint</param>
+        /// <param name="sessionName"></param>
+        /// <exception cref="Exception">Throws and forwards any exception with short error description.</exception>
+        public void ConnectAnonymous(EndpointDescription endpointDescription, string sessionName)
+        {
+            try
+            {
+                var endpointConfiguration = EndpointConfiguration.Create(_applicationConfig);
+                var endpoint = new ConfiguredEndpoint(null, endpointDescription, endpointConfiguration);
+
+                _applicationConfig.CertificateValidator.CertificateValidation += CertificateValidation;
+                _applicationConfig.CertificateValidator.Update(_applicationConfig);
+
+                _session = Session.Create(
+                    _applicationConfig,
+                    endpoint,
+                    true,
+                    sessionName,
+                    60000,
+                    null,
+                    null
+                    );
+            }
+            catch (Exception e)
+            {
+                // TODO handle Exception here
+                throw e;
+            }
+        }
+
         /// <summary>Closes an existing session and disconnects from the server.</summary>
         /// <exception cref="Exception">Throws and forwards any exception with short error description.</exception>
         public void Disconnect()
         {
-            // Close the session.
             if (_session == null) return;
             try
             {
+                // TODO unsubscribe subscription and unregister nodes
                 _session.Close(10000);
                 _session.Dispose();
             }
             catch (Exception e)
             {
-                //handle Exception here
+                // TODO handle Exception here
                 throw e;
             }
-        }
+        } 
 
+        #endregion
 
         #region Subscription
+
         /// <summary>Creats a Subscription object to a server</summary>
         /// <param name="publishingInterval">The publishing interval</param>
         /// <returns>Subscription</returns>
         /// <exception cref="Exception">Throws and forwards any exception with short error description.</exception>
-        public void Subscribe(int publishingInterval)
+        public Subscription Subscribe(int publishingInterval)
         {
             //Create a Subscription object
             var subscription = new Subscription(_session.DefaultSubscription)
             {
-                //Enable publishing
                 PublishingEnabled = true,
-                //Set the publishing interval
-                PublishingInterval = publishingInterval
+                PublishingInterval = publishingInterval,
             };
-            //Add the subscription to the session
             _session.AddSubscription(subscription);
             try
             {
@@ -245,7 +273,7 @@ namespace OpcUA.Client.Core
                 
                 //ItemChangedNotification += new MonitoredItemNotificationEventHandler(Notification_MonitoredItem);
 
-                //Subscription = subscription;
+                return subscription;
             }
             catch (Exception e)
             {
@@ -339,7 +367,6 @@ namespace OpcUA.Client.Core
         /// <summary>
         /// Reads a node by node Id from server address space
         /// </summary>
-        /// <param name="nodeId">NodeId (namespace name) for read from server address space.</param>
         /// <param name="nodeIdString"></param>
         /// <returns>The read node</returns>
         /// <exception cref="Exception">Throws and forwards any exception with short error description.</exception>

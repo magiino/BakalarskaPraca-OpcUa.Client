@@ -132,8 +132,8 @@ namespace OpcUA.Client.Core
                 //_uaClientApi.SaveConfiguration();
                 try
                 {
-                    _uaClientApi.Connect(SelectedEndpoint, UserPwIsSelected, null, null);
-                    IoC.Application.GoToPage(ApplicationPage.Main);
+                    //_uaClientApi.Connect(SelectedEndpoint, UserPwIsSelected, null, null);
+                    //IoC.Application.GoToPage(ApplicationPage.Main);
                 }
                 catch (Exception e)
                 {
