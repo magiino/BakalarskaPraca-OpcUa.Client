@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using System.Security.Cryptography.X509Certificates;
@@ -14,36 +15,15 @@ namespace OpcUA.Client.Core
     {
         #region Private Fields
 
-        /// <summary> 
-        /// Specifies this application.
-        /// </summary>
         private ApplicationConfiguration _applicationConfig;
-
-        private static CertificateValidator m_validator;
+        private Session _session;
 
         #endregion
 
         #region public Properties
 
-        /// <summary>
-        /// Provides the session being established with an OPC UA server.
-        /// </summary>
-        public Session Session { get; private set; }
-
-        private Subscription Subscription { get; set; }
-
-        private ICollection<MonitoredItem> myMonitoredItem = new List<MonitoredItem>();
 
         #endregion
-
-        public Node GetDataType(NodeId nodeId)
-        {
-            var node = Session.ReadNode(nodeId);
-            var dataTypeNodeId = (node.DataLock as VariableNode)?.DataType;
-            var dataTypeNode = Session.ReadNode(dataTypeNodeId);
-            return dataTypeNode;
-        }
-
 
         #region Constructors
 
@@ -51,7 +31,7 @@ namespace OpcUA.Client.Core
         {
             // Creats the application configuration (containing the certificate) on construction
             _applicationConfig = CreateClientConfiguration();
-            CheckApplicationInstanceCertificate(false, 2048);
+            CertificateUtils.CheckApplicationInstanceCertificate(_applicationConfig, false, 2048);
         }
         #endregion
 
@@ -77,7 +57,7 @@ namespace OpcUA.Client.Core
             }
             catch (Exception e)
             {
-                //handle Exception here
+                // TODO handle Exception here
                 throw e;
             }
         }
@@ -102,7 +82,7 @@ namespace OpcUA.Client.Core
             }
             catch (Exception e)
             {
-                //handle Exception here
+                // TODO handle Exception here
                 throw e;
             }
         }
@@ -132,12 +112,12 @@ namespace OpcUA.Client.Core
             try
             {
                 //Browse the RootFolder for variables, objects and methods
-                Session.Browse(null, null, ObjectIds.RootFolder, 0u, BrowseDirection.Forward, ReferenceTypeIds.HierarchicalReferences, true, (uint)NodeClass.Variable | (uint)NodeClass.Object | (uint)NodeClass.Method, out var continuationPoint, out var referenceDescriptionCollection);
+                _session.Browse(null, null, ObjectIds.RootFolder, 0u, BrowseDirection.Forward, ReferenceTypeIds.HierarchicalReferences, true, (uint)NodeClass.Variable | (uint)NodeClass.Object | (uint)NodeClass.Method, out var continuationPoint, out var referenceDescriptionCollection);
                 return referenceDescriptionCollection;
             }
             catch (Exception e)
             {
-                //handle Exception here
+                // TODO handle Exception here
                 throw e;
             }
 
@@ -158,12 +138,12 @@ namespace OpcUA.Client.Core
             try
             {
                 //Browse from starting point for all object types
-                Session.Browse(null, null, nodeId, 0u, BrowseDirection.Forward, ReferenceTypeIds.HierarchicalReferences, true, 0, out continuationPoint, out referenceDescriptionCollection);
+                _session.Browse(null, null, nodeId, 0u, BrowseDirection.Forward, ReferenceTypeIds.HierarchicalReferences, true, 0, out continuationPoint, out referenceDescriptionCollection);
                 return referenceDescriptionCollection;
             }
             catch (Exception e)
             {
-                //handle Exception here
+                // TODO handle Exception here
                 throw e;
             }
 
@@ -184,7 +164,7 @@ namespace OpcUA.Client.Core
                 var applicationConfig = _applicationConfig;
 
                 //Hook up a validator function for a CertificateValidation event
-                applicationConfig.CertificateValidator.CertificateValidation += Notificatio_CertificateValidation;
+                //applicationConfig.CertificateValidator.CertificateValidation += CertificateValidation;
 
                 //Create EndPoint configuration
                 var endpointConfiguration = EndpointConfiguration.Create(applicationConfig);
@@ -205,7 +185,7 @@ namespace OpcUA.Client.Core
                 applicationConfig.CertificateValidator.Update(applicationConfig);
 
                 //Create and connect session
-                Session = Session.Create(
+                _session = Session.Create(
                     applicationConfig,
                     mEndpoint,
                     true,
@@ -214,12 +194,10 @@ namespace OpcUA.Client.Core
                     userIdentity,
                     null
                     );
-
-                //Session.KeepAlive += new KeepAliveEventHandler(Notification_KeepAlive);
             }
             catch (Exception e)
             {
-                //handle Exception here
+                // TODO handle Exception here
                 throw e;
             }
         }
@@ -229,11 +207,11 @@ namespace OpcUA.Client.Core
         public void Disconnect()
         {
             // Close the session.
-            if (Session == null) return;
+            if (_session == null) return;
             try
             {
-                Session.Close(10000);
-                Session.Dispose();
+                _session.Close(10000);
+                _session.Dispose();
             }
             catch (Exception e)
             {
@@ -251,7 +229,7 @@ namespace OpcUA.Client.Core
         public void Subscribe(int publishingInterval)
         {
             //Create a Subscription object
-            var subscription = new Subscription(Session.DefaultSubscription)
+            var subscription = new Subscription(_session.DefaultSubscription)
             {
                 //Enable publishing
                 PublishingEnabled = true,
@@ -259,7 +237,7 @@ namespace OpcUA.Client.Core
                 PublishingInterval = publishingInterval
             };
             //Add the subscription to the session
-            Session.AddSubscription(subscription);
+            _session.AddSubscription(subscription);
             try
             {
                 //Create/Activate the subscription
@@ -267,7 +245,7 @@ namespace OpcUA.Client.Core
                 
                 //ItemChangedNotification += new MonitoredItemNotificationEventHandler(Notification_MonitoredItem);
 
-                Subscription = subscription;
+                //Subscription = subscription;
             }
             catch (Exception e)
             {
@@ -304,9 +282,9 @@ namespace OpcUA.Client.Core
             try
             {
                 //Add the item to the subscription
-                Subscription.AddItem(monitoredItem);
+                //Subscription.AddItem(monitoredItem);
                 //Apply changes to the subscription
-                Subscription.ApplyChanges();
+                //Subscription.ApplyChanges();
 
                 return monitoredItem;
             }
@@ -333,244 +311,187 @@ namespace OpcUA.Client.Core
             }
             catch (Exception e)
             {
-                //handle Exception here
+                // TODO handle Exception here
                 throw e;
             }
         }
 
-        /// <summary>Removes an existing Subscription</summary>
+        /// <summary>Removes an existing Subscription.</summary>
         /// <param name="subscription">The subscription</param>
         /// <exception cref="Exception">Throws and forwards any exception with short error description.</exception>
         public void RemoveSubscription(Subscription subscription)
         {
             try
             {
-                //Delete the subscription and all items submitted
                 subscription.Delete(true);
-                Session.RemoveSubscription(subscription);
+                _session.RemoveSubscription(subscription);
             }
             catch (Exception e)
             {
-                //handle Exception here
+                // TODO handle Exception here
                 throw e;
             }
         }
         #endregion
 
         #region Read/Write
-        /// <summary>Reads a node by node Id</summary>
-        /// <param name="nodeIdString">The node Id as string</param>
+
+        /// <summary>
+        /// Reads a node by node Id from server address space
+        /// </summary>
+        /// <param name="nodeId">NodeId (namespace name) for read from server address space.</param>
+        /// <param name="nodeIdString"></param>
         /// <returns>The read node</returns>
         /// <exception cref="Exception">Throws and forwards any exception with short error description.</exception>
-        public Node ReadNode(String nodeIdString)
+        public Node ReadNode(string nodeIdString)
         {
-            //Create a nodeId using the identifier string
-            NodeId nodeId = new NodeId(nodeIdString);
-            //Create a node
-            Node node = new Node();
+            var nodeId = new NodeId(nodeIdString);
             try
             {
                 //Read the dataValue
-                node = Session.ReadNode(nodeId);
+                var node = _session.ReadNode(nodeId);
                 return node;
             }
             catch (Exception e)
             {
-                //handle Exception here
+                // TODO handle Exception here
                 throw e;
             }
         }
-        
-        #endregion
 
-
-
-
-        #region EventHandling
-        /// <summary>Eventhandler to validate the server certificate forwards this event</summary>
-        private static void Notificatio_CertificateValidation(CertificateValidator certificate, CertificateValidationEventArgs e)
+        /// <summary>
+        /// Reads Node of <see cref="nodeId"/> dataType in server address space.
+        /// </summary>
+        /// <param name="nodeId"></param>
+        /// <returns></returns>
+        public Node GetDataTypeOfVariableNodeId(NodeId nodeId)
         {
-            try
-            {
-                if (e.Error != null && e.Error.Code == StatusCodes.BadCertificateUntrusted)
-                {
-                    e.Accept = true;
-                    Utils.Trace((int)Utils.TraceMasks.Security, "Automatically accepted certificate: {0}", e.Certificate.Subject);
-                }
-            }
-            catch (Exception exception)
-            {
-                Utils.Trace(exception, "Error accepting certificate.");
-            }
-
-            // TODO save to trusted store
-            /*
-            // Always accept
-            e.Accept = true;
-            // Always save to store
-            X509Store store = new X509Store(StoreName.Root, StoreLocation.CurrentUser);
-            store.Open(OpenFlags.ReadWrite);
-            if (!store.Certificates.Contains(e.Certificate))
-                store.Add(e.Certificate);
-                */
+            var node = _session.ReadNode(nodeId);
+            var dataTypeNodeId = (node.DataLock as VariableNode)?.DataType;
+            var dataTypeNode = _session.ReadNode(dataTypeNodeId);
+            return dataTypeNode;
         }
 
         #endregion
 
         #region Private methods
 
-        /// <summary>Creats a minimal required ApplicationConfiguration</summary>
+        /// <summary>Creates a default application configuration.</summary>
         /// <returns>The ApplicationConfiguration</returns>
         /// <exception cref="Exception">Throws and forwards any exception with short error description.</exception>
         private ApplicationConfiguration CreateClientConfiguration()
         {
-            // The application configuration can be loaded from any file.
-            // ApplicationConfiguration.Load() method loads configuration by looking up a file path in the App.config.
-            // This approach allows applications to share configuration files and to update them.
-            // This example creates a minimum ApplicationConfiguration using its default constructor.
-            ApplicationConfiguration configuration = new ApplicationConfiguration
+            var configuration = new ApplicationConfiguration
             {
                 ApplicationName = "UaClient",
                 ApplicationType = ApplicationType.Client,
                 ApplicationUri = "urn:UaClient",
-                ProductUri = "VutBrno.SchoolProject"
+                ProductUri = "VutBrno.SchoolProject",
+
+                ClientConfiguration = new ClientConfiguration
+                {
+                    DefaultSessionTimeout = 360000,
+                    // DiscoveryServers = 
+                    // EndpointCacheFilePath = 
+                    // MinSubscriptionLifetime = 
+                    // WellKnownDiscoveryUrls = 
+                },
+
+                TransportQuotas = new TransportQuotas
+                {
+                    OperationTimeout = 360000,
+                    MaxStringLength = 67108864,
+                    MaxByteStringLength = 16777216,
+                    // ChannelLifetime =
+                    // MaxArrayLength = 
+                    // MaxBufferSize = 
+                    // MaxMessageSize = 
+                    // SecurityTokenLifetime = 
+                },
+
             };
 
-            // Step 2 - Specify the client's application instance certificate.
-            // Application instance certificates must be placed in a windows certficate store because that is 
-            // the best way to protect the private key. Certificates in a store are identified with 4 parameters:
-            // StoreLocation, StoreName, SubjectName and Thumbprint.
-            // When using StoreType = Directory you need to have the opc.ua.certificategenerator.exe installed on your machine
+            // Add trace config before calling validate
+            configuration.TraceConfiguration = new TraceConfiguration
+            {
+                OutputFilePath = Path.Combine(Environment.ExpandEnvironmentVariables("%userprofile%"),
+                    "Documents\\UaClient\\TraceLogs"),
+                DeleteOnLoad = true,
+                TraceMasks = Utils.TraceMasks.All,
+            };
 
             configuration.SecurityConfiguration = new SecurityConfiguration
             {
+                AutoAcceptUntrustedCertificates = true,
+
+                RejectedCertificateStore = new CertificateStoreIdentifier()
+                {
+                    StoreType = CertificateStoreType.Windows,
+                    StorePath = "CurrentUser\\Rejected"
+                },
+                TrustedIssuerCertificates =
+                {
+                    StoreType = CertificateStoreType.Windows,
+                    StorePath = "CurrentUser\\Root",
+                },
+                TrustedPeerCertificates =
+                {
+                    StoreType = CertificateStoreType.Windows,
+                    StorePath = "CurrentUser\\Root",
+                },
                 ApplicationCertificate = new CertificateIdentifier
                 {
                     StoreType = CertificateStoreType.Windows,
                     StorePath = "CurrentUser\\My",
                     SubjectName = configuration.ApplicationName,
-                },
-                TrustedIssuerCertificates = 
-                {
-                    StoreType = CertificateStoreType.Windows,
-                    StorePath = "CurrentUser\\Root"
-                },
-                TrustedPeerCertificates =
-                {
-                    StoreType = CertificateStoreType.Windows,
-                    StorePath = "CurrentUser\\Root"
                 }
             };
 
-            // find the client certificate in the store.
-
-           
-
-            /*
-            // create a new self signed certificate if not found.
-            if (clientCertificate == null)
-            {
-                // Get local interface ip addresses and DNS name
-                List<string> localIps = GetLocalIpAddressAndDns();
-
-                UInt16 keySize = 2048; //must be multiples of 1024
-                UInt16 lifeTime = 24; //in month
-                UInt16 algorithm = 1; //0 = SHA1; 1 = SHA256
-
-                // this code would normally be called as part of the installer - called here to illustrate.
-                // create a new certificate an place it in the current user certificate store.
-                clientCertificate = CertificateFactory.CreateCertificate(
-                    configuration.SecurityConfiguration.ApplicationCertificate.StoreType,
-                    configuration.SecurityConfiguration.ApplicationCertificate.StorePath,
-                    configuration.ApplicationUri,
-                    configuration.ApplicationName,
-                    null,
-                    localIps,
-                    keySize,
-                    lifeTime,
-                    algorithm);
-            }
-            */
-
-
-
-
-            // Step 3 - Specify the supported transport quotas.
-            // The transport quotas are used to set limits on the contents of messages and are
-            // used to protect against DOS attacks and rogue clients. They should be set to
-            // reasonable values.
-            configuration.TransportQuotas = new TransportQuotas
-            {
-                OperationTimeout = 360000,
-                MaxStringLength = 67108864,
-                MaxByteStringLength = 16777216 // Needed, i.e. for large TypeDictionarys
-            };
-            
-
-
-            // Step 4 - Specify the client specific configuration.
-            configuration.ClientConfiguration = new ClientConfiguration
-            {
-                DefaultSessionTimeout = 360000
-            };
-
-
-
-            // Add trace config before calling validate
-            configuration.TraceConfiguration = new TraceConfiguration
-            {
-                OutputFilePath = "tracelog.txt",
-                DeleteOnLoad = true,
-                TraceMasks = Utils.TraceMasks.All
-            };
-
             configuration.CertificateValidator = new CertificateValidator();
-
             configuration.CertificateValidator.Update(configuration.SecurityConfiguration);
-            configuration.CertificateValidator.CertificateValidation += Notificatio_CertificateValidation;
-
-            m_validator = configuration.CertificateValidator;
+            // Set certificate validation
+            configuration.CertificateValidator.CertificateValidation += CertificateValidation;
+            // Set Https certificate validation
             ServicePointManager.ServerCertificateValidationCallback = HttpsCertificateValidation;
 
-            // Step 5 - Validate the configuration.
-            // This step checks if the configuration is consistent and assigns a few internal variables
-            // that are used by the SDK. This is called automatically if the configuration is loaded from
-            // a file using the ApplicationConfiguration.Load() method.
             configuration.Validate(ApplicationType.Client);
 
             return configuration;
         }
 
-        
+        #endregion
 
-
-        /// <summary>Gets the local IP addresses and the DNS name</summary>
-        /// <returns>The list of IPs and names</returns>
-        /// <exception cref="Exception">Throws and forwards any exception with short error description.</exception>
-        private static List<string> GetLocalIpAddressAndDns()
-        {
-            List<string> localIps = new List<string>();
-            var host = Dns.GetHostEntry(Dns.GetHostName());
-            foreach (var ip in host.AddressList)
-            {
-                if (ip.AddressFamily == AddressFamily.InterNetwork)
-                {
-                    localIps.Add(ip.ToString());
-                }
-            }
-            if (localIps.Count == 0)
-            {
-                throw new Exception("Local IP Address Not Found!");
-            }
-            localIps.Add(Dns.GetHostName());
-            return localIps;
-        }
-
+        #region Event Handling
 
         /// <summary>
-        /// Remotes the certificate validate.
+        /// Eventhandler to validate the server certificate forwards this event
         /// </summary>
-        private static bool HttpsCertificateValidation(
+        private static void CertificateValidation(CertificateValidator certificate, CertificateValidationEventArgs e)
+        {
+            try
+            {
+                if (e.Error == null || e.Error.Code != StatusCodes.BadCertificateUntrusted) return;
+                e.Accept = true;
+                Utils.Trace(Utils.TraceMasks.Security, "Automatically accepted certificate: {0}", e.Certificate.Subject);
+
+                // Always save to store
+                X509Store store = new X509Store(StoreName.Root, StoreLocation.CurrentUser);
+                store.Open(OpenFlags.ReadWrite);
+                if (!store.Certificates.Contains(e.Certificate))
+                    store.Add(e.Certificate);
+
+                Utils.Trace(Utils.TraceMasks.Security, "Certificate added to trusted store: {0}", e.Certificate.Subject);
+            }
+            catch (Exception exception)
+            {
+                Utils.Trace(exception, "Error accepting certificate.");
+            }  
+        }
+
+        /// <summary>
+        /// HTTPS certificates validation.
+        /// </summary>
+        private bool HttpsCertificateValidation(
             object sender,
             X509Certificate cert,
             X509Chain chain,
@@ -578,7 +499,7 @@ namespace OpcUA.Client.Core
         {
             try
             {
-                m_validator.Validate(new X509Certificate2(cert.GetRawCertData()));
+                _applicationConfig.CertificateValidator.Validate(new X509Certificate2(cert.GetRawCertData()));
                 return true;
             }
             catch (Exception e)
@@ -587,397 +508,7 @@ namespace OpcUA.Client.Core
                 return false;
             }
         }
+
         #endregion
-
-        #region Tmp certificates
-        /// <summary>
-        /// Creates the application instance certificate.
-        /// </summary>
-        /// <param name="configuration">The configuration.</param>
-        /// <param name="keySize">Size of the key.</param>
-        /// <param name="lifetimeInMonths">The lifetime in months.</param>
-        /// <returns>The new certificate</returns>
-        private static X509Certificate2 CreateApplicationInstanceCertificate(
-            ApplicationConfiguration configuration,
-            ushort keySize,
-            ushort lifetimeInMonths)
-        {
-            Utils.Trace(Utils.TraceMasks.Information, "Creating application instance certificate. KeySize={0}, Lifetime={1}", keySize, lifetimeInMonths);
-
-            // delete existing any existing certificate.
-            DeleteApplicationInstanceCertificate(configuration);
-
-            CertificateIdentifier id = configuration.SecurityConfiguration.ApplicationCertificate;
-
-            // get the domains from the configuration file.
-            IList<string> serverDomainNames = configuration.GetServerDomainNames();
-
-            if (serverDomainNames.Count == 0)
-            {
-                serverDomainNames.Add(System.Net.Dns.GetHostName());
-            }
-
-            // ensure the certificate store directory exists.
-            if (id.StoreType == CertificateStoreType.Directory)
-            {
-                Utils.GetAbsoluteDirectoryPath(id.StorePath, true, true, true);
-            }
-
-            X509Certificate2 certificate = Opc.Ua.CertificateFactory.CreateCertificate(
-                id.StoreType,
-                id.StorePath,
-                configuration.ApplicationUri,
-                configuration.ApplicationName,
-                null,
-                serverDomainNames,
-                keySize,
-                lifetimeInMonths);
-
-            id.Certificate = certificate;
-            AddToTrustedStore(configuration, certificate);
-
-            
-
-            configuration.CertificateValidator.Update(configuration.SecurityConfiguration);
-
-            Utils.Trace(Utils.TraceMasks.Information, "Certificate created. Thumbprint={0}", certificate.Thumbprint);
-
-            // reload the certificate from disk.
-            return configuration.SecurityConfiguration.ApplicationCertificate.LoadPrivateKey(null);
-        }
-
-        /// <summary>
-        /// Adds the certificate to the Trusted Certificate Store
-        /// </summary>
-        /// <param name="configuration">The application's configuration which specifies the location of the TrustedStore.</param>
-        /// <param name="certificate">The certificate to register.</param>
-        private static void AddToTrustedStore(ApplicationConfiguration configuration, X509Certificate2 certificate)
-        {
-            string storePath = null;
-
-            if (configuration != null && configuration.SecurityConfiguration != null && configuration.SecurityConfiguration.TrustedPeerCertificates != null)
-            {
-                storePath = configuration.SecurityConfiguration.TrustedPeerCertificates.StorePath;
-            }
-
-            if (String.IsNullOrEmpty(storePath))
-            {
-                Utils.Trace(Utils.TraceMasks.Information, "WARNING: Trusted peer store not specified.");
-                return;
-            }
-
-            try
-            {
-                ICertificateStore store = configuration.SecurityConfiguration.TrustedPeerCertificates.OpenStore();
-
-                if (store == null)
-                {
-                    Utils.Trace("Could not open trusted peer store. StorePath={0}", storePath);
-                    return;
-                }
-
-                try
-                {
-                    // check if it already exists.
-                    X509Certificate2 certificate2 = store.FindByThumbprint(certificate.Thumbprint);
-
-                    if (certificate2 != null)
-                    {
-                        return;
-                    }
-
-                    Utils.Trace(Utils.TraceMasks.Information, "Adding certificate to trusted peer store. StorePath={0}", storePath);
-
-                    List<string> subjectName = Utils.ParseDistinguishedName(certificate.Subject);
-
-                    // check for old certificate.
-                    X509Certificate2Collection certificates = store.Enumerate();
-
-                    for (int ii = 0; ii < certificates.Count; ii++)
-                    {
-                        if (Utils.CompareDistinguishedName(certificates[ii], subjectName))
-                        {
-                            if (certificates[ii].Thumbprint == certificate.Thumbprint)
-                            {
-                                return;
-                            }
-
-                            store.Delete(certificates[ii].Thumbprint);
-                            break;
-                        }
-                    }
-
-                    // add new certificate.
-                    X509Certificate2 publicKey = new X509Certificate2(certificate.GetRawCertData());
-                    store.Add(publicKey);
-                }
-                finally
-                {
-                    store.Close();
-                }
-            }
-            catch (Exception e)
-            {
-                Utils.Trace(e, "Could not add certificate to trusted peer store. StorePath={0}", storePath);
-            }
-        }
-
-        /// <summary>
-        /// Deletes an existing application instance certificate.
-        /// </summary>
-        /// <param name="configuration">The configuration instance that stores the configurable information for a UA application.</param>
-        private static void DeleteApplicationInstanceCertificate(ApplicationConfiguration configuration)
-        {
-            Utils.Trace(Utils.TraceMasks.Information, "Deleting application instance certificate.");
-
-            // create a default certificate id none specified.
-            CertificateIdentifier id = configuration.SecurityConfiguration.ApplicationCertificate;
-
-            if (id == null)
-            {
-                return;
-            }
-
-            // delete private key.
-            X509Certificate2 certificate = id.Find();
-
-            // delete trusted peer certificate.
-            if (configuration.SecurityConfiguration != null && configuration.SecurityConfiguration.TrustedPeerCertificates != null)
-            {
-                string thumbprint = id.Thumbprint;
-
-                if (certificate != null)
-                {
-                    thumbprint = certificate.Thumbprint;
-                }
-
-                using (ICertificateStore store = configuration.SecurityConfiguration.TrustedPeerCertificates.OpenStore())
-                {
-                    store.Delete(thumbprint);
-                }
-            }
-
-            // delete private key.
-            if (certificate != null)
-            {
-                using (ICertificateStore store = id.OpenStore())
-                {
-                    store.Delete(certificate.Thumbprint);
-                }
-            }
-        }
-
-        /// <summary>
-        /// Adds an application certificate to a store.
-        /// </summary>
-        private static void AddApplicationCertificateToStore(
-            CertificateStoreIdentifier csid,
-            X509Certificate2 certificate,
-            string oldThumbprint)
-        {
-            ICertificateStore store = csid.OpenStore();
-
-            try
-            {
-                // delete the old certificate.
-                if (oldThumbprint != null)
-                {
-                    store.Delete(oldThumbprint);
-                }
-
-                // delete certificates with the same application uri.
-                if (store.FindByThumbprint(certificate.Thumbprint) == null)
-                {
-                    string applicationUri = Utils.GetApplicationUriFromCertficate(certificate);
-
-                    // delete any existing certificates.
-                    foreach (X509Certificate2 target in store.Enumerate())
-                    {
-                        if (Utils.CompareDistinguishedName(target.Subject, certificate.Subject))
-                        {
-                            if (Utils.GetApplicationUriFromCertficate(target) == applicationUri)
-                            {
-                                store.Delete(target.Thumbprint);
-                            }
-                        }
-                    }
-
-                    // add new certificate.
-                    store.Add(new X509Certificate2(certificate.RawData));
-                }
-            }
-            finally
-            {
-                store.Close();
-            }
-        }
-
-        /// <summary>
-        /// Checks for a valid application instance certificate.
-        /// </summary>
-        /// <param name="silent">if set to <c>true</c> no dialogs will be displayed.</param>
-        /// <param name="minimumKeySize">Minimum size of the key.</param>
-        public void CheckApplicationInstanceCertificate(
-            bool silent,
-            ushort minimumKeySize)
-        {
-            Utils.Trace(Utils.TraceMasks.Information, "Checking application instance certificate.");
-
-            ApplicationConfiguration configuration = null;
-
-            configuration = _applicationConfig;
-            bool createNewCertificate = true;
-
-            // find the existing certificate.
-            CertificateIdentifier id = configuration.SecurityConfiguration.ApplicationCertificate;
-
-            if (id == null)
-            {
-                throw ServiceResultException.Create(StatusCodes.BadConfigurationError, "Configuration file does not specify a certificate.");
-            }
-
-            X509Certificate2 certificate = id.Find(true);
-
-            // check that it is ok.
-            if (certificate != null)
-            {
-                createNewCertificate = !CheckApplicationInstanceCertificate(configuration, certificate, silent, minimumKeySize);
-            }
-            else
-            {
-                // check for missing private key.
-                certificate = id.Find(false);
-
-                if (certificate != null)
-                {
-                    throw ServiceResultException.Create(StatusCodes.BadConfigurationError, "Cannot access certificate private key. Subject={0}", certificate.Subject);
-                }
-
-                // check for missing thumbprint.
-                if (!String.IsNullOrEmpty(id.Thumbprint))
-                {
-                    if (!String.IsNullOrEmpty(id.SubjectName))
-                    {
-                        CertificateIdentifier id2 = new CertificateIdentifier();
-                        id2.StoreType = id.StoreType;
-                        id2.StorePath = id.StorePath;
-                        id2.SubjectName = id.SubjectName;
-
-                        certificate = id2.Find(true);
-                    }
-
-                    if (certificate != null)
-                    {
-                        string message = Utils.Format(
-                            "Thumbprint was explicitly specified in the configuration." +
-                            "\r\nAnother certificate with the same subject name was found." +
-                            "\r\nUse it instead?\r\n" +
-                            "\r\nRequested: {0}" +
-                            "\r\nFound: {1}",
-                            id.SubjectName,
-                            certificate.Subject);
-
-                        throw ServiceResultException.Create(StatusCodes.BadConfigurationError, message);
-                    }
-                    else
-                    {
-                        string message = Utils.Format("Thumbprint was explicitly specified in the configuration. Cannot generate a new certificate.");
-                        throw ServiceResultException.Create(StatusCodes.BadConfigurationError, message);
-                    }
-                }
-                else
-                {
-                    if (String.IsNullOrEmpty(id.SubjectName))
-                    {
-                        string message = Utils.Format("Both SubjectName and Thumbprint are not specified in the configuration. Cannot generate a new certificate.");
-                        throw ServiceResultException.Create(StatusCodes.BadConfigurationError, message);
-                    }
-                }
-            }
-
-            // create a new certificate.
-            if (createNewCertificate)
-            {
-                certificate = CreateApplicationInstanceCertificate(configuration, minimumKeySize, 600);
-            }
-
-            // ensure it is trusted.
-            else
-            {
-                AddToTrustedStore(configuration, certificate);
-            }  
-        }
-
-        /// <summary>
-        /// Creates an application instance certificate if one does not already exist.
-        /// </summary>
-        private static bool CheckApplicationInstanceCertificate(
-            ApplicationConfiguration configuration,
-            X509Certificate2 certificate,
-            bool silent,
-            ushort minimumKeySize)
-        {
-            if (certificate == null)
-            {
-                return false;
-            }
-
-            Utils.Trace(Utils.TraceMasks.Information, "Checking application instance certificate. {0}", certificate.Subject);
-
-            // validate certificate.
-            configuration.CertificateValidator.Validate(certificate);
-
-            // check key size.
-            if (minimumKeySize > certificate.PublicKey.Key.KeySize)
-            {
-                bool valid = false;
-
-                string message = Utils.Format(
-                    "The key size ({0}) in the certificate is less than the minimum provided ({1}). Update certificate?",
-                    certificate.PublicKey.Key.KeySize,
-                    minimumKeySize);
-
-                Utils.Trace(message);
-
-                if (!valid)
-                {
-                    return false;
-                }
-            }
-
-            //// check domains.
-            //if (configuration.ApplicationType != ApplicationType.Client)
-            //{
-            //    if (!CheckDomainsInCertificate(configuration, certificate, silent))
-            //    {
-            //        return false;
-            //    }
-            //}
-
-            // update uri.
-            string applicationUri = Utils.GetApplicationUriFromCertficate(certificate);
-
-            if (String.IsNullOrEmpty(applicationUri))
-            {
-                bool valid = false;
-
-                string message = "The Application URI is not specified in the certificate. Update certificate?";
-
-                Utils.Trace(message);
-
-                if (!valid)
-                {
-                    return false;
-                }
-            }
-
-            // update configuration.
-            configuration.ApplicationUri = applicationUri;
-            configuration.SecurityConfiguration.ApplicationCertificate.Certificate = certificate;
-
-            return true;
-        }
-        #endregion
-
     }
 }

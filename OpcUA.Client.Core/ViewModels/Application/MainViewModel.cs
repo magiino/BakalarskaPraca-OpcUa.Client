@@ -96,7 +96,7 @@ namespace OpcUA.Client.Core
             VariablesToRead.Add(new Variable()
             {
                 NodeId = nodeId,
-                DataType = _uaClientApi.GetDataType(nodeId).ToString()
+                DataType = _uaClientApi.GetDataTypeOfVariableNodeId(nodeId).ToString()
             });
 
             _uaClientApi.AddMonitoredItem(nodeId, 1).Notification += new MonitoredItemNotificationEventHandler(Notification_MonitoredItem);
@@ -166,7 +166,7 @@ namespace OpcUA.Client.Core
                 data.Add(new AttributeDataGridModel(propertyInfo.Name, value.ToString()));
             }
 
-            var node = IoC.UaClientApi.ReadNode(referenceDescription.NodeId.ToString());
+            var node = _uaClientApi.ReadNode(referenceDescription.NodeId.ToString());
             node.GetType().GetProperties().ToList().ForEach(property => data.Add(new AttributeDataGridModel(property.Name, property.GetValue(node)?.ToString())));
 
             if (node.NodeClass != NodeClass.Variable) return data;

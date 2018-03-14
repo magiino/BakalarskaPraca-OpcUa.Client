@@ -129,9 +129,17 @@ namespace OpcUA.Client.Core
             }
             else
             {
-                _uaClientApi.SaveConfiguration();
-                _uaClientApi.Connect(SelectedEndpoint, UserPwIsSelected, null, null);
-                IoC.Application.GoToPage(ApplicationPage.Main);
+                //_uaClientApi.SaveConfiguration();
+                try
+                {
+                    _uaClientApi.Connect(SelectedEndpoint, UserPwIsSelected, null, null);
+                    IoC.Application.GoToPage(ApplicationPage.Main);
+                }
+                catch (Exception e)
+                {
+                    System.Windows.MessageBox.Show(e.Message, "Error");
+                }
+
             }
         }
 
