@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Security.Cryptography.X509Certificates;
@@ -96,6 +97,7 @@ namespace OpcUA.Client.Core
         public void SaveConfiguration()
         {
             _applicationConfig?.SaveToFile(Path.Combine(Environment.ExpandEnvironmentVariables("%userprofile%"), "Documents\\UaClient\\Configuration.xml"));
+            _session.Save(Path.Combine(Environment.ExpandEnvironmentVariables("%userprofile%"), "Documents\\UaClient\\Subscriptions.xml"));
         }
 
         #endregion
@@ -239,6 +241,7 @@ namespace OpcUA.Client.Core
             try
             {
                 // TODO unsubscribe subscription and unregister nodes
+                RemoveAllSubscriptions();
                 _session.Close(10000);
                 _session.Dispose();
             }
@@ -264,61 +267,53 @@ namespace OpcUA.Client.Core
             {
                 PublishingEnabled = true,
                 PublishingInterval = publishingInterval,
+                TimestampsToReturn = TimestampsToReturn.Both
             };
+
             _session.AddSubscription(subscription);
+
             try
             {
                 //Create/Activate the subscription
                 subscription.Create();
-                
-                //ItemChangedNotification += new MonitoredItemNotificationEventHandler(Notification_MonitoredItem);
 
                 return subscription;
             }
             catch (Exception e)
             {
-                //handle Exception here
+                // TODO handle Exception here
                 throw e;
             }
         }
 
         /// <summary>Ads a monitored item to an existing subscription</summary>
         /// <param name="node"></param>
-        /// <param name="samplingInterval">The sampling interval</param>
+        /// <param name="subscription"></param>
         /// <returns>The added item</returns>
         /// <exception cref="Exception">Throws and forwards any exception with short error description.</exception>
-        public MonitoredItem AddMonitoredItem(NodeId node, int samplingInterval)
+        public MonitoredItem AddMonitoredItem(NodeId node, Subscription subscription)
         {
-            //Create a monitored item
-            MonitoredItem monitoredItem = new MonitoredItem();
-            //Set the name of the item for assigning items and values later on; make sure item names differ
-            monitoredItem.DisplayName = node.ToString();
-            //Set the NodeId of the item
-            monitoredItem.StartNodeId = node.ToString();
-            //Set the attribute Id (value here)
-            monitoredItem.AttributeId = Attributes.Value;
-            //Set reporting mode
-            monitoredItem.MonitoringMode = MonitoringMode.Reporting;
-            //Set the sampling interval (1 = fastest possible)
-            monitoredItem.SamplingInterval = samplingInterval;
-            //Set the queue size
-            monitoredItem.QueueSize = 1;
-            //Discard the oldest item after new one has been received
-            monitoredItem.DiscardOldest = true;
-            //Define event handler for this item and then add to monitoredItem
-            //monitoredItem.Notification += new MonitoredItemNotificationEventHandler(Notification_MonitoredItem);
+            MonitoredItem monitoredItem = new MonitoredItem
+            {
+                DisplayName = node.ToString(),
+                StartNodeId = node.ToString(),
+                AttributeId = Attributes.Value,
+                MonitoringMode = MonitoringMode.Reporting,
+                // -1 minimum value, 1 maximum value
+                SamplingInterval = 1,
+                QueueSize = 1,
+                DiscardOldest = true,
+            };
             try
             {
-                //Add the item to the subscription
-                //Subscription.AddItem(monitoredItem);
-                //Apply changes to the subscription
-                //Subscription.ApplyChanges();
+                subscription.AddItem(monitoredItem);
+                subscription.ApplyChanges();
 
                 return monitoredItem;
             }
             catch (Exception e)
             {
-                //handle Exception here
+                // TODO handle Exception here
                 throw e;
             }
         }
@@ -351,7 +346,14 @@ namespace OpcUA.Client.Core
         {
             try
             {
+                subscription.RemoveItems(subscription.MonitoredItems);
+                subscription.DeleteItems();
+                if (subscription.ChangesPending)
+                    subscription.ApplyChanges();
+
                 subscription.Delete(true);
+                subscription.Dispose();
+                
                 _session.RemoveSubscription(subscription);
             }
             catch (Exception e)
@@ -360,6 +362,34 @@ namespace OpcUA.Client.Core
                 throw e;
             }
         }
+
+        /// <summary>Removes an existing Subscription.</summary>
+        /// <param name="subscription">The subscription</param>
+        /// <exception cref="Exception">Throws and forwards any exception with short error description.</exception>
+        private void RemoveAllSubscriptions()
+        {
+            try
+            {
+                foreach (var subscription in _session.Subscriptions)
+                {
+                    subscription.RemoveItems(subscription.MonitoredItems);
+                    subscription.DeleteItems();
+                    if (subscription.ChangesPending)
+                        subscription.ApplyChanges();
+
+                    subscription.Delete(true);
+                    subscription.Dispose();
+
+                    _session.RemoveSubscription(subscription);
+                }
+            }
+            catch (Exception e)
+            {
+                // TODO handle Exception here
+                throw e;
+            }
+        }
+
         #endregion
 
         #region Read/Write
