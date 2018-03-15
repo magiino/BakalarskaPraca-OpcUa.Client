@@ -13,7 +13,11 @@ namespace OpcUA.Client.Core
     {
         #region Private Fields
 
-        private readonly UaClientApi _uaClientApi; 
+        private readonly UaClientApi _uaClientApi;
+
+        private ApplicationDescription _selectedServer;
+
+        private readonly EndpointDescriptionCollection _discoveredEndpoints = new EndpointDescriptionCollection();
 
         #endregion
 
@@ -22,8 +26,6 @@ namespace OpcUA.Client.Core
         public string DiscoveryUrl { get; set; } = "opc.tcp://A05-226b:48010";
 
         public ObservableCollection<ApplicationDescription> FoundedServers { get; set; }
-
-        private ApplicationDescription _selectedServer;
 
         public ApplicationDescription SelectedServer
         {
@@ -34,8 +36,6 @@ namespace OpcUA.Client.Core
                 EndpointFilter();
             }
         }
-
-        private readonly EndpointDescriptionCollection _discoveredEndpoints = new EndpointDescriptionCollection();
 
         public ObservableCollection<EndpointGridViewModel> FilteredEndpoints { get; set; }
 
@@ -52,13 +52,11 @@ namespace OpcUA.Client.Core
 
             #region Filter
 
-            public string SessionName { get; set; }
+            public string SessionName { get; set; } = "MySession";
 
             public IEnumerable<EProtocol> EProtocols { get; set; } = Enum.GetValues(typeof(EProtocol)).Cast<EProtocol>();
 
-
             private EProtocol _selectedProtocol;
-
             public EProtocol SelectedProtocol
             {
                 get => _selectedProtocol;
@@ -70,25 +68,18 @@ namespace OpcUA.Client.Core
             }
 
             public bool NoneIsSelected { get; set; } = true;
-
             public bool SignIsSelected { get; set; } = true;
-
             public bool SignEncryptIsSelected { get; set; } = true;
 
             public bool Basic128Rsa15IsSelected { get; set; } = true;
-
             public bool Basic256IsSelected { get; set; } = true;
-
             public bool Basic256Sha256IsSelected { get; set; } = true;
 
             public IList<EMessageEncoding> EMessageEncodings { get; set; } = Enum.GetValues(typeof(EMessageEncoding)).Cast<EMessageEncoding>().ToList();
-
             public EMessageEncoding SelectedEncoding { get; set; }
 
             public bool AnonymousIsSelected { get; set; } = true;
-
             public bool UserPwIsSelected { get; set; } = false;
-
             public string UserName { get; set; } 
 
             #endregion
@@ -98,9 +89,7 @@ namespace OpcUA.Client.Core
         #region Commands
 
         public ICommand SearchCommand { get; set; }
-
         public ICommand ConnectCommand { get; set; }
-
         public ICommand StartFilterCommand { get; set; }
 
         #endregion
@@ -129,11 +118,10 @@ namespace OpcUA.Client.Core
             }
             else
             {
-                //_uaClientApi.SaveConfiguration();
                 try
                 {
-                    //_uaClientApi.Connect(SelectedEndpoint, UserPwIsSelected, null, null);
-                    //IoC.Application.GoToPage(ApplicationPage.Main);
+                    _uaClientApi.ConnectAnonymous(SelectedEndpoint, SessionName);
+                    IoC.Application.GoToPage(ApplicationPage.Main);
                 }
                 catch (Exception e)
                 {
@@ -171,6 +159,9 @@ namespace OpcUA.Client.Core
             EndpointFilter();
         }
 
+        #endregion
+
+        #region Endpoints Filter Methods
         private void EndpointFilter()
         {
             var filterProtocol = EndpointUtils.SelectByProtocol(_discoveredEndpoints, SelectedProtocol);
@@ -178,7 +169,7 @@ namespace OpcUA.Client.Core
             var filterSecurityPolciies = EndpointUtils.SelectBySecurityPolicies(filterSecurityMode, GetSelectedPolicies());
             var filterServer = EndpointUtils.SelectByApplicationName(filterSecurityPolciies, SelectedServer?.ApplicationName.ToString());
 
-            FilteredEndpoints = new ObservableCollection<EndpointGridViewModel>(filterServer.Select( x => new EndpointGridViewModel(x)) );
+            FilteredEndpoints = new ObservableCollection<EndpointGridViewModel>(filterServer.Select(x => new EndpointGridViewModel(x)));
         }
 
         private List<MessageSecurityMode> GetSelectedModes()
@@ -217,15 +208,15 @@ namespace OpcUA.Client.Core
 
         private void SetMessegeEncoding()
         {
-            if(SelectedEndpoint == null) return;
-            
+            if (SelectedEndpoint == null) return;
+
             var num = SelectedEndpoint.TransportProfileUri.Contains("xml") ? 1 : 0;
             num = (SelectedEndpoint.TransportProfileUri.Contains("xml") && SelectedEndpoint.TransportProfileUri.Contains("binary")) ? 2 : num;
 
             switch (num)
             {
                 case 0:
-                    EMessageEncodings = new List<EMessageEncoding>(){ EMessageEncoding.Binary};
+                    EMessageEncodings = new List<EMessageEncoding>() { EMessageEncoding.Binary };
                     SelectedEncoding = EMessageEncodings.First();
                     break;
                 case 1:
@@ -241,7 +232,6 @@ namespace OpcUA.Client.Core
                     break;
             }
         }
-
 
         #endregion
     }

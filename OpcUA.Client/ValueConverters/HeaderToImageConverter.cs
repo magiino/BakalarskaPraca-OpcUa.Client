@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Globalization;
-using Fasetto.Word;
 using Opc.Ua;
 
 namespace OpcUA.Client

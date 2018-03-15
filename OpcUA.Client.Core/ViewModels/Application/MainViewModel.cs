@@ -8,9 +8,13 @@ namespace OpcUA.Client.Core
 {
     public class MainViewModel : BaseViewModel
     {
-        #region PrivateFields
+        #region Private Fields
 
         private readonly UaClientApi _uaClientApi;
+
+        private Subscription _subscription;
+
+        private ReferenceDescription _refDiscOfSelectedNode;
 
         #endregion
 
@@ -20,19 +24,12 @@ namespace OpcUA.Client.Core
 
         public NodeAttributesViewModel NodeAttributesViewModel { get; set; }
 
-        private ReferenceDescription _refDiscOfSelectedNode;
-
-        /// <summary>
-        /// A list of attributes and values of <see cref="ReferenceDescription"/> object
-        /// </summary>
         public ObservableCollection<AttributeDataGridModel> SelectedNode { get; set; } = new ObservableCollection<AttributeDataGridModel>();
 
-        /// <summary>
-        /// Allowing to add variable to list only if node is selected
-        /// </summary>
-        public bool AddIsEnabled => SelectedNode != null;
+        public bool AddIsEnabled => SelectedNode.Count != 0;
 
-        public ObservableCollection<Variable> VariablesToRead { get; set; } = new ObservableCollection<Variable>();
+
+        public ObservableCollection<Variable> SubscribedVariables { get; set; } = new ObservableCollection<Variable>();
 
         #endregion
 
@@ -58,6 +55,21 @@ namespace OpcUA.Client.Core
 
         public ICommand CreateSubscriptionCommand { get; set; }
 
+        public ICommand DeleteSubscriptionCommand { get; set; }
+        public ICommand LoadSubscriptionCommand { get; set; }
+        public ICommand SaveSubscriptionCommand { get; set; }
+        public ICommand DeleteVariableFromSubscriptionCommand { get; set; }
+
+        public ICommand WriteValueCommand { get; set; }
+
+        public Variable SelectedSubscribedVariable { get; set; }
+
+        public bool DeleteIsEnabled => SelectedSubscribedVariable != null;
+
+        public bool SubscriptionCreated { get; set; }
+
+        public string ValueToWrite { get; set; }
+
         #endregion
 
         #region Constructor
@@ -74,10 +86,14 @@ namespace OpcUA.Client.Core
             DisconnectSessionCommand = new RelayCommand(DisconnectSession);
 
             AddVariableToSubscriptionCommand = new RelayCommand(AddVariableToSubscription);
+            DeleteVariableFromSubscriptionCommand = new RelayCommand(DeleteVariableFromSubscription);
             CreateSubscriptionCommand = new RelayCommand(CreateSubscription);
+            DeleteSubscriptionCommand = new RelayCommand(DeleteSubscrition);
+            SaveSubscriptionCommand = new RelayCommand(SaveSubscription);
+            LoadSubscriptionCommand = new RelayCommand(LoadSubscription);
+            WriteValueCommand = new RelayCommand(WriteValue);
 
             NodetreeViewModel = new NodeTreeViewModel(SetSelectedNode);
-
         }
 
         #endregion
@@ -86,35 +102,67 @@ namespace OpcUA.Client.Core
 
         private void CreateSubscription()
         {
-            _uaClientApi.Subscribe(2000);
-            //_uaClientApi.ItemChangedNotification += new MonitoredItemNotificationEventHandler(Notification_MonitoredItem);
+            _subscription = _uaClientApi.Subscribe(2000);
+            if (_subscription == null) return;
+            SubscriptionCreated = true;
+        }
+
+        private void DeleteSubscrition()
+        {
+            _uaClientApi.RemoveSubscription(_subscription);
+            SubscribedVariables.Clear();
+            SubscriptionCreated = false;
         }
 
         private void AddVariableToSubscription()
         {
-            var nodeId = new NodeId(_refDiscOfSelectedNode.NodeId.ToString());
-            VariablesToRead.Add(new Variable()
+            if (_refDiscOfSelectedNode == null) return;
+            var tmp = new Variable()
             {
-                NodeId = nodeId,
-                DataType = _uaClientApi.GetDataTypeOfVariableNodeId(nodeId).ToString()
-            });
+                MonitoredItem = _uaClientApi.AddMonitoredItem(_refDiscOfSelectedNode, _subscription),
+            };
 
-            _uaClientApi.AddMonitoredItem(nodeId, 1).Notification += new MonitoredItemNotificationEventHandler(Notification_MonitoredItem);
+            tmp.MonitoredItem.Notification += Notification_MonitoredItem;
+            SubscribedVariables.Add(tmp);
         }
 
-        private void NewSession()
+        private void DeleteVariableFromSubscription()
         {
-            IoC.Application.GoToPage(ApplicationPage.Welcome);
+            if(SelectedSubscribedVariable == null) return;
+            _uaClientApi.RemoveMonitoredItem(_subscription, SelectedSubscribedVariable.MonitoredItem);
+            SubscribedVariables.Remove(SelectedSubscribedVariable);
         }
 
-        private void SaveSession() {}
+        private void SaveSubscription()
+        {
+            // TODO save do priecinka /Subscriptions a ukladat s mneom ako datum v stringu
+            _uaClientApi.SaveSubsciption();
+        }
 
+        private void LoadSubscription()
+        {
+            // TODO opytat sa uzivatela ci chce prepisat existujucu subscription
+            if (_subscription != null) return;
+            _subscription = _uaClientApi.LoadSubsciption().FirstOrDefault();
+        }
+
+        private void WriteValue()
+        {
+            _uaClientApi.WriteValue(SelectedSubscribedVariable, ValueToWrite);
+        }
+
+
+
+        private void NewSession() {}
+        private void SaveSession()
+        {
+            _uaClientApi.SaveConfiguration();
+        }
         private void OpenSession() {}
-
         private void ExitApplication() {}
         private void ConnectSession() {}
-
         private void DisconnectSession() {}
+
         #endregion
 
         #region CallBack Methods
@@ -126,12 +174,17 @@ namespace OpcUA.Client.Core
         /// <param name="e"></param>
         private void Notification_MonitoredItem(MonitoredItem monitoredItem, MonitoredItemNotificationEventArgs e)
         {
-            var notification = e.NotificationValue as MonitoredItemNotification;
-            if (notification == null)
-            {
+            if (!(e.NotificationValue is MonitoredItemNotification notification))
                 return;
-            }
-            VariablesToRead.First(x => x.Name == monitoredItem.DisplayName).Value = notification.Value.Value;
+
+            var value = notification.Value;
+
+            var variable = SubscribedVariables.FirstOrDefault(x => x.Name == monitoredItem.DisplayName);
+
+            if (variable == null) return;
+            variable.Value = value.Value;
+            variable.StatusCode = value.StatusCode;
+            variable.DateTime = value.ServerTimestamp;
         }
 
         /// <summary>
@@ -181,18 +234,15 @@ namespace OpcUA.Client.Core
     }
 }
 
-
-
-
-//VariablesToRead.CollectionChanged += (s, e) =>
+//SubscribedVariables.CollectionChanged += (s, e) =>
 //{
-//if (VariablesToRead.Count == 1 && e.Action == NotifyCollectionChangedAction.Add)
+//if (SubscribedVariables.Count == 1 && e.Action == NotifyCollectionChangedAction.Add)
 //{
 //Task.Run(() =>
 //{
 //    while (true)
 //    {
-//        _uaClientApi.ReadValues(VariablesToRead.Select(x => x.NodeId.ToString()).ToList());
+//        _uaClientApi.ReadValues(SubscribedVariables.Select(x => x.NodeId.ToString()).ToList());
 //    }
 //});
 //}

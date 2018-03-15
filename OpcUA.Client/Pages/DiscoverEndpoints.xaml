@@ -90,25 +90,27 @@
                             Grid.Column="1"
                             Header="Servers" 
                             Padding="5px">
-                    <ListView ItemsSource="{Binding FoundedServers}"
-                              SelectedItem="{Binding SelectedServer, Mode=TwoWay}"
-                              Background="{StaticResource BackgroundLightBrush}"
-                              SelectionMode="Single"
-                              SelectedIndex="0">
+                    <ScrollViewer VerticalScrollBarVisibility="auto">
+                        <ListView ItemsSource="{Binding FoundedServers}"
+                                  SelectedItem="{Binding SelectedServer, Mode=TwoWay}"
+                                  Background="{StaticResource BackgroundLightBrush}"
+                                  SelectionMode="Single"
+                                  SelectedIndex="0">
 
-                        <ListView.ItemTemplate>
-                            <DataTemplate>
-                                <StackPanel Orientation="Horizontal">
-                                    <fa:ImageAwesome 
-                                        Width="10" 
-                                        Margin="3"
-                                        Foreground="{StaticResource WordBlueBrush}"
-                                        Icon="Server"/>
-                                    <TextBlock VerticalAlignment="Center" Text="{Binding ApplicationName}" />
-                                </StackPanel>
-                            </DataTemplate>
-                        </ListView.ItemTemplate>
-                    </ListView>
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <fa:ImageAwesome 
+                                            Width="10" 
+                                            Margin="3"
+                                            Foreground="{StaticResource WordBlueBrush}"
+                                            Icon="Server"/>
+                                        <TextBlock VerticalAlignment="Center" Text="{Binding ApplicationName}" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </ScrollViewer>
                 </GroupBox>
 
                 <!-- Endpoints List -->

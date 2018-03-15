@@ -97,7 +97,6 @@ namespace OpcUA.Client.Core
         public void SaveConfiguration()
         {
             _applicationConfig?.SaveToFile(Path.Combine(Environment.ExpandEnvironmentVariables("%userprofile%"), "Documents\\UaClient\\Configuration.xml"));
-            _session.Save(Path.Combine(Environment.ExpandEnvironmentVariables("%userprofile%"), "Documents\\UaClient\\Subscriptions.xml"));
         }
 
         #endregion
@@ -291,12 +290,12 @@ namespace OpcUA.Client.Core
         /// <param name="subscription"></param>
         /// <returns>The added item</returns>
         /// <exception cref="Exception">Throws and forwards any exception with short error description.</exception>
-        public MonitoredItem AddMonitoredItem(NodeId node, Subscription subscription)
+        public MonitoredItem AddMonitoredItem(ReferenceDescription node, Subscription subscription)
         {
-            MonitoredItem monitoredItem = new MonitoredItem
+            var monitoredItem = new MonitoredItem
             {
-                DisplayName = node.ToString(),
-                StartNodeId = node.ToString(),
+                DisplayName = node.DisplayName.ToString(),
+                StartNodeId = ExpandedNodeId.ToNodeId(node.NodeId, null),
                 AttributeId = Attributes.Value,
                 MonitoringMode = MonitoringMode.Reporting,
                 // -1 minimum value, 1 maximum value
@@ -322,15 +321,12 @@ namespace OpcUA.Client.Core
         /// <param name="subscription">The subscription</param>
         /// <param name="monitoredItem">The item</param>
         /// <exception cref="Exception">Throws and forwards any exception with short error description.</exception>
-        public MonitoredItem RemoveMonitoredItem(Subscription subscription, MonitoredItem monitoredItem)
+        public void RemoveMonitoredItem(Subscription subscription, MonitoredItem monitoredItem)
         {
             try
             {
-                //Add the item to the subscription
                 subscription.RemoveItem(monitoredItem);
-                //Apply changes to the subscription
                 subscription.ApplyChanges();
-                return null;
             }
             catch (Exception e)
             {
@@ -347,13 +343,12 @@ namespace OpcUA.Client.Core
             try
             {
                 subscription.RemoveItems(subscription.MonitoredItems);
-                subscription.DeleteItems();
-                if (subscription.ChangesPending)
-                    subscription.ApplyChanges();
-
+                
                 subscription.Delete(true);
                 subscription.Dispose();
                 
+                //subscription.ApplyChanges();
+
                 _session.RemoveSubscription(subscription);
             }
             catch (Exception e)
@@ -364,30 +359,29 @@ namespace OpcUA.Client.Core
         }
 
         /// <summary>Removes an existing Subscription.</summary>
-        /// <param name="subscription">The subscription</param>
         /// <exception cref="Exception">Throws and forwards any exception with short error description.</exception>
         private void RemoveAllSubscriptions()
         {
             try
             {
                 foreach (var subscription in _session.Subscriptions)
-                {
-                    subscription.RemoveItems(subscription.MonitoredItems);
-                    subscription.DeleteItems();
-                    if (subscription.ChangesPending)
-                        subscription.ApplyChanges();
-
-                    subscription.Delete(true);
-                    subscription.Dispose();
-
-                    _session.RemoveSubscription(subscription);
-                }
+                    RemoveSubscription(subscription);
             }
             catch (Exception e)
             {
                 // TODO handle Exception here
                 throw e;
             }
+        }
+
+        public void SaveSubsciption()
+        {
+            _session.Save(Path.Combine(Environment.ExpandEnvironmentVariables("%userprofile%"), "Documents\\UaClient\\Subscriptions.xml"));
+        }
+
+        public List<Subscription> LoadSubsciption()
+        {
+            return _session.Load(Path.Combine(Environment.ExpandEnvironmentVariables("%userprofile%"), "Documents\\UaClient\\Subscriptions.xml")).ToList();
         }
 
         #endregion
@@ -412,6 +406,8 @@ namespace OpcUA.Client.Core
             catch (Exception e)
             {
                 // TODO handle Exception here
+                Utils.Trace(Utils.TraceMasks.Error, "Error");
+
                 throw e;
             }
         }
@@ -427,6 +423,32 @@ namespace OpcUA.Client.Core
             var dataTypeNodeId = (node.DataLock as VariableNode)?.DataType;
             var dataTypeNode = _session.ReadNode(dataTypeNodeId);
             return dataTypeNode;
+        }
+
+        public void WriteValue(Variable variable, object newValue)
+        {
+            var wrapedValue = new Variant(Convert.ChangeType(newValue, variable.DataType));
+            var data = new DataValue(wrapedValue);
+
+            var valueToWrite = new WriteValue()
+            {
+                Value = data,
+                NodeId = variable.MonitoredItem.StartNodeId,
+                AttributeId = Attributes.Value,   
+            };
+
+            try
+            {
+                var a =_session.Write(null, new WriteValueCollection() { valueToWrite }, out var statusCodes, out var diagnosticInfo);
+
+                if (statusCodes.FirstOrDefault().Code == StatusCodes.Good)
+                    Utils.Trace(Utils.TraceMasks.Information, "Value successfully written to server!");
+            }
+            catch (Exception e)
+            {
+                // TODO handle exception
+                throw e;
+            }
         }
 
         #endregion
@@ -467,15 +489,23 @@ namespace OpcUA.Client.Core
                 },
 
             };
+            configuration.ClientConfiguration.Validate();
 
             // Add trace config before calling validate
             configuration.TraceConfiguration = new TraceConfiguration
             {
                 OutputFilePath = Path.Combine(Environment.ExpandEnvironmentVariables("%userprofile%"),
-                    "Documents\\UaClient\\TraceLogs"),
+                    "Documents\\UaClient\\TraceLogs.txt"),
                 DeleteOnLoad = true,
                 TraceMasks = Utils.TraceMasks.All,
             };
+            configuration.TraceConfiguration.ApplySettings();
+
+            Utils.SetTraceLog(Path.Combine(Environment.ExpandEnvironmentVariables("%userprofile%"),
+                "Documents\\UaClient\\UtilsTraceLogs.txt"), true);
+            Utils.SetTraceMask(Utils.TraceMasks.All);
+            Utils.SetTraceOutput(Utils.TraceOutput.DebugAndFile);
+
 
             configuration.SecurityConfiguration = new SecurityConfiguration
             {
@@ -504,16 +534,26 @@ namespace OpcUA.Client.Core
                 }
             };
 
+            configuration.SecurityConfiguration.Validate();
+
             configuration.CertificateValidator = new CertificateValidator();
             configuration.CertificateValidator.Update(configuration.SecurityConfiguration);
             // Set certificate validation
-            configuration.CertificateValidator.CertificateValidation += CertificateValidation;
+            //configuration.CertificateValidator.CertificateValidation += CertificateValidation;
             // Set Https certificate validation
             ServicePointManager.ServerCertificateValidationCallback = HttpsCertificateValidation;
 
             configuration.Validate(ApplicationType.Client);
 
             return configuration;
+        }
+
+        private void ConvertToSpecificType(object value, string type)
+        {
+            //switch (type)
+            //{
+            //      case  
+            //}
         }
 
         #endregion

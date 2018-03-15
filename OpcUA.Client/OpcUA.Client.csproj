@@ -85,6 +85,7 @@
     <Compile Include="Pages\UaClientSettings.xaml.cs">
       <DependentUpon>UaClientSettings.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ValueConverters\BooleanConverter.cs" />
     <Compile Include="ValueConverters\ProtocolValueConverter.cs" />
     <Compile Include="ValueConverters\ApplicationPageValueConverter.cs" />
     <Compile Include="ValueConverters\BaseValueConverter.cs" />
