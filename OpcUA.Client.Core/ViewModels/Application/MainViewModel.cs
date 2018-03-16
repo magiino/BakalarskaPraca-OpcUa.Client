@@ -110,16 +110,23 @@ namespace OpcUA.Client.Core
         private void DeleteSubscrition()
         {
             _uaClientApi.RemoveSubscription(_subscription);
+            _subscription = null;
             SubscribedVariables.Clear();
             SubscriptionCreated = false;
+            //_subscription.MonitoredItemCount;
+            //_subscription.Created;
+            //_subscription.DisplayName;
+            //_subscription.Id;
         }
 
         private void AddVariableToSubscription()
         {
             if (_refDiscOfSelectedNode == null) return;
+            // TODO private metoda opakovany kod
             var tmp = new Variable()
             {
                 MonitoredItem = _uaClientApi.AddMonitoredItem(_refDiscOfSelectedNode, _subscription),
+                // TODO set up type here
             };
 
             tmp.MonitoredItem.Notification += Notification_MonitoredItem;
@@ -143,7 +150,25 @@ namespace OpcUA.Client.Core
         {
             // TODO opytat sa uzivatela ci chce prepisat existujucu subscription
             if (_subscription != null) return;
-            _subscription = _uaClientApi.LoadSubsciption().FirstOrDefault();
+            _subscription = _uaClientApi.LoadSubsciption();
+
+            if (_subscription == null) return;
+
+            // TODO private metoda opakovany kod
+            foreach (var item in _subscription.MonitoredItems)
+            {
+                var tmp = new Variable()
+                {
+                    MonitoredItem = item,
+                    // TODO set up type here
+                };
+
+                tmp.MonitoredItem.Notification += Notification_MonitoredItem;
+                SubscribedVariables.Add(tmp);
+            }
+            _subscription.ApplyChanges();
+
+            SubscriptionCreated = true;
         }
 
         private void WriteValue()
@@ -194,7 +219,7 @@ namespace OpcUA.Client.Core
         private void SetSelectedNode(ReferenceDescription selectedNode)
         {
             _refDiscOfSelectedNode = selectedNode;
-            SelectedNode = new ObservableCollection<AttributeDataGridModel>(GetDataGridModel(selectedNode));
+            SelectedNode = GetDataGridModel(selectedNode);
         } 
         #endregion
 
@@ -227,6 +252,40 @@ namespace OpcUA.Client.Core
             var variableNode = (VariableNode) node.DataLock;
             variableNode.GetType().GetProperties().ToList().ForEach(property =>
             data.Add(new AttributeDataGridModel(property.Name, property.GetValue(variableNode)?.ToString())));
+
+            return data;
+        }
+
+        /// <summary>
+        /// Takes attributes and values of <see cref="ReferenceDescription"/> object
+        /// </summary>
+        /// <param name="referenceDescription"></param>
+        /// <returns></returns>
+        private ObservableCollection<AttributeDataGridModel> GetDataGridModel2(ReferenceDescription referenceDescription)
+        {
+            var data = new ObservableCollection<AttributeDataGridModel>();
+
+            var tmpNodeId = referenceDescription.NodeId;
+
+            data.Add(new AttributeDataGridModel("Node Id", tmpNodeId));
+            data.Add(new AttributeDataGridModel("Namespace Index", tmpNodeId.NamespaceIndex));
+            data.Add(new AttributeDataGridModel("Type", tmpNodeId.IdType));
+            data.Add(new AttributeDataGridModel("Node Id", tmpNodeId.Identifier));
+            data.Add(new AttributeDataGridModel("Node Class", referenceDescription.NodeClass.ToString()));
+            data.Add(new AttributeDataGridModel("Browse Name", referenceDescription.BrowseName));
+            data.Add(new AttributeDataGridModel("Display Name", referenceDescription.DisplayName));
+
+            var node = _uaClientApi.ReadNode(tmpNodeId.ToString());
+
+            data.Add(new AttributeDataGridModel("Description", node.Description));
+            data.Add(new AttributeDataGridModel("Write Mask", node.WriteMask));
+            data.Add(new AttributeDataGridModel("User Write Mask", node.UserWriteMask));
+
+            if (node.NodeClass != NodeClass.Variable) return data;
+
+            var variableNode = (VariableNode)node.DataLock;
+            variableNode.GetType().GetProperties().ToList().ForEach(property =>
+                data.Add(new AttributeDataGridModel(property.Name, property.GetValue(variableNode)?.ToString())));
 
             return data;
         }

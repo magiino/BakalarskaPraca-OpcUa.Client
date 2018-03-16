@@ -285,6 +285,28 @@ namespace OpcUA.Client.Core
             }
         }
 
+        /// <summary>Creats a Subscription object to a server</summary>
+        /// <returns>Subscription</returns>
+        /// <exception cref="Exception">Throws and forwards any exception with short error description.</exception>
+        public Subscription CreateSubscriptionFromTemplate(Subscription template)
+        {
+            //Create a Subscription object
+            var subscription = new Subscription(template);
+
+            _session.AddSubscription(subscription);
+
+            try
+            {
+                subscription.Create();
+                return subscription;
+            }
+            catch (Exception e)
+            {
+                // TODO handle Exception here
+                throw e;
+            }
+        }
+
         /// <summary>Ads a monitored item to an existing subscription</summary>
         /// <param name="node"></param>
         /// <param name="subscription"></param>
@@ -347,7 +369,7 @@ namespace OpcUA.Client.Core
                 subscription.Delete(true);
                 subscription.Dispose();
                 
-                //subscription.ApplyChanges();
+                subscription.ApplyChanges();
 
                 _session.RemoveSubscription(subscription);
             }
@@ -379,7 +401,13 @@ namespace OpcUA.Client.Core
             _session.Save(Path.Combine(Environment.ExpandEnvironmentVariables("%userprofile%"), "Documents\\UaClient\\Subscriptions.xml"));
         }
 
-        public List<Subscription> LoadSubsciption()
+        public Subscription LoadSubsciption()
+        {
+            var subscription = _session.Load(Path.Combine(Environment.ExpandEnvironmentVariables("%userprofile%"), "Documents\\UaClient\\Subscriptions.xml")).FirstOrDefault();
+            return CreateSubscriptionFromTemplate(subscription);
+        }
+
+        public List<Subscription> LoadSubsciptions()
         {
             return _session.Load(Path.Combine(Environment.ExpandEnvironmentVariables("%userprofile%"), "Documents\\UaClient\\Subscriptions.xml")).ToList();
         }
@@ -397,6 +425,30 @@ namespace OpcUA.Client.Core
         public Node ReadNode(string nodeIdString)
         {
             var nodeId = new NodeId(nodeIdString);
+            try
+            {
+                //Read the dataValue
+                var node = _session.ReadNode(nodeId);
+                return node;
+            }
+            catch (Exception e)
+            {
+                // TODO handle Exception here
+                Utils.Trace(Utils.TraceMasks.Error, "Error");
+
+                throw e;
+            }
+        }
+
+        /// <summary>
+        /// Reads a node by node Id from server address space
+        /// </summary>
+        /// <param name="expandedNodeId"></param>
+        /// <returns>The read node</returns>
+        /// <exception cref="Exception">Throws and forwards any exception with short error description.</exception>
+        public Node ReadNode(ExpandedNodeId expandedNodeId)
+        {
+            var nodeId = ExpandedNodeId.ToNodeId(expandedNodeId, null);
             try
             {
                 //Read the dataValue
@@ -439,10 +491,12 @@ namespace OpcUA.Client.Core
 
             try
             {
-                var a =_session.Write(null, new WriteValueCollection() { valueToWrite }, out var statusCodes, out var diagnosticInfo);
+                _session.Write(null, new WriteValueCollection() { valueToWrite }, out var statusCodes, out var diagnosticInfo);
 
                 if (statusCodes.FirstOrDefault().Code == StatusCodes.Good)
                     Utils.Trace(Utils.TraceMasks.Information, "Value successfully written to server!");
+                else
+                    Utils.Trace(Utils.TraceMasks.Error, "Value was not written to server!");
             }
             catch (Exception e)
             {

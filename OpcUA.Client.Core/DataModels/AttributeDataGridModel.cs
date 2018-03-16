@@ -15,13 +15,13 @@
         /// <summary>
         /// Value of ReferenceDescription object Attribute
         /// </summary>
-        public string Value { get; set; }
+        public object Value { get; set; }
 
         #endregion
 
         #region Constructor
 
-        public AttributeDataGridModel(string attribute, string value)
+        public AttributeDataGridModel(string attribute, object value)
         {
             Attribute = attribute;
             Value = value;
