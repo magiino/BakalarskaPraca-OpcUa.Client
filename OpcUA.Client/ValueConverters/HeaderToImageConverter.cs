@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Globalization;
-using System.Windows.Media.Imaging;
-using Fasetto.Word;
 using Opc.Ua;
 
 namespace OpcUA.Client
@@ -13,8 +11,6 @@ namespace OpcUA.Client
     /// </summary>
     public class HeaderToImageConverter : BaseValueConverter<HeaderToImageConverter>
     { 
-        public static HeaderToImageConverter Instance = new HeaderToImageConverter();
-
         public override object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             switch ((NodeClass)value)

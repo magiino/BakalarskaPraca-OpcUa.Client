@@ -16,18 +16,19 @@
             <TreeView.ItemContainerStyle>
                 <Style TargetType="{x:Type TreeViewItem}">
                     <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
+
                     <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
                 </Style>
             </TreeView.ItemContainerStyle>
 
             <TreeView.ItemTemplate>
-                <HierarchicalDataTemplate ItemsSource="{Binding Children}" DataType="core:NodeItemViewModel">
+                <HierarchicalDataTemplate ItemsSource="{Binding Children}">
                     <StackPanel Orientation="Horizontal">
                         <fa:ImageAwesome 
                             Width="10" 
                             Margin="3"
                             Foreground="LightSkyBlue"
-                            Icon="{Binding Type, Converter={x:Static local:HeaderToImageConverter.Instance}}"/>
+                            Icon="{Binding Type, Converter={local:HeaderToImageConverter}}"/>
                         <TextBlock VerticalAlignment="Center" Text="{Binding Name}" />
                     </StackPanel>
                 </HierarchicalDataTemplate>

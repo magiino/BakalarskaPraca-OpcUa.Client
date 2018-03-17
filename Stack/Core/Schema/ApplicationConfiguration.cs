@@ -47,10 +47,10 @@ namespace Opc.Ua
 		{
             m_sourceFilePath = null;
 
-#if !SILVERLIGHT
+            #if !SILVERLIGHT
             m_securityConfiguration = new SecurityConfiguration();
             m_transportConfigurations = new TransportConfigurationCollection();
-#endif
+            #endif
             m_disableHiResClock = true;
 		}
 
@@ -110,7 +110,7 @@ namespace Opc.Ua
             set { m_applicationType = value; }
         }
         
-#if !SILVERLIGHT
+        #if !SILVERLIGHT
         /// <summary>
         /// The security configuration for the application.
         /// </summary>
@@ -156,7 +156,7 @@ namespace Opc.Ua
                 }
             }
         }
-#endif
+        #endif
 
         /// <summary>
         /// The quotas that are used at the transport layer.

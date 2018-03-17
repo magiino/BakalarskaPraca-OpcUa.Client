@@ -9,7 +9,7 @@
         WindowStartupLocation="CenterScreen"
         MinWidth="600"
         MinHeight="300"
-        Title="OPC UA Client" Height="600" Width="900">
+        Title="OPC UA Client" Height="auto" Width="auto">
 
     <Frame 
         local:NoFrameHistory.Value="True"

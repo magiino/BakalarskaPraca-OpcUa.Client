@@ -1,91 +1,87 @@
 ﻿using System.Collections.ObjectModel;
-using System.Collections.Specialized;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using Opc.Ua;
 using Opc.Ua.Client;
 
 namespace OpcUA.Client.Core
 {
-    public delegate void IsSelected(ReferenceDescription selectedNode);
-
     public class MainViewModel : BaseViewModel
     {
-        private NodeIdCollection _nodeIdsToRead = new NodeIdCollection();
+        #region Private Fields
 
-        public ObservableCollection<Variable> VariablesToRead { get; set; } = new ObservableCollection<Variable>();
+        private readonly UaClientApi _uaClientApi;
 
-        #region Public Properties
-
-        /// <summary>
-        /// A list of root nodes in the address space
-        /// </summary>
-        public ObservableCollection<NodeItemViewModel> Items { get; set; }
-
-        /// <summary>
-        /// A list of attributes and values of <see cref="ReferenceDescription"/> object
-        /// </summary>
-        public ObservableCollection<AttributeDataGridModel> SelectedNode { get; set; } = new ObservableCollection<AttributeDataGridModel>();
+        private Subscription _subscription;
 
         private ReferenceDescription _refDiscOfSelectedNode;
 
-        private UaClientApi _uaClientApi;
-        //private ApplicationManager _applicationManager;
+        #endregion
+
+        #region Public Properties
+
+        public NodeTreeViewModel NodetreeViewModel { get; set; }
+
+        public NodeAttributesViewModel NodeAttributesViewModel { get; set; }
+
+        public ObservableCollection<AttributeDataGridViewModel> SelectedNode { get; set; } = new ObservableCollection<AttributeDataGridViewModel>();
+
+        public bool AddIsEnabled => SelectedNode.Count != 0;
+
+
+        public ObservableCollection<Variable> SubscribedVariables { get; set; } = new ObservableCollection<Variable>();
 
         #endregion
 
         #region Commands
 
-        #region MenuBar Commands
+            #region MenuBar Commands
 
-        /// <summary>
-        /// The command for creating new session
-        /// </summary>
-        public ICommand NewSessionCommand { get; set; }
+            public ICommand NewSessionCommand { get; set; }
+            public ICommand SaveSessionCommand { get; set; }
+            public ICommand OpenSessionCommand { get; set; }
+            public ICommand ExitApplicationCommand { get; set; }
 
-        /// <summary>
-        /// The command for saving session
-        /// </summary>
-        public ICommand SaveSessionCommand { get; set; }
+            #endregion
 
-        /// <summary>
-        /// The command for opening exsisting session
-        /// </summary>
-        public ICommand OpenSessionCommand { get; set; }
+            #region ToolBar Commands
 
-        /// <summary>
-        /// The command for exit application
-        /// </summary>
-        public ICommand ExitApplicationCommand { get; set; }
+            public ICommand ConnectSessionCommand { get; set; }
+            public ICommand DisconnectSessionCommand { get; set; }
 
-        /// <summary>
-        /// The command for exit application
-        /// </summary>
-        public ICommand AddVariable { get; set; }
+            #endregion
 
-        public bool AddIsEnabled => SelectedNode != null;
+        public ICommand AddVariableToSubscriptionCommand { get; set; }
 
-        #endregion
+        public ICommand CreateSubscriptionCommand { get; set; }
 
-        #region ToolBar Commands
+        public ICommand DeleteSubscriptionCommand { get; set; }
+        public ICommand LoadSubscriptionCommand { get; set; }
+        public ICommand SaveSubscriptionCommand { get; set; }
+        public ICommand DeleteVariableFromSubscriptionCommand { get; set; }
 
-        /// <summary>
-        /// The command for connecting session
-        /// </summary>
-        public ICommand ConnectSessionCommand { get; set; }
+        public ICommand WriteValueCommand { get; set; }
 
-        /// <summary>
-        /// The command for disconnecting from session
-        /// </summary>
-        public ICommand DisconnectSessionCommand { get; set; }
+        public Variable SelectedSubscribedVariable { get; set; }
+
+        public bool DeleteIsEnabled => SelectedSubscribedVariable != null;
+
+        public bool SubscriptionCreated { get; set; }
+
+        public string ValueToWrite { get; set; }
+
+        public ICommand WriteSingleValueCommand { get; set; }
+        public ICommand ReadSingleValueCommand { get; set; }
+        public string ValueToSingleWrite { get; set; }
 
         #endregion
 
-        #endregion
+        #region Constructor
 
         public MainViewModel()
         {
+            _uaClientApi = IoC.UaClientApi;
+
             NewSessionCommand = new RelayCommand(NewSession);
             SaveSessionCommand = new RelayCommand(SaveSession);
             OpenSessionCommand = new RelayCommand(OpenSession);
@@ -93,107 +89,190 @@ namespace OpcUA.Client.Core
             ConnectSessionCommand = new RelayCommand(ConnectSession);
             DisconnectSessionCommand = new RelayCommand(DisconnectSession);
 
+            AddVariableToSubscriptionCommand = new RelayCommand(AddVariableToSubscription);
+            DeleteVariableFromSubscriptionCommand = new RelayCommand(DeleteVariableFromSubscription);
+            CreateSubscriptionCommand = new RelayCommand(CreateSubscription);
+            DeleteSubscriptionCommand = new RelayCommand(DeleteSubscrition);
+            SaveSubscriptionCommand = new RelayCommand(SaveSubscription);
+            LoadSubscriptionCommand = new RelayCommand(LoadSubscription);
+            // TODO prerobit na parametrizovany command?
+            WriteValueCommand = new RelayCommand(WriteValue);
 
-            _uaClientApi = IoC.UaClientApi;
+            // TODO prerobit na parametrizovany command?
+            WriteSingleValueCommand = new RelayCommand(WriteSingleValue);
+            ReadSingleValueCommand = new RelayCommand(ReadSingleValue);
 
 
-            // Get the root nodes
-            var children = _uaClientApi.BrowseRoot();
+            NodetreeViewModel = new NodeTreeViewModel(SetSelectedNode);
+        }
 
-            
-            VariablesToRead.CollectionChanged += (s, e) =>
+        #endregion
+
+        #region Command Methods
+
+        // TODO prerobit _selectedNode z refDisc na NodeId
+        // TODO Prerobit WriteValue v opcuaApi
+        // TODO vracat z write value ci sa podaril zapis
+        // TODO Stale tam zobrazovat atributy len menit hodnoty !!!
+        // TODO Urobit ViewModel zvlast pre vsetko
+        private void WriteSingleValue()
+        {
+            var nodeId = ExpandedNodeId.ToNodeId(_refDiscOfSelectedNode.NodeId, null);
+            var variable = new Variable()
             {
-                if ( VariablesToRead.Count == 1 && e.Action == NotifyCollectionChangedAction.Add)
+                MonitoredItem = new MonitoredItem()
                 {
-                    Task.Run(() =>
-                    {
-                        while (true)
-                        {
-                            _uaClientApi.ReadValues(VariablesToRead.Select(x => x.NodeId.ToString()).ToList());
-                        }
-                    });
+                    StartNodeId = nodeId
                 }
             };
+            var data = _uaClientApi.ReadValue(nodeId);
+            variable.Value = data.Value;
+
+            bool writeStatus = _uaClientApi.WriteValue(variable, ValueToSingleWrite);
             
-            IsSelected isSelectedDelegate = SetSelectedNode;
-
-            AddVariable = new RelayCommand(Add);
-
-            // Create the view models from the root ndoes
-            Items = new ObservableCollection<NodeItemViewModel>(
-                children.Select(content => new NodeItemViewModel(content, isSelectedDelegate)).OrderBy(x => x.Name));
-        }
-
-        private void VariablesToRead_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        private void Add()
-        {
-            var nodeId = new NodeId(_refDiscOfSelectedNode.NodeId.ToString());
-            _nodeIdsToRead.Add(nodeId);
-
-            //_refDiscOfSelectedNode.TypeId
-            VariablesToRead.Add(new Variable()
+            if (data.StatusCode.Code != StatusCodes.Good || !writeStatus) return;
+            foreach (var atribute in SelectedNode)
             {
-                NodeId = nodeId
-            });
-
-            _uaClientApi.AddMonitoredItem(nodeId, 1).Notification += new MonitoredItemNotificationEventHandler(Notification_MonitoredItem);
-
-            // ClientUtils.GetDataType(IoC.UaClientApi.Session, nodeId);
-        }
-        private void Notification_MonitoredItem(MonitoredItem monitoredItem, MonitoredItemNotificationEventArgs e)
-        {
-            var notification = e.NotificationValue as MonitoredItemNotification;
-            if (notification == null)
-            {
-                return;
+                if (atribute.Attribute == "Value")
+                    atribute.Value = ValueToSingleWrite;
             }
-            //monitoredItem.
-            VariablesToRead.First(x => x.Name == monitoredItem.DisplayName).Value = notification.Value.Value;
         }
 
-        private void NewSession()
+        private void ReadSingleValue()
         {
-            IoC.Application.GoToPage(ApplicationPage.Welcome);
+            var nodeId = ExpandedNodeId.ToNodeId(_refDiscOfSelectedNode.NodeId, null);
+            var data = _uaClientApi.ReadValue(nodeId);
+            if (data.StatusCode.Code != StatusCodes.Good) return;
+            foreach (var atribute in SelectedNode)
+            {
+                if (atribute.Attribute == "Value")
+                    atribute.Value = data.Value;
+            }
         }
 
+        private void CreateSubscription()
+        {
+            _subscription = _uaClientApi.Subscribe(2000);
+            if (_subscription == null) return;
+            SubscriptionCreated = true;
+        }
+
+        private void DeleteSubscrition()
+        {
+            _uaClientApi.RemoveSubscription(_subscription);
+            _subscription = null;
+            SubscribedVariables.Clear();
+            SubscriptionCreated = false;
+            //_subscription.MonitoredItemCount;
+            //_subscription.Created;
+            //_subscription.DisplayName;
+            //_subscription.Id;
+        }
+
+        private void AddVariableToSubscription()
+        {
+            if (_refDiscOfSelectedNode == null) return;
+            // TODO private metoda opakovany kod
+            var tmp = new Variable()
+            {
+                MonitoredItem = _uaClientApi.AddMonitoredItem(_refDiscOfSelectedNode, _subscription),
+                // TODO set up type here
+            };
+
+            tmp.MonitoredItem.Notification += Notification_MonitoredItem;
+            SubscribedVariables.Add(tmp);
+        }
+
+        private void DeleteVariableFromSubscription()
+        {
+            if(SelectedSubscribedVariable == null) return;
+            _uaClientApi.RemoveMonitoredItem(_subscription, SelectedSubscribedVariable.MonitoredItem);
+            SubscribedVariables.Remove(SelectedSubscribedVariable);
+        }
+
+        private void SaveSubscription()
+        {
+            // TODO save do priecinka /Subscriptions a ukladat s mneom ako datum v stringu
+            _uaClientApi.SaveSubsciption();
+        }
+
+        private void LoadSubscription()
+        {
+            // TODO opytat sa uzivatela ci chce prepisat existujucu subscription
+            if (_subscription != null) return;
+            _subscription = _uaClientApi.LoadSubsciption();
+
+            if (_subscription == null) return;
+
+            // TODO private metoda opakovany kod
+            foreach (var item in _subscription.MonitoredItems)
+            {
+                var tmp = new Variable()
+                {
+                    MonitoredItem = item,
+                    // TODO set up type here
+                };
+
+                tmp.MonitoredItem.Notification += Notification_MonitoredItem;
+                SubscribedVariables.Add(tmp);
+            }
+            _subscription.ApplyChanges();
+
+            SubscriptionCreated = true;
+        }
+
+        private void WriteValue()
+        {
+            _uaClientApi.WriteValue(SelectedSubscribedVariable, ValueToWrite);
+        }
+
+
+
+        private void NewSession() {}
         private void SaveSession()
         {
-            return;
+            _uaClientApi.SaveConfiguration();
         }
+        private void OpenSession() {}
+        private void ExitApplication() {}
+        private void ConnectSession() {}
+        private void DisconnectSession() {}
 
-        private void OpenSession()
-        {
-            return;
-        }
+        #endregion
 
-        private void ExitApplication()
-        {
-            return;
-        }
-        private void ConnectSession()
-        {
-            return;
-        }
+        #region CallBack Methods
 
-        private void DisconnectSession()
+        /// <summary>
+        /// Callback method for updating values of subscibed nodes
+        /// </summary>
+        /// <param name="monitoredItem"></param>
+        /// <param name="e"></param>
+        private void Notification_MonitoredItem(MonitoredItem monitoredItem, MonitoredItemNotificationEventArgs e)
         {
-            _uaClientApi.Subscribe(2000);
-            _uaClientApi.ItemChangedNotification += new MonitoredItemNotificationEventHandler(Notification_MonitoredItem);
+            if (!(e.NotificationValue is MonitoredItemNotification notification))
+                return;
+
+            var value = notification.Value;
+
+            var variable = SubscribedVariables.FirstOrDefault(x => x.Name == monitoredItem.DisplayName);
+
+            if (variable == null) return;
+            variable.Value = value.Value;
+            variable.StatusCode = value.StatusCode;
+            variable.DateTime = value.ServerTimestamp;
         }
 
         /// <summary>
         /// Callback method for set up selected node
         /// </summary>
         /// <param name="selectedNode"></param>
-        public void SetSelectedNode(ReferenceDescription selectedNode)
+        private void SetSelectedNode(ReferenceDescription selectedNode)
         {
             _refDiscOfSelectedNode = selectedNode;
-            SelectedNode = new ObservableCollection<AttributeDataGridModel>(GetDataGridModel(selectedNode));
-        }
+            SelectedNode = GetDataGridModel2(selectedNode);
+            MessengerInstance.Send(new SendSelectedRefNode(_refDiscOfSelectedNode));
+        } 
+        #endregion
 
         #region Private Helpers
 
@@ -202,31 +281,90 @@ namespace OpcUA.Client.Core
         /// </summary>
         /// <param name="referenceDescription"></param>
         /// <returns></returns>
-        private ObservableCollection<AttributeDataGridModel> GetDataGridModel(ReferenceDescription referenceDescription)
+        private ObservableCollection<AttributeDataGridViewModel> GetDataGridModel(ReferenceDescription referenceDescription)
         {
-            var data = new ObservableCollection<AttributeDataGridModel>();
+            var data = new ObservableCollection<AttributeDataGridViewModel>();
 
             foreach (var propertyInfo in referenceDescription.GetType().GetProperties())
             {
                 var value = propertyInfo.GetValue(referenceDescription);
 
                 if (value is NodeId)
-                    value.GetType().GetProperties().ToList().ForEach(property => data.Add(new AttributeDataGridModel(property.Name, property.GetValue(value).ToString())));
+                    value.GetType().GetProperties().ToList().ForEach(property => data.Add(new AttributeDataGridViewModel(property.Name, property.GetValue(value).ToString())));
 
-                data.Add(new AttributeDataGridModel(propertyInfo.Name, value.ToString()));
+                data.Add(new AttributeDataGridViewModel(propertyInfo.Name, value.ToString()));
             }
 
-            var node = IoC.UaClientApi.ReadNode(referenceDescription.NodeId.ToString());
-            node.GetType().GetProperties().ToList().ForEach(property => data.Add(new AttributeDataGridModel(property.Name, property.GetValue(node)?.ToString())));
+            var node = _uaClientApi.ReadNode(referenceDescription.NodeId.ToString());
+            node.GetType().GetProperties().ToList().ForEach(property => data.Add(new AttributeDataGridViewModel(property.Name, property.GetValue(node)?.ToString())));
 
             if (node.NodeClass != NodeClass.Variable) return data;
 
             var variableNode = (VariableNode) node.DataLock;
             variableNode.GetType().GetProperties().ToList().ForEach(property =>
-            data.Add(new AttributeDataGridModel(property.Name, property.GetValue(variableNode)?.ToString())));
+            data.Add(new AttributeDataGridViewModel(property.Name, property.GetValue(variableNode)?.ToString())));
 
+            return data;
+        }
+
+        /// <summary>
+        /// Takes attributes and values of <see cref="ReferenceDescription"/> object
+        /// </summary>
+        /// <param name="referenceDescription"></param>
+        /// <returns></returns>
+        private ObservableCollection<AttributeDataGridViewModel> GetDataGridModel2(ReferenceDescription referenceDescription)
+        {
+            var data = new ObservableCollection<AttributeDataGridViewModel>();
+
+            var tmpNodeId = referenceDescription.NodeId;
+
+            data.Add(new AttributeDataGridViewModel("Node Id", tmpNodeId));
+            data.Add(new AttributeDataGridViewModel("Namespace Index", tmpNodeId.NamespaceIndex));
+            data.Add(new AttributeDataGridViewModel("Type", tmpNodeId.IdType));
+            data.Add(new AttributeDataGridViewModel("Node Id", tmpNodeId.Identifier));
+            data.Add(new AttributeDataGridViewModel("Node Class", referenceDescription.NodeClass));
+            data.Add(new AttributeDataGridViewModel("Browse Name", referenceDescription.BrowseName));
+            data.Add(new AttributeDataGridViewModel("Display Name", referenceDescription.DisplayName));
+
+            var node = _uaClientApi.ReadNode(tmpNodeId.ToString());
+
+            data.Add(new AttributeDataGridViewModel("Description", node.Description));
+            data.Add(new AttributeDataGridViewModel("Write Mask", node.WriteMask));
+            data.Add(new AttributeDataGridViewModel("User Write Mask", node.UserWriteMask));
+
+            if (node.NodeClass != NodeClass.Variable) return data;
+
+            var variableNode = (VariableNode)node.DataLock;
+            data.Add(new AttributeDataGridViewModel("Value Rank", variableNode.ValueRank));
+            data.Add(new AttributeDataGridViewModel("Data Type Node Id", variableNode.DataType));
+            data.Add(new AttributeDataGridViewModel("Namespace Index", variableNode.DataType.NamespaceIndex));
+            data.Add(new AttributeDataGridViewModel("Identifier", variableNode.DataType.Identifier));
+            data.Add(new AttributeDataGridViewModel("Id Type", variableNode.DataType.IdType));
+            data.Add(new AttributeDataGridViewModel("Array Dimensions", variableNode.ArrayDimensions));
+            data.Add(new AttributeDataGridViewModel("Access Level", variableNode.AccessLevel));
+            data.Add(new AttributeDataGridViewModel("User Access Level", variableNode.UserAccessLevel));
+            data.Add(new AttributeDataGridViewModel("Historozing", variableNode.Historizing));
+            data.Add(new AttributeDataGridViewModel("minimum Sampling", variableNode.MinimumSamplingInterval));
+            data.Add(new AttributeDataGridViewModel("Value", _uaClientApi.ReadValue(variableNode.NodeId) ));
+            data.Add(new AttributeDataGridViewModel("Data Type", TypeInfo.GetSystemType(variableNode.DataType, new EncodeableFactory())));
+            data.Add(new AttributeDataGridViewModel("Built In Type", TypeInfo.GetBuiltInType(variableNode.DataType)));
+            
             return data;
         }
         #endregion
     }
 }
+
+//SubscribedVariables.CollectionChanged += (s, e) =>
+//{
+//if (SubscribedVariables.Count == 1 && e.Action == NotifyCollectionChangedAction.Add)
+//{
+//Task.Run(() =>
+//{
+//    while (true)
+//    {
+//        _uaClientApi.ReadValues(SubscribedVariables.Select(x => x.NodeId.ToString()).ToList());
+//    }
+//});
+//}
+//};

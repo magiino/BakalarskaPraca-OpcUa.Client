@@ -1,18 +1,23 @@
 ﻿namespace OpcUA.Client.Core
 {
     /// <summary>
-    /// Enum of messsage encoding
+    /// Enum of transport protocol supported by Opc Ua
     /// </summary>
-    public enum EMessageEncoding
+    public enum EProtocol
     {
         /// <summary>
         /// Ua Tcp binary
         /// </summary>
-        Binary = 0,
+        UaTcp = 0,
 
         /// <summary>
         /// Ua Https
         /// </summary>
-        Xml = 1
+        UaHttp = 1,
+
+        /// <summary>
+        /// Ua Https
+        /// </summary>
+        UaHttps = 2
     }
 }

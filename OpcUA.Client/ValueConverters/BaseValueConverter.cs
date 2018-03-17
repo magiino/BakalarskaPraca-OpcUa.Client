@@ -3,7 +3,7 @@ using System.Globalization;
 using System.Windows.Data;
 using System.Windows.Markup;
 
-namespace Fasetto.Word
+namespace OpcUA.Client
 {
     /// <summary>
     /// A base value converter that allows direct XAML usage
@@ -17,7 +17,7 @@ namespace Fasetto.Word
         /// <summary>
         /// A single static instance of this value converter
         /// </summary>
-        private static T Converter = null;
+        private static T Converter;
 
         #endregion
 
