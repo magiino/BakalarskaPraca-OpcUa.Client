@@ -12,7 +12,7 @@ namespace OpcUA.Client.Core
         #endregion
 
         #region Public Properties
-
+        //  public ObservableCollection<AttributeDataGridViewModel> SelectedNode { get; set; } = new ObservableCollection<AttributeDataGridViewModel>();
         public ExpandedNodeId NodeId { get; set; }
         public ReferenceDescription ReferenceDescription { get; set; }
         public Node Node { get; set; }
