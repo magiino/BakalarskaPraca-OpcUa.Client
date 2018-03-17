@@ -99,7 +99,6 @@ namespace OpcUA.Client.Core
         /// Default constructor
         /// </summary>
         /// <param name="node"></param>
-        /// <param name="setSelectedNode"></param>
         public NodeTreeItemViewModel(ReferenceDescription node)
         {
             ExpandCommand = new RelayCommand(Expand);

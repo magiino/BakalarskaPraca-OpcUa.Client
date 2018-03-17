@@ -39,14 +39,15 @@
                     </TabItem>
 
                     <TabItem Header="Server info">
-                        <TextBlock Text="{Binding SelectedNode}"></TextBlock>
+                        <TextBlock Text="{Binding SelectedNode}"/>
                     </TabItem>
                 </TabControl>
 
                 <!-- Second Column-->
                 <TabControl Grid.Column="1">
-                    <TabItem Header="Node Attributes">
-                        <local:AttributeInfo DataContext="{Binding NodeAttributesViewModel}"/>
+                    <TabItem Header="Node Attributes"
+                             Width="350">
+                        <local:AttributeInfo2 DataContext="{Binding NodeAttributesViewModel}"/>
                     </TabItem>
                 </TabControl>
 

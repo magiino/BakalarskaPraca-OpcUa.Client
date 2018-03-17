@@ -90,6 +90,9 @@
     <Compile Include="Controls\PageHost.xaml.cs">
       <DependentUpon>PageHost.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\TabItems\AttributeInfo2.xaml.cs">
+      <DependentUpon>AttributeInfo2.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\TabItems\AttributeInfo.xaml.cs">
       <DependentUpon>AttributeInfo.xaml</DependentUpon>
     </Compile>
@@ -127,6 +130,10 @@
     <Page Include="Controls\PageHost.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\TabItems\AttributeInfo2.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Controls\TabItems\AttributeInfo.xaml">
       <SubType>Designer</SubType>

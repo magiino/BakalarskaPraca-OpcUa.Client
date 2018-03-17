@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.Windows.Input;
 using Opc.Ua;
 using Opc.Ua.Client;
@@ -8,15 +9,23 @@ namespace OpcUA.Client.Core
     public class NodeAttributesViewModel : BaseViewModel
     {
         #region Private Fields
-
         private readonly UaClientApi _uaClientApi;
-        private ReferenceDescription _refDiscOfSelectedNode;
-
         #endregion
 
         #region Public Properties
+        //public ObservableCollection<AttributeDataGridViewModel> SelectedNode { get; set; } = new ObservableCollection<AttributeDataGridViewModel>();
+        public ExpandedNodeId NodeId { get; set; }
+        public ReferenceDescription ReferenceDescription { get; set; }
+        public Node Node { get; set; }
+        public VariableNode VariableNode { get; set; }
+        public NodeId DataTypeNodeId { get; set; }
+        public DataValue DataValue { get; set; }
+        public Type DataType { get; set; }
+        public BuiltInType BuiltInType { get; set; }
 
-        public ObservableCollection<AttributeDataGridViewModel> SelectedNode { get; set; } = new ObservableCollection<AttributeDataGridViewModel>();
+
+
+        public bool IsVariableType { get; set; }
         public string ValueToSingleWrite { get; set; }
 
         #endregion
@@ -46,8 +55,9 @@ namespace OpcUA.Client.Core
                 this,
                 node =>
                 {
-                    _refDiscOfSelectedNode = node.RefNode;
-                    SelectedNode = GetDataGridModel(_refDiscOfSelectedNode);
+                    ReferenceDescription = node.RefNode;
+                    UpdateValues(ReferenceDescription);
+                    //SelectedNode = GetDataGridModel(_refDiscOfSelectedNode);
                 });
         }
 
@@ -57,7 +67,7 @@ namespace OpcUA.Client.Core
 
         private void WriteSingleValue()
         {
-            var nodeId = ExpandedNodeId.ToNodeId(_refDiscOfSelectedNode.NodeId, null);
+            var nodeId = ExpandedNodeId.ToNodeId(ReferenceDescription.NodeId, null);
             var variable = new Variable()
             {
                 MonitoredItem = new MonitoredItem()
@@ -65,80 +75,90 @@ namespace OpcUA.Client.Core
                     StartNodeId = nodeId
                 }
             };
+            // TOTO robim aby som si zistil data type
+            // TODO vymysliet to inak
             var data = _uaClientApi.ReadValue(nodeId);
             variable.Value = data.Value;
 
             bool writeStatus = _uaClientApi.WriteValue(variable, ValueToSingleWrite);
 
             if (data.StatusCode.Code != StatusCodes.Good || !writeStatus) return;
-            foreach (var atribute in SelectedNode)
-            {
-                if (atribute.Attribute == "Value")
-                    atribute.Value = ValueToSingleWrite;
-            }
+
+            DataValue.Value = ValueToSingleWrite;
         }
 
         private void ReadSingleValue()
         {
-            var nodeId = ExpandedNodeId.ToNodeId(_refDiscOfSelectedNode.NodeId, null);
-            var data = _uaClientApi.ReadValue(nodeId);
-            if (data.StatusCode.Code != StatusCodes.Good) return;
-            foreach (var atribute in SelectedNode)
-            {
-                if (atribute.Attribute == "Value")
-                    atribute.Value = data.Value;
-            }
-        } 
+            var nodeId = ExpandedNodeId.ToNodeId(ReferenceDescription.NodeId, null);
+            DataValue = _uaClientApi.ReadValue(nodeId);
+
+        }
 
         #endregion
 
         #region Private Helpers
 
-        /// <summary>
-        /// Takes attributes and values of <see cref="ReferenceDescription"/> object
-        /// </summary>
-        /// <param name="referenceDescription"></param>
-        /// <returns></returns>
-        private ObservableCollection<AttributeDataGridViewModel> GetDataGridModel(ReferenceDescription referenceDescription)
+        private void UpdateValues(ReferenceDescription referenceDescription)
         {
-            var data = new ObservableCollection<AttributeDataGridViewModel>();
+            IsVariableType = false;
 
-            var tmpNodeId = referenceDescription.NodeId;
+            NodeId = referenceDescription.NodeId;
+            Node = _uaClientApi.ReadNode(NodeId.ToString());
 
-            data.Add(new AttributeDataGridViewModel("Node Id", tmpNodeId));
-            data.Add(new AttributeDataGridViewModel("Namespace Index", tmpNodeId.NamespaceIndex));
-            data.Add(new AttributeDataGridViewModel("Type", tmpNodeId.IdType));
-            data.Add(new AttributeDataGridViewModel("Node Id", tmpNodeId.Identifier));
-            data.Add(new AttributeDataGridViewModel("Node Class", referenceDescription.NodeClass));
-            data.Add(new AttributeDataGridViewModel("Browse Name", referenceDescription.BrowseName));
-            data.Add(new AttributeDataGridViewModel("Display Name", referenceDescription.DisplayName));
+            if (Node.NodeClass != NodeClass.Variable) return;
 
-            var node = _uaClientApi.ReadNode(tmpNodeId.ToString());
-
-            data.Add(new AttributeDataGridViewModel("Description", node.Description));
-            data.Add(new AttributeDataGridViewModel("Write Mask", node.WriteMask));
-            data.Add(new AttributeDataGridViewModel("User Write Mask", node.UserWriteMask));
-
-            if (node.NodeClass != NodeClass.Variable) return data;
-
-            var variableNode = (VariableNode)node.DataLock;
-            data.Add(new AttributeDataGridViewModel("Value Rank", variableNode.ValueRank));
-            data.Add(new AttributeDataGridViewModel("Data Type Node Id", variableNode.DataType));
-            data.Add(new AttributeDataGridViewModel("Namespace Index", variableNode.DataType.NamespaceIndex));
-            data.Add(new AttributeDataGridViewModel("Identifier", variableNode.DataType.Identifier));
-            data.Add(new AttributeDataGridViewModel("Id Type", variableNode.DataType.IdType));
-            data.Add(new AttributeDataGridViewModel("Array Dimensions", variableNode.ArrayDimensions));
-            data.Add(new AttributeDataGridViewModel("Access Level", variableNode.AccessLevel));
-            data.Add(new AttributeDataGridViewModel("User Access Level", variableNode.UserAccessLevel));
-            data.Add(new AttributeDataGridViewModel("Historozing", variableNode.Historizing));
-            data.Add(new AttributeDataGridViewModel("minimum Sampling", variableNode.MinimumSamplingInterval));
-            data.Add(new AttributeDataGridViewModel("Value", _uaClientApi.ReadValue(variableNode.NodeId)));
-            data.Add(new AttributeDataGridViewModel("Data Type", TypeInfo.GetSystemType(variableNode.DataType, new EncodeableFactory())));
-            data.Add(new AttributeDataGridViewModel("Built In Type", TypeInfo.GetBuiltInType(variableNode.DataType)));
-
-            return data;
+            IsVariableType = true;
+            VariableNode = (VariableNode)Node.DataLock;
+            DataTypeNodeId = VariableNode.DataType;
+            DataValue = _uaClientApi.ReadValue(VariableNode.NodeId);
+            DataType = TypeInfo.GetSystemType(VariableNode.DataType, new EncodeableFactory());
+            BuiltInType = TypeInfo.GetBuiltInType(VariableNode.DataType);
         }
 
+        ///// <summary>
+        ///// Takes attributes and values of <see cref="ReferenceDescription"/> object
+        ///// </summary>
+        ///// <param name="referenceDescription"></param>
+        ///// <returns></returns>
+        //private ObservableCollection<AttributeDataGridViewModel> GetDataGridModel(ReferenceDescription referenceDescription)
+        //{
+        //    var data = new ObservableCollection<AttributeDataGridViewModel>();
+
+        //    var tmpNodeId = referenceDescription.NodeId;
+
+        //    data.Add(new AttributeDataGridViewModel("Node Id", tmpNodeId));
+        //    data.Add(new AttributeDataGridViewModel("Namespace Index", tmpNodeId.NamespaceIndex));
+        //    data.Add(new AttributeDataGridViewModel("Type", tmpNodeId.IdType));
+        //    data.Add(new AttributeDataGridViewModel("Identifier", tmpNodeId.Identifier));
+        //    data.Add(new AttributeDataGridViewModel("Node Class", referenceDescription.NodeClass));
+        //    data.Add(new AttributeDataGridViewModel("Browse Name", referenceDescription.BrowseName));
+        //    data.Add(new AttributeDataGridViewModel("Display Name", referenceDescription.DisplayName));
+
+        //    var node = _uaClientApi.ReadNode(tmpNodeId.ToString());
+
+        //    data.Add(new AttributeDataGridViewModel("Description", node.Description));
+        //    data.Add(new AttributeDataGridViewModel("Write Mask", node.WriteMask));
+        //    data.Add(new AttributeDataGridViewModel("User Write Mask", node.UserWriteMask));
+
+        //    if (node.NodeClass != NodeClass.Variable) return data;
+
+        //    var variableNode = (VariableNode)node.DataLock;
+        //    data.Add(new AttributeDataGridViewModel("Value Rank", variableNode.ValueRank));
+        //    data.Add(new AttributeDataGridViewModel("Data Type", variableNode.DataType));
+        //    data.Add(new AttributeDataGridViewModel("Namespace Index", variableNode.DataType.NamespaceIndex));
+        //    data.Add(new AttributeDataGridViewModel("Identifier", variableNode.DataType.Identifier));
+        //    data.Add(new AttributeDataGridViewModel("Id Type", variableNode.DataType.IdType));
+        //    data.Add(new AttributeDataGridViewModel("Array Dimensions", variableNode.ArrayDimensions));
+        //    data.Add(new AttributeDataGridViewModel("Access Level", variableNode.AccessLevel));
+        //    data.Add(new AttributeDataGridViewModel("User Access Level", variableNode.UserAccessLevel));
+        //    data.Add(new AttributeDataGridViewModel("Historozing", variableNode.Historizing));
+        //    data.Add(new AttributeDataGridViewModel("Minimum Sampling", variableNode.MinimumSamplingInterval));
+        //    data.Add(new AttributeDataGridViewModel("Value", _uaClientApi.ReadValue(variableNode.NodeId)));
+        //    data.Add(new AttributeDataGridViewModel("Data Type", TypeInfo.GetSystemType(variableNode.DataType, new EncodeableFactory())));
+        //    data.Add(new AttributeDataGridViewModel("Built In Type", TypeInfo.GetBuiltInType(variableNode.DataType)));
+
+        //    return data;
+        //}
         #endregion
     }
 }

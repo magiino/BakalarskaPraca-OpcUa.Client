@@ -1,0 +1,275 @@
+﻿<UserControl x:Class="OpcUA.Client.AttributeInfo2"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:OpcUA.Client"
+             mc:Ignorable="d" 
+             d:DesignHeight="600" d:DesignWidth="300">
+    <StackPanel>
+        <TreeView>
+            <!-- NodeId data -->
+            <TreeViewItem DataContext="{Binding NodeId}">
+                <TreeViewItem.Header >
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="Node Id" Width="150"/>
+                        <Label Content="{Binding Identifier}" Width="auto"/>
+                    </StackPanel>
+                </TreeViewItem.Header>
+
+                <TreeViewItem>
+                    <TreeViewItem.Header >
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="Namespace Index" Width="150"/>
+                            <Label Content="{Binding NamespaceIndex}" Width="auto"/>
+                        </StackPanel>
+                    </TreeViewItem.Header>
+                </TreeViewItem>
+                <TreeViewItem>
+                    <TreeViewItem.Header >
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="Type" Width="150"/>
+                            <Label Content="{Binding Identifier}" Width="auto"/>
+                        </StackPanel>
+                    </TreeViewItem.Header>
+                </TreeViewItem>
+                <TreeViewItem>
+                    <TreeViewItem.Header >
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="Identifier" Width="150"/>
+                            <Label Content="{Binding IdType}" Width="auto"/>
+                        </StackPanel>
+                    </TreeViewItem.Header>
+                </TreeViewItem>
+            </TreeViewItem>
+
+            <!-- ReferenceDescription data -->
+            <TreeViewItem DataContext="{Binding ReferenceDescription}">
+                <TreeViewItem.Header >
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="Node Class" Width="150"/>
+                            <Label Content="{Binding NodeClass}" Width="auto"/>
+
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="Browse Name" Width="150"/>
+                            <Label Content="{Binding BrowseName}" Width="auto"/>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="Display Name" Width="150"/>
+                            <Label Content="{Binding DisplayName}" Width="auto"/>
+                        </StackPanel>
+                    </StackPanel>
+                </TreeViewItem.Header>
+            </TreeViewItem>
+     
+            <!-- Node data -->
+            <TreeViewItem DataContext="{Binding Node}">
+                <TreeViewItem.Header >
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="Description" Width="150"/>
+                            <Label Content="{Binding Description}" Width="auto"/>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="Write Mask" Width="150"/>
+                            <Label Content="{Binding WriteMask}" Width="auto"/>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="User Write Mask" Width="150"/>
+                            <Label Content="{Binding UserWriteMask}" Width="auto"/>
+                        </StackPanel>
+                    </StackPanel>
+                </TreeViewItem.Header>
+            </TreeViewItem>
+
+            <Separator  Width="300"/>
+
+            <!-- Data Type-->
+            <TreeViewItem DataContext="{Binding DataTypeNodeId}">
+                <TreeViewItem.Header >
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="Data Type" Width="150"/>
+                        <Label Content="{Binding IdentifierText}" Width="auto"/>
+                    </StackPanel>
+                </TreeViewItem.Header>
+
+                <TreeViewItem>
+                    <TreeViewItem.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="Namespace Index" Width="150"/>
+                            <Label Content="{Binding NamespaceIndex}" Width="auto"/>
+                        </StackPanel>
+                    </TreeViewItem.Header>
+                </TreeViewItem>
+
+                <TreeViewItem>
+                    <TreeViewItem.Header >
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="Identifier" Width="150"/>
+                            <Label Content="{Binding Identifier}" Width="auto"/>
+                        </StackPanel>
+                    </TreeViewItem.Header>
+                </TreeViewItem>
+
+                <TreeViewItem>
+                    <TreeViewItem.Header >
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="Id Type" Width="150"/>
+                            <Label Content="{Binding IdType}" Width="auto"/>
+                        </StackPanel>
+                    </TreeViewItem.Header>
+                </TreeViewItem>
+            </TreeViewItem>
+            <!-- NodeVariable Data -->
+            <StackPanel Margin="-20 0 0 0"
+                        DataContext="{Binding VariableNode}"
+                        Visibility="{Binding IsVariableType}">
+
+                <TreeViewItem>
+                    <TreeViewItem.Header >
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="Value Rank" Width="150"/>
+                            <Label Content="{Binding ValueRank}" Width="auto"/>
+                        </StackPanel>
+                    </TreeViewItem.Header>
+                </TreeViewItem>
+
+                <TreeViewItem>
+                    <TreeViewItem.Header >
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="Array Dimensions" Width="150"/>
+                            <Label Content="{Binding ArrayDimensions}" Width="auto"/>
+                        </StackPanel>
+                    </TreeViewItem.Header>
+                </TreeViewItem>
+
+                <TreeViewItem>
+                    <TreeViewItem.Header >
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="Access Level" Width="150"/>
+                            <Label Content="{Binding AccessLevel}" Width="auto"/>
+                        </StackPanel>
+                    </TreeViewItem.Header>
+                </TreeViewItem>
+
+                <TreeViewItem>
+                    <TreeViewItem.Header >
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="User Access Level" Width="150"/>
+                            <Label Content="{Binding UserAccessLevel}" Width="auto"/>
+                        </StackPanel>
+                    </TreeViewItem.Header>
+                </TreeViewItem>
+
+                <TreeViewItem>
+                    <TreeViewItem.Header >
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="Historozing" Width="150"/>
+                            <Label Content="{Binding Historizing}" Width="auto"/>
+                        </StackPanel>
+                    </TreeViewItem.Header>
+                </TreeViewItem>
+
+                <TreeViewItem>
+                    <TreeViewItem.Header >
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="Minimum Sampling" Width="150"/>
+                            <Label Content="{Binding MinimumSamplingInterval}" Width="auto"/>
+                        </StackPanel>
+                    </TreeViewItem.Header>
+                </TreeViewItem>
+
+            </StackPanel>
+            
+            <!-- Value Data -->
+            <StackPanel Margin="-20 0 0 0"
+                        DataContext="{Binding DataValue}"
+                        Visibility="{Binding IsVariableType}">
+
+                <TreeViewItem>
+                    <TreeViewItem.Header >
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="Value" Width="150"/>
+                            <Label Content="{Binding Value}" Width="auto"/>
+                        </StackPanel>
+                    </TreeViewItem.Header>
+                </TreeViewItem>
+
+                <TreeViewItem>
+                    <TreeViewItem.Header >
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="Status Code" Width="150"/>
+                            <Label Content="{Binding StatusCode}" Width="auto"/>
+                        </StackPanel>
+                    </TreeViewItem.Header>
+                </TreeViewItem>
+
+                <TreeViewItem>
+                    <TreeViewItem.Header >
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="Time Stamp" Width="150"/>
+                            <Label Content="{Binding ServerTimestamp}" Width="auto"/>
+                        </StackPanel>
+                    </TreeViewItem.Header>
+                </TreeViewItem>
+            </StackPanel>
+
+            <TreeViewItem>
+                <TreeViewItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="Data Type" Width="150"/>
+                        <Label Content="{Binding DataType}" Width="auto"/>
+                    </StackPanel>
+                </TreeViewItem.Header>
+            </TreeViewItem>
+
+            <TreeViewItem>
+                <TreeViewItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="Build In Type" Width="150"/>
+                        <Label Content="{Binding BuiltInType}" Width="auto"/>
+                    </StackPanel>
+                </TreeViewItem.Header>
+            </TreeViewItem>
+
+            <TreeViewItem>
+                <TreeViewItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <Button Width="50" 
+                                Content="Read"
+                                Command="{Binding ReadSingleValueCommand}"/>
+                        <TextBox Margin="100 0 0 0"
+                                    Width="50"
+                                    Text="{Binding ValueToSingleWrite}"/>
+                        <Button Width="50"
+                                Content="Write"
+                                Command="{Binding WriteSingleValueCommand}"/>
+                    </StackPanel>
+                </TreeViewItem.Header>
+            </TreeViewItem>
+        </TreeView>
+
+        <!--<Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Button Grid.Column="0" 
+                    Content="Read"
+                    Command="{Binding ReadSingleValueCommand}"/>
+            <Button Grid.Column="1" 
+                    Content="Write"
+                    Command="{Binding WriteSingleValueCommand}"/>
+            <TextBox Grid.Column="2"
+                        Text="{Binding ValueToSingleWrite}"/>
+        </Grid>-->
+    </StackPanel>
+</UserControl>
