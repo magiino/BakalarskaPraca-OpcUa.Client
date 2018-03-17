@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.ObjectModel;
 using System.Windows.Input;
 using Opc.Ua;
 using Opc.Ua.Client;
@@ -13,7 +12,7 @@ namespace OpcUA.Client.Core
         #endregion
 
         #region Public Properties
-        //public ObservableCollection<AttributeDataGridViewModel> SelectedNode { get; set; } = new ObservableCollection<AttributeDataGridViewModel>();
+
         public ExpandedNodeId NodeId { get; set; }
         public ReferenceDescription ReferenceDescription { get; set; }
         public Node Node { get; set; }
@@ -22,11 +21,10 @@ namespace OpcUA.Client.Core
         public DataValue DataValue { get; set; }
         public Type DataType { get; set; }
         public BuiltInType BuiltInType { get; set; }
-
-
-
         public bool IsVariableType { get; set; }
         public string ValueToSingleWrite { get; set; }
+
+        public bool IsExpanded { get; set; }
 
         #endregion
 
@@ -57,7 +55,6 @@ namespace OpcUA.Client.Core
                 {
                     ReferenceDescription = node.RefNode;
                     UpdateValues(ReferenceDescription);
-                    //SelectedNode = GetDataGridModel(_refDiscOfSelectedNode);
                 });
         }
 
@@ -75,6 +72,7 @@ namespace OpcUA.Client.Core
                     StartNodeId = nodeId
                 }
             };
+
             // TOTO robim aby som si zistil data type
             // TODO vymysliet to inak
             var data = _uaClientApi.ReadValue(nodeId);
@@ -83,7 +81,6 @@ namespace OpcUA.Client.Core
             bool writeStatus = _uaClientApi.WriteValue(variable, ValueToSingleWrite);
 
             if (data.StatusCode.Code != StatusCodes.Good || !writeStatus) return;
-
             DataValue.Value = ValueToSingleWrite;
         }
 
@@ -91,7 +88,6 @@ namespace OpcUA.Client.Core
         {
             var nodeId = ExpandedNodeId.ToNodeId(ReferenceDescription.NodeId, null);
             DataValue = _uaClientApi.ReadValue(nodeId);
-
         }
 
         #endregion
