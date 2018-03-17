@@ -11,9 +11,7 @@ namespace OpcUA.Client.Core
         #region Private Fields
 
         private readonly UaClientApi _uaClientApi;
-
         private Subscription _subscription;
-
         private ReferenceDescription _refDiscOfSelectedNode;
 
         #endregion
@@ -21,12 +19,11 @@ namespace OpcUA.Client.Core
         #region Public Properties
 
         public NodeTreeViewModel NodetreeViewModel { get; set; }
-
         public NodeAttributesViewModel NodeAttributesViewModel { get; set; }
 
-        public ObservableCollection<AttributeDataGridViewModel> SelectedNode { get; set; } = new ObservableCollection<AttributeDataGridViewModel>();
+        //public ObservableCollection<AttributeDataGridViewModel> SelectedNode { get; set; } = new ObservableCollection<AttributeDataGridViewModel>();
 
-        public bool AddIsEnabled => SelectedNode.Count != 0;
+        //public bool AddIsEnabled => SelectedNode.Count != 0;
 
 
         public ObservableCollection<Variable> SubscribedVariables { get; set; } = new ObservableCollection<Variable>();
@@ -70,9 +67,10 @@ namespace OpcUA.Client.Core
 
         public string ValueToWrite { get; set; }
 
-        public ICommand WriteSingleValueCommand { get; set; }
-        public ICommand ReadSingleValueCommand { get; set; }
-        public string ValueToSingleWrite { get; set; }
+
+        //public ICommand WriteSingleValueCommand { get; set; }
+        //public ICommand ReadSingleValueCommand { get; set; }
+        //public string ValueToSingleWrite { get; set; }
 
         #endregion
 
@@ -95,15 +93,14 @@ namespace OpcUA.Client.Core
             DeleteSubscriptionCommand = new RelayCommand(DeleteSubscrition);
             SaveSubscriptionCommand = new RelayCommand(SaveSubscription);
             LoadSubscriptionCommand = new RelayCommand(LoadSubscription);
-            // TODO prerobit na parametrizovany command?
             WriteValueCommand = new RelayCommand(WriteValue);
 
-            // TODO prerobit na parametrizovany command?
-            WriteSingleValueCommand = new RelayCommand(WriteSingleValue);
-            ReadSingleValueCommand = new RelayCommand(ReadSingleValue);
+            //WriteSingleValueCommand = new RelayCommand(WriteSingleValue);
+            //ReadSingleValueCommand = new RelayCommand(ReadSingleValue);
 
 
             NodetreeViewModel = new NodeTreeViewModel(SetSelectedNode);
+            NodeAttributesViewModel = new NodeAttributesViewModel(_uaClientApi);
         }
 
         #endregion
@@ -115,40 +112,40 @@ namespace OpcUA.Client.Core
         // TODO vracat z write value ci sa podaril zapis
         // TODO Stale tam zobrazovat atributy len menit hodnoty !!!
         // TODO Urobit ViewModel zvlast pre vsetko
-        private void WriteSingleValue()
-        {
-            var nodeId = ExpandedNodeId.ToNodeId(_refDiscOfSelectedNode.NodeId, null);
-            var variable = new Variable()
-            {
-                MonitoredItem = new MonitoredItem()
-                {
-                    StartNodeId = nodeId
-                }
-            };
-            var data = _uaClientApi.ReadValue(nodeId);
-            variable.Value = data.Value;
+        //private void WriteSingleValue()
+        //{
+        //    var nodeId = ExpandedNodeId.ToNodeId(_refDiscOfSelectedNode.NodeId, null);
+        //    var variable = new Variable()
+        //    {
+        //        MonitoredItem = new MonitoredItem()
+        //        {
+        //            StartNodeId = nodeId
+        //        }
+        //    };
+        //    var data = _uaClientApi.ReadValue(nodeId);
+        //    variable.Value = data.Value;
 
-            bool writeStatus = _uaClientApi.WriteValue(variable, ValueToSingleWrite);
+        //    bool writeStatus = _uaClientApi.WriteValue(variable, ValueToSingleWrite);
             
-            if (data.StatusCode.Code != StatusCodes.Good || !writeStatus) return;
-            foreach (var atribute in SelectedNode)
-            {
-                if (atribute.Attribute == "Value")
-                    atribute.Value = ValueToSingleWrite;
-            }
-        }
+        //    if (data.StatusCode.Code != StatusCodes.Good || !writeStatus) return;
+        //    foreach (var atribute in SelectedNode)
+        //    {
+        //        if (atribute.Attribute == "Value")
+        //            atribute.Value = ValueToSingleWrite;
+        //    }
+        //}
 
-        private void ReadSingleValue()
-        {
-            var nodeId = ExpandedNodeId.ToNodeId(_refDiscOfSelectedNode.NodeId, null);
-            var data = _uaClientApi.ReadValue(nodeId);
-            if (data.StatusCode.Code != StatusCodes.Good) return;
-            foreach (var atribute in SelectedNode)
-            {
-                if (atribute.Attribute == "Value")
-                    atribute.Value = data.Value;
-            }
-        }
+        //private void ReadSingleValue()
+        //{
+        //    var nodeId = ExpandedNodeId.ToNodeId(_refDiscOfSelectedNode.NodeId, null);
+        //    var data = _uaClientApi.ReadValue(nodeId);
+        //    if (data.StatusCode.Code != StatusCodes.Good) return;
+        //    foreach (var atribute in SelectedNode)
+        //    {
+        //        if (atribute.Attribute == "Value")
+        //            atribute.Value = data.Value;
+        //    }
+        //}
 
         private void CreateSubscription()
         {
@@ -269,88 +266,58 @@ namespace OpcUA.Client.Core
         private void SetSelectedNode(ReferenceDescription selectedNode)
         {
             _refDiscOfSelectedNode = selectedNode;
-            SelectedNode = GetDataGridModel2(selectedNode);
+            //SelectedNode = GetDataGridModel2(selectedNode);
             MessengerInstance.Send(new SendSelectedRefNode(_refDiscOfSelectedNode));
         } 
         #endregion
 
         #region Private Helpers
 
-        /// <summary>
-        /// Takes attributes and values of <see cref="ReferenceDescription"/> object
-        /// </summary>
-        /// <param name="referenceDescription"></param>
-        /// <returns></returns>
-        private ObservableCollection<AttributeDataGridViewModel> GetDataGridModel(ReferenceDescription referenceDescription)
-        {
-            var data = new ObservableCollection<AttributeDataGridViewModel>();
+        ///// <summary>
+        ///// Takes attributes and values of <see cref="ReferenceDescription"/> object
+        ///// </summary>
+        ///// <param name="referenceDescription"></param>
+        ///// <returns></returns>
+        //private ObservableCollection<AttributeDataGridViewModel> GetDataGridModel2(ReferenceDescription referenceDescription)
+        //{
+        //    var data = new ObservableCollection<AttributeDataGridViewModel>();
 
-            foreach (var propertyInfo in referenceDescription.GetType().GetProperties())
-            {
-                var value = propertyInfo.GetValue(referenceDescription);
+        //    var tmpNodeId = referenceDescription.NodeId;
 
-                if (value is NodeId)
-                    value.GetType().GetProperties().ToList().ForEach(property => data.Add(new AttributeDataGridViewModel(property.Name, property.GetValue(value).ToString())));
+        //    data.Add(new AttributeDataGridViewModel("Node Id", tmpNodeId));
+        //    data.Add(new AttributeDataGridViewModel("Namespace Index", tmpNodeId.NamespaceIndex));
+        //    data.Add(new AttributeDataGridViewModel("Type", tmpNodeId.IdType));
+        //    data.Add(new AttributeDataGridViewModel("Node Id", tmpNodeId.Identifier));
+        //    data.Add(new AttributeDataGridViewModel("Node Class", referenceDescription.NodeClass));
+        //    data.Add(new AttributeDataGridViewModel("Browse Name", referenceDescription.BrowseName));
+        //    data.Add(new AttributeDataGridViewModel("Display Name", referenceDescription.DisplayName));
 
-                data.Add(new AttributeDataGridViewModel(propertyInfo.Name, value.ToString()));
-            }
+        //    var node = _uaClientApi.ReadNode(tmpNodeId.ToString());
 
-            var node = _uaClientApi.ReadNode(referenceDescription.NodeId.ToString());
-            node.GetType().GetProperties().ToList().ForEach(property => data.Add(new AttributeDataGridViewModel(property.Name, property.GetValue(node)?.ToString())));
+        //    data.Add(new AttributeDataGridViewModel("Description", node.Description));
+        //    data.Add(new AttributeDataGridViewModel("Write Mask", node.WriteMask));
+        //    data.Add(new AttributeDataGridViewModel("User Write Mask", node.UserWriteMask));
 
-            if (node.NodeClass != NodeClass.Variable) return data;
+        //    if (node.NodeClass != NodeClass.Variable) return data;
 
-            var variableNode = (VariableNode) node.DataLock;
-            variableNode.GetType().GetProperties().ToList().ForEach(property =>
-            data.Add(new AttributeDataGridViewModel(property.Name, property.GetValue(variableNode)?.ToString())));
-
-            return data;
-        }
-
-        /// <summary>
-        /// Takes attributes and values of <see cref="ReferenceDescription"/> object
-        /// </summary>
-        /// <param name="referenceDescription"></param>
-        /// <returns></returns>
-        private ObservableCollection<AttributeDataGridViewModel> GetDataGridModel2(ReferenceDescription referenceDescription)
-        {
-            var data = new ObservableCollection<AttributeDataGridViewModel>();
-
-            var tmpNodeId = referenceDescription.NodeId;
-
-            data.Add(new AttributeDataGridViewModel("Node Id", tmpNodeId));
-            data.Add(new AttributeDataGridViewModel("Namespace Index", tmpNodeId.NamespaceIndex));
-            data.Add(new AttributeDataGridViewModel("Type", tmpNodeId.IdType));
-            data.Add(new AttributeDataGridViewModel("Node Id", tmpNodeId.Identifier));
-            data.Add(new AttributeDataGridViewModel("Node Class", referenceDescription.NodeClass));
-            data.Add(new AttributeDataGridViewModel("Browse Name", referenceDescription.BrowseName));
-            data.Add(new AttributeDataGridViewModel("Display Name", referenceDescription.DisplayName));
-
-            var node = _uaClientApi.ReadNode(tmpNodeId.ToString());
-
-            data.Add(new AttributeDataGridViewModel("Description", node.Description));
-            data.Add(new AttributeDataGridViewModel("Write Mask", node.WriteMask));
-            data.Add(new AttributeDataGridViewModel("User Write Mask", node.UserWriteMask));
-
-            if (node.NodeClass != NodeClass.Variable) return data;
-
-            var variableNode = (VariableNode)node.DataLock;
-            data.Add(new AttributeDataGridViewModel("Value Rank", variableNode.ValueRank));
-            data.Add(new AttributeDataGridViewModel("Data Type Node Id", variableNode.DataType));
-            data.Add(new AttributeDataGridViewModel("Namespace Index", variableNode.DataType.NamespaceIndex));
-            data.Add(new AttributeDataGridViewModel("Identifier", variableNode.DataType.Identifier));
-            data.Add(new AttributeDataGridViewModel("Id Type", variableNode.DataType.IdType));
-            data.Add(new AttributeDataGridViewModel("Array Dimensions", variableNode.ArrayDimensions));
-            data.Add(new AttributeDataGridViewModel("Access Level", variableNode.AccessLevel));
-            data.Add(new AttributeDataGridViewModel("User Access Level", variableNode.UserAccessLevel));
-            data.Add(new AttributeDataGridViewModel("Historozing", variableNode.Historizing));
-            data.Add(new AttributeDataGridViewModel("minimum Sampling", variableNode.MinimumSamplingInterval));
-            data.Add(new AttributeDataGridViewModel("Value", _uaClientApi.ReadValue(variableNode.NodeId) ));
-            data.Add(new AttributeDataGridViewModel("Data Type", TypeInfo.GetSystemType(variableNode.DataType, new EncodeableFactory())));
-            data.Add(new AttributeDataGridViewModel("Built In Type", TypeInfo.GetBuiltInType(variableNode.DataType)));
+        //    var variableNode = (VariableNode)node.DataLock;
+        //    data.Add(new AttributeDataGridViewModel("Value Rank", variableNode.ValueRank));
+        //    data.Add(new AttributeDataGridViewModel("Data Type Node Id", variableNode.DataType));
+        //    data.Add(new AttributeDataGridViewModel("Namespace Index", variableNode.DataType.NamespaceIndex));
+        //    data.Add(new AttributeDataGridViewModel("Identifier", variableNode.DataType.Identifier));
+        //    data.Add(new AttributeDataGridViewModel("Id Type", variableNode.DataType.IdType));
+        //    data.Add(new AttributeDataGridViewModel("Array Dimensions", variableNode.ArrayDimensions));
+        //    data.Add(new AttributeDataGridViewModel("Access Level", variableNode.AccessLevel));
+        //    data.Add(new AttributeDataGridViewModel("User Access Level", variableNode.UserAccessLevel));
+        //    data.Add(new AttributeDataGridViewModel("Historozing", variableNode.Historizing));
+        //    data.Add(new AttributeDataGridViewModel("minimum Sampling", variableNode.MinimumSamplingInterval));
+        //    data.Add(new AttributeDataGridViewModel("Value", _uaClientApi.ReadValue(variableNode.NodeId) ));
+        //    data.Add(new AttributeDataGridViewModel("Data Type", TypeInfo.GetSystemType(variableNode.DataType, new EncodeableFactory())));
+        //    data.Add(new AttributeDataGridViewModel("Built In Type", TypeInfo.GetBuiltInType(variableNode.DataType)));
             
-            return data;
-        }
+        //    return data;
+        //}
+
         #endregion
     }
 }

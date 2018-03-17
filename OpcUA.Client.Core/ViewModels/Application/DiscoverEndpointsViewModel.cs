@@ -4,7 +4,6 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Windows.Input;
-using Ninject.Infrastructure.Language;
 using Opc.Ua;
 
 namespace OpcUA.Client.Core

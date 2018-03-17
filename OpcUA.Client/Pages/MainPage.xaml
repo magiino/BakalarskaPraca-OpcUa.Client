@@ -44,10 +44,11 @@
 
                 <!-- Second Column-->
                 <TabControl Grid.Column="1">
-                    <TabItem Header="Node Attributes">
+                    <TabItem Header="Node Attributes"
+                             DataContext="{Binding NodeAttributesViewModel}">
                         <StackPanel>
-                            <DataGrid Grid.Column="1"
-                                      HorizontalAlignment="Left" 
+
+                            <DataGrid HorizontalAlignment="Left" 
                                       Width="300px" 
                                       AutoGenerateColumns="false"
                                       ItemsSource="{Binding SelectedNode}">
@@ -56,6 +57,7 @@
                                     <DataGridTextColumn Width="*" Header="Attribute" Binding="{Binding Attribute}"/>
                                     <DataGridTextColumn Width="*" Header="Value" Binding="{Binding Value}"/>
                                 </DataGrid.Columns>
+
                             </DataGrid>
                             <Grid>
                                 <Grid.ColumnDefinitions>
@@ -63,6 +65,7 @@
                                     <ColumnDefinition Width="*"/>
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
+
                                 <Button Grid.Column="0" 
                                         Content="Read"
                                         Command="{Binding ReadSingleValueCommand}"/>
