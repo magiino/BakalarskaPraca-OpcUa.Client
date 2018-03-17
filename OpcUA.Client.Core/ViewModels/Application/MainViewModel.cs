@@ -24,7 +24,7 @@ namespace OpcUA.Client.Core
 
         public NodeAttributesViewModel NodeAttributesViewModel { get; set; }
 
-        public ObservableCollection<AttributeDataGridModel> SelectedNode { get; set; } = new ObservableCollection<AttributeDataGridModel>();
+        public ObservableCollection<AttributeDataGridViewModel> SelectedNode { get; set; } = new ObservableCollection<AttributeDataGridViewModel>();
 
         public bool AddIsEnabled => SelectedNode.Count != 0;
 
@@ -70,6 +70,10 @@ namespace OpcUA.Client.Core
 
         public string ValueToWrite { get; set; }
 
+        public ICommand WriteSingleValueCommand { get; set; }
+        public ICommand ReadSingleValueCommand { get; set; }
+        public string ValueToSingleWrite { get; set; }
+
         #endregion
 
         #region Constructor
@@ -91,7 +95,13 @@ namespace OpcUA.Client.Core
             DeleteSubscriptionCommand = new RelayCommand(DeleteSubscrition);
             SaveSubscriptionCommand = new RelayCommand(SaveSubscription);
             LoadSubscriptionCommand = new RelayCommand(LoadSubscription);
+            // TODO prerobit na parametrizovany command?
             WriteValueCommand = new RelayCommand(WriteValue);
+
+            // TODO prerobit na parametrizovany command?
+            WriteSingleValueCommand = new RelayCommand(WriteSingleValue);
+            ReadSingleValueCommand = new RelayCommand(ReadSingleValue);
+
 
             NodetreeViewModel = new NodeTreeViewModel(SetSelectedNode);
         }
@@ -99,6 +109,46 @@ namespace OpcUA.Client.Core
         #endregion
 
         #region Command Methods
+
+        // TODO prerobit _selectedNode z refDisc na NodeId
+        // TODO Prerobit WriteValue v opcuaApi
+        // TODO vracat z write value ci sa podaril zapis
+        // TODO Stale tam zobrazovat atributy len menit hodnoty !!!
+        // TODO Urobit ViewModel zvlast pre vsetko
+        private void WriteSingleValue()
+        {
+            var nodeId = ExpandedNodeId.ToNodeId(_refDiscOfSelectedNode.NodeId, null);
+            var variable = new Variable()
+            {
+                MonitoredItem = new MonitoredItem()
+                {
+                    StartNodeId = nodeId
+                }
+            };
+            var data = _uaClientApi.ReadValue(nodeId);
+            variable.Value = data.Value;
+
+            bool writeStatus = _uaClientApi.WriteValue(variable, ValueToSingleWrite);
+            
+            if (data.StatusCode.Code != StatusCodes.Good || !writeStatus) return;
+            foreach (var atribute in SelectedNode)
+            {
+                if (atribute.Attribute == "Value")
+                    atribute.Value = ValueToSingleWrite;
+            }
+        }
+
+        private void ReadSingleValue()
+        {
+            var nodeId = ExpandedNodeId.ToNodeId(_refDiscOfSelectedNode.NodeId, null);
+            var data = _uaClientApi.ReadValue(nodeId);
+            if (data.StatusCode.Code != StatusCodes.Good) return;
+            foreach (var atribute in SelectedNode)
+            {
+                if (atribute.Attribute == "Value")
+                    atribute.Value = data.Value;
+            }
+        }
 
         private void CreateSubscription()
         {
@@ -219,7 +269,8 @@ namespace OpcUA.Client.Core
         private void SetSelectedNode(ReferenceDescription selectedNode)
         {
             _refDiscOfSelectedNode = selectedNode;
-            SelectedNode = GetDataGridModel(selectedNode);
+            SelectedNode = GetDataGridModel2(selectedNode);
+            MessengerInstance.Send(new SendSelectedRefNode(_refDiscOfSelectedNode));
         } 
         #endregion
 
@@ -230,28 +281,28 @@ namespace OpcUA.Client.Core
         /// </summary>
         /// <param name="referenceDescription"></param>
         /// <returns></returns>
-        private ObservableCollection<AttributeDataGridModel> GetDataGridModel(ReferenceDescription referenceDescription)
+        private ObservableCollection<AttributeDataGridViewModel> GetDataGridModel(ReferenceDescription referenceDescription)
         {
-            var data = new ObservableCollection<AttributeDataGridModel>();
+            var data = new ObservableCollection<AttributeDataGridViewModel>();
 
             foreach (var propertyInfo in referenceDescription.GetType().GetProperties())
             {
                 var value = propertyInfo.GetValue(referenceDescription);
 
                 if (value is NodeId)
-                    value.GetType().GetProperties().ToList().ForEach(property => data.Add(new AttributeDataGridModel(property.Name, property.GetValue(value).ToString())));
+                    value.GetType().GetProperties().ToList().ForEach(property => data.Add(new AttributeDataGridViewModel(property.Name, property.GetValue(value).ToString())));
 
-                data.Add(new AttributeDataGridModel(propertyInfo.Name, value.ToString()));
+                data.Add(new AttributeDataGridViewModel(propertyInfo.Name, value.ToString()));
             }
 
             var node = _uaClientApi.ReadNode(referenceDescription.NodeId.ToString());
-            node.GetType().GetProperties().ToList().ForEach(property => data.Add(new AttributeDataGridModel(property.Name, property.GetValue(node)?.ToString())));
+            node.GetType().GetProperties().ToList().ForEach(property => data.Add(new AttributeDataGridViewModel(property.Name, property.GetValue(node)?.ToString())));
 
             if (node.NodeClass != NodeClass.Variable) return data;
 
             var variableNode = (VariableNode) node.DataLock;
             variableNode.GetType().GetProperties().ToList().ForEach(property =>
-            data.Add(new AttributeDataGridModel(property.Name, property.GetValue(variableNode)?.ToString())));
+            data.Add(new AttributeDataGridViewModel(property.Name, property.GetValue(variableNode)?.ToString())));
 
             return data;
         }
@@ -261,32 +312,43 @@ namespace OpcUA.Client.Core
         /// </summary>
         /// <param name="referenceDescription"></param>
         /// <returns></returns>
-        private ObservableCollection<AttributeDataGridModel> GetDataGridModel2(ReferenceDescription referenceDescription)
+        private ObservableCollection<AttributeDataGridViewModel> GetDataGridModel2(ReferenceDescription referenceDescription)
         {
-            var data = new ObservableCollection<AttributeDataGridModel>();
+            var data = new ObservableCollection<AttributeDataGridViewModel>();
 
             var tmpNodeId = referenceDescription.NodeId;
 
-            data.Add(new AttributeDataGridModel("Node Id", tmpNodeId));
-            data.Add(new AttributeDataGridModel("Namespace Index", tmpNodeId.NamespaceIndex));
-            data.Add(new AttributeDataGridModel("Type", tmpNodeId.IdType));
-            data.Add(new AttributeDataGridModel("Node Id", tmpNodeId.Identifier));
-            data.Add(new AttributeDataGridModel("Node Class", referenceDescription.NodeClass.ToString()));
-            data.Add(new AttributeDataGridModel("Browse Name", referenceDescription.BrowseName));
-            data.Add(new AttributeDataGridModel("Display Name", referenceDescription.DisplayName));
+            data.Add(new AttributeDataGridViewModel("Node Id", tmpNodeId));
+            data.Add(new AttributeDataGridViewModel("Namespace Index", tmpNodeId.NamespaceIndex));
+            data.Add(new AttributeDataGridViewModel("Type", tmpNodeId.IdType));
+            data.Add(new AttributeDataGridViewModel("Node Id", tmpNodeId.Identifier));
+            data.Add(new AttributeDataGridViewModel("Node Class", referenceDescription.NodeClass));
+            data.Add(new AttributeDataGridViewModel("Browse Name", referenceDescription.BrowseName));
+            data.Add(new AttributeDataGridViewModel("Display Name", referenceDescription.DisplayName));
 
             var node = _uaClientApi.ReadNode(tmpNodeId.ToString());
 
-            data.Add(new AttributeDataGridModel("Description", node.Description));
-            data.Add(new AttributeDataGridModel("Write Mask", node.WriteMask));
-            data.Add(new AttributeDataGridModel("User Write Mask", node.UserWriteMask));
+            data.Add(new AttributeDataGridViewModel("Description", node.Description));
+            data.Add(new AttributeDataGridViewModel("Write Mask", node.WriteMask));
+            data.Add(new AttributeDataGridViewModel("User Write Mask", node.UserWriteMask));
 
             if (node.NodeClass != NodeClass.Variable) return data;
 
             var variableNode = (VariableNode)node.DataLock;
-            variableNode.GetType().GetProperties().ToList().ForEach(property =>
-                data.Add(new AttributeDataGridModel(property.Name, property.GetValue(variableNode)?.ToString())));
-
+            data.Add(new AttributeDataGridViewModel("Value Rank", variableNode.ValueRank));
+            data.Add(new AttributeDataGridViewModel("Data Type Node Id", variableNode.DataType));
+            data.Add(new AttributeDataGridViewModel("Namespace Index", variableNode.DataType.NamespaceIndex));
+            data.Add(new AttributeDataGridViewModel("Identifier", variableNode.DataType.Identifier));
+            data.Add(new AttributeDataGridViewModel("Id Type", variableNode.DataType.IdType));
+            data.Add(new AttributeDataGridViewModel("Array Dimensions", variableNode.ArrayDimensions));
+            data.Add(new AttributeDataGridViewModel("Access Level", variableNode.AccessLevel));
+            data.Add(new AttributeDataGridViewModel("User Access Level", variableNode.UserAccessLevel));
+            data.Add(new AttributeDataGridViewModel("Historozing", variableNode.Historizing));
+            data.Add(new AttributeDataGridViewModel("minimum Sampling", variableNode.MinimumSamplingInterval));
+            data.Add(new AttributeDataGridViewModel("Value", _uaClientApi.ReadValue(variableNode.NodeId) ));
+            data.Add(new AttributeDataGridViewModel("Data Type", TypeInfo.GetSystemType(variableNode.DataType, new EncodeableFactory())));
+            data.Add(new AttributeDataGridViewModel("Built In Type", TypeInfo.GetBuiltInType(variableNode.DataType)));
+            
             return data;
         }
         #endregion

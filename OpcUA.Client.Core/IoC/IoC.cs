@@ -47,6 +47,8 @@ namespace OpcUA.Client.Core
         {
             // Bind to a single instance of Application view model
             Kernel.Bind<ApplicationViewModel>().ToConstant(new ApplicationViewModel());
+
+            //Kernel.Bind<MessageListener>().ToConstant(new MessageListener());
         }
 
         private static void BindUaApi()

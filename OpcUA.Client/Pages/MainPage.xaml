@@ -45,17 +45,35 @@
                 <!-- Second Column-->
                 <TabControl Grid.Column="1">
                     <TabItem Header="Node Attributes">
-                        <DataGrid Grid.Column="1"
-                                  HorizontalAlignment="Left" 
-                                  Width="300px" 
-                                  AutoGenerateColumns="false"
-                                  ItemsSource="{Binding SelectedNode}">
+                        <StackPanel>
+                            <DataGrid Grid.Column="1"
+                                      HorizontalAlignment="Left" 
+                                      Width="300px" 
+                                      AutoGenerateColumns="false"
+                                      ItemsSource="{Binding SelectedNode}">
 
-                            <DataGrid.Columns>
-                                <DataGridTextColumn Width="*" Header="Attribute" Binding="{Binding Attribute}"/>
-                                <DataGridTextColumn Width="*" Header="Value" Binding="{Binding Value}"/>
-                            </DataGrid.Columns>
-                        </DataGrid>
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Width="*" Header="Attribute" Binding="{Binding Attribute}"/>
+                                    <DataGridTextColumn Width="*" Header="Value" Binding="{Binding Value}"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Button Grid.Column="0" 
+                                        Content="Read"
+                                        Command="{Binding ReadSingleValueCommand}"/>
+                                <Button Grid.Column="1" 
+                                        Content="Write"
+                                        Command="{Binding WriteSingleValueCommand}"/>
+                                <TextBox Grid.Column="2"
+                                         Text="{Binding ValueToSingleWrite}"/>
+                            </Grid>
+                            
+                        </StackPanel>
                     </TabItem>
                 </TabControl>
 

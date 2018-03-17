@@ -477,7 +477,7 @@ namespace OpcUA.Client.Core
             return dataTypeNode;
         }
 
-        public void WriteValue(Variable variable, object newValue)
+        public bool WriteValue(Variable variable, object newValue)
         {
             var wrapedValue = new Variant(Convert.ChangeType(newValue, variable.DataType));
             var data = new DataValue(wrapedValue);
@@ -493,10 +493,13 @@ namespace OpcUA.Client.Core
             {
                 _session.Write(null, new WriteValueCollection() { valueToWrite }, out var statusCodes, out var diagnosticInfo);
 
-                if (statusCodes.FirstOrDefault().Code == StatusCodes.Good)
+                if (statusCodes.FirstOrDefault().Code == StatusCodes.Good) { 
                     Utils.Trace(Utils.TraceMasks.Information, "Value successfully written to server!");
-                else
-                    Utils.Trace(Utils.TraceMasks.Error, "Value was not written to server!");
+                    return true;
+                }
+
+                Utils.Trace(Utils.TraceMasks.Error, "Value was not written to server!");
+                return false;
             }
             catch (Exception e)
             {
@@ -505,14 +508,19 @@ namespace OpcUA.Client.Core
             }
         }
 
+        public DataValue ReadValue(NodeId nodeId)
+        {
+            return _session.ReadValue(nodeId);
+        }
+
         #endregion
 
-        #region Private methods
+            #region Private methods
 
-        /// <summary>Creates a default application configuration.</summary>
-        /// <returns>The ApplicationConfiguration</returns>
-        /// <exception cref="Exception">Throws and forwards any exception with short error description.</exception>
-        private ApplicationConfiguration CreateClientConfiguration()
+            /// <summary>Creates a default application configuration.</summary>
+            /// <returns>The ApplicationConfiguration</returns>
+            /// <exception cref="Exception">Throws and forwards any exception with short error description.</exception>
+            private ApplicationConfiguration CreateClientConfiguration()
         {
             var configuration = new ApplicationConfiguration
             {
