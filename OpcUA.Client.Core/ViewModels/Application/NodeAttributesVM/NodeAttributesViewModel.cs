@@ -1,5 +1,4 @@
 ﻿using System.Collections.ObjectModel;
-using System.Linq;
 using System.Windows.Input;
 using Opc.Ua;
 using Opc.Ua.Client;
@@ -8,12 +7,17 @@ namespace OpcUA.Client.Core
 {
     public class NodeAttributesViewModel : BaseViewModel
     {
-        private readonly UaClientApi _uaClientApi;
+        #region Private Fields
 
+        private readonly UaClientApi _uaClientApi;
         private ReferenceDescription _refDiscOfSelectedNode;
 
+        #endregion
+
         #region Public Properties
+
         public ObservableCollection<AttributeDataGridViewModel> SelectedNode { get; set; } = new ObservableCollection<AttributeDataGridViewModel>();
+        public string ValueToSingleWrite { get; set; }
 
         #endregion
 
@@ -21,22 +25,35 @@ namespace OpcUA.Client.Core
 
         public ICommand WriteSingleValueCommand { get; set; }
         public ICommand ReadSingleValueCommand { get; set; }
-        public string ValueToSingleWrite { get; set; }
 
         #endregion
 
         #region Constructor
 
-        public NodeAttributesViewModel()
+        // TODO prerobit _selectedNode z refDisc na NodeId
+        // TODO Prerobit WriteValue v opcuaApi
+        // TODO vracat z write value ci sa podaril zapis
+        // TODO Stale tam zobrazovat atributy len menit hodnoty !!!
+        // TODO Urobit ViewModel zvlast pre vsetko
+        public NodeAttributesViewModel(UaClientApi uaClientApi)
         {
-            _uaClientApi = IoC.UaClientApi;
-            // TODO prerobit na parametrizovany command?
+            _uaClientApi = uaClientApi;
+
             WriteSingleValueCommand = new RelayCommand(WriteSingleValue);
             ReadSingleValueCommand = new RelayCommand(ReadSingleValue);
 
-            MessengerInstance.Register<SendSelectedRefNode>(this, node => { _refDiscOfSelectedNode = node.RefNode;});
-
+            MessengerInstance.Register<SendSelectedRefNode>(
+                this,
+                node =>
+                {
+                    _refDiscOfSelectedNode = node.RefNode;
+                    SelectedNode = GetDataGridModel(_refDiscOfSelectedNode);
+                });
         }
+
+        #endregion
+
+        #region Command Methods
 
         private void WriteSingleValue()
         {
@@ -71,7 +88,7 @@ namespace OpcUA.Client.Core
                 if (atribute.Attribute == "Value")
                     atribute.Value = data.Value;
             }
-        }
+        } 
 
         #endregion
 
@@ -83,37 +100,6 @@ namespace OpcUA.Client.Core
         /// <param name="referenceDescription"></param>
         /// <returns></returns>
         private ObservableCollection<AttributeDataGridViewModel> GetDataGridModel(ReferenceDescription referenceDescription)
-        {
-            var data = new ObservableCollection<AttributeDataGridViewModel>();
-
-            foreach (var propertyInfo in referenceDescription.GetType().GetProperties())
-            {
-                var value = propertyInfo.GetValue(referenceDescription);
-
-                if (value is NodeId)
-                    value.GetType().GetProperties().ToList().ForEach(property => data.Add(new AttributeDataGridViewModel(property.Name, property.GetValue(value).ToString())));
-
-                data.Add(new AttributeDataGridViewModel(propertyInfo.Name, value.ToString()));
-            }
-
-            var node = _uaClientApi.ReadNode(referenceDescription.NodeId.ToString());
-            node.GetType().GetProperties().ToList().ForEach(property => data.Add(new AttributeDataGridViewModel(property.Name, property.GetValue(node)?.ToString())));
-
-            if (node.NodeClass != NodeClass.Variable) return data;
-
-            var variableNode = (VariableNode)node.DataLock;
-            variableNode.GetType().GetProperties().ToList().ForEach(property =>
-            data.Add(new AttributeDataGridViewModel(property.Name, property.GetValue(variableNode)?.ToString())));
-
-            return data;
-        }
-
-        /// <summary>
-        /// Takes attributes and values of <see cref="ReferenceDescription"/> object
-        /// </summary>
-        /// <param name="referenceDescription"></param>
-        /// <returns></returns>
-        private ObservableCollection<AttributeDataGridViewModel> GetDataGridModel2(ReferenceDescription referenceDescription)
         {
             var data = new ObservableCollection<AttributeDataGridViewModel>();
 
@@ -152,6 +138,7 @@ namespace OpcUA.Client.Core
 
             return data;
         }
+
         #endregion
     }
 }

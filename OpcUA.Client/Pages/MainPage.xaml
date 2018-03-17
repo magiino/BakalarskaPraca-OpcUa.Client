@@ -10,9 +10,10 @@
 
     <Border Background="{StaticResource ForegroundLightBrush}">
         <DockPanel>
+
             <StackPanel DockPanel.Dock="Top">
-                <local:MenuBar/>
-                <local:MenuToolBar/>
+                <local:MenuBar DataContext="{Binding MenuBarViewModel}"/>
+                <local:MenuToolBar DataContext="{Binding MenuToolBarViewModel}"/>
             </StackPanel>
 
             <Grid>
@@ -45,136 +46,19 @@
                 <!-- Second Column-->
                 <TabControl Grid.Column="1">
                     <TabItem Header="Node Attributes">
-                        <StackPanel>
-                            <DataGrid Grid.Column="1"
-                                      HorizontalAlignment="Left" 
-                                      Width="300px" 
-                                      AutoGenerateColumns="false"
-                                      ItemsSource="{Binding SelectedNode}">
-
-                                <DataGrid.Columns>
-                                    <DataGridTextColumn Width="*" Header="Attribute" Binding="{Binding Attribute}"/>
-                                    <DataGridTextColumn Width="*" Header="Value" Binding="{Binding Value}"/>
-                                </DataGrid.Columns>
-                            </DataGrid>
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="*"/>
-                                </Grid.ColumnDefinitions>
-                                <Button Grid.Column="0" 
-                                        Content="Read"
-                                        Command="{Binding ReadSingleValueCommand}"/>
-                                <Button Grid.Column="1" 
-                                        Content="Write"
-                                        Command="{Binding WriteSingleValueCommand}"/>
-                                <TextBox Grid.Column="2"
-                                         Text="{Binding ValueToSingleWrite}"/>
-                            </Grid>
-                            
-                        </StackPanel>
+                        <local:AttributeInfo DataContext="{Binding NodeAttributesViewModel}"/>
                     </TabItem>
                 </TabControl>
 
                 <!-- Third Column-->
                 <TabControl Grid.Column="2">
-                    <TabItem Header="Subscribed Nodes">
-
-                        <Grid>
-                            <Grid.RowDefinitions >
-                                <RowDefinition Height="*"/>
-                                <RowDefinition Height="auto"/>
-                                <RowDefinition Height="auto"/>
-                            </Grid.RowDefinitions >
-
-                            <!-- ListView of subscribed variables -->
-                            <DataGrid ItemsSource="{Binding SubscribedVariables}"
-                                      Background="{StaticResource BackgroundLightBrush}"
-                                      SelectedItem="{Binding SelectedSubscribedVariable}"
-                                      SelectionMode="Single"
-                                      HeadersVisibility="None"
-                                      BorderThickness="0"
-                                      AutoGenerateColumns="false"
-                                      RowHeaderWidth="0"
-                                      CanUserResizeColumns="False"
-                                      CanUserReorderColumns="False"
-                                      IsReadOnly="True"
-                                      SelectedIndex="0"
-                                      IsManipulationEnabled="False"
-                                      CanUserAddRows="False">
-                                <DataGrid.Columns>
-                                    <DataGridTextColumn Width="*" Binding="{Binding Name}"/>
-                                    <DataGridTextColumn Width="*" Binding="{Binding Value}"/>
-                                    <DataGridTextColumn Width="*" Binding="{Binding DataType}"/>
-                                    <DataGridTextColumn Width="*" Binding="{Binding StatusCode}"/>
-                                    <DataGridTextColumn Width="*" Binding="{Binding DateTime}"/>
-
-                                </DataGrid.Columns>
-                            </DataGrid>
-
-                            <!-- Separator -->
-                            <Separator Grid.Row="1"
-                                       Margin="0 0 0 5"/>
-
-                            <!-- Subscription control -->
-                            <Grid Grid.Row="2">
-                                <Grid.ColumnDefinitions >
-                                    <ColumnDefinition Width="auto"/>
-                                    <ColumnDefinition Width="auto"/>
-                                    <ColumnDefinition Width="auto"/>
-                                    <ColumnDefinition Width="auto"/>
-                                </Grid.ColumnDefinitions>
-
-                                <!--<TextBlock Text="Subscription.." Grid.ColumnSpan="3"/>-->
-                                <StackPanel Grid.Column="0">
-                                    <Button Content="Create"
-                                            Padding="10 5"
-                                            Command="{Binding CreateSubscriptionCommand}"
-                                            IsEnabled="{Binding SubscriptionCreated, Converter={local:BooleanConverter}}"/>
-                                    <Button Content="Delete"
-                                            Padding="10 5"
-                                            Command="{Binding DeleteSubscriptionCommand}"
-                                            IsEnabled="{Binding SubscriptionCreated}"/>
-                                </StackPanel>
-
-                                <StackPanel Grid.Column="1" Margin="10 0 10 0">
-                                    <Button Content="Load"
-                                            Padding="10 5"
-                                            Command="{Binding LoadSubscriptionCommand}"/>
-                                    <Button Content="Save"
-                                            Padding="10 5"
-                                            Command="{Binding SaveSubscriptionCommand}"
-                                            IsEnabled="{Binding SubscriptionCreated}"/>
-                                </StackPanel>
-
-                                <StackPanel Grid.Column="2">
-                                    <Button Content="Add Node"
-                                            Padding="10 5"
-                                            Command="{Binding AddVariableToSubscriptionCommand}"
-                                            IsEnabled="{Binding AddIsEnabled}"/>
-                                    <Button Content="Delete Node"
-                                            Padding="10 5"
-                                            Command="{Binding DeleteVariableFromSubscriptionCommand}"
-                                            IsEnabled="{Binding DeleteIsEnabled}"/>
-                                </StackPanel>
-
-                                <StackPanel Grid.Column="3"
-                                            Margin="10 0 0 0">
-                                    <TextBox Text="{Binding ValueToWrite}"
-                                             Padding="10 5"/>
-                                    <Button Content="WriteValue"
-                                            Padding="10 5"
-                                            Command="{Binding WriteValueCommand}"
-                                            IsEnabled="{Binding DeleteIsEnabled}"/>
-                                </StackPanel>
-
-                            </Grid>
-                        </Grid>
+                    <TabItem Header="Subscribed Nodes"
+                             DataContext="{Binding SubscriptionViewModel}">
+                        <local:Subscription />
                     </TabItem>
                 </TabControl>
-
             </Grid>
+
         </DockPanel>
     </Border>
 </local:BasePage>

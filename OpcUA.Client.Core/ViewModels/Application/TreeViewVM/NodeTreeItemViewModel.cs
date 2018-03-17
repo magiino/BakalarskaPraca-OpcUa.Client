@@ -78,7 +78,7 @@ namespace OpcUA.Client.Core
                 _isSelected = value;
 
                 if (_isSelected)
-                    _setSelectedNode(Node);
+                    MessengerInstance.Send(new SendSelectedRefNode(Node));
             }
         }
 
@@ -100,13 +100,11 @@ namespace OpcUA.Client.Core
         /// </summary>
         /// <param name="node"></param>
         /// <param name="setSelectedNode"></param>
-        public NodeTreeItemViewModel(ReferenceDescription node, Action<ReferenceDescription> setSelectedNode)
+        public NodeTreeItemViewModel(ReferenceDescription node)
         {
             ExpandCommand = new RelayCommand(Expand);
 
             Node = node;
-
-            _setSelectedNode = setSelectedNode;
 
             // Setup the children as needed
             ClearChildren();
@@ -127,7 +125,7 @@ namespace OpcUA.Client.Core
             // Find all children
             var children = IoC.UaClientApi.BrowseNode(Node);
             Children = new ObservableCollection<NodeTreeItemViewModel>(
-                                children.Select(content => new NodeTreeItemViewModel(content, _setSelectedNode)).OrderBy(x => x.Name));
+                                children.Select(content => new NodeTreeItemViewModel(content)).OrderBy(x => x.Name));
         }
         #endregion
 

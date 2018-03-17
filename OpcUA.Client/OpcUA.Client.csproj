@@ -90,6 +90,12 @@
     <Compile Include="Controls\PageHost.xaml.cs">
       <DependentUpon>PageHost.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\TabItems\AttributeInfo.xaml.cs">
+      <DependentUpon>AttributeInfo.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\TabItems\Subscription.xaml.cs">
+      <DependentUpon>Subscription.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\TabItems\TreeView.xaml.cs">
       <DependentUpon>TreeView.xaml</DependentUpon>
     </Compile>
@@ -119,6 +125,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\PageHost.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\TabItems\AttributeInfo.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\TabItems\Subscription.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
