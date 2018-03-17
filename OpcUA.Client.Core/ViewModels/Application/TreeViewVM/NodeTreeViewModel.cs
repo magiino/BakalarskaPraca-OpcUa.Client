@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Linq;
-using Opc.Ua;
 
 namespace OpcUA.Client.Core
 {
@@ -21,7 +19,7 @@ namespace OpcUA.Client.Core
 
         #region Constructor
 
-        public NodeTreeViewModel(Action<ReferenceDescription> setSelectedNode)
+        public NodeTreeViewModel()
         {
             //TODO nepouzivat tu IOC?
             // Get the root nodes
@@ -29,7 +27,7 @@ namespace OpcUA.Client.Core
 
             //Create the view models from the root ndoes
             Items = new ObservableCollection<NodeTreeItemViewModel>(
-                children.Select(content => new NodeTreeItemViewModel(content, setSelectedNode)).OrderBy(x => x.Name));
+                children.Select(content => new NodeTreeItemViewModel(content)).OrderBy(x => x.Name));
         }
 
         #endregion

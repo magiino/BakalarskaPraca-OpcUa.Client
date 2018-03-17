@@ -7,11 +7,17 @@ namespace OpcUA.Client.Core
 {
     public class NodeAttributesViewModel : BaseViewModel
     {
+        #region Private Fields
+
         private readonly UaClientApi _uaClientApi;
         private ReferenceDescription _refDiscOfSelectedNode;
 
+        #endregion
+
         #region Public Properties
+
         public ObservableCollection<AttributeDataGridViewModel> SelectedNode { get; set; } = new ObservableCollection<AttributeDataGridViewModel>();
+        public string ValueToSingleWrite { get; set; }
 
         #endregion
 
@@ -19,12 +25,16 @@ namespace OpcUA.Client.Core
 
         public ICommand WriteSingleValueCommand { get; set; }
         public ICommand ReadSingleValueCommand { get; set; }
-        public string ValueToSingleWrite { get; set; }
 
         #endregion
 
         #region Constructor
 
+        // TODO prerobit _selectedNode z refDisc na NodeId
+        // TODO Prerobit WriteValue v opcuaApi
+        // TODO vracat z write value ci sa podaril zapis
+        // TODO Stale tam zobrazovat atributy len menit hodnoty !!!
+        // TODO Urobit ViewModel zvlast pre vsetko
         public NodeAttributesViewModel(UaClientApi uaClientApi)
         {
             _uaClientApi = uaClientApi;
@@ -40,6 +50,10 @@ namespace OpcUA.Client.Core
                     SelectedNode = GetDataGridModel(_refDiscOfSelectedNode);
                 });
         }
+
+        #endregion
+
+        #region Command Methods
 
         private void WriteSingleValue()
         {
@@ -74,7 +88,7 @@ namespace OpcUA.Client.Core
                 if (atribute.Attribute == "Value")
                     atribute.Value = data.Value;
             }
-        }
+        } 
 
         #endregion
 

@@ -81,12 +81,14 @@
     <Compile Include="OpcUa\UaClientApi.cs" />
     <Compile Include="DataModels\Variable.cs" />
     <Compile Include="ViewModels\Application\ApplicationViewModel.cs" />
+    <Compile Include="ViewModels\Application\NodeAttributesViewModel - Copy.cs" />
+    <Compile Include="ViewModels\Application\SubscriptionVM\SubscriptionViewModel.cs" />
     <Compile Include="ViewModels\Application\NodeAttributesVM\NodeAttributesViewModel.cs" />
     <Compile Include="ViewModels\Application\UaClientSettingsViewModel.cs" />
-    <Compile Include="ViewModels\Application\MainViewModel.cs" />
+    <Compile Include="ViewModels\Application\PagesVM\MainViewModel.cs" />
     <Compile Include="ViewModels\Application\ViewModelLocator.cs" />
-    <Compile Include="ViewModels\Application\DiscoverEndpointsViewModel.cs" />
-    <Compile Include="ViewModels\Application\WelcomeViewModel.cs" />
+    <Compile Include="ViewModels\Application\PagesVM\DiscoverEndpointsViewModel.cs" />
+    <Compile Include="ViewModels\Application\PagesVM\WelcomeViewModel.cs" />
     <Compile Include="ViewModels\Application\WindowViewModel.cs" />
     <Compile Include="ViewModels\Base\BaseViewModel.cs" />
     <Compile Include="ViewModels\Base\IHavePassword.cs" />

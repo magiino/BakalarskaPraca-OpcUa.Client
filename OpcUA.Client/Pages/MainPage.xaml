@@ -82,7 +82,8 @@
 
                 <!-- Third Column-->
                 <TabControl Grid.Column="2">
-                    <TabItem Header="Subscribed Nodes">
+                    <TabItem Header="Subscribed Nodes"
+                             DataContext="{Binding SubscriptionViewModel}">
 
                         <Grid>
                             <Grid.RowDefinitions >

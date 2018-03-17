@@ -368,8 +368,6 @@ namespace OpcUA.Client.Core
                 
                 subscription.Delete(true);
                 subscription.Dispose();
-                
-                subscription.ApplyChanges();
 
                 _session.RemoveSubscription(subscription);
             }
