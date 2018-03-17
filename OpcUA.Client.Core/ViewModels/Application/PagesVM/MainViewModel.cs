@@ -5,9 +5,6 @@ namespace OpcUA.Client.Core
     public class MainViewModel : BaseViewModel
     {
         #region Private Fields
-
-        private readonly UaClientApi _uaClientApi;
-
         #endregion
 
         #region Public Properties
@@ -16,45 +13,30 @@ namespace OpcUA.Client.Core
         public NodeAttributesViewModel NodeAttributesViewModel { get; set; }
         public SubscriptionViewModel SubscriptionViewModel { get; set; }
         public MenuBarViewModel MenuBarViewModel { get; set; }
+        public MenuToolBarViewModel MenuToolBarViewModel { get; set; }
 
         #endregion
 
         #region Commands
-
-            #region ToolBar Commands
-
-            public ICommand ConnectSessionCommand { get; set; }
-            public ICommand DisconnectSessionCommand { get; set; }
-
-            #endregion
-
         #endregion
 
         #region Constructor
 
         public MainViewModel()
         {
-            _uaClientApi = IoC.UaClientApi;
-
-        
-            ConnectSessionCommand = new RelayCommand(ConnectSession);
-            DisconnectSessionCommand = new RelayCommand(DisconnectSession);
+            var uaClientApi = IoC.UaClientApi;
 
             // Set up child view models
             NodetreeViewModel = new NodeTreeViewModel();
-            NodeAttributesViewModel = new NodeAttributesViewModel(_uaClientApi);
-            SubscriptionViewModel = new SubscriptionViewModel(_uaClientApi);
-            MenuBarViewModel = new MenuBarViewModel(_uaClientApi);
+            NodeAttributesViewModel = new NodeAttributesViewModel(uaClientApi);
+            SubscriptionViewModel = new SubscriptionViewModel(uaClientApi);
+            MenuBarViewModel = new MenuBarViewModel(uaClientApi);
+            MenuToolBarViewModel = new MenuToolBarViewModel(uaClientApi);
         }
 
         #endregion
 
         #region Command Methods
-
-      
-        private void ConnectSession() {}
-        private void DisconnectSession() {}
-
         #endregion
     }
 }

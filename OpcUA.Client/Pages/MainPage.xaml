@@ -11,8 +11,8 @@
     <Border Background="{StaticResource ForegroundLightBrush}">
         <DockPanel>
             <StackPanel DockPanel.Dock="Top">
-                <local:MenuBar/>
-                <local:MenuToolBar/>
+                <local:MenuBar DataContext="{Binding MenuBarViewModel}"/>
+                <local:MenuToolBar DataContext="{Binding MenuToolBarViewModel}"/>
             </StackPanel>
 
             <Grid>

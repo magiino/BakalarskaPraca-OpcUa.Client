@@ -1,7 +1,4 @@
-﻿using System.Collections.ObjectModel;
-using System.Windows.Input;
-using Opc.Ua;
-using Opc.Ua.Client;
+﻿using System.Windows.Input;
 
 namespace OpcUA.Client.Core
 {
@@ -27,7 +24,6 @@ namespace OpcUA.Client.Core
         #endregion
 
         #region Constructor
-
 
         public MenuBarViewModel(UaClientApi uaClientApi)
         {

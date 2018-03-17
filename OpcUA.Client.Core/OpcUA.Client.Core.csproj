@@ -81,7 +81,8 @@
     <Compile Include="OpcUa\UaClientApi.cs" />
     <Compile Include="DataModels\Variable.cs" />
     <Compile Include="ViewModels\Application\ApplicationViewModel.cs" />
-    <Compile Include="ViewModels\Application\NodeAttributesViewModel - Copy.cs" />
+    <Compile Include="ViewModels\Application\MenuBarViewModel - Copy.cs" />
+    <Compile Include="ViewModels\Application\MenuBarViewModel.cs" />
     <Compile Include="ViewModels\Application\SubscriptionVM\SubscriptionViewModel.cs" />
     <Compile Include="ViewModels\Application\NodeAttributesVM\NodeAttributesViewModel.cs" />
     <Compile Include="ViewModels\Application\UaClientSettingsViewModel.cs" />
