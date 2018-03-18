@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Windows.Input;
 using Opc.Ua;
-using Opc.Ua.Client;
 
 namespace OpcUA.Client.Core
 {
@@ -67,10 +66,8 @@ namespace OpcUA.Client.Core
             var nodeId = ExpandedNodeId.ToNodeId(ReferenceDescription.NodeId, null);
             var variable = new Variable()
             {
-                MonitoredItem = new MonitoredItem()
-                {
-                    StartNodeId = nodeId
-                }
+                NodeId = nodeId.ToString(),
+                Name = ReferenceDescription.DisplayName.ToString()
             };
 
             // TOTO robim aby som si zistil data type

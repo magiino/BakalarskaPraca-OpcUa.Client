@@ -56,6 +56,9 @@
                              DataContext="{Binding SubscriptionViewModel}">
                         <local:Subscription />
                     </TabItem>
+                    <TabItem Header="Archive">
+
+                    </TabItem>
                 </TabControl>
             </Grid>
 

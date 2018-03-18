@@ -338,13 +338,14 @@ namespace OpcUA.Client.Core
 
         /// <summary>Removs a monitored item from an existing subscription</summary>
         /// <param name="subscription">The subscription</param>
-        /// <param name="monitoredItem">The item</param>
+        /// <param name="monitoredItemNodeId"></param>
         /// <exception cref="Exception">Throws and forwards any exception with short error description.</exception>
-        public void RemoveMonitoredItem(Subscription subscription, MonitoredItem monitoredItem)
+        public void RemoveMonitoredItem(Subscription subscription, string monitoredItemNodeId)
         {
             try
             {
-                subscription.RemoveItem(monitoredItem);
+                var tmp = subscription.MonitoredItems.FirstOrDefault(x => x.StartNodeId.ToString() == monitoredItemNodeId);
+                subscription.RemoveItem(tmp);
                 subscription.ApplyChanges();
             }
             catch (Exception e)
@@ -480,7 +481,7 @@ namespace OpcUA.Client.Core
             var valueToWrite = new WriteValue()
             {
                 Value = data,
-                NodeId = variable.MonitoredItem.StartNodeId,
+                NodeId = new NodeId(variable.NodeId),
                 AttributeId = Attributes.Value,   
             };
 

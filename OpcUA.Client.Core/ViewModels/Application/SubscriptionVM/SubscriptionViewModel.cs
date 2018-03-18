@@ -95,18 +95,21 @@ namespace OpcUA.Client.Core
             // TODO private metoda opakovany kod
             var tmp = new Variable()
             {
-                MonitoredItem = _uaClientApi.AddMonitoredItem(_refDiscOfSelectedNode, _subscription),
+                NodeId = _refDiscOfSelectedNode.NodeId.ToString(),
+                Name = _refDiscOfSelectedNode.DisplayName.ToString()
                 // TODO set up type here
             };
 
-            tmp.MonitoredItem.Notification += Notification_MonitoredItem;
+            var monitoredItem = _uaClientApi.AddMonitoredItem(_refDiscOfSelectedNode, _subscription);
+            monitoredItem.Notification += Notification_MonitoredItem;
+
             SubscribedVariables.Add(tmp);
         }
 
         private void DeleteVariableFromSubscription()
         {
             if (SelectedSubscribedVariable == null) return;
-            _uaClientApi.RemoveMonitoredItem(_subscription, SelectedSubscribedVariable.MonitoredItem);
+            _uaClientApi.RemoveMonitoredItem(_subscription, SelectedSubscribedVariable.NodeId);
             SubscribedVariables.Remove(SelectedSubscribedVariable);
         }
 
@@ -129,11 +132,12 @@ namespace OpcUA.Client.Core
             {
                 var tmp = new Variable()
                 {
-                    MonitoredItem = item,
+                    NodeId = item.StartNodeId.ToString(),
+                    Name = item.DisplayName
                     // TODO set up type here
                 };
 
-                tmp.MonitoredItem.Notification += Notification_MonitoredItem;
+                item.Notification += Notification_MonitoredItem;
                 SubscribedVariables.Add(tmp);
             }
             _subscription.ApplyChanges();

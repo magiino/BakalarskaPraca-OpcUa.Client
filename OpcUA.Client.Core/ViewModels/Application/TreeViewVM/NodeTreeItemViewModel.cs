@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
 using Opc.Ua;
@@ -13,35 +12,15 @@ namespace OpcUA.Client.Core
     {
         #region Private Fields
 
-        /// <summary>
-        /// The Action for sending selected node to parent view model
-        /// </summary>
-        private readonly Action<ReferenceDescription> _setSelectedNode;
-
         private bool _isSelected;
 
         #endregion
 
         #region Public Properties
 
-        /// <summary>
-        /// A current node
-        /// </summary>
         public ReferenceDescription Node { get; set; }
-
-        /// <summary>
-        /// The type of this node
-        /// </summary>
         public NodeClass Type => Node.NodeClass;
-
-        /// <summary>
-        /// The name of this node
-        /// </summary>
         public string Name => Node.DisplayName.ToString();
-
-        /// <summary>
-        /// A list of all children contained inside this node
-        /// </summary>
         public ObservableCollection<NodeTreeItemViewModel> Children { get; set; }
 
         /// <summary>
