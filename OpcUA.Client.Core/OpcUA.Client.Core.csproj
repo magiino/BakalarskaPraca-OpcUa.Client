@@ -76,7 +76,12 @@
     <Compile Include="Migrations\201803181351109_InitialCreate.Designer.cs">
       <DependentUpon>201803181351109_InitialCreate.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201803181609366_ArchiveIntervalAdded.cs" />
+    <Compile Include="Migrations\201803181609366_ArchiveIntervalAdded.Designer.cs">
+      <DependentUpon>201803181609366_ArchiveIntervalAdded.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\ArchiveInfoTable.cs" />
     <Compile Include="Models\Entities\Base\BaseEntity.cs" />
     <Compile Include="Models\Entities\Base\IEntity.cs" />
     <Compile Include="Models\Entities\DataContext.cs" />
@@ -138,6 +143,12 @@
     <EmbeddedResource Include="Migrations\201803181351109_InitialCreate.resx">
       <DependentUpon>201803181351109_InitialCreate.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803181609366_ArchiveIntervalAdded.resx">
+      <DependentUpon>201803181609366_ArchiveIntervalAdded.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Fody.2.4.6\build\Fody.targets" Condition="Exists('..\packages\Fody.2.4.6\build\Fody.targets')" />

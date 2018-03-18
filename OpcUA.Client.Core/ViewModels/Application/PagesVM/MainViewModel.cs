@@ -12,6 +12,7 @@ namespace OpcUA.Client.Core
         public NodeTreeViewModel NodetreeViewModel { get; set; }
         public NodeAttributesViewModel NodeAttributesViewModel { get; set; }
         public SubscriptionViewModel SubscriptionViewModel { get; set; }
+        public ArchiveViewModel ArchiveViewModel { get; set; }
         public MenuBarViewModel MenuBarViewModel { get; set; }
         public MenuToolBarViewModel MenuToolBarViewModel { get; set; }
 
@@ -25,6 +26,7 @@ namespace OpcUA.Client.Core
         public MainViewModel()
         {
             var uaClientApi = IoC.UaClientApi;
+            var dataContext = IoC.DataContext;
 
             // Set up child view models
             NodetreeViewModel = new NodeTreeViewModel();
@@ -32,6 +34,7 @@ namespace OpcUA.Client.Core
             SubscriptionViewModel = new SubscriptionViewModel(uaClientApi);
             MenuBarViewModel = new MenuBarViewModel(uaClientApi);
             MenuToolBarViewModel = new MenuToolBarViewModel(uaClientApi);
+            ArchiveViewModel = new ArchiveViewModel(dataContext, uaClientApi);
         }
 
         #endregion

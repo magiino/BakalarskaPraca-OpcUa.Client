@@ -53,7 +53,7 @@ namespace OpcUA.Client.Core.Migrations
                 Id = 4,
                 VariableEntityID = 1,
                 Value = "576",
-                ArchiveTime = DateTime.Now + TimeSpan.FromMinutes(1)
+                ArchiveTime = DateTime.Now + TimeSpan.FromSeconds(30)
             };
             context.Records.AddOrUpdate(x => x.Id, record4);
 
@@ -62,7 +62,7 @@ namespace OpcUA.Client.Core.Migrations
                 Id = 5,
                 VariableEntityID = 2,
                 Value = "26",
-                ArchiveTime = DateTime.Now + TimeSpan.FromMinutes(1)
+                ArchiveTime = DateTime.Now + TimeSpan.FromSeconds(30)
             };
             context.Records.AddOrUpdate(x => x.Id, record5);
 
@@ -71,7 +71,7 @@ namespace OpcUA.Client.Core.Migrations
                 Id = 6,
                 VariableEntityID = 3,
                 Value = "1566",
-                ArchiveTime = DateTime.Now + TimeSpan.FromMinutes(1)
+                ArchiveTime = DateTime.Now + TimeSpan.FromSeconds(30)
             };
             context.Records.AddOrUpdate(x => x.Id, record6);
 
@@ -80,7 +80,7 @@ namespace OpcUA.Client.Core.Migrations
                 Id = 7,
                 VariableEntityID = 1,
                 Value = "586",
-                ArchiveTime = DateTime.Now + TimeSpan.FromMinutes(2)
+                ArchiveTime = DateTime.Now + TimeSpan.FromSeconds(60)
             };
             context.Records.AddOrUpdate(x => x.Id, record7);
 
@@ -89,7 +89,7 @@ namespace OpcUA.Client.Core.Migrations
                 Id = 8,
                 VariableEntityID = 2,
                 Value = "33",
-                ArchiveTime = DateTime.Now + TimeSpan.FromMinutes(2)
+                ArchiveTime = DateTime.Now + TimeSpan.FromSeconds(60)
             };
             context.Records.AddOrUpdate(x => x.Id, record8);
 
@@ -98,7 +98,7 @@ namespace OpcUA.Client.Core.Migrations
                 Id = 9,
                 VariableEntityID = 3,
                 Value = "1570",
-                ArchiveTime = DateTime.Now + TimeSpan.FromMinutes(2)
+                ArchiveTime = DateTime.Now + TimeSpan.FromSeconds(60)
             };
             context.Records.AddOrUpdate(x => x.Id, record9);
 

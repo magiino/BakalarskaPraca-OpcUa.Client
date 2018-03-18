@@ -9,9 +9,9 @@
              d:DesignHeight="450" d:DesignWidth="500">
     <Grid>
         <Grid.RowDefinitions >
+            <RowDefinition Height="3*"/>
+            <RowDefinition Height="auto"/>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
         </Grid.RowDefinitions >
 
         <!-- ListView of subscribed variables -->
@@ -31,11 +31,8 @@
                   CanUserAddRows="False">
             <DataGrid.Columns>
                 <DataGridTextColumn Width="*" Binding="{Binding Name}"/>
-                <DataGridTextColumn Width="*" Binding="{Binding Value}"/>
                 <DataGridTextColumn Width="*" Binding="{Binding DataType}"/>
-                <DataGridTextColumn Width="*" Binding="{Binding StatusCode}"/>
-                <DataGridTextColumn Width="*" Binding="{Binding DateTime}"/>
-
+                <DataGridTextColumn Width="*" Binding="{Binding Archive}"/>
             </DataGrid.Columns>
         </DataGrid>
 
@@ -48,32 +45,55 @@
             <Grid.ColumnDefinitions >
                 <ColumnDefinition Width="auto"/>
                 <ColumnDefinition Width="auto"/>
-                <ColumnDefinition Width="auto"/>
-                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
             <!--<TextBlock Text="Subscription.." Grid.ColumnSpan="3"/>-->
             <StackPanel Grid.Column="0">
-                <Button Content="Create"
+                <Button Content="Start archive"
                         Padding="10 5"
-                        Command="{Binding CreateSubscriptionCommand}"
+                        Command="{Binding StartArchiveCommand}"
                         IsEnabled="{Binding SubscriptionCreated, Converter={client:BooleanConverter}}"/>
-                <Button Content="Delete"
+                <Button Content="Stop archive"
                         Padding="10 5"
                         Command="{Binding DeleteSubscriptionCommand}"
                         IsEnabled="{Binding SubscriptionCreated}"/>
             </StackPanel>
 
+
             <StackPanel Grid.Column="1">
                 <Button Content="Add Node"
                         Padding="10 5"
-                        Command="{Binding AddVariableToSubscriptionCommand}"
+                        Command="{Binding AddVariableToArchiveCommand}"
                         IsEnabled="{Binding AddIsEnabled}"/>
                 <Button Content="Delete Node"
                         Padding="10 5"
-                        Command="{Binding DeleteVariableFromSubscriptionCommand}"
+                        Command="{Binding DeleteVariableFromArchiveCommand}"
                         IsEnabled="{Binding DeleteIsEnabled}"/>
             </StackPanel>
+            <!-- DataGrid of archive types -->
+            <DataGrid Grid.Column="2"
+                          ItemsSource="{Binding ArchiveInfo}"
+                          Background="{StaticResource BackgroundLightBrush}"
+                          Height="auto"
+                          SelectedItem="{Binding SelectedSubscribedVariable}"
+                          SelectionMode="Single"
+                          BorderThickness="0"
+                          AutoGenerateColumns="false"
+                          RowHeaderWidth="0"
+                          CanUserResizeColumns="False"
+                          CanUserReorderColumns="False"
+                          IsReadOnly="True"
+                          SelectedIndex="0"
+                          IsManipulationEnabled="False"
+                          CanUserAddRows="False">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Archive Interval" Width="*" Binding="{Binding Name}"/>
+                    <DataGridTextColumn Header="Num of Variables" Width="*" Binding="{Binding DataType}"/>
+                    <DataGridTextColumn Header="Status" Width="*" Binding="{Binding Archive}"/>
+                </DataGrid.Columns>
+            </DataGrid>
+
 
         </Grid>
     </Grid>

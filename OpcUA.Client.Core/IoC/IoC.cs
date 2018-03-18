@@ -27,7 +27,7 @@ namespace OpcUA.Client.Core
         /// <summary>
         /// A shortcut to access the <see cref="UaClientApi"/>
         /// </summary>
-        //public static ApplicationManager ApplicationManager => IoC.Get<ApplicationManager>();
+        public static DataContext DataContext => IoC.Get<DataContext>();
 
         #endregion
 
@@ -38,6 +38,7 @@ namespace OpcUA.Client.Core
             // Bind all required view models
             BindViewModels();
             BindUaApi();
+            BindDataContext();
         }
 
         /// <summary>
@@ -47,8 +48,6 @@ namespace OpcUA.Client.Core
         {
             // Bind to a single instance of Application view model
             Kernel.Bind<ApplicationViewModel>().ToConstant(new ApplicationViewModel());
-
-            //Kernel.Bind<MessageListener>().ToConstant(new MessageListener());
         }
 
         private static void BindUaApi()
@@ -56,6 +55,12 @@ namespace OpcUA.Client.Core
             // Bind to a single instance of UaClientHelperApi
             Kernel.Bind<UaClientApi>().ToConstant(new UaClientApi());
             //Kernel.Bind<ApplicationManager>().ToConstant(new ApplicationManager(new UaClientApi()));
+        }
+
+        private static void BindDataContext()
+        {
+            // Bind to a single instance of Data Context
+            Kernel.Bind<DataContext>().ToConstant(new DataContext());
         }
 
         #endregion
