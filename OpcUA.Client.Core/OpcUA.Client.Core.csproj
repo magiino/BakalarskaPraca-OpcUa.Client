@@ -72,6 +72,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Messages\SendDataType.cs" />
     <Compile Include="Migrations\201803181351109_InitialCreate.cs" />
     <Compile Include="Migrations\201803181351109_InitialCreate.Designer.cs">
       <DependentUpon>201803181351109_InitialCreate.cs</DependentUpon>

@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
 using Opc.Ua;
@@ -21,9 +22,11 @@ namespace OpcUA.Client.Core
         public ObservableCollection<Variable> SubscribedVariables { get; set; } = new ObservableCollection<Variable>();
         public Variable SelectedSubscribedVariable { get; set; }
         public string ValueToWrite { get; set; }
-        public bool DeleteIsEnabled => SelectedSubscribedVariable != null;
+        
+
         public bool SubscriptionCreated { get; set; }
-        //public bool AddIsEnabled => SelectedNode.Count != 0;
+        public bool AddIsEnabled => _refDiscOfSelectedNode != null;
+        public bool DeleteIsEnabled => SelectedSubscribedVariable != null;
 
         #endregion
 

@@ -478,6 +478,19 @@ namespace OpcUA.Client.Core
             return dataTypeNode;
         }
 
+        /// <summary>
+        /// Reads Node of <see cref="nodeId"/> dataType in server address space.
+        /// </summary>
+        /// <param name="nodeId"></param>
+        /// <returns></returns>
+        public BuiltInType GetBuiltInTypeOfVariableNodeId(string nodeId)
+        {
+            var node = _session.ReadNode(new NodeId(nodeId));
+            var dataTypeNodeId = (node.DataLock as VariableNode)?.DataType;
+            var dataTypeNode = _session.ReadNode(dataTypeNodeId);
+            return TypeInfo.GetBuiltInType(dataTypeNode.NodeId);
+        }
+
         public bool WriteValue(Variable variable, object newValue)
         {
             var wrapedValue = new Variant(Convert.ChangeType(newValue, variable.DataType));

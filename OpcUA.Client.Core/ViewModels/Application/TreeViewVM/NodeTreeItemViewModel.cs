@@ -92,11 +92,10 @@ namespace OpcUA.Client.Core
 
         #region Command Methods
         /// <summary>
-        ///  Expands this directory and finds all children
+        ///  Expands this item in address space and finds all children
         /// </summary>
         private void Expand()
         {
-            // We cannot expand a file
             if (Type == NodeClass.Unspecified)
                 return;
 

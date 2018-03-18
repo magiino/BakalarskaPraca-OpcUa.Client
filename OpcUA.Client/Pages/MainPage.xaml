@@ -6,7 +6,7 @@
       xmlns:local="clr-namespace:OpcUA.Client"
       xmlns:core="clr-namespace:OpcUA.Client.Core;assembly=OpcUA.Client.Core"
       mc:Ignorable="d"
-      d:DesignHeight="600" d:DesignWidth="900">
+      d:DesignHeight="600" d:DesignWidth="1000">
 
     <Border Background="{StaticResource ForegroundLightBrush}">
         <DockPanel>
@@ -57,7 +57,7 @@
                         <local:Subscription />
                     </TabItem>
                     <TabItem Header="Archive">
-
+                        <local:Archive DataContext="{Binding ArchiveViewModel}" />
                     </TabItem>
                 </TabControl>
             </Grid>

@@ -1,5 +1,4 @@
 ﻿using PropertyChanged;
-using System.ComponentModel;
 using GalaSoft.MvvmLight;
 
 namespace OpcUA.Client.Core
@@ -10,6 +9,7 @@ namespace OpcUA.Client.Core
     [AddINotifyPropertyChangedInterface]
     public class BaseViewModel : ViewModelBase
     {
+        // TODO Prejst na ineho messengera
     //    /// <summary>
     //    /// The event that is fired when any child property changes its value
     //    /// </summary>

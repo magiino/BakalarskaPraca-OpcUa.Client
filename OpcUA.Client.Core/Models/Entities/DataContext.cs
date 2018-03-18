@@ -16,5 +16,5 @@ namespace OpcUA.Client.Core
         public DataContext() : base("name=UaClientContext") { }
 
         #endregion
-}
+    }
 }

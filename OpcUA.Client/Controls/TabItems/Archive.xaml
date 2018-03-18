@@ -15,9 +15,9 @@
         </Grid.RowDefinitions >
 
         <!-- ListView of subscribed variables -->
-        <DataGrid ItemsSource="{Binding SubscribedVariables}"
+        <DataGrid ItemsSource="{Binding ArchiveVariables}"
                   Background="{StaticResource BackgroundLightBrush}"
-                  SelectedItem="{Binding SelectedSubscribedVariable}"
+                  SelectedItem="{Binding SelectedArchiveVariable}"
                   SelectionMode="Single"
                   HeadersVisibility="None"
                   BorderThickness="0"
@@ -48,16 +48,15 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <!--<TextBlock Text="Subscription.." Grid.ColumnSpan="3"/>-->
             <StackPanel Grid.Column="0">
                 <Button Content="Start archive"
                         Padding="10 5"
                         Command="{Binding StartArchiveCommand}"
-                        IsEnabled="{Binding SubscriptionCreated, Converter={client:BooleanConverter}}"/>
+                        IsEnabled="{Binding ArchiveInfoIsSelected}"/>
                 <Button Content="Stop archive"
                         Padding="10 5"
-                        Command="{Binding DeleteSubscriptionCommand}"
-                        IsEnabled="{Binding SubscriptionCreated}"/>
+                        Command="{Binding StopArchiveCommand}"
+                        IsEnabled="{Binding ArchiveInfoIsSelected}"/>
             </StackPanel>
 
 
@@ -65,18 +64,17 @@
                 <Button Content="Add Node"
                         Padding="10 5"
                         Command="{Binding AddVariableToArchiveCommand}"
-                        IsEnabled="{Binding AddIsEnabled}"/>
+                        IsEnabled="{Binding AddArchiveVariableIsEnabled}"/>
                 <Button Content="Delete Node"
                         Padding="10 5"
                         Command="{Binding DeleteVariableFromArchiveCommand}"
-                        IsEnabled="{Binding DeleteIsEnabled}"/>
+                        IsEnabled="{Binding DeleteArchiveVariableIsEnabled}"/>
             </StackPanel>
             <!-- DataGrid of archive types -->
             <DataGrid Grid.Column="2"
                           ItemsSource="{Binding ArchiveInfo}"
                           Background="{StaticResource BackgroundLightBrush}"
-                          Height="auto"
-                          SelectedItem="{Binding SelectedSubscribedVariable}"
+                          SelectedItem="{Binding SelectedArchiveInfo}"
                           SelectionMode="Single"
                           BorderThickness="0"
                           AutoGenerateColumns="false"
@@ -88,13 +86,11 @@
                           IsManipulationEnabled="False"
                           CanUserAddRows="False">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Archive Interval" Width="*" Binding="{Binding Name}"/>
-                    <DataGridTextColumn Header="Num of Variables" Width="*" Binding="{Binding DataType}"/>
-                    <DataGridTextColumn Header="Status" Width="*" Binding="{Binding Archive}"/>
+                    <DataGridTextColumn Header="Archive Interval" Width="*" Binding="{Binding ArchiveInterval}"/>
+                    <DataGridTextColumn Header="Num of Variables" Width="*" Binding="{Binding VariablesCount}"/>
+                    <DataGridTextColumn Header="Status" Width="*" Binding="{Binding Running}"/>
                 </DataGrid.Columns>
             </DataGrid>
-
-
         </Grid>
     </Grid>
 </UserControl>
