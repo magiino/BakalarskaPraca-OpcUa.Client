@@ -1,6 +1,6 @@
 ﻿namespace OpcUA.Client.Core
 {
-    public enum ESecurityPolicy
+    public enum SecurityPolicy
     {
         None = 0,
         Basic128Rsa15,

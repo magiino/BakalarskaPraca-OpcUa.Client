@@ -6,6 +6,7 @@ namespace OpcUA.Client.Core
     {
         public string Name { get; set; }
         public string DataType { get; set; }
+        public ArchiveInterval Archive { get; set; }
         public virtual ICollection<RecordEntity> Records { get; set; } = new List<RecordEntity>();
     }
 }

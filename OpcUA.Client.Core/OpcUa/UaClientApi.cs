@@ -318,9 +318,14 @@ namespace OpcUA.Client.Core
                 AttributeId = Attributes.Value,
                 MonitoringMode = MonitoringMode.Reporting,
                 // -1 minimum value, 1 maximum value
-                SamplingInterval = 1,
+                SamplingInterval = -1,
                 QueueSize = 1,
+                CacheQueueSize = 1,
                 DiscardOldest = true,
+                //Filter = new DataChangeFilter()
+                //{
+                //  Deadband    
+                //}
             };
             try
             {

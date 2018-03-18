@@ -72,7 +72,7 @@ namespace OpcUA.Client.Core
 
         private void CreateSubscription()
         {
-            _subscription = _uaClientApi.Subscribe(2000);
+            _subscription = _uaClientApi.Subscribe(4000);
             if (_subscription == null) return;
             SubscriptionCreated = true;
         }

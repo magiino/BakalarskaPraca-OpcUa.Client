@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:OpcUA.Client"
              xmlns:client="clr-namespace:OpcUA.Client"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="400">
+             d:DesignHeight="450" d:DesignWidth="500">
     <Grid>
         <Grid.RowDefinitions >
             <RowDefinition Height="*"/>

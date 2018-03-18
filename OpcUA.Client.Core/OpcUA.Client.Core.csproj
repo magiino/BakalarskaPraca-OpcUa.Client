@@ -87,10 +87,11 @@
     <Compile Include="Models\ApplicationPage.cs" />
     <Compile Include="Models\AttributeDataGridViewModel.cs" />
     <Compile Include="Models\EndpointGridViewModel.cs" />
-    <Compile Include="OpcUa\Enums\EMessageEncoding.cs" />
-    <Compile Include="OpcUa\Enums\EndpointUtils.cs" />
-    <Compile Include="OpcUa\Enums\EProtocol.cs" />
-    <Compile Include="OpcUa\Enums\ESecurityPolicy.cs" />
+    <Compile Include="OpcUa\Enums\ArchiveInterval.cs" />
+    <Compile Include="OpcUa\Enums\MessageEncoding.cs" />
+    <Compile Include="OpcUa\EndpointUtils.cs" />
+    <Compile Include="OpcUa\Enums\Protocol.cs" />
+    <Compile Include="OpcUa\Enums\SecurityPolicy.cs" />
     <Compile Include="IoC\IoC.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Security\SecurityStringHelpers.cs" />
@@ -98,7 +99,7 @@
     <Compile Include="OpcUa\UaClientApi.cs" />
     <Compile Include="Models\Variable.cs" />
     <Compile Include="ViewModels\Application\ApplicationViewModel.cs" />
-    <Compile Include="ViewModels\Application\MenuBarViewModel - Copy.cs" />
+    <Compile Include="ViewModels\Application\MenuToolBarViewModel.cs" />
     <Compile Include="ViewModels\Application\MenuBarViewModel.cs" />
     <Compile Include="ViewModels\Application\SubscriptionVM\ArchiveViewModel.cs" />
     <Compile Include="ViewModels\Application\SubscriptionVM\SubscriptionViewModel.cs" />

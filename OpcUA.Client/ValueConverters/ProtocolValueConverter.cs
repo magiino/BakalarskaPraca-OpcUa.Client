@@ -12,12 +12,12 @@ namespace OpcUA.Client
     {
         public override object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            switch ((EProtocol)value)
+            switch ((Protocol)value)
             {
-                case EProtocol.UaTcp:
+                case Protocol.UaTcp:
                     return "UA Tcp";
 
-                case EProtocol.UaHttps:
+                case Protocol.UaHttps:
                     return "UA Https";
 
                 default:
@@ -31,10 +31,10 @@ namespace OpcUA.Client
             switch (value)
             {
                 case "UA Tcp":
-                    return EProtocol.UaTcp;
+                    return Protocol.UaTcp;
 
                 case "UA Https":
-                    return EProtocol.UaHttps;
+                    return Protocol.UaHttps;
 
                 default:
                     Debugger.Break();
@@ -45,15 +45,15 @@ namespace OpcUA.Client
 
         public override object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return EProtocol.UaTcp;
+            return Protocol.UaTcp;
             /*
             switch ((value as ComboBoxItem)?.Name)
             {
                 case "UA Tcp":
-                    return EProtocol.UaTcp;
+                    return Protocol.UaTcp;
 
                 case "UA Https":
-                    return EProtocol.UaHttps;
+                    return Protocol.UaHttps;
 
                 default:
                     Debugger.Break();
