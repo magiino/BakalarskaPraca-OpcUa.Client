@@ -7,7 +7,6 @@ namespace OpcUA.Client.Core
         #region Public Members
 
         public DbSet<RecordEntity> Records { get; set; }
-        public DbSet<RecordTimeEntity> RecordTimes { get; set; }
         public DbSet<VariableEntity> Variables { get; set; }
 
         #endregion

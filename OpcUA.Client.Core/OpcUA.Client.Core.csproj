@@ -72,16 +72,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Migrations\201803181204245_InitialCreate.cs" />
-    <Compile Include="Migrations\201803181204245_InitialCreate.Designer.cs">
-      <DependentUpon>201803181204245_InitialCreate.cs</DependentUpon>
+    <Compile Include="Migrations\201803181351109_InitialCreate.cs" />
+    <Compile Include="Migrations\201803181351109_InitialCreate.Designer.cs">
+      <DependentUpon>201803181351109_InitialCreate.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Entities\Base\BaseEntity.cs" />
     <Compile Include="Models\Entities\Base\IEntity.cs" />
     <Compile Include="Models\Entities\DataContext.cs" />
     <Compile Include="Models\Entities\RecordEntity.cs" />
-    <Compile Include="Models\Entities\RecordTimeEntity.cs" />
     <Compile Include="Models\Entities\VariableEntity.cs" />
     <Compile Include="Messages\SendSelectedRefNode.cs" />
     <Compile Include="OpcUa\CertificateUtils.cs" />
@@ -135,8 +134,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201803181204245_InitialCreate.resx">
-      <DependentUpon>201803181204245_InitialCreate.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201803181351109_InitialCreate.resx">
+      <DependentUpon>201803181351109_InitialCreate.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

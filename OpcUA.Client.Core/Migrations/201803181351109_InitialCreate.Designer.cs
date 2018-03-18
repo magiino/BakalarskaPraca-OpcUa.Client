@@ -13,7 +13,7 @@ namespace OpcUA.Client.Core.Migrations
         
         string IMigrationMetadata.Id
         {
-            get { return "201803181204245_InitialCreate"; }
+            get { return "201803181351109_InitialCreate"; }
         }
         
         string IMigrationMetadata.Source

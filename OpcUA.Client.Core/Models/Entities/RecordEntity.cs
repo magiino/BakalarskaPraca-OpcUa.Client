@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System;
 
 namespace OpcUA.Client.Core
 {
@@ -7,6 +7,6 @@ namespace OpcUA.Client.Core
         public int VariableEntityID { get; set; }
         public VariableEntity Variable { get; set; }
         public string Value { get; set; }
-        public virtual ICollection<RecordTimeEntity> Records { get; set; } = new List<RecordTimeEntity>();
+        public DateTime ArchiveTime { get; set; }
     }
 }
