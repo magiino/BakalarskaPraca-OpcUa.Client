@@ -3,10 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Net.Sockets;
 using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Xml;
 using Opc.Ua;
 using Opc.Ua.Client;
 
@@ -513,12 +510,12 @@ namespace OpcUA.Client.Core
 
         #endregion
 
-            #region Private methods
+        #region Private methods
 
-            /// <summary>Creates a default application configuration.</summary>
-            /// <returns>The ApplicationConfiguration</returns>
-            /// <exception cref="Exception">Throws and forwards any exception with short error description.</exception>
-            private ApplicationConfiguration CreateClientConfiguration()
+        /// <summary>Creates a default application configuration.</summary>
+        /// <returns>The ApplicationConfiguration</returns>
+        /// <exception cref="Exception">Throws and forwards any exception with short error description.</exception>
+        private ApplicationConfiguration CreateClientConfiguration()
         {
             var configuration = new ApplicationConfiguration
             {
@@ -549,6 +546,7 @@ namespace OpcUA.Client.Core
                 },
 
             };
+
             configuration.ClientConfiguration.Validate();
 
             // Add trace config before calling validate
@@ -607,15 +605,6 @@ namespace OpcUA.Client.Core
 
             return configuration;
         }
-
-        private void ConvertToSpecificType(object value, string type)
-        {
-            //switch (type)
-            //{
-            //      case  
-            //}
-        }
-
         #endregion
 
         #region Event Handling

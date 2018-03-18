@@ -1809,13 +1809,13 @@ namespace Opc.Ua.Client
             
             ClientBase.ValidateResponse(values, itemsToRead);
             ClientBase.ValidateDiagnosticInfos(diagnosticInfos, itemsToRead);
-            
+            /*
             if (StatusCode.IsBad(values[0].StatusCode))
             {
                 ServiceResult result = ClientBase.GetResult(values[0].StatusCode, 0, diagnosticInfos, responseHeader);
                 throw new ServiceResultException(result);
             }
-
+            */
             return values[0];
         }
 
