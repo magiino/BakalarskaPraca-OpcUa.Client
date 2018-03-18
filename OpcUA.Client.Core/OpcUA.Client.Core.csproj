@@ -65,6 +65,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataModels\Entities\Base\BaseEntity.cs" />
+    <Compile Include="DataModels\Entities\Base\IEntity.cs" />
+    <Compile Include="DataModels\Entities\DataContext.cs" />
+    <Compile Include="DataModels\Entities\RecordEntity.cs" />
+    <Compile Include="DataModels\Entities\RecordTimeEntity.cs" />
+    <Compile Include="DataModels\Entities\VariableEntity.cs" />
     <Compile Include="Messages\SendSelectedRefNode.cs" />
     <Compile Include="OpcUa\CertificateUtils.cs" />
     <Compile Include="DataModels\ApplicationPage.cs" />
