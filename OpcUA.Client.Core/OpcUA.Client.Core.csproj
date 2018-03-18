@@ -72,6 +72,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Migrations\201803181204245_InitialCreate.cs" />
+    <Compile Include="Migrations\201803181204245_InitialCreate.Designer.cs">
+      <DependentUpon>201803181204245_InitialCreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Entities\Base\BaseEntity.cs" />
     <Compile Include="Models\Entities\Base\IEntity.cs" />
     <Compile Include="Models\Entities\DataContext.cs" />
@@ -129,7 +134,11 @@
       <Name>UA Core Library</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201803181204245_InitialCreate.resx">
+      <DependentUpon>201803181204245_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Fody.2.4.6\build\Fody.targets" Condition="Exists('..\packages\Fody.2.4.6\build\Fody.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

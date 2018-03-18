@@ -1,13 +1,10 @@
 ﻿using System;
 using Opc.Ua;
-using Opc.Ua.Client;
 
 namespace OpcUA.Client.Core
 {
     public class Variable : BaseViewModel
     {
-        //public MonitoredItem MonitoredItem { get; set; }
-
         public string NodeId { get; set; }
 
         public string Name { get; set; }

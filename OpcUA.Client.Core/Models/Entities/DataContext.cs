@@ -1,11 +1,11 @@
 ﻿using System.Data.Entity;
-using System.Data.Entity.Core.EntityClient;
 
 namespace OpcUA.Client.Core
 {
     public class DataContext : DbContext
     {
-        #region Public Members (Tables)
+        #region Public Members
+
         public DbSet<RecordEntity> Records { get; set; }
         public DbSet<RecordTimeEntity> RecordTimes { get; set; }
         public DbSet<VariableEntity> Variables { get; set; }
@@ -14,7 +14,7 @@ namespace OpcUA.Client.Core
 
         #region Constructor
 
-        public DataContext() : base("UaClientDatabase") { }
+        public DataContext() : base("name=UaClientContext") { }
 
         #endregion
 }
