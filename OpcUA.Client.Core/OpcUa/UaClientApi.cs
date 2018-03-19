@@ -7,6 +7,7 @@ using System.Security.Cryptography.X509Certificates;
 using Ninject.Infrastructure.Language;
 using Opc.Ua;
 using Opc.Ua.Client;
+using OpcUA.Client.Core.Models;
 
 namespace OpcUA.Client.Core
 {
@@ -529,12 +530,27 @@ namespace OpcUA.Client.Core
             return _session.ReadValue(nodeId);
         }
 
-        public DataValue ReadValues(List<NodeId> nodeId)
+        public void ReadValues(ref List<ArchiveReadVariable> variables)
         {
-            return _session.ReadValue(nodeId);
+            try
+            {
+                var dataTypes = variables.Select(x => TypeInfo.GetSystemType(x.Type, -1)).ToList();
+                var nodeIds = variables.Select(x => x.RegisteredNodeId).ToList();
+                _session.ReadValues(nodeIds, dataTypes, out var values, out var results);
+
+                for (var i = 0; i < values.Count; ++i)
+                {
+                    variables[i].Value = values[i];
+                    variables[i].Result = results[i];
+                }
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
         }
 
-        public List<string> RegisterNodes(List<string> nodesToRegister)
+        public List<NodeId> RegisterNodes(List<string> nodesToRegister)
         {
 
             var nodeIdsToRegister = new NodeIdCollection(nodesToRegister.Select(x => new NodeId(x)).ToEnumerable());
@@ -542,7 +558,8 @@ namespace OpcUA.Client.Core
             try
             {
                 _session.RegisterNodes(null, nodeIdsToRegister, out var registeredNodeIds);
-                return registeredNodeIds.Select(x => x.ToString()).ToList();
+                return registeredNodeIds;
+                // return registeredNodeIds.Select(x => x.ToString()).ToList();
             }
             catch (Exception e)
             {

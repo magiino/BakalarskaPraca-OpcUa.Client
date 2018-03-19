@@ -129,7 +129,7 @@
                                   Background="{StaticResource BackgroundLightBrush}"
                                   IsReadOnly="True"
                                   ItemsSource="{Binding FilteredEndpoints}"
-                                  SelectedItem="{Binding SelectedEndpointGridViewModel, Mode=TwoWay}"
+                                  SelectedItem="{Binding SelectedEndpointDataGrid, Mode=TwoWay}"
                                   SelectedIndex="0"
                                   SelectionMode="Single"
                                   IsManipulationEnabled="False"

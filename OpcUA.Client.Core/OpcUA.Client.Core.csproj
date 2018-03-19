@@ -73,13 +73,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Messages\SendDataType.cs" />
-    <Compile Include="Migrations\201803181351109_InitialCreate.cs" />
-    <Compile Include="Migrations\201803181351109_InitialCreate.Designer.cs">
-      <DependentUpon>201803181351109_InitialCreate.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201803181609366_ArchiveIntervalAdded.cs" />
-    <Compile Include="Migrations\201803181609366_ArchiveIntervalAdded.Designer.cs">
-      <DependentUpon>201803181609366_ArchiveIntervalAdded.cs</DependentUpon>
+    <Compile Include="Migrations\201803192156523_InitialCreate.cs" />
+    <Compile Include="Migrations\201803192156523_InitialCreate.Designer.cs">
+      <DependentUpon>201803192156523_InitialCreate.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\ArchiveInfoTable.cs" />
@@ -89,6 +85,7 @@
     <Compile Include="Models\Entities\RecordEntity.cs" />
     <Compile Include="Models\Entities\VariableEntity.cs" />
     <Compile Include="Messages\SendSelectedRefNode.cs" />
+    <Compile Include="Models\ArchiveReadVariable.cs" />
     <Compile Include="OpcUa\Utils\CertificateUtils.cs" />
     <Compile Include="Models\ApplicationPage.cs" />
     <Compile Include="Models\AttributeDataGrid.cs" />
@@ -142,17 +139,13 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201803181351109_InitialCreate.resx">
-      <DependentUpon>201803181351109_InitialCreate.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201803181609366_ArchiveIntervalAdded.resx">
-      <DependentUpon>201803181609366_ArchiveIntervalAdded.cs</DependentUpon>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201803192156523_InitialCreate.resx">
+      <DependentUpon>201803192156523_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Fody.2.4.6\build\Fody.targets" Condition="Exists('..\packages\Fody.2.4.6\build\Fody.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

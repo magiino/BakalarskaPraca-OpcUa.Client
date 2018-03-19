@@ -26,7 +26,8 @@ namespace OpcUA.Client.Core.Migrations
                     {
                         Id = c.Int(nullable: false, identity: true),
                         Name = c.String(),
-                        DataType = c.String(),
+                        DataType = c.Int(nullable: false),
+                        Archive = c.Int(nullable: false),
                     })
                 .PrimaryKey(t => t.Id);
             

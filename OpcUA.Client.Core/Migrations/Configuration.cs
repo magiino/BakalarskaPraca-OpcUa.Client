@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using Opc.Ua;
 
 namespace OpcUA.Client.Core.Migrations
 {
@@ -107,7 +108,7 @@ namespace OpcUA.Client.Core.Migrations
                 Id = 1,
                 Name = "ns=2;s=Demo.Dynamic.Scalar.Int16",
                 Archive = ArchiveInterval.ThirtySecond,
-                DataType = "Int16",
+                DataType = BuiltInType.Int16,
             };
             context.Variables.AddOrUpdate(x => x.Id, var1);
 
@@ -116,7 +117,7 @@ namespace OpcUA.Client.Core.Migrations
                 Id = 2,
                 Name = "ns=2;s=Demo.Dynamic.Scalar.SByte",
                 Archive = ArchiveInterval.ThirtySecond,
-                DataType = "SByte",
+                DataType = BuiltInType.SByte,
             };
             context.Variables.AddOrUpdate(x => x.Id, var2);
 
@@ -125,7 +126,7 @@ namespace OpcUA.Client.Core.Migrations
                 Id = 3,
                 Name = "ns=2;s=Demo.Dynamic.Scalar.UInt64",
                 Archive = ArchiveInterval.ThirtySecond,
-                DataType = "UInt64",
+                DataType = BuiltInType.UInt64,
             };
             context.Variables.AddOrUpdate(x => x.Id, var3);
         }
