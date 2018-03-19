@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Security.Cryptography.X509Certificates;
+using Ninject.Infrastructure.Language;
 using Opc.Ua;
 using Opc.Ua.Client;
 
@@ -322,6 +323,7 @@ namespace OpcUA.Client.Core
                 QueueSize = 1,
                 CacheQueueSize = 1,
                 DiscardOldest = true,
+                // TODO deadband
                 //Filter = new DataChangeFilter()
                 //{
                 //  Deadband    
@@ -525,6 +527,48 @@ namespace OpcUA.Client.Core
         public DataValue ReadValue(NodeId nodeId)
         {
             return _session.ReadValue(nodeId);
+        }
+
+        public DataValue ReadValues(List<NodeId> nodeId)
+        {
+            return _session.ReadValue(nodeId);
+        }
+
+        public List<string> RegisterNodes(List<string> nodesToRegister)
+        {
+
+            var nodeIdsToRegister = new NodeIdCollection(nodesToRegister.Select(x => new NodeId(x)).ToEnumerable());
+
+            try
+            {
+                _session.RegisterNodes(null, nodeIdsToRegister, out var registeredNodeIds);
+                return registeredNodeIds.Select(x => x.ToString()).ToList();
+            }
+            catch (Exception e)
+            {
+
+                throw e;
+            }
+        }
+
+        public string RegisterNode(string nodeToRegister)
+        {
+
+            var nodeIdToRegister = new NodeIdCollection()
+            {
+                new NodeId(nodeToRegister)
+            };
+
+            try
+            {
+                _session.RegisterNodes(null, nodeIdToRegister, out var registeredNode);
+                return registeredNode?.FirstOrDefault()?.ToString();
+            }
+            catch (Exception e)
+            {
+
+                throw e;
+            }
         }
 
         #endregion

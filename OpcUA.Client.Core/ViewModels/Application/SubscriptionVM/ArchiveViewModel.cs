@@ -48,6 +48,7 @@ namespace OpcUA.Client.Core
 
             LoadDataFromDataBase();
             InitializeTables();
+            RegisterLoadedNodes();
 
             AddVariableToArchiveCommand = new RelayCommand(AddVariableToArchive);
             DeleteVariableFromArchiveCommand = new RelayCommand(DeleteVariableFromArchive);
@@ -61,6 +62,12 @@ namespace OpcUA.Client.Core
                     _refDiscOfSelectedNode = node.RefNode;
                     AddArchiveVariableIsEnabled = _refDiscOfSelectedNode.NodeClass == NodeClass.Variable;
                 });
+        }
+
+        private void RegisterLoadedNodes()
+        {
+            var nodeIds = ArchiveVariables.Select(x => x.Name).ToList();
+            _uaClientApi.RegisterNodes(nodeIds);
         }
 
         #endregion
@@ -116,6 +123,7 @@ namespace OpcUA.Client.Core
             // TODO registrovat vsetky nody
             // TODO nacitat hodnoty
             // TODO archivovat
+            // TODO ako sa disposuje session
         }
 
         private bool IsTimerAlive(ArchiveInterval interval)
