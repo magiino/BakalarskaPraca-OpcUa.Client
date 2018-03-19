@@ -36,9 +36,9 @@ namespace OpcUA.Client.Core
             }
         }
 
-        public ObservableCollection<EndpointGridViewModel> FilteredEndpoints { get; set; }
+        public ObservableCollection<EndpointDataGrid> FilteredEndpoints { get; set; }
 
-        public EndpointGridViewModel SelectedEndpointGridViewModel
+        public EndpointDataGrid SelectedEndpointDataGrid
         {
             set
             {
@@ -168,7 +168,7 @@ namespace OpcUA.Client.Core
             var filterSecurityPolciies = EndpointUtils.SelectBySecurityPolicies(filterSecurityMode, GetSelectedPolicies());
             var filterServer = EndpointUtils.SelectByApplicationName(filterSecurityPolciies, SelectedServer?.ApplicationName.ToString());
 
-            FilteredEndpoints = new ObservableCollection<EndpointGridViewModel>(filterServer.Select(x => new EndpointGridViewModel(x)));
+            FilteredEndpoints = new ObservableCollection<EndpointDataGrid>(filterServer.Select(x => new EndpointDataGrid(x)));
         }
 
         private List<MessageSecurityMode> GetSelectedModes()

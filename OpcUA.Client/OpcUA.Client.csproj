@@ -105,7 +105,7 @@
     <Compile Include="Controls\TabItems\TreeView.xaml.cs">
       <DependentUpon>TreeView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\BasePage.cs" />
+    <Compile Include="Pages\Base\BasePage.cs" />
     <Compile Include="Pages\DiscoverEndpoints.xaml.cs">
       <DependentUpon>DiscoverEndpoints.xaml</DependentUpon>
     </Compile>
