@@ -40,7 +40,7 @@
         <Separator Grid.Row="1"
                    Margin="0 0 0 5"/>
 
-        <!-- Subscription control -->
+        <!-- Archive control -->
         <Grid Grid.Row="2">
             <Grid.ColumnDefinitions >
                 <ColumnDefinition Width="auto"/>
@@ -58,7 +58,6 @@
                         Command="{Binding StopArchiveCommand}"
                         IsEnabled="{Binding ArchiveInfoIsSelected}"/>
             </StackPanel>
-
 
             <StackPanel Grid.Column="1">
                 <Button Content="Add Node"

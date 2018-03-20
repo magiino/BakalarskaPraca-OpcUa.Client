@@ -26,12 +26,12 @@ namespace OpcUA.Client.Core
         public static UaClientApi UaClientApi => IoC.Get<UaClientApi>();
 
         /// <summary>
-        /// A shortcut to access the <see cref="UaClientApi"/>
+        /// A shortcut to access the <see cref="DataContext"/>
         /// </summary>
         public static DataContext DataContext => IoC.Get<DataContext>();
 
         /// <summary>
-        /// A shortcut to access the <see cref="UaClientApi"/>
+        /// A shortcut to access the <see cref="Messenger"/>
         /// </summary>
         public static Messenger Messenger => IoC.Get<Messenger>();
 
@@ -72,6 +72,13 @@ namespace OpcUA.Client.Core
         {
             // Bind to a single instance of Data Context
             Kernel.Bind<DataContext>().ToConstant(new DataContext());
+        }
+
+        public static void DisposeAll()
+        {
+            UaClientApi.Disconnect();
+            DataContext.Dispose();
+            Messenger.Cleanup();
         }
 
         #endregion

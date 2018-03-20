@@ -20,7 +20,7 @@ namespace OpcUA.Client
 
         protected override void OnClosing(CancelEventArgs e)
         {
-            IoC.UaClientApi.Disconnect();
+            IoC.DisposeAll();
         }
  
     }

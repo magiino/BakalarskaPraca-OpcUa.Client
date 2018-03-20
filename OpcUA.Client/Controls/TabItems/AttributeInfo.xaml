@@ -8,9 +8,20 @@
              d:DesignHeight="500" d:DesignWidth="400">
     <StackPanel>
         <DataGrid HorizontalAlignment="Left" 
-                    Width="300px" 
-                    AutoGenerateColumns="false"
-                    ItemsSource="{Binding SelectedNode}">
+                  Width="300px" 
+                  AutoGenerateColumns="false"
+                  ItemsSource="{Binding SelectedNode}"
+                  RowHeaderWidth="0"
+                  CanUserResizeColumns="False"
+                  CanUserReorderColumns="False"
+                  CanUserSortColumns="False"
+                  CanUserDeleteRows="False"
+                  Background="{StaticResource BackgroundLightBrush}"
+                  IsReadOnly="True"
+                  SelectedIndex="0"
+                  SelectionMode="Single"
+                  IsManipulationEnabled="False"
+                  CanUserAddRows="False">
 
             <DataGrid.Columns>
                 <DataGridTextColumn Width="*" Header="Attribute" Binding="{Binding Attribute}"/>

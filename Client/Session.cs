@@ -2761,6 +2761,9 @@ namespace Opc.Ua.Client
                 m_keepAliveTimer = null;
             }
 
+            // Disposes all subscriptions
+            Dispose(true);
+
             // check if currectly connected.
             bool connected = Connected;            
             

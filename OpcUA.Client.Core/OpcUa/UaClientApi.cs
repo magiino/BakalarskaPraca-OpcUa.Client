@@ -239,8 +239,7 @@ namespace OpcUA.Client.Core
             if (_session == null) return;
             try
             {
-                // TODO unsubscribe subscription and unregister nodes
-                RemoveAllSubscriptions();
+                //RemoveAllSubscriptions();
                 UnRegisterNodes();
                 _session.Close(10000);
                 _session.Dispose();
@@ -606,7 +605,6 @@ namespace OpcUA.Client.Core
 
         public bool UnRegisterNode(NodeId nodeIdForUnregister)
         {
-
             try
             {
                 var response = _session.UnregisterNodes(null, new NodeIdCollection(){ nodeIdForUnregister});

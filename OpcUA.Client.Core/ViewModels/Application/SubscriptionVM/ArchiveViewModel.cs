@@ -95,7 +95,7 @@ namespace OpcUA.Client.Core
             if (timer == null) return;
             timer.Dispose();
             _timers.Remove(interval);
-
+            SelectedArchiveInfo.Running = false;
         }
 
         private void AddVariableToArchive()

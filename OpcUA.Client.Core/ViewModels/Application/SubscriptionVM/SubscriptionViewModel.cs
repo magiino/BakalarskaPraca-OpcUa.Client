@@ -21,7 +21,6 @@ namespace OpcUA.Client.Core
         public ObservableCollection<Variable> SubscribedVariables { get; set; } = new ObservableCollection<Variable>();
         public Variable SelectedSubscribedVariable { get; set; }
         public string ValueToWrite { get; set; }
-        
 
         public bool SubscriptionCreated { get; set; }
         public bool AddIsEnabled { get; set; }
@@ -45,9 +44,7 @@ namespace OpcUA.Client.Core
 
         // TODO prerobit _selectedNode z refDisc na NodeId
         // TODO Prerobit WriteValue v opcuaApi
-        // TODO vracat z write value ci sa podaril zapis
         // TODO Stale tam zobrazovat atributy len menit hodnoty !!!
-        // TODO Urobit ViewModel zvlast pre vsetko
         public SubscriptionViewModel(UaClientApi uaClientApi)
         {
             _uaClientApi = uaClientApi;

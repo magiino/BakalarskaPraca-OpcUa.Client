@@ -46,7 +46,7 @@
                 <!-- Second Column-->
                 <Grid Grid.Column="1">
                     <ScrollViewer VerticalScrollBarVisibility="Auto">
-                        <local:AttributeInfo2 DataContext="{Binding NodeAttributesViewModel}"/>
+                        <local:AttributeInfo DataContext="{Binding NodeAttributesViewModel}"/>
                     </ScrollViewer>
                 </Grid>
 
