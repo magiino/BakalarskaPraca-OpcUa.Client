@@ -17,6 +17,7 @@ namespace OpcUA.Client.Core
 
         private ApplicationConfiguration _applicationConfig;
         private Session _session;
+        private readonly NodeIdCollection _registeredNodes = new NodeIdCollection();
 
         #endregion
 
@@ -240,6 +241,7 @@ namespace OpcUA.Client.Core
             {
                 // TODO unsubscribe subscription and unregister nodes
                 RemoveAllSubscriptions();
+                UnRegisterNodes();
                 _session.Close(10000);
                 _session.Dispose();
             }
@@ -558,19 +560,18 @@ namespace OpcUA.Client.Core
             try
             {
                 _session.RegisterNodes(null, nodeIdsToRegister, out var registeredNodeIds);
+                _registeredNodes.AddRange(registeredNodeIds);
                 return registeredNodeIds;
                 // return registeredNodeIds.Select(x => x.ToString()).ToList();
             }
             catch (Exception e)
             {
-
                 throw e;
             }
         }
 
-        public string RegisterNode(string nodeToRegister)
+        public NodeId RegisterNode(string nodeToRegister)
         {
-
             var nodeIdToRegister = new NodeIdCollection()
             {
                 new NodeId(nodeToRegister)
@@ -579,11 +580,44 @@ namespace OpcUA.Client.Core
             try
             {
                 _session.RegisterNodes(null, nodeIdToRegister, out var registeredNode);
-                return registeredNode?.FirstOrDefault()?.ToString();
+                var node = registeredNode.FirstOrDefault();
+                _registeredNodes.Add(node);
+
+                return node;
             }
             catch (Exception e)
             {
+                throw e;
+            }
+        }
 
+        public void UnRegisterNodes()
+        {
+
+            try
+            {   
+                var response = _session.UnregisterNodes(null, _registeredNodes);
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+
+        public bool UnRegisterNode(NodeId nodeIdForUnregister)
+        {
+
+            try
+            {
+                var response = _session.UnregisterNodes(null, new NodeIdCollection(){ nodeIdForUnregister});
+
+                if (!ServiceResult.IsGood(response.ServiceResult)) return false;
+                _registeredNodes.Remove(nodeIdForUnregister);
+                return true;
+
+            }
+            catch (Exception e)
+            {
                 throw e;
             }
         }

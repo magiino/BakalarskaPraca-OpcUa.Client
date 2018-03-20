@@ -16,7 +16,7 @@ namespace OpcUA.Client.Core
 
         private readonly DataContext _dataContext;
         private readonly UaClientApi _uaClientApi;
-        private ReferenceDescription _refDiscOfSelectedNode;
+        private ReferenceDescription _refDescOfSelectedNode;
         private readonly Dictionary<ArchiveInterval, Timer> _timers = new Dictionary<ArchiveInterval, Timer>();
         private List<ArchiveReadVariable> _registeredNodesForRead;
 
@@ -25,7 +25,7 @@ namespace OpcUA.Client.Core
         #region Public Properties
 
         public ObservableCollection<VariableEntity> ArchiveVariables { get; set; }
-        public Variable SelectedArchiveVariable { get; set; }
+        public VariableEntity SelectedArchiveVariable { get; set; }
        
         public ObservableCollection<ArchiveInfoTable> ArchiveInfo { get; set; }
         public ArchiveInfoTable SelectedArchiveInfo { get; set; }
@@ -64,8 +64,8 @@ namespace OpcUA.Client.Core
                 this,
                 node =>
                 {
-                    _refDiscOfSelectedNode = node.RefNode;
-                    AddArchiveVariableIsEnabled = _refDiscOfSelectedNode.NodeClass == NodeClass.Variable;
+                    _refDescOfSelectedNode = node.RefNode;
+                    AddArchiveVariableIsEnabled = _refDescOfSelectedNode.NodeClass == NodeClass.Variable;
                 });
         }
 
@@ -76,13 +76,19 @@ namespace OpcUA.Client.Core
         private void StartArchive()
         {
             if (SelectedArchiveInfo == null) return;
+            if (SelectedArchiveInfo.Running) return;
+
             var interval = SelectedArchiveInfo.ArchiveInterval;
             var timer = new Timer(Archive, interval,TimeSpan.FromSeconds(1),TimeSpan.FromSeconds((int)interval));
             _timers.Add(interval, timer);
+            SelectedArchiveInfo.Running = true;
         }
 
         private void StopArchive()
         {
+            if (SelectedArchiveInfo == null) return;
+            if (!SelectedArchiveInfo.Running) return;
+
             var interval = SelectedArchiveInfo.ArchiveInterval;
             _timers.TryGetValue(interval, out var timer);
 
@@ -94,9 +100,10 @@ namespace OpcUA.Client.Core
 
         private void AddVariableToArchive()
         {
-            if (_refDiscOfSelectedNode == null || SelectedArchiveInfo == null) return;
+            if (_refDescOfSelectedNode == null || SelectedArchiveInfo == null || _refDescOfSelectedNode.NodeClass != NodeClass.Variable) return;
+            if (SelectedArchiveInfo.Running) return;
 
-            var nodeId = _refDiscOfSelectedNode.NodeId.ToString();
+            var nodeId = _refDescOfSelectedNode.NodeId.ToString();
             var type = _uaClientApi.GetBuiltInTypeOfVariableNodeId(nodeId);
 
             var tmp = new VariableEntity()
@@ -106,16 +113,43 @@ namespace OpcUA.Client.Core
                 DataType = type,
             };
             _dataContext.Variables.Add(tmp);
-            if (_dataContext.SaveChanges() == 1)
-                ArchiveVariables.Add(tmp);
+            if (_dataContext.SaveChanges() != 1) return;
 
-            // TODO Zaregistrovat premennu a pridat ju medzi ostatne
+            var registeredNode = _uaClientApi.RegisterNode(nodeId);
+            _registeredNodesForRead.Add( new ArchiveReadVariable()
+            {
+                Interval = SelectedArchiveInfo.ArchiveInterval,
+                RegisteredNodeId = registeredNode,
+                Type = type,
+                VariableId = tmp.Id
+            });
+            ArchiveVariables.Add(tmp);
+
+            SelectedArchiveInfo.VariablesCount++;
         }
 
-        // TODO DeleteVariableFromArchive
         private void DeleteVariableFromArchive()
         {
             if (SelectedArchiveVariable == null) return;
+            foreach (var archive in ArchiveInfo)
+            {
+                if (archive.ArchiveInterval == SelectedArchiveVariable.Archive && archive.Running) return;
+
+                if (archive.ArchiveInterval == SelectedArchiveVariable.Archive && !archive.Running)
+                    archive.VariablesCount--;
+            }
+
+            // vymazanie z databaze
+            _dataContext.Variables.Remove(SelectedArchiveVariable);
+            _dataContext.SaveChanges();
+
+            var index = ArchiveVariables.IndexOf(SelectedArchiveVariable);
+            // Vymazanie z tabulky
+            ArchiveVariables.Remove(SelectedArchiveVariable);
+            // Odregistrovanie
+            _uaClientApi.UnRegisterNode(_registeredNodesForRead[index].RegisteredNodeId);
+            // Vymazanie z nodes for read
+            _registeredNodesForRead.RemoveAt(index);
         }
         #endregion
 
@@ -126,11 +160,12 @@ namespace OpcUA.Client.Core
             var interval = (ArchiveInterval)objectInfo;
             if (!IsTimerAlive(interval)) return;
 
-            // TODO nacitat hodnoty
             // TODO keby nahodou pridal pocas archivacie premennu tak sa nacita ?? prerobit to ??
+            // Vytriedenie premennych pre tento interval a ancitanie hodnot
             var variablesForRead = _registeredNodesForRead.Where(x => x.Interval == interval).ToList();
             _uaClientApi.ReadValues(ref variablesForRead);
 
+            // Vytvorenie zaznamov
             var records = variablesForRead.Select(x => new RecordEntity()
             {
                 VariableEntityID = x.VariableId,
@@ -138,7 +173,7 @@ namespace OpcUA.Client.Core
                 ArchiveTime = DateTime.Now
             }).ToList();
 
-            // TODO archivovat
+            // Archivacia
             _dataContext.Records.AddRange(records);
             _dataContext.SaveChanges();
             

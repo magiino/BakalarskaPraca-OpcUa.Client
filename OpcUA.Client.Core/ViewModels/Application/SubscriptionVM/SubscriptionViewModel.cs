@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
 using Opc.Ua;
@@ -12,7 +11,7 @@ namespace OpcUA.Client.Core
         #region Private Fields
 
         private readonly UaClientApi _uaClientApi;
-        private ReferenceDescription _refDiscOfSelectedNode;
+        private ReferenceDescription _refDescOfSelectedNode;
         private Subscription _subscription; 
 
         #endregion
@@ -25,7 +24,7 @@ namespace OpcUA.Client.Core
         
 
         public bool SubscriptionCreated { get; set; }
-        public bool AddIsEnabled => _refDiscOfSelectedNode != null;
+        public bool AddIsEnabled { get; set; }
         public bool DeleteIsEnabled => SelectedSubscribedVariable != null;
 
         #endregion
@@ -65,7 +64,8 @@ namespace OpcUA.Client.Core
                 this,
                 node =>
                 {
-                    _refDiscOfSelectedNode = node.RefNode;
+                    _refDescOfSelectedNode = node.RefNode;
+                    AddIsEnabled = _refDescOfSelectedNode.NodeClass == NodeClass.Variable;
                 });
         }
 
@@ -94,16 +94,16 @@ namespace OpcUA.Client.Core
 
         private void AddVariableToSubscription()
         {
-            if (_refDiscOfSelectedNode == null) return;
+            if (_refDescOfSelectedNode == null) return;
             // TODO private metoda opakovany kod
             var tmp = new Variable()
             {
-                NodeId = _refDiscOfSelectedNode.NodeId.ToString(),
-                Name = _refDiscOfSelectedNode.DisplayName.ToString()
+                NodeId = _refDescOfSelectedNode.NodeId.ToString(),
+                Name = _refDescOfSelectedNode.DisplayName.ToString()
                 // TODO set up type here
             };
 
-            var monitoredItem = _uaClientApi.AddMonitoredItem(_refDiscOfSelectedNode, _subscription);
+            var monitoredItem = _uaClientApi.AddMonitoredItem(_refDescOfSelectedNode, _subscription);
             monitoredItem.Notification += Notification_MonitoredItem;
 
             SubscribedVariables.Add(tmp);

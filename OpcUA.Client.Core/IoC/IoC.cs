@@ -1,4 +1,5 @@
-﻿using Ninject;
+﻿using GalaSoft.MvvmLight.Messaging;
+using Ninject;
 
 namespace OpcUA.Client.Core
 {
@@ -29,6 +30,11 @@ namespace OpcUA.Client.Core
         /// </summary>
         public static DataContext DataContext => IoC.Get<DataContext>();
 
+        /// <summary>
+        /// A shortcut to access the <see cref="UaClientApi"/>
+        /// </summary>
+        public static Messenger Messenger => IoC.Get<Messenger>();
+
         #endregion
 
         #region Setup
@@ -39,6 +45,12 @@ namespace OpcUA.Client.Core
             BindViewModels();
             BindUaApi();
             BindDataContext();
+            BindMessenger();
+        }
+
+        private static void BindMessenger()
+        {
+            Kernel.Bind<Messenger>().ToConstant(new Messenger());
         }
 
         /// <summary>
@@ -54,7 +66,6 @@ namespace OpcUA.Client.Core
         {
             // Bind to a single instance of UaClientHelperApi
             Kernel.Bind<UaClientApi>().ToConstant(new UaClientApi());
-            //Kernel.Bind<ApplicationManager>().ToConstant(new ApplicationManager(new UaClientApi()));
         }
 
         private static void BindDataContext()
