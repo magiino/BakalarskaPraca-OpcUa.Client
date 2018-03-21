@@ -51,13 +51,16 @@
                 </Grid>
 
                 <!-- Third Column-->
-                <TabControl Grid.Column="2">
+                <TabControl Grid.Column="2" SelectedIndex="{Binding SelectedIndex}">
                     <TabItem Header="Subscribed Nodes"
                              DataContext="{Binding SubscriptionViewModel}">
                         <local:Subscription />
                     </TabItem>
                     <TabItem Header="Archive">
                         <local:Archive DataContext="{Binding ArchiveViewModel}" />
+                    </TabItem>
+                    <TabItem Header="Chart">
+                        <local:Chart DataContext="{Binding StaticChartViewModel}" />
                     </TabItem>
                 </TabControl>
             </Grid>

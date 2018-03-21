@@ -105,6 +105,9 @@
     <Compile Include="Controls\TabItems\AttributeInfo.xaml.cs">
       <DependentUpon>AttributeInfo.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\TabItems\Chart.xaml.cs">
+      <DependentUpon>Chart.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\TabItems\Subscription.xaml.cs">
       <DependentUpon>Subscription.xaml</DependentUpon>
     </Compile>
@@ -150,6 +153,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Controls\TabItems\AttributeInfo.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\TabItems\Chart.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
