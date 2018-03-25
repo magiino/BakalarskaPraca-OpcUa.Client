@@ -553,7 +553,7 @@ namespace OpcUA.Client.Core
 
         public List<NodeId> RegisterNodes(List<string> nodesToRegister)
         {
-
+            if (nodesToRegister.Count == 0) return new List<NodeId>();
             var nodeIdsToRegister = new NodeIdCollection(nodesToRegister.Select(x => new NodeId(x)).ToEnumerable());
 
             try
