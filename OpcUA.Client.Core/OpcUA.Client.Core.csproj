@@ -83,6 +83,10 @@
     <Compile Include="Migrations\201803192156523_InitialCreate.Designer.cs">
       <DependentUpon>201803192156523_InitialCreate.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201803252146502_VarDescriptionAdded.cs" />
+    <Compile Include="Migrations\201803252146502_VarDescriptionAdded.Designer.cs">
+      <DependentUpon>201803252146502_VarDescriptionAdded.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\ArchiveInfoTable.cs" />
     <Compile Include="Models\ChartModel.cs" />
@@ -153,6 +157,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201803192156523_InitialCreate.resx">
       <DependentUpon>201803192156523_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803252146502_VarDescriptionAdded.resx">
+      <DependentUpon>201803252146502_VarDescriptionAdded.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

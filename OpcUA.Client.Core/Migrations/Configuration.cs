@@ -107,6 +107,7 @@ namespace OpcUA.Client.Core.Migrations
             {
                 Id = 1,
                 Name = "ns=2;s=Demo.Dynamic.Scalar.Int16",
+                Description = "Test Int16 Value",
                 Archive = ArchiveInterval.ThirtySecond,
                 DataType = BuiltInType.Int16,
             };
@@ -116,6 +117,7 @@ namespace OpcUA.Client.Core.Migrations
             {
                 Id = 2,
                 Name = "ns=2;s=Demo.Dynamic.Scalar.SByte",
+                Description = "Test Short Byte Value",
                 Archive = ArchiveInterval.ThirtySecond,
                 DataType = BuiltInType.SByte,
             };
@@ -125,6 +127,7 @@ namespace OpcUA.Client.Core.Migrations
             {
                 Id = 3,
                 Name = "ns=2;s=Demo.Dynamic.Scalar.UInt64",
+                Description = "Test Unsigned Int64 Value",
                 Archive = ArchiveInterval.ThirtySecond,
                 DataType = BuiltInType.UInt64,
             };
