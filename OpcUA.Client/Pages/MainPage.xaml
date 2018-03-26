@@ -6,7 +6,7 @@
       xmlns:local="clr-namespace:OpcUA.Client"
       xmlns:core="clr-namespace:OpcUA.Client.Core;assembly=OpcUA.Client.Core"
       mc:Ignorable="d"
-      d:DesignHeight="600" d:DesignWidth="900">
+      d:DesignHeight="600" d:DesignWidth="1000">
 
     <Border Background="{StaticResource ForegroundLightBrush}">
         <DockPanel>
@@ -46,15 +46,27 @@
                 <!-- Second Column-->
                 <Grid Grid.Column="1">
                     <ScrollViewer VerticalScrollBarVisibility="Auto">
-                        <local:AttributeInfo2 DataContext="{Binding NodeAttributesViewModel}"/>
+                        <local:AttributeInfo DataContext="{Binding NodeAttributesViewModel}"/>
                     </ScrollViewer>
                 </Grid>
 
                 <!-- Third Column-->
-                <TabControl Grid.Column="2">
+                <TabControl Grid.Column="2" SelectedIndex="{Binding SelectedIndex}">
                     <TabItem Header="Subscribed Nodes"
                              DataContext="{Binding SubscriptionViewModel}">
                         <local:Subscription />
+                    </TabItem>
+                    <TabItem Header="Archive">
+                        <local:Archive DataContext="{Binding ArchiveViewModel}" />
+                    </TabItem>
+                    <TabItem Header="Chart">
+                        <local:Chart DataContext="{Binding ChartViewModel}" />
+                    </TabItem>
+                    <!--<TabItem Header="Static Chart">
+                        <local:Chart DataContext="{Binding StaticChartViewModel}" />
+                    </TabItem>-->
+                    <TabItem Header="ZoomChart">
+                        <local:ZoomChart/>
                     </TabItem>
                 </TabControl>
             </Grid>

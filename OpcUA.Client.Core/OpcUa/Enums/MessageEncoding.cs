@@ -1,6 +1,6 @@
 ﻿namespace OpcUA.Client.Core
 {
-    public enum EMessageEncoding
+    public enum MessageEncoding
     {
         Binary = 0,
         Xml

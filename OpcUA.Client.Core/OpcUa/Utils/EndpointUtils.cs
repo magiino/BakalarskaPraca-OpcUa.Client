@@ -8,7 +8,7 @@ namespace OpcUA.Client.Core
     {
         private static readonly string[] Protocol = { "opc.tcp://", "http://", "https://"};
 
-        public static string EProtocolToString(EProtocol protocol)
+        public static string EProtocolToString(Protocol protocol)
         {
             return Protocol[(int)protocol];
         }
@@ -16,14 +16,14 @@ namespace OpcUA.Client.Core
 
         private static readonly string[] SecurityPoliciesStringValues = { "None", "Basic128Rsa15", "Basic256", "Https", "Basic256Sha256" };
 
-        public static string ESecutityPolicyToString(ESecurityPolicy policy)
+        public static string ESecutityPolicyToString(SecurityPolicy policy)
         {
             return SecurityPoliciesStringValues[(int)policy];
         }
 
 
 
-        public static List<EndpointDescription> SelectByProtocol(List<EndpointDescription> endpoints, EProtocol protocol)
+        public static List<EndpointDescription> SelectByProtocol(List<EndpointDescription> endpoints, Protocol protocol)
         {
             return endpoints?.Where(endpoint => endpoint.EndpointUrl.ToLower().StartsWith( EProtocolToString(protocol)) ).ToList();
         }

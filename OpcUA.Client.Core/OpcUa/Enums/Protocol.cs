@@ -3,7 +3,7 @@
     /// <summary>
     /// Enum of transport protocol supported by Opc Ua
     /// </summary>
-    public enum EProtocol
+    public enum Protocol
     {
         /// <summary>
         /// Ua Tcp binary

@@ -11,7 +11,7 @@ namespace OpcUA.Client.Core
         #region Private Fields
 
         private readonly UaClientApi _uaClientApi;
-        private ReferenceDescription _refDiscOfSelectedNode;
+        private ReferenceDescription _refDescOfSelectedNode;
         private Subscription _subscription; 
 
         #endregion
@@ -21,9 +21,10 @@ namespace OpcUA.Client.Core
         public ObservableCollection<Variable> SubscribedVariables { get; set; } = new ObservableCollection<Variable>();
         public Variable SelectedSubscribedVariable { get; set; }
         public string ValueToWrite { get; set; }
-        public bool DeleteIsEnabled => SelectedSubscribedVariable != null;
+
         public bool SubscriptionCreated { get; set; }
-        //public bool AddIsEnabled => SelectedNode.Count != 0;
+        public bool AddIsEnabled { get; set; }
+        public bool DeleteIsEnabled => SelectedSubscribedVariable != null;
 
         #endregion
 
@@ -43,9 +44,7 @@ namespace OpcUA.Client.Core
 
         // TODO prerobit _selectedNode z refDisc na NodeId
         // TODO Prerobit WriteValue v opcuaApi
-        // TODO vracat z write value ci sa podaril zapis
         // TODO Stale tam zobrazovat atributy len menit hodnoty !!!
-        // TODO Urobit ViewModel zvlast pre vsetko
         public SubscriptionViewModel(UaClientApi uaClientApi)
         {
             _uaClientApi = uaClientApi;
@@ -62,7 +61,8 @@ namespace OpcUA.Client.Core
                 this,
                 node =>
                 {
-                    _refDiscOfSelectedNode = node.RefNode;
+                    _refDescOfSelectedNode = node.RefNode;
+                    AddIsEnabled = _refDescOfSelectedNode.NodeClass == NodeClass.Variable;
                 });
         }
 
@@ -72,7 +72,7 @@ namespace OpcUA.Client.Core
 
         private void CreateSubscription()
         {
-            _subscription = _uaClientApi.Subscribe(2000);
+            _subscription = _uaClientApi.Subscribe(4000);
             if (_subscription == null) return;
             SubscriptionCreated = true;
         }
@@ -91,22 +91,25 @@ namespace OpcUA.Client.Core
 
         private void AddVariableToSubscription()
         {
-            if (_refDiscOfSelectedNode == null) return;
+            if (_refDescOfSelectedNode == null) return;
             // TODO private metoda opakovany kod
             var tmp = new Variable()
             {
-                MonitoredItem = _uaClientApi.AddMonitoredItem(_refDiscOfSelectedNode, _subscription),
+                NodeId = _refDescOfSelectedNode.NodeId.ToString(),
+                Name = _refDescOfSelectedNode.DisplayName.ToString()
                 // TODO set up type here
             };
 
-            tmp.MonitoredItem.Notification += Notification_MonitoredItem;
+            var monitoredItem = _uaClientApi.AddMonitoredItem(_refDescOfSelectedNode, _subscription);
+            monitoredItem.Notification += Notification_MonitoredItem;
+
             SubscribedVariables.Add(tmp);
         }
 
         private void DeleteVariableFromSubscription()
         {
             if (SelectedSubscribedVariable == null) return;
-            _uaClientApi.RemoveMonitoredItem(_subscription, SelectedSubscribedVariable.MonitoredItem);
+            _uaClientApi.RemoveMonitoredItem(_subscription, SelectedSubscribedVariable.NodeId);
             SubscribedVariables.Remove(SelectedSubscribedVariable);
         }
 
@@ -129,11 +132,12 @@ namespace OpcUA.Client.Core
             {
                 var tmp = new Variable()
                 {
-                    MonitoredItem = item,
+                    NodeId = item.StartNodeId.ToString(),
+                    Name = item.DisplayName
                     // TODO set up type here
                 };
 
-                tmp.MonitoredItem.Notification += Notification_MonitoredItem;
+                item.Notification += Notification_MonitoredItem;
                 SubscribedVariables.Add(tmp);
             }
             _subscription.ApplyChanges();

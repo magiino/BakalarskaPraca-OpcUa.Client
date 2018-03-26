@@ -4,8 +4,10 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Security.Cryptography.X509Certificates;
+using Ninject.Infrastructure.Language;
 using Opc.Ua;
 using Opc.Ua.Client;
+using OpcUA.Client.Core.Models;
 
 namespace OpcUA.Client.Core
 {
@@ -15,6 +17,7 @@ namespace OpcUA.Client.Core
 
         private ApplicationConfiguration _applicationConfig;
         private Session _session;
+        private readonly NodeIdCollection _registeredNodes = new NodeIdCollection();
 
         #endregion
 
@@ -236,8 +239,8 @@ namespace OpcUA.Client.Core
             if (_session == null) return;
             try
             {
-                // TODO unsubscribe subscription and unregister nodes
-                RemoveAllSubscriptions();
+                //RemoveAllSubscriptions();
+                UnRegisterNodes();
                 _session.Close(10000);
                 _session.Dispose();
             }
@@ -318,9 +321,15 @@ namespace OpcUA.Client.Core
                 AttributeId = Attributes.Value,
                 MonitoringMode = MonitoringMode.Reporting,
                 // -1 minimum value, 1 maximum value
-                SamplingInterval = 1,
+                SamplingInterval = -1,
                 QueueSize = 1,
+                CacheQueueSize = 1,
                 DiscardOldest = true,
+                // TODO deadband
+                //Filter = new DataChangeFilter()
+                //{
+                //  Deadband    
+                //}
             };
             try
             {
@@ -338,13 +347,14 @@ namespace OpcUA.Client.Core
 
         /// <summary>Removs a monitored item from an existing subscription</summary>
         /// <param name="subscription">The subscription</param>
-        /// <param name="monitoredItem">The item</param>
+        /// <param name="monitoredItemNodeId"></param>
         /// <exception cref="Exception">Throws and forwards any exception with short error description.</exception>
-        public void RemoveMonitoredItem(Subscription subscription, MonitoredItem monitoredItem)
+        public void RemoveMonitoredItem(Subscription subscription, string monitoredItemNodeId)
         {
             try
             {
-                subscription.RemoveItem(monitoredItem);
+                var tmp = subscription.MonitoredItems.FirstOrDefault(x => x.StartNodeId.ToString() == monitoredItemNodeId);
+                subscription.RemoveItem(tmp);
                 subscription.ApplyChanges();
             }
             catch (Exception e)
@@ -472,6 +482,19 @@ namespace OpcUA.Client.Core
             return dataTypeNode;
         }
 
+        /// <summary>
+        /// Reads Node of <see cref="nodeId"/> dataType in server address space.
+        /// </summary>
+        /// <param name="nodeId"></param>
+        /// <returns></returns>
+        public BuiltInType GetBuiltInTypeOfVariableNodeId(string nodeId)
+        {
+            var node = _session.ReadNode(new NodeId(nodeId));
+            var dataTypeNodeId = (node.DataLock as VariableNode)?.DataType;
+            var dataTypeNode = _session.ReadNode(dataTypeNodeId);
+            return TypeInfo.GetBuiltInType(dataTypeNode.NodeId);
+        }
+
         public bool WriteValue(Variable variable, object newValue)
         {
             var wrapedValue = new Variant(Convert.ChangeType(newValue, variable.DataType));
@@ -480,7 +503,7 @@ namespace OpcUA.Client.Core
             var valueToWrite = new WriteValue()
             {
                 Value = data,
-                NodeId = variable.MonitoredItem.StartNodeId,
+                NodeId = new NodeId(variable.NodeId),
                 AttributeId = Attributes.Value,   
             };
 
@@ -506,6 +529,95 @@ namespace OpcUA.Client.Core
         public DataValue ReadValue(NodeId nodeId)
         {
             return _session.ReadValue(nodeId);
+        }
+
+        public void ReadValues(ref List<ArchiveReadVariable> variables)
+        {
+            try
+            {
+                var dataTypes = variables.Select(x => TypeInfo.GetSystemType(x.Type, -1)).ToList();
+                var nodeIds = variables.Select(x => x.RegisteredNodeId).ToList();
+                _session.ReadValues(nodeIds, dataTypes, out var values, out var results);
+
+                for (var i = 0; i < values.Count; ++i)
+                {
+                    variables[i].Value = values[i];
+                    variables[i].Result = results[i];
+                }
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+
+        public List<NodeId> RegisterNodes(List<string> nodesToRegister)
+        {
+            if (nodesToRegister.Count == 0) return new List<NodeId>();
+            var nodeIdsToRegister = new NodeIdCollection(nodesToRegister.Select(x => new NodeId(x)).ToEnumerable());
+
+            try
+            {
+                _session.RegisterNodes(null, nodeIdsToRegister, out var registeredNodeIds);
+                _registeredNodes.AddRange(registeredNodeIds);
+                return registeredNodeIds;
+                // return registeredNodeIds.Select(x => x.ToString()).ToList();
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+
+        public NodeId RegisterNode(string nodeToRegister)
+        {
+            var nodeIdToRegister = new NodeIdCollection()
+            {
+                new NodeId(nodeToRegister)
+            };
+
+            try
+            {
+                _session.RegisterNodes(null, nodeIdToRegister, out var registeredNode);
+                var node = registeredNode.FirstOrDefault();
+                _registeredNodes.Add(node);
+
+                return node;
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+
+        public void UnRegisterNodes()
+        {
+
+            try
+            {   
+                var response = _session.UnregisterNodes(null, _registeredNodes);
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+
+        public bool UnRegisterNode(NodeId nodeIdForUnregister)
+        {
+            try
+            {
+                var response = _session.UnregisterNodes(null, new NodeIdCollection(){ nodeIdForUnregister});
+
+                if (!ServiceResult.IsGood(response.ServiceResult)) return false;
+                _registeredNodes.Remove(nodeIdForUnregister);
+                return true;
+
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
         }
 
         #endregion

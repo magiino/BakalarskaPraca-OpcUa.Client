@@ -1,4 +1,5 @@
-﻿using Ninject;
+﻿using GalaSoft.MvvmLight.Messaging;
+using Ninject;
 
 namespace OpcUA.Client.Core
 {
@@ -25,9 +26,14 @@ namespace OpcUA.Client.Core
         public static UaClientApi UaClientApi => IoC.Get<UaClientApi>();
 
         /// <summary>
-        /// A shortcut to access the <see cref="UaClientApi"/>
+        /// A shortcut to access the <see cref="DataContext"/>
         /// </summary>
-        //public static ApplicationManager ApplicationManager => IoC.Get<ApplicationManager>();
+        public static DataContext DataContext => IoC.Get<DataContext>();
+
+        /// <summary>
+        /// A shortcut to access the <see cref="Messenger"/>
+        /// </summary>
+        public static Messenger Messenger => IoC.Get<Messenger>();
 
         #endregion
 
@@ -38,6 +44,13 @@ namespace OpcUA.Client.Core
             // Bind all required view models
             BindViewModels();
             BindUaApi();
+            BindDataContext();
+            BindMessenger();
+        }
+
+        private static void BindMessenger()
+        {
+            Kernel.Bind<Messenger>().ToConstant(new Messenger());
         }
 
         /// <summary>
@@ -47,15 +60,25 @@ namespace OpcUA.Client.Core
         {
             // Bind to a single instance of Application view model
             Kernel.Bind<ApplicationViewModel>().ToConstant(new ApplicationViewModel());
-
-            //Kernel.Bind<MessageListener>().ToConstant(new MessageListener());
         }
 
         private static void BindUaApi()
         {
             // Bind to a single instance of UaClientHelperApi
             Kernel.Bind<UaClientApi>().ToConstant(new UaClientApi());
-            //Kernel.Bind<ApplicationManager>().ToConstant(new ApplicationManager(new UaClientApi()));
+        }
+
+        private static void BindDataContext()
+        {
+            // Bind to a single instance of Data Context
+            Kernel.Bind<DataContext>().ToConstant(new DataContext());
+        }
+
+        public static void DisposeAll()
+        {
+            UaClientApi.Disconnect();
+            DataContext.Dispose();
+            Messenger.Cleanup();
         }
 
         #endregion

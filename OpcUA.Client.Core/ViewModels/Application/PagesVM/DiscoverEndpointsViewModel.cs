@@ -36,9 +36,9 @@ namespace OpcUA.Client.Core
             }
         }
 
-        public ObservableCollection<EndpointGridViewModel> FilteredEndpoints { get; set; }
+        public ObservableCollection<EndpointDataGrid> FilteredEndpoints { get; set; }
 
-        public EndpointGridViewModel SelectedEndpointGridViewModel
+        public EndpointDataGrid SelectedEndpointDataGrid
         {
             set
             {
@@ -53,10 +53,10 @@ namespace OpcUA.Client.Core
 
             public string SessionName { get; set; } = "MySession";
 
-            public IEnumerable<EProtocol> EProtocols { get; set; } = Enum.GetValues(typeof(EProtocol)).Cast<EProtocol>();
+            public IEnumerable<Protocol> EProtocols { get; set; } = Enum.GetValues(typeof(Protocol)).Cast<Protocol>();
 
-            private EProtocol _selectedProtocol;
-            public EProtocol SelectedProtocol
+            private Protocol _selectedProtocol;
+            public Protocol SelectedProtocol
             {
                 get => _selectedProtocol;
                 set
@@ -74,8 +74,8 @@ namespace OpcUA.Client.Core
             public bool Basic256IsSelected { get; set; } = true;
             public bool Basic256Sha256IsSelected { get; set; } = true;
 
-            public IList<EMessageEncoding> EMessageEncodings { get; set; } = Enum.GetValues(typeof(EMessageEncoding)).Cast<EMessageEncoding>().ToList();
-            public EMessageEncoding SelectedEncoding { get; set; }
+            public IList<MessageEncoding> EMessageEncodings { get; set; } = Enum.GetValues(typeof(MessageEncoding)).Cast<MessageEncoding>().ToList();
+            public MessageEncoding SelectedEncoding { get; set; }
 
             public bool AnonymousIsSelected { get; set; } = true;
             public bool UserPwIsSelected { get; set; } = false;
@@ -168,7 +168,7 @@ namespace OpcUA.Client.Core
             var filterSecurityPolciies = EndpointUtils.SelectBySecurityPolicies(filterSecurityMode, GetSelectedPolicies());
             var filterServer = EndpointUtils.SelectByApplicationName(filterSecurityPolciies, SelectedServer?.ApplicationName.ToString());
 
-            FilteredEndpoints = new ObservableCollection<EndpointGridViewModel>(filterServer.Select(x => new EndpointGridViewModel(x)));
+            FilteredEndpoints = new ObservableCollection<EndpointDataGrid>(filterServer.Select(x => new EndpointDataGrid(x)));
         }
 
         private List<MessageSecurityMode> GetSelectedModes()
@@ -189,7 +189,7 @@ namespace OpcUA.Client.Core
 
         private List<string> GetSelectedPolicies()
         {
-            var securityPolicies = Enum.GetValues(typeof(ESecurityPolicy)).Cast<ESecurityPolicy>().ToList();
+            var securityPolicies = Enum.GetValues(typeof(SecurityPolicy)).Cast<SecurityPolicy>().ToList();
 
             List<string> selectedPolicies = new List<string>();
 
@@ -215,15 +215,15 @@ namespace OpcUA.Client.Core
             switch (num)
             {
                 case 0:
-                    EMessageEncodings = new List<EMessageEncoding>() { EMessageEncoding.Binary };
+                    EMessageEncodings = new List<MessageEncoding>() { MessageEncoding.Binary };
                     SelectedEncoding = EMessageEncodings.First();
                     break;
                 case 1:
-                    EMessageEncodings = new List<EMessageEncoding>() { EMessageEncoding.Xml };
+                    EMessageEncodings = new List<MessageEncoding>() { MessageEncoding.Xml };
                     SelectedEncoding = EMessageEncodings.First();
                     break;
                 case 2:
-                    EMessageEncodings = new List<EMessageEncoding>() { EMessageEncoding.Binary, EMessageEncoding.Xml };
+                    EMessageEncodings = new List<MessageEncoding>() { MessageEncoding.Binary, MessageEncoding.Xml };
                     SelectedEncoding = EMessageEncodings.First();
                     break;
                 default:
