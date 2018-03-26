@@ -8,34 +8,29 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"></RowDefinition>
-                <RowDefinition Height="*"></RowDefinition>
-            </Grid.RowDefinitions>
-
-            <!--Here we disable tooltips and hovering to get a better performance-->
-            <wpf:CartesianChart Grid.Row="1" AnimationsSpeed="0:0:0.5" Hoverable="False" DataTooltip="{x:Null}">
-                <wpf:CartesianChart.Series>
-                    <wpf:LineSeries Values="{Binding Values}" 
-                                    PointGeometry="{x:Null}" 
-                                    LineSmoothness="1"
-                                    StrokeThickness="6" 
-                                    Stroke="#F34336"
-                                    Fill="Transparent"/>
-                </wpf:CartesianChart.Series>
-                <wpf:CartesianChart.AxisX>
-                    <wpf:Axis LabelFormatter="{Binding DateTimeFormatter}" />
-                        <!--<wpf:Axis LabelFormatter="{Binding DateTimeFormatter}" 
-                              MaxValue="{Binding AxisMax}" 
-                              MinValue="{Binding AxisMin}"
-                              Unit="{Binding AxisUnit}">
-                        --><!--<wpf:Axis.Separator>
-                            <wpf:Separator Step="{Binding AxisStep}" />
-                        </wpf:Axis.Separator>--><!--
-                    </wpf:Axis>-->
-                </wpf:CartesianChart.AxisX>
-            </wpf:CartesianChart>
-        </Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Button Grid.Row="0" Command="{Binding StopCommand}">
+            Inject/Stop Data
+        </Button>
+        <!--Here we disable tooltips and hovering to get a better performance  Hoverable="False" DataTooltip="{x:Null}" -->
+        <wpf:CartesianChart Grid.Row="1" AnimationsSpeed="0:0:0.5">
+            <wpf:CartesianChart.Series>
+                <wpf:LineSeries Values="{Binding Values}" 
+                                PointGeometrySize="15"
+                                LineSmoothness="1"
+                                StrokeThickness="6" 
+                                Stroke="#F34336"
+                                Fill="Transparent"/>
+            </wpf:CartesianChart.Series>
+            <wpf:CartesianChart.AxisX>
+                <wpf:Axis LabelFormatter="{Binding DateTimeFormatter}"
+                          Separator="{x:Static wpf:DefaultAxes.CleanSeparator}"
+                          MaxValue="{Binding AxisMax}" 
+                          MinValue="{Binding AxisMin}"/>
+            </wpf:CartesianChart.AxisX>
+        </wpf:CartesianChart>
     </Grid>
 </UserControl>

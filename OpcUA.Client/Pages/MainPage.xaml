@@ -60,7 +60,13 @@
                         <local:Archive DataContext="{Binding ArchiveViewModel}" />
                     </TabItem>
                     <TabItem Header="Chart">
+                        <local:Chart DataContext="{Binding ChartViewModel}" />
+                    </TabItem>
+                    <!--<TabItem Header="Static Chart">
                         <local:Chart DataContext="{Binding StaticChartViewModel}" />
+                    </TabItem>-->
+                    <TabItem Header="ZoomChart">
+                        <local:ZoomChart/>
                     </TabItem>
                 </TabControl>
             </Grid>

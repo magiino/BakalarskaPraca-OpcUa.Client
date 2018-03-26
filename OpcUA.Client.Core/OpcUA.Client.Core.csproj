@@ -89,7 +89,6 @@
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\ArchiveInfoTable.cs" />
-    <Compile Include="Models\ChartModel.cs" />
     <Compile Include="Models\Entities\Base\BaseEntity.cs" />
     <Compile Include="Models\Entities\Base\IEntity.cs" />
     <Compile Include="Models\Entities\DataContext.cs" />
@@ -131,8 +130,9 @@
     <Compile Include="ViewModels\Base\RelayParameterizedCommand.cs" />
     <Compile Include="ViewModels\Application\TreeViewVM\NodeTreeItemViewModel.cs" />
     <Compile Include="ViewModels\Application\TreeViewVM\NodeTreeViewModel.cs" />
-    <Compile Include="ViewModels\StaticChartViewModel.cs" />
     <Compile Include="ViewModels\ChartViewModel.cs" />
+    <Compile Include="ViewModels\DemoChartViewModel.cs" />
+    <Compile Include="ViewModels\StaticChartViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

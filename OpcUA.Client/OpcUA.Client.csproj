@@ -112,6 +112,9 @@
     <Compile Include="Controls\TabItems\AttributeInfo.xaml.cs">
       <DependentUpon>AttributeInfo.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\TabItems\ZoomChart.xaml.cs">
+      <DependentUpon>ZoomChart.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\TabItems\Chart.xaml.cs">
       <DependentUpon>Chart.xaml</DependentUpon>
     </Compile>
@@ -162,6 +165,10 @@
     <Page Include="Controls\TabItems\AttributeInfo.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\TabItems\ZoomChart.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Controls\TabItems\Chart.xaml">
       <SubType>Designer</SubType>
@@ -289,6 +296,7 @@
   <ItemGroup>
     <Folder Include="Resources\Icons\" />
     <Folder Include="Resources\Images\" />
+    <Folder Include="ViewModels\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Fody.2.4.6\build\Fody.targets" Condition="Exists('..\packages\Fody.2.4.6\build\Fody.targets')" />

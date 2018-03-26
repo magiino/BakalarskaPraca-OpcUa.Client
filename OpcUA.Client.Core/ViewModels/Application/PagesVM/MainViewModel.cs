@@ -21,8 +21,8 @@
             get => _selectedIndes;
             set
             {
-                if (value == 2 & ChartViewModel == null)
-                    CreateChartVM();
+                //if (value == 2 & ChartViewModel == null)
+                //    CreateChartVM();
 
                 _selectedIndes = value;
             }
@@ -31,7 +31,7 @@
 
         private void CreateChartVM()
         {
-            ChartViewModel = new ChartViewModel(IoC.DataContext);
+            //ChartViewModel = new ChartViewModel(IoC.DataContext);
         }
 
         #endregion
@@ -53,7 +53,7 @@
             MenuBarViewModel = new MenuBarViewModel(uaClientApi);
             MenuToolBarViewModel = new MenuToolBarViewModel(uaClientApi);
             ArchiveViewModel = new ArchiveViewModel(dataContext, uaClientApi);
-            ChartViewModel = new ChartViewModel(IoC.DataContext);
+            ChartViewModel = new ChartViewModel(dataContext);
         }
 
         #endregion
@@ -62,17 +62,3 @@
         #endregion
     }
 }
-
-//SubscribedVariables.CollectionChanged += (s, e) =>
-//{
-//if (SubscribedVariables.Count == 1 && e.Action == NotifyCollectionChangedAction.Add)
-//{
-//Task.Run(() =>
-//{
-//    while (true)
-//    {
-//        _uaClientApi.ReadValues(SubscribedVariables.Select(x => x.NodeId.ToString()).ToList());
-//    }
-//});
-//}
-//};
