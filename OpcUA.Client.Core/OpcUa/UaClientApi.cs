@@ -138,7 +138,16 @@ namespace OpcUA.Client.Core
         /// <exception cref="Exception">Throws and forwards any exception with short error description.</exception>
         public ReferenceDescriptionCollection BrowseNode(ReferenceDescription referenceDescription)
         {
-            var nodeId = ExpandedNodeId.ToNodeId(referenceDescription.NodeId, null);
+            var expNodeId = referenceDescription.NodeId;
+            NodeId nodeId;
+            if (expNodeId.NamespaceUri != null)
+            {
+                var namespaceTable = new NamespaceTable();
+                nodeId = ExpandedNodeId.ToNodeId(expNodeId, namespaceTable);
+            }
+            else
+                nodeId = ExpandedNodeId.ToNodeId(expNodeId, null);
+
             try
             {
                 //Browse from starting point for all object types
@@ -320,8 +329,8 @@ namespace OpcUA.Client.Core
                 StartNodeId = ExpandedNodeId.ToNodeId(node.NodeId, null),
                 AttributeId = Attributes.Value,
                 MonitoringMode = MonitoringMode.Reporting,
-                // -1 minimum value, 1 maximum value
-                SamplingInterval = -1,
+                // -1 minimum if we want sample as subscription publish
+                SamplingInterval = 300,
                 QueueSize = 1,
                 CacheQueueSize = 1,
                 DiscardOldest = true,
@@ -558,7 +567,8 @@ namespace OpcUA.Client.Core
 
             try
             {
-                _session.RegisterNodes(null, nodeIdsToRegister, out var registeredNodeIds);
+                // TODO osetrit ak nepatria tomu serveru
+                var responseHeader = _session.RegisterNodes(null, nodeIdsToRegister, out var registeredNodeIds);
                 _registeredNodes.AddRange(registeredNodeIds);
                 return registeredNodeIds;
                 // return registeredNodeIds.Select(x => x.ToString()).ToList();
@@ -667,7 +677,7 @@ namespace OpcUA.Client.Core
                 OutputFilePath = Path.Combine(Environment.ExpandEnvironmentVariables("%userprofile%"),
                     "Documents\\UaClient\\TraceLogs.txt"),
                 DeleteOnLoad = true,
-                TraceMasks = Utils.TraceMasks.All,
+                TraceMasks = 0x40,
             };
             configuration.TraceConfiguration.ApplySettings();
 

@@ -11,6 +11,7 @@ namespace OpcUA.Client.Core
         #region Private Fields
 
         private readonly UaClientApi _uaClientApi;
+        private readonly DataContext _dataContext;
         private ReferenceDescription _refDescOfSelectedNode;
         private Subscription _subscription; 
 
@@ -45,9 +46,10 @@ namespace OpcUA.Client.Core
         // TODO prerobit _selectedNode z refDisc na NodeId
         // TODO Prerobit WriteValue v opcuaApi
         // TODO Stale tam zobrazovat atributy len menit hodnoty !!!
-        public SubscriptionViewModel(UaClientApi uaClientApi)
+        public SubscriptionViewModel(UaClientApi uaClientApi, DataContext dataContext)
         {
             _uaClientApi = uaClientApi;
+            _dataContext = dataContext;
 
             AddVariableToSubscriptionCommand = new RelayCommand(AddVariableToSubscription);
             DeleteVariableFromSubscriptionCommand = new RelayCommand(DeleteVariableFromSubscription);
@@ -72,7 +74,7 @@ namespace OpcUA.Client.Core
 
         private void CreateSubscription()
         {
-            _subscription = _uaClientApi.Subscribe(4000);
+            _subscription = _uaClientApi.Subscribe(500);
             if (_subscription == null) return;
             SubscriptionCreated = true;
         }
@@ -169,6 +171,13 @@ namespace OpcUA.Client.Core
             var variable = SubscribedVariables.FirstOrDefault(x => x.Name == monitoredItem.DisplayName);
 
             if (variable == null) return;
+
+            _dataContext.Records.Add(new RecordEntity()
+            {
+                ArchiveTime = value.ServerTimestamp,
+                
+
+            });
             variable.Value = value.Value;
             variable.StatusCode = value.StatusCode;
             variable.DateTime = value.ServerTimestamp;

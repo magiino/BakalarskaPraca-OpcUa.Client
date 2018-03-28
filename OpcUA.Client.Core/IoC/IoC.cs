@@ -76,9 +76,9 @@ namespace OpcUA.Client.Core
 
         public static void DisposeAll()
         {
-            UaClientApi.Disconnect();
-            DataContext.Dispose();
-            Messenger.Cleanup();
+            UaClientApi?.Disconnect();
+            DataContext?.Dispose();
+            Messenger?.Cleanup();
         }
 
         #endregion

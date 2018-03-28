@@ -35,7 +35,8 @@ namespace OpcUA.Client.Core
         #region Command Methods
 
         private void ConnectSession() { }
-        private void DisconnectSession() { }
+
+        private void DisconnectSession() => _uaClientApi.Disconnect();
 
         #endregion
     }
