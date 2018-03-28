@@ -78,6 +78,12 @@ namespace OpcUA.Client.Core
             if (SelectedArchiveInfo == null) return;
             if (SelectedArchiveInfo.Running) return;
 
+            if (SelectedArchiveInfo.ArchiveInterval == ArchiveInterval.None)
+            {
+                // TODO spusti subscription
+                return;
+            } 
+
             var interval = SelectedArchiveInfo.ArchiveInterval;
             var timer = new Timer(Archive, interval,TimeSpan.FromSeconds(1),TimeSpan.FromSeconds((int)interval));
             _timers.Add(interval, timer);
@@ -88,6 +94,12 @@ namespace OpcUA.Client.Core
         {
             if (SelectedArchiveInfo == null) return;
             if (!SelectedArchiveInfo.Running) return;
+
+            if (SelectedArchiveInfo.ArchiveInterval == ArchiveInterval.None)
+            {
+                // TODO stopnut subscription
+                return;
+            }
 
             var interval = SelectedArchiveInfo.ArchiveInterval;
             _timers.TryGetValue(interval, out var timer);
@@ -175,6 +187,7 @@ namespace OpcUA.Client.Core
 
             // Archivacia
             _dataContext.Records.AddRange(records);
+            MessengerInstance.Send(new SendArchivedValue(1));
             _dataContext.SaveChanges();
             
             // TODO ako sa disposuje session

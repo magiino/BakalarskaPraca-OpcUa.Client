@@ -78,7 +78,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Messages\SendDataType.cs" />
+    <Compile Include="Messages\SendArchivedValue.cs" />
     <Compile Include="Migrations\201803192156523_InitialCreate.cs" />
     <Compile Include="Migrations\201803192156523_InitialCreate.Designer.cs">
       <DependentUpon>201803192156523_InitialCreate.cs</DependentUpon>
@@ -115,6 +115,7 @@
     <Compile Include="ViewModels\Application\MenuVM\MenuToolBarViewModel.cs" />
     <Compile Include="ViewModels\Application\MenuVM\MenuBarViewModel.cs" />
     <Compile Include="ViewModels\Application\SubscriptionVM\ArchiveViewModel.cs" />
+    <Compile Include="ViewModels\Application\SubscriptionVM\SubscriptionArchiveViewModel.cs" />
     <Compile Include="ViewModels\Application\SubscriptionVM\SubscriptionViewModel.cs" />
     <Compile Include="ViewModels\Application\NodeAttributesVM\NodeAttributesViewModel.cs" />
     <Compile Include="ViewModels\Application\UaClientSettingsViewModel.cs" />
