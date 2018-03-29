@@ -49,7 +49,7 @@
             // Set up child view models
             NodetreeViewModel = new NodeTreeViewModel();
             NodeAttributesViewModel = new NodeAttributesViewModel(uaClientApi);
-            SubscriptionViewModel = new SubscriptionViewModel(uaClientApi);
+            SubscriptionViewModel = new SubscriptionViewModel(uaClientApi, dataContext);
             MenuBarViewModel = new MenuBarViewModel(uaClientApi);
             MenuToolBarViewModel = new MenuToolBarViewModel(uaClientApi);
             ArchiveViewModel = new ArchiveViewModel(dataContext, uaClientApi);

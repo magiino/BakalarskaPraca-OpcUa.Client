@@ -1,6 +1,4 @@
-﻿using System.Windows.Controls;
-using OpcUA.Client.Core;
-
+﻿using OpcUA.Client.Core;
 
 namespace OpcUA.Client
 {

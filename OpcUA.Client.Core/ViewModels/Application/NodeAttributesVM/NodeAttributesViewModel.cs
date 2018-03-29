@@ -98,7 +98,7 @@ namespace OpcUA.Client.Core
             IsVariableType = false;
 
             NodeId = referenceDescription.NodeId;
-            Node = _uaClientApi.ReadNode(NodeId.ToString());
+            Node = _uaClientApi.ReadNode(NodeId);
 
             if (Node.NodeClass != NodeClass.Variable) return;
 
@@ -129,7 +129,7 @@ namespace OpcUA.Client.Core
             data.Add(new AttributeDataGrid("Browse Name", referenceDescription.BrowseName));
             data.Add(new AttributeDataGrid("Display Name", referenceDescription.DisplayName));
 
-            var node = _uaClientApi.ReadNode(tmpNodeId.ToString());
+            var node = _uaClientApi.ReadNode(tmpNodeId);
 
             data.Add(new AttributeDataGrid("Description", node.Description));
             data.Add(new AttributeDataGrid("Write Mask", node.WriteMask));

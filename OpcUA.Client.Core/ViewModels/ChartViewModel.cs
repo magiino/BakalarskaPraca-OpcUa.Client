@@ -12,10 +12,14 @@ namespace OpcUA.Client
     public class ChartViewModel : BaseViewModel
     {
         private readonly DataContext _dataContext;
+        private DateTime _lastTime;
+
         public ChartValues<DateTimePoint> Values { get; set; }
         public Func<double, string> DateTimeFormatter { get; set; }
         public long AxisMin { get; set; }
         public long AxisMax { get; set; }
+        public double AxisStep { get; set; }
+        public double AxisUnit { get; set; }
 
 
         public ICommand StopCommand { get; set; }
@@ -31,10 +35,34 @@ namespace OpcUA.Client
             //the values property will store our values array
             Values = new ChartValues<DateTimePoint>();
 
+            //AxisStep forces the distance between each separator in the X axis
+            AxisStep = TimeSpan.FromHours(3).Ticks;
+            //AxisUnit forces lets the axis know that we are plotting seconds
+            //this is not always necessary, but it can prevent wrong labeling
+            //AxisUnit = TimeSpan.TicksPerSecond;
+
             Read();
 
             //lets set how to display the X Labels
             DateTimeFormatter = value => new DateTime((long)value).ToString("dd MMM H:mm:ss");
+
+
+            MessengerInstance.Register<SendArchivedValue>(
+                this, val =>
+                {
+                    var test = _dataContext.Records.Local;
+                    var testRecords = test.Where(x => x.VariableEntityID == val.Id && _lastTime < x.ArchiveTime);
+
+                    foreach (var record in testRecords)
+                    {
+                        Values.Add(new DateTimePoint()
+                        {
+                            Value = Convert.ToDouble(record.Value),
+                            DateTime = record.ArchiveTime,
+                        });
+                        MaxAxisLimit(record.ArchiveTime);
+                    }
+                });
         }
 
         private void Read()
@@ -57,8 +85,14 @@ namespace OpcUA.Client
 
         private void SetAxisLimits(DateTime firstRecord, DateTime lastRecord)
         {
-            AxisMax = lastRecord.Ticks + TimeSpan.FromMinutes(5).Ticks;
-            AxisMin = firstRecord.Ticks - TimeSpan.FromMinutes(5).Ticks;
+            AxisMax = lastRecord.Ticks + TimeSpan.FromMinutes(1).Ticks;
+            AxisMin = firstRecord.Ticks - TimeSpan.FromMinutes(2).Ticks;
+            _lastTime = lastRecord;
+        }
+        private void MaxAxisLimit(DateTime newrRecord)
+        {
+            AxisMax = newrRecord.Ticks + TimeSpan.FromHours(2).Ticks;
+            _lastTime = newrRecord;
         }
     }
 }

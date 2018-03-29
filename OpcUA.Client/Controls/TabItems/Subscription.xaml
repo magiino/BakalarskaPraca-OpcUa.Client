@@ -33,7 +33,8 @@
                 <DataGridTextColumn Width="*" Binding="{Binding Value}"/>
                 <DataGridTextColumn Width="*" Binding="{Binding DataType}"/>
                 <DataGridTextColumn Width="*" Binding="{Binding StatusCode}"/>
-                <DataGridTextColumn Width="*" Binding="{Binding DateTime}"/>
+                <DataGridTextColumn Width="*" Binding="{Binding ServerDateTime}"/>
+                <DataGridTextColumn Width="*" Binding="{Binding SourceDateTime}"/>
 
             </DataGrid.Columns>
         </DataGrid>

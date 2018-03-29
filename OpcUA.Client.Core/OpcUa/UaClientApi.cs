@@ -138,7 +138,9 @@ namespace OpcUA.Client.Core
         /// <exception cref="Exception">Throws and forwards any exception with short error description.</exception>
         public ReferenceDescriptionCollection BrowseNode(ReferenceDescription referenceDescription)
         {
-            var nodeId = ExpandedNodeId.ToNodeId(referenceDescription.NodeId, null);
+            var expNodeId = referenceDescription.NodeId;
+            var nodeId = ExpandedNodeId.ToNodeId(expNodeId, new NamespaceTable());
+
             try
             {
                 //Browse from starting point for all object types
@@ -162,6 +164,7 @@ namespace OpcUA.Client.Core
             }
 
         }
+
         #endregion
 
         #region Connect / Disconnect
@@ -243,6 +246,7 @@ namespace OpcUA.Client.Core
                 UnRegisterNodes();
                 _session.Close(10000);
                 _session.Dispose();
+                _session = null;
             }
             catch (Exception e)
             {
@@ -320,9 +324,9 @@ namespace OpcUA.Client.Core
                 StartNodeId = ExpandedNodeId.ToNodeId(node.NodeId, null),
                 AttributeId = Attributes.Value,
                 MonitoringMode = MonitoringMode.Reporting,
-                // -1 minimum value, 1 maximum value
-                SamplingInterval = -1,
-                QueueSize = 1,
+                // -1 minimum if we want sample as subscription publish
+                SamplingInterval = 300,
+                QueueSize = 5,
                 CacheQueueSize = 1,
                 DiscardOldest = true,
                 // TODO deadband
@@ -453,7 +457,7 @@ namespace OpcUA.Client.Core
         /// <exception cref="Exception">Throws and forwards any exception with short error description.</exception>
         public Node ReadNode(ExpandedNodeId expandedNodeId)
         {
-            var nodeId = ExpandedNodeId.ToNodeId(expandedNodeId, null);
+            var nodeId = ExpandedNodeId.ToNodeId(expandedNodeId, new NamespaceTable());
             try
             {
                 //Read the dataValue
@@ -558,6 +562,7 @@ namespace OpcUA.Client.Core
 
             try
             {
+                // TODO osetrit ak nepatria tomu serveru
                 _session.RegisterNodes(null, nodeIdsToRegister, out var registeredNodeIds);
                 _registeredNodes.AddRange(registeredNodeIds);
                 return registeredNodeIds;
@@ -667,7 +672,7 @@ namespace OpcUA.Client.Core
                 OutputFilePath = Path.Combine(Environment.ExpandEnvironmentVariables("%userprofile%"),
                     "Documents\\UaClient\\TraceLogs.txt"),
                 DeleteOnLoad = true,
-                TraceMasks = Utils.TraceMasks.All,
+                TraceMasks = 0x40,
             };
             configuration.TraceConfiguration.ApplySettings();
 
