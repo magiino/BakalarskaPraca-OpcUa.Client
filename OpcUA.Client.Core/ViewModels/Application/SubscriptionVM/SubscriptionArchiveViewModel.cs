@@ -171,7 +171,7 @@ namespace OpcUA.Client.Core
             if (variable == null) return;
             variable.Value = value.Value;
             variable.StatusCode = value.StatusCode;
-            variable.DateTime = value.ServerTimestamp;
+            variable.ServerDateTime = value.ServerTimestamp;
         }
 
         #endregion

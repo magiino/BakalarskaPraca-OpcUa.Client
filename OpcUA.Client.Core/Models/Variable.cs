@@ -15,6 +15,7 @@ namespace OpcUA.Client.Core
 
         public StatusCode StatusCode { get; set; }
 
-        public DateTime DateTime { get; set; }
+        public DateTime ServerDateTime { get; set; }
+        public DateTime SourceDateTime { get; set; }
     }
 }

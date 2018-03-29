@@ -74,7 +74,7 @@ namespace OpcUA.Client.Core
 
         private void CreateSubscription()
         {
-            _subscription = _uaClientApi.Subscribe(500);
+            _subscription = _uaClientApi.Subscribe(2000);
             if (_subscription == null) return;
             SubscriptionCreated = true;
         }
@@ -172,15 +172,15 @@ namespace OpcUA.Client.Core
 
             if (variable == null) return;
 
-            _dataContext.Records.Add(new RecordEntity()
-            {
-                ArchiveTime = value.ServerTimestamp,
-                
+            //_dataContext.Records.Add(new RecordEntity()
+            //{
+            //    ArchiveTime = value.ServerTimestamp,
+            //});
 
-            });
             variable.Value = value.Value;
             variable.StatusCode = value.StatusCode;
-            variable.DateTime = value.ServerTimestamp;
+            variable.ServerDateTime = value.ServerTimestamp;
+            variable.SourceDateTime = value.SourceTimestamp;
         }
 
         #endregion

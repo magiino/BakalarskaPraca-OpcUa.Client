@@ -36,7 +36,11 @@ namespace OpcUA.Client.Core
 
         private void ConnectSession() { }
 
-        private void DisconnectSession() => _uaClientApi.Disconnect();
+        private void DisconnectSession()
+        {
+            _uaClientApi.Disconnect();
+            IoC.Application.GoToPage(ApplicationPage.Endpoints);
+        }
 
         #endregion
     }
