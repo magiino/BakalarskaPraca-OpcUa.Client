@@ -1,4 +1,4 @@
-﻿namespace OpcUA.Client.Core
+﻿namespace OpcUa.Client.Core
 {
     /// <inheritdoc />
     /// <summary>

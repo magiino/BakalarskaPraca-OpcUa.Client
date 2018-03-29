@@ -1,7 +1,7 @@
 ﻿using GalaSoft.MvvmLight.Messaging;
 using Ninject;
 
-namespace OpcUA.Client.Core
+namespace OpcUa.Client.Core
 {
     /// <summary>
     /// The IoC container for our application

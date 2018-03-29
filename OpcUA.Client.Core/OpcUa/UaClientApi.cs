@@ -7,9 +7,9 @@ using System.Security.Cryptography.X509Certificates;
 using Ninject.Infrastructure.Language;
 using Opc.Ua;
 using Opc.Ua.Client;
-using OpcUA.Client.Core.Models;
+using OpcUa.Client.Core;
 
-namespace OpcUA.Client.Core
+namespace OpcUa.Client.Core
 {
     public class UaClientApi
     {

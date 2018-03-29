@@ -1,4 +1,4 @@
-﻿namespace OpcUA.Client.Core
+﻿namespace OpcUa.Client.Core
 {
     /// <summary>
     /// A page of the application

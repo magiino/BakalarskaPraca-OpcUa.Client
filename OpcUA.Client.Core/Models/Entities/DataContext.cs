@@ -1,6 +1,6 @@
 ﻿using System.Data.Entity;
 
-namespace OpcUA.Client.Core
+namespace OpcUa.Client.Core
 {
     public class DataContext : DbContext
     {

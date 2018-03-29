@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Opc.Ua;
 
-namespace OpcUA.Client.Core
+namespace OpcUa.Client.Core
 {
     public class VariableEntity : BaseEntity
     {

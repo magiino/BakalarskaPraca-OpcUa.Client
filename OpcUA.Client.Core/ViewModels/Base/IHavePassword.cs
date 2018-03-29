@@ -1,6 +1,6 @@
 ﻿using System.Security;
 
-namespace OpcUA.Client.Core
+namespace OpcUa.Client.Core
 {
     /// <summary>
     /// An interface for a class that can provide a secure password

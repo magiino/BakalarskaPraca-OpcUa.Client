@@ -1,7 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.Linq;
 
-namespace OpcUA.Client.Core
+namespace OpcUa.Client.Core
 {
     /// <summary>
     /// The view model for the address space tab item

@@ -1,6 +1,6 @@
 ﻿using System.Windows.Input;
 
-namespace OpcUA.Client.Core
+namespace OpcUa.Client.Core
 {
     public class UaClientSettingsViewModel : BaseViewModel
     {

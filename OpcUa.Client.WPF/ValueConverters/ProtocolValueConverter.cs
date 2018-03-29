@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Globalization;
-using OpcUA.Client.Core;
+using OpcUa.Client.Core;
 
 namespace OpcUa.Client.WPF
 {

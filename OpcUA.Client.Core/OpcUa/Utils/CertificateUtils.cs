@@ -5,7 +5,7 @@ using System.Net.Sockets;
 using System.Security.Cryptography.X509Certificates;
 using Opc.Ua;
 
-namespace OpcUA.Client.Core
+namespace OpcUa.Client.Core
 {
     public static class CertificateUtils
     {

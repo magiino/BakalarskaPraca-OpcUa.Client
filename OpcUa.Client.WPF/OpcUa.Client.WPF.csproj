@@ -281,9 +281,9 @@
       <Project>{42E9198C-ED2C-4BC8-B0A1-55D91D8F1E90}</Project>
       <Name>UA Client Library</Name>
     </ProjectReference>
-    <ProjectReference Include="..\OpcUA.Client.Core\OpcUA.Client.Core.csproj">
+    <ProjectReference Include="..\OpcUA.Client.Core\OpcUa.Client.Core.csproj">
       <Project>{694dec57-6b2f-44e9-a4b8-72995b23a129}</Project>
-      <Name>OpcUA.Client.Core</Name>
+      <Name>OpcUa.Client.Core</Name>
     </ProjectReference>
     <ProjectReference Include="..\Stack\Core\UA Core Library.csproj">
       <Project>{7543AFCB-F5AF-44AF-83C9-23164474C1E9}</Project>

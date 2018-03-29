@@ -1,7 +1,7 @@
 ﻿using System;
 using Opc.Ua;
 
-namespace OpcUA.Client.Core
+namespace OpcUa.Client.Core
 {
     public class Variable : BaseViewModel
     {

@@ -1,4 +1,6 @@
-﻿namespace OpcUA.Client.Core
+﻿using OpcUa.Client.WPF;
+
+namespace OpcUa.Client.Core
 {
     public class MainViewModel : BaseViewModel
     {

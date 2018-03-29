@@ -10,7 +10,7 @@ using LiveCharts;
 using LiveCharts.Defaults;
 using LiveCharts.Wpf;
 using Opc.Ua;
-using OpcUA.Client.Core;
+using OpcUa.Client.Core;
 
 namespace OpcUa.Client.WPF
 {

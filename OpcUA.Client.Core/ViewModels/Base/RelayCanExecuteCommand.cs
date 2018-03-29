@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Input;
 
-namespace OpcUA.Client.Core
+namespace OpcUa.Client.Core
 {
     /// <inheritdoc />
     /// <summary>

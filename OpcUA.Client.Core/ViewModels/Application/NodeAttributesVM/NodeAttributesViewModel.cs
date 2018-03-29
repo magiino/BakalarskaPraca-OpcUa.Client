@@ -3,7 +3,7 @@ using System.Collections.ObjectModel;
 using System.Windows.Input;
 using Opc.Ua;
 
-namespace OpcUA.Client.Core
+namespace OpcUa.Client.Core
 {
     public class NodeAttributesViewModel : BaseViewModel
     {

@@ -2,7 +2,7 @@
 using System.Linq;
 using Opc.Ua;
 
-namespace OpcUA.Client.Core
+namespace OpcUa.Client.Core
 {
     public class EndpointDataGrid : BaseViewModel
     {

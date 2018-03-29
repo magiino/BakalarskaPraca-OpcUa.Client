@@ -3,7 +3,7 @@ using LiveCharts;
 using LiveCharts.Configurations;
 using LiveCharts.Defaults;
 using LiveCharts.Wpf;
-using OpcUA.Client.Core;
+using OpcUa.Client.Core;
 
 namespace OpcUA.Client
 {

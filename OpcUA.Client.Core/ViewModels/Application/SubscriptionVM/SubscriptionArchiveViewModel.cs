@@ -4,7 +4,7 @@ using System.Windows.Input;
 using Opc.Ua;
 using Opc.Ua.Client;
 
-namespace OpcUA.Client.Core
+namespace OpcUa.Client.Core
 {
     public class SubscriptionArchiveViewModel : BaseViewModel
     {

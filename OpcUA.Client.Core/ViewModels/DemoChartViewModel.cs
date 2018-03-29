@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using LiveCharts;
 using LiveCharts.Configurations;
-using OpcUA.Client.Core;
+using OpcUa.Client.Core;
 
 namespace OpcUA.Client
 {

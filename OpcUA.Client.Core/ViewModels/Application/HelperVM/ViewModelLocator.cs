@@ -1,4 +1,4 @@
-﻿namespace OpcUA.Client.Core
+﻿namespace OpcUa.Client.Core
 {
     /// <summary>
     /// Locates view models from the IoC for use in binding in Xaml files

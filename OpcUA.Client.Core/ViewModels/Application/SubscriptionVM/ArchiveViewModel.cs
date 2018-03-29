@@ -6,9 +6,9 @@ using System.Linq;
 using System.Threading;
 using System.Windows.Input;
 using Opc.Ua;
-using OpcUA.Client.Core.Models;
+using OpcUa.Client.Core;
 
-namespace OpcUA.Client.Core
+namespace OpcUa.Client.Core
 {
     public class ArchiveViewModel : BaseViewModel
     {

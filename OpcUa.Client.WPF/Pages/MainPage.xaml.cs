@@ -1,4 +1,4 @@
-﻿using OpcUA.Client.Core;
+﻿using OpcUa.Client.Core;
 
 namespace OpcUa.Client.WPF
 {

@@ -5,9 +5,9 @@ using LiveCharts;
 using LiveCharts.Configurations;
 using LiveCharts.Defaults;
 using Opc.Ua;
-using OpcUA.Client.Core;
+using OpcUa.Client.Core;
 
-namespace OpcUA.Client
+namespace OpcUa.Client.WPF
 {
     public class ChartViewModel : BaseViewModel
     {

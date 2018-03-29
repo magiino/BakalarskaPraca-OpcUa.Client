@@ -1,4 +1,4 @@
-namespace OpcUA.Client.Core.Migrations
+namespace OpcUa.Client.Core.Migrations
 {
     using System;
     using System.Data.Entity.Migrations;

@@ -2,7 +2,7 @@
 using System.Runtime.InteropServices;
 using System.Security;
 
-namespace OpcUA.Client.Core
+namespace OpcUa.Client.Core
 {
     /// <summary>
     /// Helpers for the <see cref="SecureString"/> class

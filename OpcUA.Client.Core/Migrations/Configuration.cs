@@ -2,21 +2,21 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Opc.Ua;
 
-namespace OpcUA.Client.Core.Migrations
+namespace OpcUa.Client.Core.Migrations
 {
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Migrations;
     using System.Linq;
 
-    internal sealed class Configuration : DbMigrationsConfiguration<OpcUA.Client.Core.DataContext>
+    internal sealed class Configuration : DbMigrationsConfiguration<OpcUa.Client.Core.DataContext>
     {
         public Configuration()
         {
             AutomaticMigrationsEnabled = false;
         }
 
-        protected override void Seed(OpcUA.Client.Core.DataContext context)
+        protected override void Seed(OpcUa.Client.Core.DataContext context)
         {
             //  This method will be called after migrating to the latest version.
 

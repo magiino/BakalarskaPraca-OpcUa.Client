@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Windows;
-using OpcUA.Client.Core;
+using OpcUa.Client.Core;
 
 namespace OpcUa.Client.WPF
 {

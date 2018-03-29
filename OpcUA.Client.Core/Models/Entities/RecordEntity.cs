@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace OpcUA.Client.Core
+namespace OpcUa.Client.Core
 {
     public class RecordEntity : BaseEntity
     {

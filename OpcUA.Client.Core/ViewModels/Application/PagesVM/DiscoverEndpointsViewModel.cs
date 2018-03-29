@@ -6,7 +6,7 @@ using System.Linq;
 using System.Windows.Input;
 using Opc.Ua;
 
-namespace OpcUA.Client.Core
+namespace OpcUa.Client.Core
 {
     public class DiscoverEndpointsViewModel : BaseViewModel
     {

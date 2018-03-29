@@ -3,7 +3,7 @@ using PropertyChanged;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Messaging;
 
-namespace OpcUA.Client.Core
+namespace OpcUa.Client.Core
 {
     /// <summary>
     /// A base view model that fires Property Changed events as needed

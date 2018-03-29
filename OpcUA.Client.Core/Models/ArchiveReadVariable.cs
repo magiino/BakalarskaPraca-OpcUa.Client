@@ -1,6 +1,6 @@
 ﻿using Opc.Ua;
 
-namespace OpcUA.Client.Core.Models
+namespace OpcUa.Client.Core
 {
     public class ArchiveReadVariable
     {
