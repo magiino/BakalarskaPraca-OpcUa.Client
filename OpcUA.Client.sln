@@ -11,6 +11,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UA Client Library", "Client
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UA Core Library", "Stack\Core\UA Core Library.csproj", "{7543AFCB-F5AF-44AF-83C9-23164474C1E9}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Ua Libraries", "Ua Libraries", "{BD5C936E-2B90-453A-A195-7C9E7932CD01}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{9D8AB212-5D7E-4696-AE36-C561655B8153}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Ui", "Ui", "{E9321F44-EFE9-47CF-9EF1-33752C080F02}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,6 +42,12 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{6A5C0335-9A64-4AE8-A20A-F86DF999EEB8} = {E9321F44-EFE9-47CF-9EF1-33752C080F02}
+		{694DEC57-6B2F-44E9-A4B8-72995B23A129} = {9D8AB212-5D7E-4696-AE36-C561655B8153}
+		{42E9198C-ED2C-4BC8-B0A1-55D91D8F1E90} = {BD5C936E-2B90-453A-A195-7C9E7932CD01}
+		{7543AFCB-F5AF-44AF-83C9-23164474C1E9} = {BD5C936E-2B90-453A-A195-7C9E7932CD01}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5C924BDE-9D8E-415A-B65C-9C4BFD12E5C3}
