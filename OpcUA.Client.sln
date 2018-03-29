@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26730.16
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpcUA.Client", "OpcUA.Client\OpcUA.Client.csproj", "{6A5C0335-9A64-4AE8-A20A-F86DF999EEB8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpcUa.Client.WPF", "OpcUa.Client.WPF\OpcUa.Client.WPF.csproj", "{6A5C0335-9A64-4AE8-A20A-F86DF999EEB8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpcUA.Client.Core", "OpcUA.Client.Core\OpcUA.Client.Core.csproj", "{694DEC57-6B2F-44E9-A4B8-72995B23A129}"
 EndProject
