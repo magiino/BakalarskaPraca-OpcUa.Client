@@ -21,9 +21,6 @@ namespace OpcUa.Client.WPF
                 case ApplicationPage.Endpoints:
                     return new DiscoverEndpoints();
 
-                case ApplicationPage.ClientSettings:
-                    return new UaClientSettings();
-
                 case ApplicationPage.Welcome:
                     return new WelcomePage();
                 default:

@@ -80,6 +80,7 @@
   <ItemGroup>
     <Compile Include="BL\Messages\SendArchivedValue.cs" />
     <Compile Include="BL\RecordRepository.cs" />
+    <Compile Include="DAL\IRepositary.cs" />
     <Compile Include="DAL\Migrations\201803192156523_InitialCreate.cs" />
     <Compile Include="DAL\Migrations\201803192156523_InitialCreate.Designer.cs">
       <DependentUpon>201803192156523_InitialCreate.cs</DependentUpon>
@@ -107,7 +108,7 @@
     <Compile Include="BL\Enums\TransportProtocol.cs" />
     <Compile Include="BL\Enums\SecurityPolicy.cs" />
     <Compile Include="BL\IoC.cs" />
-    <Compile Include="Repository.cs" />
+    <Compile Include="DAL\Repository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="BL\SecurityStringHelpers.cs" />
     <Compile Include="BL\OpcUa\Utils\ClientUtils.cs" />

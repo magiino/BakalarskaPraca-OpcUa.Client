@@ -64,21 +64,20 @@ namespace OpcUa.Client.Core
             }
         }
 
-        public void RemoveRecordaas<T>(ICollection<T> records)
+        public void UpdateRecord<T>(ICollection<T> records)
             where T : class, IEntity
         {
             using (var dbContext = new DataContext())
             {
             }
         }
-    }
 
-    public interface IRepository
-    {
-        T GetById<T>(int id) where T : class, IEntity;
-        T SaveRecord<T>(T record) where T : class, IEntity;
-        IEnumerable<T> SaveRecords<T>(ICollection<T> record) where T : class, IEntity;
-        T RemoveRecord<T>(T record) where T : class, IEntity;
-        IEnumerable<T> RemoveRecords<T>(ICollection<T> records) where T : class, IEntity;
+        public void UpdateRecords<T>(ICollection<T> records)
+            where T : class, IEntity
+        {
+            using (var dbContext = new DataContext())
+            {
+            }
+        }
     }
 }
