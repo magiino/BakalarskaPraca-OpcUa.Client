@@ -3,7 +3,7 @@
     /// <summary>
     /// Data model for attribute data grid
     /// </summary>
-    public class AttributeDataGrid : BaseViewModel
+    public class AttributeListModel : BaseViewModel
     {
         #region Public Properties
 
@@ -21,7 +21,7 @@
 
         #region Constructor
 
-        public AttributeDataGrid(string attribute, object value)
+        public AttributeListModel(string attribute, object value)
         {
             Attribute = attribute;
             Value = value;

@@ -3,7 +3,7 @@ using Opc.Ua;
 
 namespace OpcUa.Client.Core
 {
-    public class Variable : BaseViewModel
+    public class VariableModel : BaseViewModel
     {
         public string NodeId { get; set; }
 

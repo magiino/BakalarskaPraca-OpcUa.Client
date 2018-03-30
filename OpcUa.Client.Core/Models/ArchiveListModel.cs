@@ -1,6 +1,6 @@
 ﻿namespace OpcUa.Client.Core
 {
-    public class ArchiveInfoTable : BaseViewModel
+    public class ArchiveListModel : BaseViewModel
     {
         public ArchiveInterval ArchiveInterval { get; set; }
         public int VariablesCount { get; set; }

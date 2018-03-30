@@ -4,7 +4,7 @@ using Opc.Ua;
 
 namespace OpcUa.Client.Core
 {
-    public class EndpointDataGrid : BaseViewModel
+    public class EndpointListModel : BaseViewModel
     {
         #region Public Properties
         public EndpointDescription EndpointDesciption { get; set; }
@@ -27,7 +27,7 @@ namespace OpcUa.Client.Core
 
         #region Constructor
 
-        public EndpointDataGrid(EndpointDescription endpointDesciption)
+        public EndpointListModel(EndpointDescription endpointDesciption)
         {
             EndpointDesciption = endpointDesciption;
             Tokens = EndpointDesciption.UserIdentityTokens.Select(x => x.TokenType).ToList();

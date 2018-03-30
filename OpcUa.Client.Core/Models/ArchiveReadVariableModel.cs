@@ -2,7 +2,7 @@
 
 namespace OpcUa.Client.Core
 {
-    public class ArchiveReadVariable
+    public class ArchiveReadVariableModel
     {
         public int VariableId { get; set; } 
         public object Value { get; set; }
