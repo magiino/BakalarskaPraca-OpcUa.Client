@@ -81,6 +81,8 @@
     <Compile Include="BL\IoC\Interfaces\IUIManager.cs" />
     <Compile Include="BL\Messages\SendArchivedValue.cs" />
     <Compile Include="BL\RecordRepository.cs" />
+    <Compile Include="DAL\Entities\UserEntity.cs" />
+    <Compile Include="DAL\Entities\ProjectEntity.cs" />
     <Compile Include="DAL\Entities\NotificationEntity.cs" />
     <Compile Include="DAL\IRepositary.cs" />
     <Compile Include="DAL\Migrations\201803192156523_InitialCreate.cs" />
@@ -111,6 +113,10 @@
     <Compile Include="BL\Enums\SecurityPolicy.cs" />
     <Compile Include="BL\IoC\Base\IoC.cs" />
     <Compile Include="DAL\Repository.cs" />
+    <Compile Include="Migrations\201803302313163_UserAndProjectEntity.cs" />
+    <Compile Include="Migrations\201803302313163_UserAndProjectEntity.Designer.cs">
+      <DependentUpon>201803302313163_UserAndProjectEntity.cs</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="BL\SecurityStringHelpers.cs" />
     <Compile Include="BL\OpcUa\Utils\ClientUtils.cs" />
@@ -165,6 +171,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="DAL\Migrations\201803252146502_VarDescriptionAdded.resx">
       <DependentUpon>201803252146502_VarDescriptionAdded.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803302313163_UserAndProjectEntity.resx">
+      <DependentUpon>201803302313163_UserAndProjectEntity.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup />

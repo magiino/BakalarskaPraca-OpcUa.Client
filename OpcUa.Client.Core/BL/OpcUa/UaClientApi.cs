@@ -320,20 +320,24 @@ namespace OpcUa.Client.Core
             var monitoredItem = new MonitoredItem
             {
                 DisplayName = node.DisplayName.ToString(),
-                StartNodeId = ExpandedNodeId.ToNodeId(node.NodeId, null),
+                StartNodeId = ExpandedNodeId.ToNodeId(node.NodeId, new NamespaceTable()),
                 AttributeId = Attributes.Value,
                 MonitoringMode = MonitoringMode.Reporting,
                 // -1 minimum if we want sample as subscription publish
                 SamplingInterval = 300,
+                // Cache na strane serveru
                 QueueSize = 5,
-                CacheQueueSize = 1,
+                // Cache na mojej strane, kolko hodnot si ulozim
+                CacheQueueSize = 5,
                 DiscardOldest = true,
-                
+
                 // TODO deadband
-                //Filter = new DataChangeFilter()
-                //{
-                //  Deadband    
-                //}
+                Filter = new DataChangeFilter()
+                {
+                    DeadbandType = (uint)DeadbandType.Absolute,
+                    DeadbandValue = 2,
+                    Trigger = DataChangeTrigger.Status
+                }
             };
             try
             {

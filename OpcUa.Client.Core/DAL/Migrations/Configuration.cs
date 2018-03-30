@@ -20,7 +20,7 @@ namespace OpcUa.Client.Core.Migrations
             //  to avoid creating duplicate seed data.
             var record1 = new RecordEntity()
             {
-                Id = 1,
+                Id = 143,
                 VariableEntityId = 1,
                 Value = "566",
                 ArchiveTime = DateTime.Now
@@ -29,7 +29,7 @@ namespace OpcUa.Client.Core.Migrations
 
             var record2 = new RecordEntity()
             {
-                Id = 2,
+                Id = 144,
                 VariableEntityId = 2,
                 Value = "20",
                 ArchiveTime = DateTime.Now
@@ -38,7 +38,7 @@ namespace OpcUa.Client.Core.Migrations
 
             var record3 = new RecordEntity()
             {
-                Id = 3,
+                Id = 145,
                 VariableEntityId = 3,
                 Value = "1500",
                 ArchiveTime = DateTime.Now
@@ -47,7 +47,7 @@ namespace OpcUa.Client.Core.Migrations
 
             var record4 = new RecordEntity()
             {
-                Id = 4,
+                Id = 146,
                 VariableEntityId = 1,
                 Value = "576",
                 ArchiveTime = DateTime.Now + TimeSpan.FromSeconds(30)
@@ -56,7 +56,7 @@ namespace OpcUa.Client.Core.Migrations
 
             var record5 = new RecordEntity()
             {
-                Id = 5,
+                Id = 147,
                 VariableEntityId = 2,
                 Value = "26",
                 ArchiveTime = DateTime.Now + TimeSpan.FromSeconds(30)
@@ -65,7 +65,7 @@ namespace OpcUa.Client.Core.Migrations
 
             var record6 = new RecordEntity()
             {
-                Id = 6,
+                Id = 148,
                 VariableEntityId = 3,
                 Value = "1566",
                 ArchiveTime = DateTime.Now + TimeSpan.FromSeconds(30)
@@ -74,7 +74,7 @@ namespace OpcUa.Client.Core.Migrations
 
             var record7 = new RecordEntity()
             {
-                Id = 7,
+                Id = 149,
                 VariableEntityId = 1,
                 Value = "586",
                 ArchiveTime = DateTime.Now + TimeSpan.FromSeconds(60)
@@ -83,7 +83,7 @@ namespace OpcUa.Client.Core.Migrations
 
             var record8 = new RecordEntity()
             {
-                Id = 8,
+                Id = 150,
                 VariableEntityId = 2,
                 Value = "33",
                 ArchiveTime = DateTime.Now + TimeSpan.FromSeconds(60)
@@ -92,7 +92,7 @@ namespace OpcUa.Client.Core.Migrations
 
             var record9 = new RecordEntity()
             {
-                Id = 9,
+                Id = 151,
                 VariableEntityId = 3,
                 Value = "1570",
                 ArchiveTime = DateTime.Now + TimeSpan.FromSeconds(60)

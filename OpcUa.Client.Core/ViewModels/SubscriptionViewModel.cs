@@ -35,9 +35,9 @@ namespace OpcUa.Client.Core
         public ICommand DeleteVariableFromSubscriptionCommand { get; set; }
         public ICommand CreateSubscriptionCommand { get; set; }
         public ICommand DeleteSubscriptionCommand { get; set; }
-        public ICommand LoadSubscriptionCommand { get; set; }
-        public ICommand SaveSubscriptionCommand { get; set; }
-        public ICommand WriteValueCommand { get; set; }
+        //public ICommand LoadSubscriptionCommand { get; set; }
+        //public ICommand SaveSubscriptionCommand { get; set; }
+        //public ICommand WriteValueCommand { get; set; }
 
         #endregion
 
@@ -55,9 +55,9 @@ namespace OpcUa.Client.Core
             DeleteVariableFromSubscriptionCommand = new RelayCommand(DeleteVariableFromSubscription);
             CreateSubscriptionCommand = new RelayCommand(CreateSubscription);
             DeleteSubscriptionCommand = new RelayCommand(DeleteSubscrition);
-            SaveSubscriptionCommand = new RelayCommand(SaveSubscription);
-            LoadSubscriptionCommand = new RelayCommand(LoadSubscription);
-            WriteValueCommand = new RelayCommand(WriteValue);
+            //SaveSubscriptionCommand = new RelayCommand(SaveSubscription);
+            //LoadSubscriptionCommand = new RelayCommand(LoadSubscription);
+            //WriteValueCommand = new RelayCommand(WriteValue);
 
             MessengerInstance.Register<SendSelectedRefNode>(
                 this,
@@ -74,7 +74,7 @@ namespace OpcUa.Client.Core
 
         private void CreateSubscription()
         {
-            _subscription = _uaClientApi.Subscribe(2000);
+            _subscription = _uaClientApi.Subscribe(15000);
             if (_subscription == null) return;
             SubscriptionCreated = true;
         }
