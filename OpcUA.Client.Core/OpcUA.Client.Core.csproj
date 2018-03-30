@@ -107,6 +107,7 @@
     <Compile Include="BL\Enums\TransportProtocol.cs" />
     <Compile Include="BL\Enums\SecurityPolicy.cs" />
     <Compile Include="BL\IoC.cs" />
+    <Compile Include="Repository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="BL\SecurityStringHelpers.cs" />
     <Compile Include="BL\OpcUa\Utils\ClientUtils.cs" />
@@ -137,7 +138,7 @@
     <Compile Include="ViewModels\StaticChartViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
+    <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
