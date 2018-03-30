@@ -4,22 +4,9 @@ using OpcUa.Client.Core;
 namespace OpcUa.Client.WPF
 {
     /// <summary>
-    /// A base page for all pages to gain base functionality
-    /// </summary>
-    public class BasePage : Page
-    {
-        /// <summary>
-        /// Default constructor
-        /// </summary>
-        public BasePage()
-        {
-        }
-    }
-
-    /// <summary>
     /// A base page with added ViewModel support
     /// </summary>
-    public class BasePage<VM> : BasePage
+    public class BasePage<VM> : Page
         where VM : BaseViewModel, new()
     {
         #region Private Member
