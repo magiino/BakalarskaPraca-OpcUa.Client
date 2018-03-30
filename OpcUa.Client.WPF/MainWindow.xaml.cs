@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.Windows;
 using OpcUa.Client.Core;
 
@@ -14,6 +15,7 @@ namespace OpcUa.Client.WPF
         public MainWindow()
         {
             InitializeComponent();
+            DataContext = new WindowViewModel();
         }
 
         #endregion
@@ -22,7 +24,16 @@ namespace OpcUa.Client.WPF
         {
             IoC.DisposeAll();
         }
- 
+
+        private void MainWindow_OnDeactivated(object sender, EventArgs e)
+        {
+            ((WindowViewModel) DataContext).DimmableOverlayVisible = true;
+        }
+
+        private void MainWindow_OnActivated(object sender, EventArgs e)
+        {
+            ((WindowViewModel) DataContext).DimmableOverlayVisible = false;
+        }
     }
 }
 

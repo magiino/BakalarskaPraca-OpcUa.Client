@@ -17,17 +17,19 @@ namespace OpcUa.Client.WPF
         {
             base.OnStartup(e);
 
-            ConfigureIoc();
+            ConfigureIoC();
 
             // Show the main window
             Current.MainWindow = new MainWindow();
             Current.MainWindow.Show();
         }
 
-        private static void ConfigureIoc()
+        private static void ConfigureIoC()
         {
             // Configure IoC
             IoC.Configure();
+
+            IoC.Kernel.Bind<IUIManager>().ToConstant(new UIManager());
         }
     }
 }

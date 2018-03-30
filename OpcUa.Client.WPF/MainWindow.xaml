@@ -7,18 +7,33 @@
         xmlns:core="clr-namespace:OpcUa.Client.Core;assembly=OpcUa.Client.Core"
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
-        MinWidth="600"
-        MinHeight="300"
-        Title="OPC UA Client" Height="auto" Width="auto">
+        MinWidth="{Binding WindowMinimumWidth}"
+        MinHeight="{Binding WindowMinimumHeight}"
+        Deactivated="MainWindow_OnDeactivated"
+        Activated="MainWindow_OnActivated"
+        Title="OPC UA Client" 
+        Height="auto" 
+        Width="auto">
 
-    <Frame
-        local:NoFrameHistory.Value="True"
-        d:DataContext=""
-        DataContext="{Binding ApplicationViewModel.CurrentPage,
-                                      Source={x:Static core:ViewModelLocator.Instance},
-                                      Converter={local:ApplicationPageValueConverter}}"
-        Content="{Binding}"
-        Background="Transparent"
-    />
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
 
+        <Border Grid.RowSpan="1"
+                Opacity="{Binding DimmableOverlayVisible, Converter={local:OpacityConverter}}"
+                Panel.ZIndex="10">
+            <Border Background="{StaticResource ForegroundVeryDarkBrush}"/>
+        </Border>
+        <Frame
+            Grid.Row="0"
+            local:NoFrameHistory.Value="True"
+            d:DataContext=""
+            DataContext="{Binding ApplicationViewModel.CurrentPage,
+                          Source={x:Static core:ViewModelLocator.Instance},
+                          Converter={local:ApplicationPageValueConverter}}"
+
+            Content="{Binding}"
+            Background="Transparent"/>
+    </Grid>
 </Window>

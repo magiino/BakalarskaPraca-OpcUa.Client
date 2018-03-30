@@ -1,6 +1,6 @@
 ﻿namespace OpcUa.Client.Core
 {
-    public class WindowViewModel
+    public class WindowViewModel : BaseViewModel
     {
         #region Public Properties
 
@@ -13,6 +13,11 @@
         /// The smallest height the window can go to
         /// </summary>
         public double WindowMinimumHeight { get; set; } = 500;
+
+        /// <summary>
+        /// True if main window is not focused
+        /// </summary>
+        public bool DimmableOverlayVisible { get; set; }
 
         #endregion
     }
