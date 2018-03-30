@@ -36,9 +36,9 @@ namespace OpcUa.Client.Core
             }
         }
 
-        public ObservableCollection<EndpointDataGrid> FilteredEndpoints { get; set; }
+        public ObservableCollection<EndpointListModel> FilteredEndpoints { get; set; }
 
-        public EndpointDataGrid SelectedEndpointDataGrid
+        public EndpointListModel SelectedEndpointListModel
         {
             set
             {
@@ -53,15 +53,15 @@ namespace OpcUa.Client.Core
 
             public string SessionName { get; set; } = "MySession";
 
-            public IEnumerable<Protocol> EProtocols { get; set; } = Enum.GetValues(typeof(Protocol)).Cast<Protocol>();
+            public IEnumerable<TransportProtocol> EProtocols { get; set; } = Enum.GetValues(typeof(TransportProtocol)).Cast<TransportProtocol>();
 
-            private Protocol _selectedProtocol;
-            public Protocol SelectedProtocol
+            private TransportProtocol _selectedTransportProtocol;
+            public TransportProtocol SelectedTransportProtocol
             {
-                get => _selectedProtocol;
+                get => _selectedTransportProtocol;
                 set
                 {
-                    _selectedProtocol = value;
+                    _selectedTransportProtocol = value;
                     EndpointFilter();
                 }
             }
@@ -163,12 +163,12 @@ namespace OpcUa.Client.Core
         #region Endpoints Filter Methods
         private void EndpointFilter()
         {
-            var filterProtocol = EndpointUtils.SelectByProtocol(_discoveredEndpoints, SelectedProtocol);
+            var filterProtocol = EndpointUtils.SelectByProtocol(_discoveredEndpoints, SelectedTransportProtocol);
             var filterSecurityMode = EndpointUtils.SelectByMessageSecurityModes(filterProtocol, GetSelectedModes());
             var filterSecurityPolciies = EndpointUtils.SelectBySecurityPolicies(filterSecurityMode, GetSelectedPolicies());
             var filterServer = EndpointUtils.SelectByApplicationName(filterSecurityPolciies, SelectedServer?.ApplicationName.ToString());
 
-            FilteredEndpoints = new ObservableCollection<EndpointDataGrid>(filterServer.Select(x => new EndpointDataGrid(x)));
+            FilteredEndpoints = new ObservableCollection<EndpointListModel>(filterServer.Select(x => new EndpointListModel(x)));
         }
 
         private List<MessageSecurityMode> GetSelectedModes()
