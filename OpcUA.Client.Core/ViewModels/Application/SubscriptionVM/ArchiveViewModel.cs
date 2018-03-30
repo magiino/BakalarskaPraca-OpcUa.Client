@@ -18,7 +18,7 @@ namespace OpcUa.Client.Core
         private readonly UaClientApi _uaClientApi;
         private ReferenceDescription _refDescOfSelectedNode;
         private readonly Dictionary<ArchiveInterval, Timer> _timers = new Dictionary<ArchiveInterval, Timer>();
-        private List<ArchiveReadVariable> _registeredNodesForRead;
+        private List<ArchiveReadVariableModel> _registeredNodesForRead;
 
         #endregion
 
@@ -27,8 +27,8 @@ namespace OpcUa.Client.Core
         public ObservableCollection<VariableEntity> ArchiveVariables { get; set; }
         public VariableEntity SelectedArchiveVariable { get; set; }
        
-        public ObservableCollection<ArchiveInfoTable> ArchiveInfo { get; set; }
-        public ArchiveInfoTable SelectedArchiveInfo { get; set; }
+        public ObservableCollection<ArchiveListModel> ArchiveInfo { get; set; }
+        public ArchiveListModel SelectedArchiveInfo { get; set; }
 
         public bool ArchiveInfoIsSelected => SelectedArchiveInfo != null;
         public bool AddArchiveVariableIsEnabled { get; set; }
@@ -128,7 +128,7 @@ namespace OpcUa.Client.Core
             if (_dataContext.SaveChanges() != 1) return;
 
             var registeredNode = _uaClientApi.RegisterNode(nodeId);
-            _registeredNodesForRead.Add( new ArchiveReadVariable()
+            _registeredNodesForRead.Add( new ArchiveReadVariableModel()
             {
                 Interval = SelectedArchiveInfo.ArchiveInterval,
                 RegisteredNodeId = registeredNode,
@@ -212,7 +212,7 @@ namespace OpcUa.Client.Core
             // TODO prerobit
             if(registeredNodes.Count != ArchiveVariables.Count) throw  new ValidationException("Pocty sa nerovnaju");
 
-            _registeredNodesForRead = ArchiveVariables.Zip(registeredNodes, (entity, regNode) => new ArchiveReadVariable()
+            _registeredNodesForRead = ArchiveVariables.Zip(registeredNodes, (entity, regNode) => new ArchiveReadVariableModel()
             {
                 VariableId = entity.Id,
                 RegisteredNodeId = regNode,
@@ -224,11 +224,11 @@ namespace OpcUa.Client.Core
         private void InitializeTables()
         {
             var archiveIntervals = Enum.GetValues(typeof(ArchiveInterval)).Cast<ArchiveInterval>();
-            ArchiveInfo = new ObservableCollection<ArchiveInfoTable>();
+            ArchiveInfo = new ObservableCollection<ArchiveListModel>();
 
             foreach (var interval in archiveIntervals)
             {
-                ArchiveInfo.Add(new ArchiveInfoTable()
+                ArchiveInfo.Add(new ArchiveListModel()
                 {
                     ArchiveInterval = interval,
                     VariablesCount = ArchiveVariables.Count(x => x.Archive == interval),

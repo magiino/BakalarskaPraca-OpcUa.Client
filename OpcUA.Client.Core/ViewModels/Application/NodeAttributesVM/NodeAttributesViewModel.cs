@@ -12,7 +12,7 @@ namespace OpcUa.Client.Core
         #endregion
 
         #region Public Properties
-        public ObservableCollection<AttributeDataGrid> SelectedNode { get; set; } = new ObservableCollection<AttributeDataGrid>();
+        public ObservableCollection<AttributeListModel> SelectedNode { get; set; } = new ObservableCollection<AttributeListModel>();
         public ExpandedNodeId NodeId { get; set; }
         public ReferenceDescription ReferenceDescription { get; set; }
         public Node Node { get; set; }
@@ -66,7 +66,7 @@ namespace OpcUa.Client.Core
         private void WriteSingleValue()
         {
             var nodeId = ExpandedNodeId.ToNodeId(ReferenceDescription.NodeId, null);
-            var variable = new Variable()
+            var variable = new VariableModel()
             {
                 NodeId = nodeId.ToString(),
                 Name = ReferenceDescription.DisplayName.ToString()
@@ -115,42 +115,42 @@ namespace OpcUa.Client.Core
         ///// </summary>
         ///// <param name="referenceDescription"></param>
         ///// <returns></returns>
-        private ObservableCollection<AttributeDataGrid> GetDataGridModel(ReferenceDescription referenceDescription)
+        private ObservableCollection<AttributeListModel> GetDataGridModel(ReferenceDescription referenceDescription)
         {
-            var data = new ObservableCollection<AttributeDataGrid>();
+            var data = new ObservableCollection<AttributeListModel>();
 
             var tmpNodeId = referenceDescription.NodeId;
 
-            data.Add(new AttributeDataGrid("Node Id", tmpNodeId));
-            data.Add(new AttributeDataGrid("Namespace Index", tmpNodeId.NamespaceIndex));
-            data.Add(new AttributeDataGrid("Type", tmpNodeId.IdType));
-            data.Add(new AttributeDataGrid("Identifier", tmpNodeId.Identifier));
-            data.Add(new AttributeDataGrid("Node Class", referenceDescription.NodeClass));
-            data.Add(new AttributeDataGrid("Browse Name", referenceDescription.BrowseName));
-            data.Add(new AttributeDataGrid("Display Name", referenceDescription.DisplayName));
+            data.Add(new AttributeListModel("Node Id", tmpNodeId));
+            data.Add(new AttributeListModel("Namespace Index", tmpNodeId.NamespaceIndex));
+            data.Add(new AttributeListModel("Type", tmpNodeId.IdType));
+            data.Add(new AttributeListModel("Identifier", tmpNodeId.Identifier));
+            data.Add(new AttributeListModel("Node Class", referenceDescription.NodeClass));
+            data.Add(new AttributeListModel("Browse Name", referenceDescription.BrowseName));
+            data.Add(new AttributeListModel("Display Name", referenceDescription.DisplayName));
 
             var node = _uaClientApi.ReadNode(tmpNodeId);
 
-            data.Add(new AttributeDataGrid("Description", node.Description));
-            data.Add(new AttributeDataGrid("Write Mask", node.WriteMask));
-            data.Add(new AttributeDataGrid("User Write Mask", node.UserWriteMask));
+            data.Add(new AttributeListModel("Description", node.Description));
+            data.Add(new AttributeListModel("Write Mask", node.WriteMask));
+            data.Add(new AttributeListModel("User Write Mask", node.UserWriteMask));
 
             if (node.NodeClass != NodeClass.Variable) return data;
 
             var variableNode = (VariableNode)node.DataLock;
-            data.Add(new AttributeDataGrid("Value Rank", variableNode.ValueRank));
-            data.Add(new AttributeDataGrid("Data Type", variableNode.DataType));
-            data.Add(new AttributeDataGrid("Namespace Index", variableNode.DataType.NamespaceIndex));
-            data.Add(new AttributeDataGrid("Identifier", variableNode.DataType.Identifier));
-            data.Add(new AttributeDataGrid("Id Type", variableNode.DataType.IdType));
-            data.Add(new AttributeDataGrid("Array Dimensions", variableNode.ArrayDimensions));
-            data.Add(new AttributeDataGrid("Access Level", variableNode.AccessLevel));
-            data.Add(new AttributeDataGrid("User Access Level", variableNode.UserAccessLevel));
-            data.Add(new AttributeDataGrid("Historozing", variableNode.Historizing));
-            data.Add(new AttributeDataGrid("Minimum Sampling", variableNode.MinimumSamplingInterval));
-            data.Add(new AttributeDataGrid("Value", _uaClientApi.ReadValue(variableNode.NodeId)));
-            data.Add(new AttributeDataGrid("Data Type", TypeInfo.GetSystemType(variableNode.DataType, new EncodeableFactory())));
-            data.Add(new AttributeDataGrid("Built In Type", TypeInfo.GetBuiltInType(variableNode.DataType)));
+            data.Add(new AttributeListModel("Value Rank", variableNode.ValueRank));
+            data.Add(new AttributeListModel("Data Type", variableNode.DataType));
+            data.Add(new AttributeListModel("Namespace Index", variableNode.DataType.NamespaceIndex));
+            data.Add(new AttributeListModel("Identifier", variableNode.DataType.Identifier));
+            data.Add(new AttributeListModel("Id Type", variableNode.DataType.IdType));
+            data.Add(new AttributeListModel("Array Dimensions", variableNode.ArrayDimensions));
+            data.Add(new AttributeListModel("Access Level", variableNode.AccessLevel));
+            data.Add(new AttributeListModel("User Access Level", variableNode.UserAccessLevel));
+            data.Add(new AttributeListModel("Historozing", variableNode.Historizing));
+            data.Add(new AttributeListModel("Minimum Sampling", variableNode.MinimumSamplingInterval));
+            data.Add(new AttributeListModel("Value", _uaClientApi.ReadValue(variableNode.NodeId)));
+            data.Add(new AttributeListModel("Data Type", TypeInfo.GetSystemType(variableNode.DataType, new EncodeableFactory())));
+            data.Add(new AttributeListModel("Built In Type", TypeInfo.GetBuiltInType(variableNode.DataType)));
 
             return data;
         }

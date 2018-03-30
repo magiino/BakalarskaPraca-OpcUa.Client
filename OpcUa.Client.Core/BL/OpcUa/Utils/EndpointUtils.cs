@@ -8,9 +8,9 @@ namespace OpcUa.Client.Core
     {
         private static readonly string[] Protocol = { "opc.tcp://", "http://", "https://"};
 
-        public static string EProtocolToString(Protocol protocol)
+        public static string EProtocolToString(TransportProtocol transportProtocol)
         {
-            return Protocol[(int)protocol];
+            return Protocol[(int)transportProtocol];
         }
 
 
@@ -23,9 +23,9 @@ namespace OpcUa.Client.Core
 
 
 
-        public static List<EndpointDescription> SelectByProtocol(List<EndpointDescription> endpoints, Protocol protocol)
+        public static List<EndpointDescription> SelectByProtocol(List<EndpointDescription> endpoints, TransportProtocol transportProtocol)
         {
-            return endpoints?.Where(endpoint => endpoint.EndpointUrl.ToLower().StartsWith( EProtocolToString(protocol)) ).ToList();
+            return endpoints?.Where(endpoint => endpoint.EndpointUrl.ToLower().StartsWith( EProtocolToString(transportProtocol)) ).ToList();
         }
 
 

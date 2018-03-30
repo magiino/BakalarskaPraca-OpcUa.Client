@@ -167,7 +167,7 @@
                             <TextBox Text="{Binding SessionName}"/>
 
                             <!-- Protocol Combo Box -->
-                            <TextBlock Text="Protocol"/>
+                            <TextBlock Text="TransportProtocol"/>
                             <ComboBox SelectedIndex="0"
                                       ItemsSource="{Binding EProtocols}"
                                       SelectedItem="{Binding SelectedProtocol, Mode=TwoWay}"/>

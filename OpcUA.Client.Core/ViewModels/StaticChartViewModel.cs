@@ -48,11 +48,11 @@ namespace OpcUA.Client
                 Values = new ChartValues<DateTimePoint>()
             };
             /*
-            var variable = _dataContext.Variables.FirstOrDefault(x => x.Id == 1);
-            if (variable == null) return;
-            foreach (var record in variable.Records)
+            var variableModel = _dataContext.Variables.FirstOrDefault(x => x.Id == 1);
+            if (variableModel == null) return;
+            foreach (var record in variableModel.Records)
             {
-                var type = TypeInfo.GetSystemType(variable.DataType, -1);
+                var type = TypeInfo.GetSystemType(variableModel.DataType, -1);
                 var value = (Int16) Convert.ChangeType(record.Value, type);
                 data.Values.Add(new ChartModel<Int16>
                 {
@@ -62,7 +62,7 @@ namespace OpcUA.Client
             }
             Series.Add(data);
             
-            SetAxisLimits(variable.Records.Last().ArchiveTime, variable.Records.First().ArchiveTime);
+            SetAxisLimits(variableModel.Records.Last().ArchiveTime, variableModel.Records.First().ArchiveTime);
             */
         }
 

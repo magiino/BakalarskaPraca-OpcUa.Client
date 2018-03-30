@@ -18,13 +18,13 @@ namespace OpcUa.Client.Core
 
         #region Public Properties
 
-        public ObservableCollection<Variable> SubscribedVariables { get; set; } = new ObservableCollection<Variable>();
-        public Variable SelectedSubscribedVariable { get; set; }
+        public ObservableCollection<VariableModel> SubscribedVariables { get; set; } = new ObservableCollection<VariableModel>();
+        public VariableModel SelectedSubscribedVariableModel { get; set; }
         public string ValueToWrite { get; set; }
 
         public bool SubscriptionCreated { get; set; }
         public bool AddIsEnabled { get; set; }
-        public bool DeleteIsEnabled => SelectedSubscribedVariable != null;
+        public bool DeleteIsEnabled => SelectedSubscribedVariableModel != null;
 
         #endregion
 
@@ -93,7 +93,7 @@ namespace OpcUa.Client.Core
         {
             if (_refDescOfSelectedNode == null) return;
             // TODO private metoda opakovany kod
-            var tmp = new Variable()
+            var tmp = new VariableModel()
             {
                 NodeId = _refDescOfSelectedNode.NodeId.ToString(),
                 Name = _refDescOfSelectedNode.DisplayName.ToString()
@@ -108,9 +108,9 @@ namespace OpcUa.Client.Core
 
         private void DeleteVariableFromSubscription()
         {
-            if (SelectedSubscribedVariable == null) return;
-            _uaClientApi.RemoveMonitoredItem(_subscription, SelectedSubscribedVariable.NodeId);
-            SubscribedVariables.Remove(SelectedSubscribedVariable);
+            if (SelectedSubscribedVariableModel == null) return;
+            _uaClientApi.RemoveMonitoredItem(_subscription, SelectedSubscribedVariableModel.NodeId);
+            SubscribedVariables.Remove(SelectedSubscribedVariableModel);
         }
 
         private void SaveSubscription()
@@ -130,7 +130,7 @@ namespace OpcUa.Client.Core
             // TODO private metoda opakovany kod
             foreach (var item in _subscription.MonitoredItems)
             {
-                var tmp = new Variable()
+                var tmp = new VariableModel()
                 {
                     NodeId = item.StartNodeId.ToString(),
                     Name = item.DisplayName
@@ -147,7 +147,7 @@ namespace OpcUa.Client.Core
 
         private void WriteValue()
         {
-            _uaClientApi.WriteValue(SelectedSubscribedVariable, ValueToWrite);
+            _uaClientApi.WriteValue(SelectedSubscribedVariableModel, ValueToWrite);
         }
 
         #endregion

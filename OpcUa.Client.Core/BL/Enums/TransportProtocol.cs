@@ -1,9 +1,9 @@
 ﻿namespace OpcUa.Client.Core
 {
     /// <summary>
-    /// Enum of transport protocol supported by Opc Ua
+    /// Enum of transport transportProtocol supported by Opc Ua
     /// </summary>
-    public enum Protocol
+    public enum TransportProtocol
     {
         /// <summary>
         /// Ua Tcp binary
