@@ -6,7 +6,6 @@ using System.Linq;
 using System.Threading;
 using System.Windows.Input;
 using Opc.Ua;
-using OpcUa.Client.Core;
 
 namespace OpcUa.Client.Core
 {

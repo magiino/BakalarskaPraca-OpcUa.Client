@@ -65,7 +65,7 @@
             </StackPanel>
 
             <StackPanel Grid.Column="1" Margin="10 0 10 0">
-                <Button Content="Load"
+                <Button Content="Import Xaml"
                                             Padding="10 5"
                                             Command="{Binding LoadSubscriptionCommand}"/>
                 <Button Content="Save"

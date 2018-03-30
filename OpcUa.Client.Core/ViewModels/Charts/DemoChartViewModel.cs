@@ -4,9 +4,8 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using LiveCharts;
 using LiveCharts.Configurations;
-using OpcUa.Client.Core;
 
-namespace OpcUA.Client
+namespace OpcUa.Client.Core
 {
     public class MeasureModel
     {

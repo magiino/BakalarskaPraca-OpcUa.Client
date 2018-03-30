@@ -3,9 +3,8 @@ using LiveCharts;
 using LiveCharts.Configurations;
 using LiveCharts.Defaults;
 using LiveCharts.Wpf;
-using OpcUa.Client.Core;
 
-namespace OpcUA.Client
+namespace OpcUa.Client.Core
 {
     public class StaticChartViewModel : BaseViewModel
     {
