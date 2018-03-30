@@ -179,7 +179,7 @@ namespace OpcUa.Client.Core
             // Vytvorenie zaznamov
             var records = variablesForRead.Select(x => new RecordEntity()
             {
-                VariableEntityID = x.VariableId,
+                VariableEntityId = x.VariableId,
                 Value = x.Value.ToString(),
                 ArchiveTime = DateTime.Now
             }).ToList();

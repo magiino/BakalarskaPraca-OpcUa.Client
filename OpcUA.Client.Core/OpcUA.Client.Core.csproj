@@ -80,6 +80,7 @@
   <ItemGroup>
     <Compile Include="BL\Messages\SendArchivedValue.cs" />
     <Compile Include="BL\RecordRepository.cs" />
+    <Compile Include="DAL\Entities\NotificationEntity.cs" />
     <Compile Include="DAL\IRepositary.cs" />
     <Compile Include="DAL\Migrations\201803192156523_InitialCreate.cs" />
     <Compile Include="DAL\Migrations\201803192156523_InitialCreate.Designer.cs">

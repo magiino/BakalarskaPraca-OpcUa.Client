@@ -1,22 +1,18 @@
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using Opc.Ua;
 
 namespace OpcUa.Client.Core.Migrations
 {
     using System;
-    using System.Data.Entity;
     using System.Data.Entity.Migrations;
-    using System.Linq;
 
-    internal sealed class Configuration : DbMigrationsConfiguration<OpcUa.Client.Core.DataContext>
+    internal sealed class Configuration : DbMigrationsConfiguration<DataContext>
     {
         public Configuration()
         {
             AutomaticMigrationsEnabled = false;
         }
 
-        protected override void Seed(OpcUa.Client.Core.DataContext context)
+        protected override void Seed(DataContext context)
         {
             //  This method will be called after migrating to the latest version.
 
@@ -25,7 +21,7 @@ namespace OpcUa.Client.Core.Migrations
             var record1 = new RecordEntity()
             {
                 Id = 1,
-                VariableEntityID = 1,
+                VariableEntityId = 1,
                 Value = "566",
                 ArchiveTime = DateTime.Now
             };
@@ -34,7 +30,7 @@ namespace OpcUa.Client.Core.Migrations
             var record2 = new RecordEntity()
             {
                 Id = 2,
-                VariableEntityID = 2,
+                VariableEntityId = 2,
                 Value = "20",
                 ArchiveTime = DateTime.Now
             };
@@ -43,7 +39,7 @@ namespace OpcUa.Client.Core.Migrations
             var record3 = new RecordEntity()
             {
                 Id = 3,
-                VariableEntityID = 3,
+                VariableEntityId = 3,
                 Value = "1500",
                 ArchiveTime = DateTime.Now
             };
@@ -52,7 +48,7 @@ namespace OpcUa.Client.Core.Migrations
             var record4 = new RecordEntity()
             {
                 Id = 4,
-                VariableEntityID = 1,
+                VariableEntityId = 1,
                 Value = "576",
                 ArchiveTime = DateTime.Now + TimeSpan.FromSeconds(30)
             };
@@ -61,7 +57,7 @@ namespace OpcUa.Client.Core.Migrations
             var record5 = new RecordEntity()
             {
                 Id = 5,
-                VariableEntityID = 2,
+                VariableEntityId = 2,
                 Value = "26",
                 ArchiveTime = DateTime.Now + TimeSpan.FromSeconds(30)
             };
@@ -70,7 +66,7 @@ namespace OpcUa.Client.Core.Migrations
             var record6 = new RecordEntity()
             {
                 Id = 6,
-                VariableEntityID = 3,
+                VariableEntityId = 3,
                 Value = "1566",
                 ArchiveTime = DateTime.Now + TimeSpan.FromSeconds(30)
             };
@@ -79,7 +75,7 @@ namespace OpcUa.Client.Core.Migrations
             var record7 = new RecordEntity()
             {
                 Id = 7,
-                VariableEntityID = 1,
+                VariableEntityId = 1,
                 Value = "586",
                 ArchiveTime = DateTime.Now + TimeSpan.FromSeconds(60)
             };
@@ -88,7 +84,7 @@ namespace OpcUa.Client.Core.Migrations
             var record8 = new RecordEntity()
             {
                 Id = 8,
-                VariableEntityID = 2,
+                VariableEntityId = 2,
                 Value = "33",
                 ArchiveTime = DateTime.Now + TimeSpan.FromSeconds(60)
             };
@@ -97,7 +93,7 @@ namespace OpcUa.Client.Core.Migrations
             var record9 = new RecordEntity()
             {
                 Id = 9,
-                VariableEntityID = 3,
+                VariableEntityId = 3,
                 Value = "1570",
                 ArchiveTime = DateTime.Now + TimeSpan.FromSeconds(60)
             };

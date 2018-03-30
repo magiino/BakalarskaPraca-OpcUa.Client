@@ -328,6 +328,7 @@ namespace OpcUa.Client.Core
                 QueueSize = 5,
                 CacheQueueSize = 1,
                 DiscardOldest = true,
+                
                 // TODO deadband
                 //Filter = new DataChangeFilter()
                 //{
