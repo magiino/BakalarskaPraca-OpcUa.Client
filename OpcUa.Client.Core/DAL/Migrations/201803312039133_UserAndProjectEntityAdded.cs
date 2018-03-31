@@ -1,13 +1,11 @@
-namespace OpcUa.Client.Core.Migrations
+namespace OpcUa.Client.Core.DAL.Migrations
 {
-    using System;
     using System.Data.Entity.Migrations;
     
-    public partial class UserAndProjectEntity : DbMigration
+    public partial class UserAndProjectEntityAdded : DbMigration
     {
         public override void Up()
         {
-            DropIndex("dbo.RecordEntities", new[] { "VariableEntityID" });
             CreateTable(
                 "dbo.ProjectEntities",
                 c => new
@@ -33,17 +31,43 @@ namespace OpcUa.Client.Core.Migrations
                     })
                 .PrimaryKey(t => t.Id);
             
-            CreateIndex("dbo.RecordEntities", "VariableEntityId");
+            CreateTable(
+                "dbo.RecordEntities",
+                c => new
+                    {
+                        Id = c.Int(nullable: false, identity: true),
+                        VariableEntityId = c.Int(nullable: false),
+                        Value = c.String(),
+                        ArchiveTime = c.DateTime(nullable: false),
+                    })
+                .PrimaryKey(t => t.Id)
+                .ForeignKey("dbo.VariableEntities", t => t.VariableEntityId, cascadeDelete: true)
+                .Index(t => t.VariableEntityId);
+            
+            CreateTable(
+                "dbo.VariableEntities",
+                c => new
+                    {
+                        Id = c.Int(nullable: false, identity: true),
+                        Name = c.String(),
+                        Description = c.String(),
+                        DataType = c.Int(nullable: false),
+                        Archive = c.Int(nullable: false),
+                    })
+                .PrimaryKey(t => t.Id);
+            
         }
         
         public override void Down()
         {
+            DropForeignKey("dbo.RecordEntities", "VariableEntityId", "dbo.VariableEntities");
             DropForeignKey("dbo.ProjectEntities", "UserEntityId", "dbo.UserEntities");
             DropIndex("dbo.RecordEntities", new[] { "VariableEntityId" });
             DropIndex("dbo.ProjectEntities", new[] { "UserEntityId" });
+            DropTable("dbo.VariableEntities");
+            DropTable("dbo.RecordEntities");
             DropTable("dbo.UserEntities");
             DropTable("dbo.ProjectEntities");
-            CreateIndex("dbo.RecordEntities", "VariableEntityID");
         }
     }
 }

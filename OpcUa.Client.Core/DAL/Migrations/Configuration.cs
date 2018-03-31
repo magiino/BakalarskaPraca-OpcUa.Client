@@ -1,15 +1,16 @@
+using System;
+using System.Data.Entity.Migrations;
 using Opc.Ua;
 
-namespace OpcUa.Client.Core.Migrations
+namespace OpcUa.Client.Core.DAL
 {
-    using System;
-    using System.Data.Entity.Migrations;
-
     internal sealed class Configuration : DbMigrationsConfiguration<DataContext>
     {
         public Configuration()
         {
             AutomaticMigrationsEnabled = false;
+            MigrationsDirectory = @"DAL\Migrations";
+            MigrationsNamespace = "OpcUa.Client.Core.DAL.Migrations";
         }
 
         protected override void Seed(DataContext context)
@@ -20,7 +21,7 @@ namespace OpcUa.Client.Core.Migrations
             //  to avoid creating duplicate seed data.
             var record1 = new RecordEntity()
             {
-                Id = 143,
+                Id = 1,
                 VariableEntityId = 1,
                 Value = "566",
                 ArchiveTime = DateTime.Now
@@ -29,7 +30,7 @@ namespace OpcUa.Client.Core.Migrations
 
             var record2 = new RecordEntity()
             {
-                Id = 144,
+                Id = 2,
                 VariableEntityId = 2,
                 Value = "20",
                 ArchiveTime = DateTime.Now
@@ -38,7 +39,7 @@ namespace OpcUa.Client.Core.Migrations
 
             var record3 = new RecordEntity()
             {
-                Id = 145,
+                Id = 3,
                 VariableEntityId = 3,
                 Value = "1500",
                 ArchiveTime = DateTime.Now
@@ -47,7 +48,7 @@ namespace OpcUa.Client.Core.Migrations
 
             var record4 = new RecordEntity()
             {
-                Id = 146,
+                Id = 4,
                 VariableEntityId = 1,
                 Value = "576",
                 ArchiveTime = DateTime.Now + TimeSpan.FromSeconds(30)
@@ -56,7 +57,7 @@ namespace OpcUa.Client.Core.Migrations
 
             var record5 = new RecordEntity()
             {
-                Id = 147,
+                Id = 5,
                 VariableEntityId = 2,
                 Value = "26",
                 ArchiveTime = DateTime.Now + TimeSpan.FromSeconds(30)
@@ -65,7 +66,7 @@ namespace OpcUa.Client.Core.Migrations
 
             var record6 = new RecordEntity()
             {
-                Id = 148,
+                Id = 6,
                 VariableEntityId = 3,
                 Value = "1566",
                 ArchiveTime = DateTime.Now + TimeSpan.FromSeconds(30)
@@ -74,7 +75,7 @@ namespace OpcUa.Client.Core.Migrations
 
             var record7 = new RecordEntity()
             {
-                Id = 149,
+                Id = 7,
                 VariableEntityId = 1,
                 Value = "586",
                 ArchiveTime = DateTime.Now + TimeSpan.FromSeconds(60)
@@ -83,7 +84,7 @@ namespace OpcUa.Client.Core.Migrations
 
             var record8 = new RecordEntity()
             {
-                Id = 150,
+                Id = 8,
                 VariableEntityId = 2,
                 Value = "33",
                 ArchiveTime = DateTime.Now + TimeSpan.FromSeconds(60)
@@ -92,7 +93,7 @@ namespace OpcUa.Client.Core.Migrations
 
             var record9 = new RecordEntity()
             {
-                Id = 151,
+                Id = 9,
                 VariableEntityId = 3,
                 Value = "1570",
                 ArchiveTime = DateTime.Now + TimeSpan.FromSeconds(60)

@@ -121,6 +121,9 @@
     <Compile Include="Controls\TabItems\TreeView.xaml.cs">
       <DependentUpon>TreeView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\UaClientSettings.xaml.cs">
+      <DependentUpon>UaClientSettings.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Dialogs\Base\BaseDialogUserControl.cs" />
     <Compile Include="Dialogs\DialogAddNotification.xaml.cs">
       <DependentUpon>DialogAddNotification.xaml</DependentUpon>
@@ -135,10 +138,7 @@
     <Compile Include="Pages\DiscoverEndpoints.xaml.cs">
       <DependentUpon>DiscoverEndpoints.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\UaClientSettings.xaml.cs">
-      <DependentUpon>UaClientSettings.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="UIManager.cs" />
+    <Compile Include="IoC\UIManager.cs" />
     <Compile Include="ValueConverters\OpacityConverter.cs" />
     <Compile Include="ValueConverters\BooleanToVisibilityConverter.cs" />
     <Compile Include="ValueConverters\BooleanConverter.cs" />
@@ -188,6 +188,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Controls\UaClientSettings.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Dialogs\DialogAddNotification.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -221,10 +225,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\MainPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Pages\UaClientSettings.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
