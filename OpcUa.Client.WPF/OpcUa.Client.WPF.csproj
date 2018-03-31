@@ -121,7 +121,6 @@
     <Compile Include="Controls\TabItems\TreeView.xaml.cs">
       <DependentUpon>TreeView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Dialogs\AddNotificationDialog.cs" />
     <Compile Include="Dialogs\Base\BaseDialogUserControl.cs" />
     <Compile Include="Dialogs\DialogAddNotification.xaml.cs">
       <DependentUpon>DialogAddNotification.xaml</DependentUpon>

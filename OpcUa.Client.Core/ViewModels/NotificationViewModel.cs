@@ -108,8 +108,8 @@ namespace OpcUa.Client.Core
         private void DeleteNotification()
         {
             if (SelectedNotification == null) return;
-            _uaClientApi.RemoveMonitoredItem(_subscription, SelectedSubscribedVariableModel.NodeId);
-            Notifications.Remove(SelectedSubscribedVariableModel);
+            _uaClientApi.RemoveMonitoredItem(_subscription, SelectedNotification.NodeId);
+            Notifications.Remove(SelectedNotification);
         }
 
         private void SaveSubscription()
@@ -141,12 +141,6 @@ namespace OpcUa.Client.Core
             }
             _subscription.ApplyChanges();
 
-            SubscriptionCreated = true;
-        }
-
-        private void WriteValue()
-        {
-            _uaClientApi.WriteValue(SelectedSubscribedVariableModel, ValueToWrite);
         }
 
         #endregion
@@ -160,8 +154,6 @@ namespace OpcUa.Client.Core
         /// <param name="e"></param>
         private void Notification_MonitoredItem(MonitoredItem monitoredItem, MonitoredItemNotificationEventArgs e)
         {
-
-
             if (!(e.NotificationValue is MonitoredItemNotification notification))
                 return;
 
@@ -170,11 +162,6 @@ namespace OpcUa.Client.Core
             var variable = Notifications.FirstOrDefault(x => x.Name == monitoredItem.DisplayName);
 
             if (variable == null) return;
-
-            //_dataContext.Records.Add(new RecordEntity()
-            //{
-            //    ArchiveTime = value.ServerTimestamp,
-            //});
 
             variable.Value = value.Value;
             variable.StatusCode = value.StatusCode;
