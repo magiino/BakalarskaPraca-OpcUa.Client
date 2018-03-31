@@ -123,6 +123,7 @@
     <Compile Include="BL\OpcUa\Utils\ClientUtils.cs" />
     <Compile Include="BL\OpcUa\UaClientApi.cs" />
     <Compile Include="BL\Models\VariableModel.cs" />
+    <Compile Include="ViewModels\Base\MixRelayCommand.cs" />
     <Compile Include="ViewModels\Dialogs\AddNotificationDialogViewModel.cs" />
     <Compile Include="ViewModels\Dialogs\Base\BaseDialogViewModel.cs" />
     <Compile Include="ViewModels\Dialogs\Design\MessageBoxDialogDesignModel.cs" />
@@ -140,7 +141,6 @@
     <Compile Include="ViewModels\Window\WindowViewModel.cs" />
     <Compile Include="ViewModels\Base\BaseViewModel.cs" />
     <Compile Include="ViewModels\Base\IHavePassword.cs" />
-    <Compile Include="ViewModels\Base\RelayCanExecuteCommand.cs" />
     <Compile Include="ViewModels\Base\RelayCommand.cs" />
     <Compile Include="ViewModels\Base\RelayParameterizedCommand.cs" />
     <Compile Include="ViewModels\TreeView\NodeTreeItemViewModel.cs" />
