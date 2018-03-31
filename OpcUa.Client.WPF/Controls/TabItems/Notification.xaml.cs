@@ -3,11 +3,11 @@
 namespace OpcUa.Client.WPF
 {
     /// <summary>
-    /// Interaction logic for Notifications.xaml
+    /// Interaction logic for Notification.xaml
     /// </summary>
-    public partial class Notifications : UserControl
+    public partial class Notification : UserControl
     {
-        public Notifications()
+        public Notification()
         {
             InitializeComponent();
         }

@@ -16,6 +16,8 @@ namespace OpcUa.Client.Core
         /// </summary>
         private readonly Action _action;
 
+        private Predicate<object> _canExecute;
+
         #endregion
 
         #region Public Events

@@ -21,15 +21,6 @@ namespace OpcUa.Client.WPF
 
         #endregion
 
-        #region Public Commands
-
-        /// <summary>
-        /// Closes this dialog
-        /// </summary>
-        public ICommand CloseCommand { get; private set; }
-
-        #endregion
-
         #region Public Properties
 
         /// <summary>
@@ -61,9 +52,6 @@ namespace OpcUa.Client.WPF
                 // Create a new dialog window
                 _dialogWindow = new DialogWindow();
                 _dialogWindow.ViewModel = new DialogWindowViewModel();
-
-                // Create close command
-                CloseCommand = new RelayCommand(() => _dialogWindow.Close());
             }
         }
 
@@ -95,6 +83,10 @@ namespace OpcUa.Client.WPF
 
                     // Set this control to the dialog window content
                     _dialogWindow.ViewModel.Content = this;
+
+                    // Create close command
+                    viewModel.CloseAction = () => _dialogWindow.Close();
+                        
 
                     // Setup this controls data context binding to the view model
                     DataContext = viewModel;

@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="OpcUa.Client.WPF.Notifications"
+﻿<UserControl x:Class="OpcUa.Client.WPF.Notification"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -15,19 +15,19 @@
 
         <!-- ListView of subscribed variables -->
         <DataGrid ItemsSource="{Binding SubscribedVariables}"
-                                      Background="{StaticResource BackgroundLightBrush}"
-                                      SelectedItem="{Binding SelectedSubscribedVariable}"
-                                      SelectionMode="Single"
-                                      HeadersVisibility="None"
-                                      BorderThickness="0"
-                                      AutoGenerateColumns="false"
-                                      RowHeaderWidth="0"
-                                      CanUserResizeColumns="False"
-                                      CanUserReorderColumns="False"
-                                      IsReadOnly="True"
-                                      SelectedIndex="0"
-                                      IsManipulationEnabled="False"
-                                      CanUserAddRows="False">
+                  Background="{StaticResource BackgroundLightBrush}"
+                  SelectedItem="{Binding SelectedNotification}"
+                  SelectionMode="Single"
+                  HeadersVisibility="None"
+                  BorderThickness="0"
+                  AutoGenerateColumns="false"
+                  RowHeaderWidth="0"
+                  CanUserResizeColumns="False"
+                  CanUserReorderColumns="False"
+                  IsReadOnly="True"
+                  SelectedIndex="0"
+                  IsManipulationEnabled="False"
+                  CanUserAddRows="False">
             <DataGrid.Columns>
                 <DataGridTextColumn Width="*" Binding="{Binding Name}"/>
                 <DataGridTextColumn Width="*" Binding="{Binding Value}"/>
@@ -77,11 +77,11 @@
             <StackPanel Grid.Column="1">
                 <Button Content="Add Notification"
                         Padding="10 5"
-                        Command="{Binding AddVariableToSubscriptionCommand}"
+                        Command="{Binding AddNotificationCommand}"
                         IsEnabled="{Binding AddIsEnabled}"/>
                 <Button Content="Delete Notification"
                         Padding="10 5"
-                        Command="{Binding DeleteVariableFromSubscriptionCommand}"
+                        Command="{Binding RemoveNotificationCommand}"
                         IsEnabled="{Binding DeleteIsEnabled}"/>
             </StackPanel>
 

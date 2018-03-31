@@ -6,7 +6,7 @@ using Opc.Ua.Client;
 
 namespace OpcUa.Client.Core
 {
-    public class SubscriptionViewModel : BaseViewModel
+    public class NotificationViewModel : BaseViewModel
     {
         #region Private Fields
 
@@ -19,25 +19,18 @@ namespace OpcUa.Client.Core
 
         #region Public Properties
 
-        public ObservableCollection<VariableModel> SubscribedVariables { get; set; } = new ObservableCollection<VariableModel>();
-        public VariableModel SelectedSubscribedVariableModel { get; set; }
-        public string ValueToWrite { get; set; }
+        public ObservableCollection<VariableModel> Notifications { get; set; } = new ObservableCollection<VariableModel>();
+        public VariableModel SelectedNotification { get; set; }
 
-        public bool SubscriptionCreated { get; set; }
         public bool AddIsEnabled { get; set; }
-        public bool DeleteIsEnabled => SelectedSubscribedVariableModel != null;
+        public bool DeleteIsEnabled => SelectedNotification != null;
 
         #endregion
 
         #region Commands
 
-        public ICommand AddVariableToSubscriptionCommand { get; set; }
-        public ICommand DeleteVariableFromSubscriptionCommand { get; set; }
-        public ICommand CreateSubscriptionCommand { get; set; }
-        public ICommand DeleteSubscriptionCommand { get; set; }
-        //public ICommand LoadSubscriptionCommand { get; set; }
-        //public ICommand SaveSubscriptionCommand { get; set; }
-        //public ICommand WriteValueCommand { get; set; }
+        public ICommand AddNotificationCommand { get; set; }
+        public ICommand RemoveNotificationCommand { get; set; }
 
         #endregion
 
@@ -46,18 +39,15 @@ namespace OpcUa.Client.Core
         // TODO prerobit _selectedNode z refDisc na NodeId
         // TODO Prerobit WriteValue v opcuaApi
         // TODO Stale tam zobrazovat atributy len menit hodnoty !!!
-        public SubscriptionViewModel(UaClientApi uaClientApi, DataContext dataContext)
+        public NotificationViewModel(UaClientApi uaClientApi, DataContext dataContext)
         {
             _uaClientApi = uaClientApi;
             _dataContext = dataContext;
+            _subscription = _uaClientApi.NotificationSubscription();
 
-            AddVariableToSubscriptionCommand = new RelayCommand(AddVariableToSubscription);
-            DeleteVariableFromSubscriptionCommand = new RelayCommand(DeleteVariableFromSubscription);
-            CreateSubscriptionCommand = new RelayCommand(CreateSubscription);
-            DeleteSubscriptionCommand = new RelayCommand(DeleteSubscrition);
-            //SaveSubscriptionCommand = new RelayCommand(SaveSubscription);
-            //LoadSubscriptionCommand = new RelayCommand(LoadSubscription);
-            //WriteValueCommand = new RelayCommand(WriteValue);
+            //AddNotificationCommand = new RelayCommand(AddNotification);
+            //RemoveNotificationCommand = new RelayCommand(DeleteNotification);
+            //AddNotificationCommand = new Rela
 
             MessengerInstance.Register<SendSelectedRefNode>(
                 this,
@@ -66,53 +56,60 @@ namespace OpcUa.Client.Core
                     _refDescOfSelectedNode = node.RefNode;
                     AddIsEnabled = _refDescOfSelectedNode.NodeClass == NodeClass.Variable;
                 });
+
+            MessengerInstance.Register<SendMonitoredItem>(
+                this,
+                item => AddNotificationToSubscription(item.Item));
         }
 
         #endregion
 
         #region Command Methods
 
-        private void CreateSubscription()
+        private void AddNotification()
         {
-            _subscription = _uaClientApi.Subscribe(15000);
-            if (_subscription == null) return;
-            SubscriptionCreated = true;
+            if (_refDescOfSelectedNode.NodeClass != NodeClass.Variable)
+            {
+                IoC.Ui.ShowMessage(new MessageBoxDialogViewModel()
+                {
+                    Title = "Error",
+                    Message = "Musíte zvoliť Nodu typu Variable!",
+                    OkText = "Ok"
+                });
+                return;
+            }
+
+            IoC.Ui.ShowAddNotification(new AddNotificationDialogViewModel()
+            {
+                NodeId = _refDescOfSelectedNode.NodeId.ToString()
+            });
         }
 
-        private void DeleteSubscrition()
+        private void AddNotificationToSubscription(MonitoredItem item)
         {
-            _uaClientApi.RemoveSubscription(_subscription);
-            _subscription = null;
-            SubscribedVariables.Clear();
-            SubscriptionCreated = false;
-            //_subscription.MonitoredItemCount;
-            //_subscription.Created;
-            //_subscription.DisplayName;
-            //_subscription.Id;
-        }
+            var nodeId = item.StartNodeId.ToString();
+            var type = _uaClientApi.GetBuiltInTypeOfVariableNodeId(nodeId);
 
-        private void AddVariableToSubscription()
-        {
-            if (_refDescOfSelectedNode == null) return;
             // TODO private metoda opakovany kod
             var tmp = new VariableModel()
             {
-                NodeId = _refDescOfSelectedNode.NodeId.ToString(),
-                Name = _refDescOfSelectedNode.DisplayName.ToString()
-                // TODO set up type here
+                NodeId = nodeId,
+                Name = item.DisplayName,
+                DataType = type,
+                Value = "No change yet",
             };
 
-            var monitoredItem = _uaClientApi.AddMonitoredItem(_refDescOfSelectedNode, _subscription);
-            monitoredItem.Notification += Notification_MonitoredItem;
+            _uaClientApi.AddMonitoredItem(item, _subscription);
+            item.Notification += Notification_MonitoredItem;
 
-            SubscribedVariables.Add(tmp);
+            Notifications.Add(tmp);
         }
 
-        private void DeleteVariableFromSubscription()
+        private void DeleteNotification()
         {
-            if (SelectedSubscribedVariableModel == null) return;
+            if (SelectedNotification == null) return;
             _uaClientApi.RemoveMonitoredItem(_subscription, SelectedSubscribedVariableModel.NodeId);
-            SubscribedVariables.Remove(SelectedSubscribedVariableModel);
+            Notifications.Remove(SelectedSubscribedVariableModel);
         }
 
         private void SaveSubscription()
@@ -140,7 +137,7 @@ namespace OpcUa.Client.Core
                 };
 
                 item.Notification += Notification_MonitoredItem;
-                SubscribedVariables.Add(tmp);
+                Notifications.Add(tmp);
             }
             _subscription.ApplyChanges();
 
@@ -163,12 +160,14 @@ namespace OpcUa.Client.Core
         /// <param name="e"></param>
         private void Notification_MonitoredItem(MonitoredItem monitoredItem, MonitoredItemNotificationEventArgs e)
         {
+
+
             if (!(e.NotificationValue is MonitoredItemNotification notification))
                 return;
 
             var value = notification.Value;
 
-            var variable = SubscribedVariables.FirstOrDefault(x => x.Name == monitoredItem.DisplayName);
+            var variable = Notifications.FirstOrDefault(x => x.Name == monitoredItem.DisplayName);
 
             if (variable == null) return;
 

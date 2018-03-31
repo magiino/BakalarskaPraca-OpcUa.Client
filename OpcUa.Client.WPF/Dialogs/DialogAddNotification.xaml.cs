@@ -3,9 +3,9 @@
     /// <summary>
     /// Interaction logic for DialogMessageBox.xaml
     /// </summary>
-    public partial class AddNotificationMessageBox : BaseDialogUserControl
+    public partial class DialogAddNotification : BaseDialogUserControl
     {
-        public AddNotificationMessageBox()
+        public DialogAddNotification()
         {
             InitializeComponent();
         }

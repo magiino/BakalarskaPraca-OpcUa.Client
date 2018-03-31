@@ -115,15 +115,16 @@
     <Compile Include="Controls\TabItems\Chart.xaml.cs">
       <DependentUpon>Chart.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\TabItems\Notifications.xaml.cs">
-      <DependentUpon>Notifications.xaml</DependentUpon>
+    <Compile Include="Controls\TabItems\Notification.xaml.cs">
+      <DependentUpon>Notification.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\TabItems\TreeView.xaml.cs">
       <DependentUpon>TreeView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Dialogs\BaseDialogUserControl.cs" />
-    <Compile Include="Dialogs\AddNotificationMessageBox.xaml.cs">
-      <DependentUpon>AddNotificationMessageBox.xaml</DependentUpon>
+    <Compile Include="Dialogs\AddNotificationDialog.cs" />
+    <Compile Include="Dialogs\Base\BaseDialogUserControl.cs" />
+    <Compile Include="Dialogs\DialogAddNotification.xaml.cs">
+      <DependentUpon>DialogAddNotification.xaml</DependentUpon>
     </Compile>
     <Compile Include="Dialogs\DialogMessageBox.xaml.cs">
       <DependentUpon>DialogMessageBox.xaml</DependentUpon>
@@ -180,7 +181,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\TabItems\Notifications.xaml">
+    <Page Include="Controls\TabItems\Notification.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -188,7 +189,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Dialogs\AddNotificationMessageBox.xaml">
+    <Page Include="Dialogs\DialogAddNotification.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

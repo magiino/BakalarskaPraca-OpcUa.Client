@@ -53,8 +53,8 @@
                 <!-- Third Column-->
                 <TabControl Grid.Column="2" SelectedIndex="{Binding SelectedIndex}">
                     <TabItem Header="Subscribed Nodes"
-                             DataContext="{Binding SubscriptionViewModel}">
-                        <local:Notifications />
+                             DataContext="{Binding NotificationViewModel}">
+                        <local:Notification />
                     </TabItem>
                     <TabItem Header="Archive">
                         <local:Archive DataContext="{Binding ArchiveViewModel}" />

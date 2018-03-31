@@ -9,7 +9,7 @@
 
         public NodeTreeViewModel NodetreeViewModel { get; set; }
         public NodeAttributesViewModel NodeAttributesViewModel { get; set; }
-        public SubscriptionViewModel SubscriptionViewModel { get; set; }
+        public NotificationViewModel NotificationViewModel { get; set; }
         public ArchiveViewModel ArchiveViewModel { get; set; }
         public MenuBarViewModel MenuBarViewModel { get; set; }
         public MenuToolBarViewModel MenuToolBarViewModel { get; set; }
@@ -49,7 +49,7 @@
             // Set up child view models
             NodetreeViewModel = new NodeTreeViewModel();
             NodeAttributesViewModel = new NodeAttributesViewModel(uaClientApi);
-            SubscriptionViewModel = new SubscriptionViewModel(uaClientApi, dataContext);
+            NotificationViewModel = new NotificationViewModel(uaClientApi, dataContext);
             MenuBarViewModel = new MenuBarViewModel(uaClientApi);
             MenuToolBarViewModel = new MenuToolBarViewModel(uaClientApi);
             ArchiveViewModel = new ArchiveViewModel(dataContext, uaClientApi);

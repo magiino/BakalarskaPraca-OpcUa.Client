@@ -24,7 +24,6 @@ namespace OpcUa.Client.Core
 
         public UaClientApi()
         {
-            // Creats the application configuration (containing the certificate) on construction
             _applicationConfig = CreateClientConfiguration();
             CertificateUtils.CheckApplicationInstanceCertificate(_applicationConfig, false, 2048);
         }
@@ -85,21 +84,6 @@ namespace OpcUa.Client.Core
 
         #endregion
 
-        #region Public Methods
-
-        public void CreateDefaultConfiguration()
-        {
-            if (_applicationConfig != null) return;
-            _applicationConfig = CreateClientConfiguration();
-        }
-
-        public void SaveConfiguration()
-        {
-            _applicationConfig?.SaveToFile(Path.Combine(Environment.ExpandEnvironmentVariables("%userprofile%"), "Documents\\UaClient\\Configuration.xml"));
-        }
-
-        #endregion
-
         #region Browse
 
         /// <summary>Browses the root folder of an OPC UA server.</summary>
@@ -128,7 +112,6 @@ namespace OpcUa.Client.Core
                 // TODO handle Exception here
                 throw e;
             }
-
         }
 
         /// <summary>Browses a node ID provided by a ReferenceDescription</summary>
@@ -161,7 +144,6 @@ namespace OpcUa.Client.Core
                 // TODO handle Exception here
                 throw e;
             }
-
         }
 
         #endregion
@@ -180,7 +162,6 @@ namespace OpcUa.Client.Core
                 var endpointConfiguration = EndpointConfiguration.Create(_applicationConfig);
                 var endpoint = new ConfiguredEndpoint(null, endpointDescription, endpointConfiguration);
 
-
                 _applicationConfig.CertificateValidator.CertificateValidation += CertificateValidation;
                 _applicationConfig.CertificateValidator.Update(_applicationConfig);
 
@@ -198,8 +179,7 @@ namespace OpcUa.Client.Core
             }
             catch (Exception e)
             {
-                // TODO handle Exception here
-                throw e;
+                ShowErrorMessage(e);
             }
         }
 
@@ -229,8 +209,7 @@ namespace OpcUa.Client.Core
             }
             catch (Exception e)
             {
-                // TODO handle Exception here
-                throw e;
+                ShowErrorMessage(e);
             }
         }
 
@@ -249,14 +228,13 @@ namespace OpcUa.Client.Core
             }
             catch (Exception e)
             {
-                // TODO handle Exception here
-                throw e;
+                ShowErrorMessage(e);
             }
         } 
 
         #endregion
 
-        #region Subscription
+        #region Subscription / MonitoredItem
 
         /// <summary>Creats a Subscription object to a server</summary>
         /// <param name="publishingInterval">The publishing interval</param>
@@ -272,19 +250,47 @@ namespace OpcUa.Client.Core
                 TimestampsToReturn = TimestampsToReturn.Both
             };
 
-            _session.AddSubscription(subscription);
-
             try
             {
                 //Create/Activate the subscription
                 subscription.Create();
+                _session.AddSubscription(subscription);
 
                 return subscription;
             }
             catch (Exception e)
             {
-                // TODO handle Exception here
-                throw e;
+                ShowErrorMessage(e);
+                return null;
+            }
+        }
+
+        /// <summary>Creats a Subscription object to a server</summary>
+        /// <param name="publishingInterval">The publishing interval</param>
+        /// <returns>Subscription</returns>
+        /// <exception cref="Exception">Throws and forwards any exception with short error description.</exception>
+        public Subscription NotificationSubscription()
+        {
+            //Create a Subscription object
+            var subscription = new Subscription(_session.DefaultSubscription)
+            {
+                PublishingEnabled = true,
+                PublishingInterval = 500,
+                TimestampsToReturn = TimestampsToReturn.Both,
+                DisplayName = "Notifications"
+            };
+
+            try
+            {
+                subscription.Create();
+                _session.AddSubscription(subscription);
+
+                return subscription;
+            }
+            catch (Exception e)
+            {
+                ShowErrorMessage(e);
+                return null;
             }
         }
 
@@ -296,17 +302,19 @@ namespace OpcUa.Client.Core
             //Create a Subscription object
             var subscription = new Subscription(template);
 
-            _session.AddSubscription(subscription);
+            
 
             try
             {
                 subscription.Create();
+                _session.AddSubscription(subscription);
+
                 return subscription;
             }
             catch (Exception e)
             {
-                // TODO handle Exception here
-                throw e;
+                ShowErrorMessage(e);
+                return null;
             }
         }
 
@@ -336,21 +344,56 @@ namespace OpcUa.Client.Core
                 {
                     DeadbandType = (uint)DeadbandType.Absolute,
                     DeadbandValue = 2,
-                    Trigger = DataChangeTrigger.Status
+                    Trigger = DataChangeTrigger.StatusValue
                 }
             };
+
+            if (AddMonitoredItem(monitoredItem, subscription))
+                return monitoredItem;
+
+            return null;
+        }
+
+        public bool AddMonitoredItem(MonitoredItem monitoredItem, Subscription subscription)
+        {
             try
             {
                 subscription.AddItem(monitoredItem);
                 subscription.ApplyChanges();
-
-                return monitoredItem;
+                return true;
             }
             catch (Exception e)
             {
-                // TODO handle Exception here
-                throw e;
+                ShowErrorMessage(e);
             }
+
+            return false;
+        }
+
+        public MonitoredItem NotificationMonitoredItem(string displayName, string nodeId, double filterValue)
+        {
+            var monitoredItem = new MonitoredItem
+            {
+                DisplayName = displayName,
+                StartNodeId = new NodeId(nodeId),
+                AttributeId = Attributes.Value,
+                MonitoringMode = MonitoringMode.Reporting,
+                SamplingInterval = 300,
+                QueueSize = 1,
+                CacheQueueSize = 1,
+                DiscardOldest = true
+            };
+
+            if (filterValue == 0d) return monitoredItem;
+
+            monitoredItem.Filter = new DataChangeFilter()
+            {
+                DeadbandType = (uint) DeadbandType.Absolute,
+                DeadbandValue = filterValue,
+                Trigger = DataChangeTrigger.Status
+            };
+
+            return monitoredItem;
         }
 
         /// <summary>Removs a monitored item from an existing subscription</summary>
@@ -427,7 +470,7 @@ namespace OpcUa.Client.Core
 
         #endregion
 
-        #region Read/Write
+        #region Read / Write
 
         /// <summary>
         /// Reads a node by node Id from server address space
@@ -447,8 +490,7 @@ namespace OpcUa.Client.Core
             catch (Exception e)
             {
                 // TODO handle Exception here
-                Utils.Trace(Utils.TraceMasks.Error, "Error");
-
+                Utils.Trace(Utils.TraceMasks.Error, $"{e.Message}");
                 throw e;
             }
         }
@@ -471,41 +513,14 @@ namespace OpcUa.Client.Core
             catch (Exception e)
             {
                 // TODO handle Exception here
-                Utils.Trace(Utils.TraceMasks.Error, "Error");
-
+                Utils.Trace(Utils.TraceMasks.Error, $"{e.Message}");
                 throw e;
             }
         }
 
-        /// <summary>
-        /// Reads Node of <see cref="nodeId"/> dataType in server address space.
-        /// </summary>
-        /// <param name="nodeId"></param>
-        /// <returns></returns>
-        public Node GetDataTypeOfVariableNodeId(NodeId nodeId)
-        {
-            var node = _session.ReadNode(nodeId);
-            var dataTypeNodeId = (node.DataLock as VariableNode)?.DataType;
-            var dataTypeNode = _session.ReadNode(dataTypeNodeId);
-            return dataTypeNode;
-        }
-
-        /// <summary>
-        /// Reads Node of <see cref="nodeId"/> dataType in server address space.
-        /// </summary>
-        /// <param name="nodeId"></param>
-        /// <returns></returns>
-        public BuiltInType GetBuiltInTypeOfVariableNodeId(string nodeId)
-        {
-            var node = _session.ReadNode(new NodeId(nodeId));
-            var dataTypeNodeId = (node.DataLock as VariableNode)?.DataType;
-            var dataTypeNode = _session.ReadNode(dataTypeNodeId);
-            return TypeInfo.GetBuiltInType(dataTypeNode.NodeId);
-        }
-
         public bool WriteValue(VariableModel variableModel, object newValue)
         {
-            var wrapedValue = new Variant(Convert.ChangeType(newValue, variableModel.DataType));
+            var wrapedValue = new Variant( Convert.ChangeType(newValue, TypeInfo.GetSystemType(variableModel.DataType, -1)) );
             var data = new DataValue(wrapedValue);
 
             var valueToWrite = new WriteValue()
@@ -558,7 +573,9 @@ namespace OpcUa.Client.Core
                 throw e;
             }
         }
+        #endregion
 
+        #region Register / Unregister
         public List<NodeId> RegisterNodes(List<string> nodesToRegister)
         {
             if (nodesToRegister.Count == 0) return new List<NodeId>();
@@ -627,6 +644,47 @@ namespace OpcUa.Client.Core
             {
                 throw e;
             }
+        }
+
+        #endregion
+
+        #region Public Methods
+
+        public void CreateDefaultConfiguration()
+        {
+            if (_applicationConfig != null) return;
+            _applicationConfig = CreateClientConfiguration();
+        }
+
+        public void SaveConfiguration()
+        {
+            _applicationConfig?.SaveToFile(Path.Combine(Environment.ExpandEnvironmentVariables("%userprofile%"), "Documents\\UaClient\\Configuration.xml"));
+        }
+
+        /// <summary>
+        /// Reads Node of <see cref="nodeId"/> dataType in server address space.
+        /// </summary>
+        /// <param name="nodeId"></param>
+        /// <returns></returns>
+        public Node GetDataTypeOfVariableNodeId(NodeId nodeId)
+        {
+            var node = _session.ReadNode(nodeId);
+            var dataTypeNodeId = (node.DataLock as VariableNode)?.DataType;
+            var dataTypeNode = _session.ReadNode(dataTypeNodeId);
+            return dataTypeNode;
+        }
+
+        /// <summary>
+        /// Reads Node of <see cref="nodeId"/> dataType in server address space.
+        /// </summary>
+        /// <param name="nodeId"></param>
+        /// <returns></returns>
+        public BuiltInType GetBuiltInTypeOfVariableNodeId(string nodeId)
+        {
+            var node = _session.ReadNode(new NodeId(nodeId));
+            var dataTypeNodeId = (node.DataLock as VariableNode)?.DataType;
+            var dataTypeNode = _session.ReadNode(dataTypeNodeId);
+            return TypeInfo.GetBuiltInType(dataTypeNode.NodeId);
         }
 
         #endregion
@@ -726,6 +784,21 @@ namespace OpcUa.Client.Core
 
             return configuration;
         }
+
+        /// <summary>
+        /// Throws new window with error message
+        /// </summary>
+        /// <param name="e"></param>
+        private void ShowErrorMessage(Exception e)
+        {
+            IoC.Ui.ShowMessage(new MessageBoxDialogViewModel()
+            {
+                Title = "Error",
+                Message = e.Message,
+                OkText = "Ok"
+            });
+        }
+
         #endregion
 
         #region Event Handling
@@ -775,7 +848,6 @@ namespace OpcUa.Client.Core
                 return false;
             }
         }
-
         #endregion
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace OpcUa.Client.Core
+﻿using System;
+
+namespace OpcUa.Client.Core
 {
     /// <summary>
     /// A base view model for any dialogs
@@ -9,5 +11,10 @@
         /// The title of the dialog
         /// </summary>
         public string Title { get; set; }
+
+        /// <summary>
+        /// Command for closing dialog window
+        /// </summary>
+        public Action CloseAction { get; set; }
     }
 }

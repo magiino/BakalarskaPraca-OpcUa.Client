@@ -13,5 +13,12 @@ namespace OpcUa.Client.Core
         /// <param name="viewModel">The view model</param>
         /// <returns></returns>
         Task ShowMessage(MessageBoxDialogViewModel viewModel);
+
+        /// <summary>
+        /// Displays a add notification window to user
+        /// </summary>
+        /// <param name="viewModel">The view model</param>
+        /// <returns></returns>
+        Task ShowAddNotification(AddNotificationDialogViewModel viewModel);
     }
 }
