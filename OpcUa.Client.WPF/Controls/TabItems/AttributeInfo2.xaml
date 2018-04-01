@@ -163,7 +163,6 @@
         <StackPanel Visibility="{Binding IsVariableType, Converter={local:BooleanToVisibilityConverter}, Mode=OneWay}"
                     >
             <!-- TODO separator a treeview -->
-            <Separator Style="{DynamicResource VerticalSeparatorStyle}" />
 
             <TreeView DataContext="{Binding DataTypeNodeId}"
                       BorderThickness="0"
