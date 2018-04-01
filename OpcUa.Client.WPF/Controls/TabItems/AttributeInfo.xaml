@@ -38,12 +38,12 @@
 
             <Button Grid.Column="0" 
                     Content="Read"
-                    Command="{Binding ReadSingleValueCommand}"/>
+                    Command="{Binding ReadValueCommand}"/>
             <Button Grid.Column="1" 
                     Content="Write"
-                    Command="{Binding WriteSingleValueCommand}"/>
+                    Command="{Binding WriteValueCommand}"/>
             <TextBox Grid.Column="2"
-                        Text="{Binding ValueToSingleWrite}"/>
+                        Text="{Binding ValueToWrite}"/>
         </Grid>
     </StackPanel>
 </UserControl>

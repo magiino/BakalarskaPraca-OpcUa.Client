@@ -63,7 +63,7 @@ namespace OpcUa.Client.Core
                 this,
                 node =>
                 {
-                    _refDescOfSelectedNode = node.RefNode;
+                    _refDescOfSelectedNode = node.ReferenceNode;
                     AddArchiveVariableIsEnabled = _refDescOfSelectedNode.NodeClass == NodeClass.Variable;
                 });
         }

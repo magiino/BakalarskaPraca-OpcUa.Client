@@ -4,11 +4,11 @@ namespace OpcUa.Client.Core
 {
     public class SendSelectedRefNode
     {
-        public ReferenceDescription RefNode { get; set; }
+        public ReferenceDescription ReferenceNode { get; set; }
 
-        public SendSelectedRefNode(ReferenceDescription refNode)
+        public SendSelectedRefNode(ReferenceDescription referenceNode)
         {
-            RefNode = refNode;
+            ReferenceNode = referenceNode;
         }
     }
 }

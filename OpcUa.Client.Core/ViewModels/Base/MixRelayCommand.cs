@@ -7,7 +7,7 @@ namespace OpcUa.Client.Core
     /// <summary>
     /// A basic command that runs an Action with condition for execute
     /// </summary>
-    public class RelayCanExecuteCommand : ICommand
+    public class MixRelayCommand : ICommand
     {
         #region Private Members
 
@@ -43,11 +43,13 @@ namespace OpcUa.Client.Core
         /// <summary>
         /// Default constructor
         /// </summary>
-        public RelayCanExecuteCommand(Action<object> execute, Predicate<object> canExecute)
+        public MixRelayCommand(Action<object> execute, Predicate<object> canExecute)
         {
             _execute = execute ?? throw new ArgumentNullException("execute");
             _canExecute = canExecute;
         }
+
+        public MixRelayCommand(Action<object> execute) : this(execute, null) { }
 
         #endregion
 

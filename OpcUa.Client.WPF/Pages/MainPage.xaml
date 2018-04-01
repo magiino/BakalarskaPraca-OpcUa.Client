@@ -24,47 +24,50 @@
                 </Grid.ColumnDefinitions>
 
                 <!-- First Column-->
-                <TabControl
-                    Grid.Column="0"
-                    HorizontalAlignment="Left" 
-                    DockPanel.Dock="Left">
+                <TabControl Grid.Column="0"
+                            HorizontalAlignment="Left" 
+                            DockPanel.Dock="Left"
+                            >
 
                     <TabItem Header="Server Address Space">
                         <local:TreeView MinWidth="200"
-                                        DataContext="{Binding NodetreeViewModel}"/>
+                                        DataContext="{Binding NodetreeViewModel}"
+                                        />
                     </TabItem>
 
                     <TabItem Header="PLC info">
-
                     </TabItem>
 
                     <TabItem Header="Server info">
-                        <TextBlock Text="{Binding SelectedNode}"/>
                     </TabItem>
+
                 </TabControl>
 
                 <!-- Second Column-->
                 <Grid Grid.Column="1">
                     <ScrollViewer VerticalScrollBarVisibility="Auto">
-                        <local:AttributeInfo DataContext="{Binding NodeAttributesViewModel}"/>
+                        <local:AttributeInfo2 MinWidth="300"
+                                              DataContext="{Binding NodeAttributesViewModel}"
+                                              />
                     </ScrollViewer>
                 </Grid>
 
                 <!-- Third Column-->
-                <TabControl Grid.Column="2" SelectedIndex="{Binding SelectedIndex}">
-                    <TabItem Header="Subscribed Nodes"
-                             DataContext="{Binding NotificationViewModel}">
-                        <local:Notification />
+                <TabControl Grid.Column="2" 
+                            SelectedIndex="{Binding SelectedIndex}"
+                            >
+                    <TabItem Header="Subscribed Nodes">
+                        <local:Notification DataContext="{Binding NotificationViewModel}"/>
                     </TabItem>
+
                     <TabItem Header="Archive">
                         <local:Archive DataContext="{Binding ArchiveViewModel}" />
                     </TabItem>
+
                     <TabItem Header="Chart">
                         <local:Chart DataContext="{Binding ChartViewModel}" />
                     </TabItem>
-                    <!--<TabItem Header="Static Chart">
-                        <local:Chart DataContext="{Binding StaticChartViewModel}" />
-                    </TabItem>-->
+
                     <TabItem Header="ZoomChart">
                         <local:ZoomChart/>
                     </TabItem>

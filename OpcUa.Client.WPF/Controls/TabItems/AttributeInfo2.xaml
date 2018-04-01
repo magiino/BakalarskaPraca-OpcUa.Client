@@ -7,30 +7,30 @@
              mc:Ignorable="d"
              d:DesignHeight="700" d:DesignWidth="400">
 
-   <StackPanel>
+    <StackPanel x:Name="Stack">
         <TreeView BorderThickness="0">
 
             <!-- NodeId data  -->
-            <TreeViewItem DataContext="{Binding NodeId}"
-                          IsExpanded="{Binding IsExpanded, Mode=TwoWay}">
-
+            <TreeViewItem DataContext="{Binding NodeId}">
                 <TreeViewItem.Header>
                     <StackPanel Orientation="Horizontal">
-                        <Label Content="Node Id" Width="120"/>
+                        <Label Content="Node Id"
+                            Width="120"/>
                         <TextBlock Text="{Binding }" 
-                                   Width="200"
-                                   TextTrimming="WordEllipsis"
-                                   VerticalAlignment="Center"/>
+                                Width="200"
+                                TextTrimming="WordEllipsis"
+                                VerticalAlignment="Center"/>
                     </StackPanel>
                 </TreeViewItem.Header>
 
                 <TreeViewItem>
                     <TreeViewItem.Header >
                         <StackPanel Orientation="Horizontal">
-                            <Label Content="Namespace Index" Width="120"/>
+                            <Label Content="Namespace Index" 
+                                Width="120"/>
                             <TextBlock Text="{Binding NamespaceIndex}" 
-                                       Width="200"
-                                       VerticalAlignment="Center"/>
+                                    Width="200"
+                                    VerticalAlignment="Center"/>
                         </StackPanel>
                     </TreeViewItem.Header>
                 </TreeViewItem>
@@ -38,11 +38,12 @@
                 <TreeViewItem>
                     <TreeViewItem.Header >
                         <StackPanel Orientation="Horizontal" >
-                            <Label Content="Type" Width="120"/>
+                            <Label Content="Type" 
+                                Width="120"/>
                             <TextBlock Text="{Binding Identifier}" 
-                                       Width="200"
-                                       TextTrimming="WordEllipsis"
-                                       VerticalAlignment="Center"/>
+                                    Width="200"
+                                    TextTrimming="WordEllipsis"
+                                    VerticalAlignment="Center"/>
                         </StackPanel>
                     </TreeViewItem.Header>
                 </TreeViewItem>
@@ -55,233 +56,346 @@
                         </StackPanel>
                     </TreeViewItem.Header>
                 </TreeViewItem>
-
             </TreeViewItem>
+        </TreeView>
 
-            <!-- ReferenceDescription data -->
-            <TreeViewItem DataContext="{Binding ReferenceDescription}">
-                <TreeViewItem.Header>
-                    <StackPanel Orientation="Horizontal" Focusable="true">
-                        <Label Content="Node Class" Width="120"/>
-                        <Label Content="{Binding NodeClass}" Width="200"/>
-                    </StackPanel>
-                </TreeViewItem.Header>
-            </TreeViewItem>
+        <!-- ReferenceDescription data -->
+        <Grid DataContext="{Binding ReferenceDescription}"
+              >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="120"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
 
-            <TreeViewItem DataContext="{Binding ReferenceDescription}">
-                <TreeViewItem.Header >
-                    <StackPanel Orientation="Horizontal">
-                        <Label Content="Browse Name" Width="120"/>
-                        <Label Content="{Binding BrowseName}" Width="200"/>
-                    </StackPanel>
-                </TreeViewItem.Header>
-            </TreeViewItem>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
 
-            <TreeViewItem DataContext="{Binding ReferenceDescription}">
-                <TreeViewItem.Header >
-                    <StackPanel Orientation="Horizontal">
-                        <Label Content="Display Name" Width="120"/>
-                        <Label Content="{Binding DisplayName}" Width="200"/>
-                    </StackPanel>
-                </TreeViewItem.Header>
-            </TreeViewItem>
+            <TextBlock Grid.Row="1" 
+                    Grid.Column="0"
+                    Style="{StaticResource AttributeHeader}"
+                    Text="Description"
+                    />
+            <TextBlock Grid.Row="1" 
+                    Grid.Column="1"
+                    Style="{StaticResource AttributeValue}"
+                    Text="{Binding Description}"
+                    />
 
-            <!-- Node data -->
-            <TreeViewItem DataContext="{Binding Node}">
-                <TreeViewItem.Header>
-                    <StackPanel Orientation="Horizontal">
-                        <Label Content="Description" Width="120"/>
-                        <TextBlock Text="{Binding Description}"
-                                   Width="200"
-                                   TextWrapping="Wrap"/>
-                    </StackPanel>
-                </TreeViewItem.Header>
-            </TreeViewItem>
+            <TextBlock Grid.Row="0" 
+                    Grid.Column="0"
+                    Style="{StaticResource AttributeHeader}"
+                    Text="Node Class"
+                    />
 
-            <TreeViewItem DataContext="{Binding Node}">
-                <TreeViewItem.Header >
-                    <StackPanel Orientation="Horizontal">
-                        <Label Content="Write Mask" Width="120"/>
-                        <Label Content="{Binding WriteMask}" Width="200"/>
-                    </StackPanel>
-                </TreeViewItem.Header>
-            </TreeViewItem>
+            <TextBlock Grid.Row="0" 
+                    Grid.Column="1"
+                    Style="{StaticResource AttributeValue}"
+                    Text="{Binding NodeClass}"
+                    />
 
-            <TreeViewItem DataContext="{Binding Node}">
-                <TreeViewItem.Header >
-                    <StackPanel Orientation="Horizontal">
-                        <Label Content="User Write Mask" Width="120"/>
-                        <Label Content="{Binding UserWriteMask}" Width="200"/>
-                    </StackPanel>
-                </TreeViewItem.Header>
-            </TreeViewItem>
+            <TextBlock Grid.Row="2" 
+                    Grid.Column="0"
+                    Style="{StaticResource AttributeHeader}"
+                    Text="Display Name"
+                         
+                    />
+            <TextBlock Grid.Row="2" 
+                    Grid.Column="1"
+                    Style="{StaticResource AttributeValue}"
+                    Text="{Binding DisplayName}"
+                    />
+        </Grid>
 
+        <!-- Node data -->
+        <Grid DataContext="{Binding Node}"
+            >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="120"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
 
-            <Separator  Width="330"/>
-            
-            <!-- Data Type-->
-            <TreeViewItem DataContext="{Binding DataTypeNodeId}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
 
-                <TreeViewItem.Header >
-                    <StackPanel Orientation="Horizontal">
-                        <Label Content="Data Type" Width="120"/>
-                        <Label Content="{Binding }" Width="200"/>
-                    </StackPanel>
-                </TreeViewItem.Header>
+            <TextBlock Grid.Row="0" 
+                    Grid.Column="0"
+                    Style="{StaticResource AttributeHeader}"
+                    Text="Node Class"
+                    />
+            <TextBlock Grid.Row="0" 
+                    Grid.Column="1"
+                    Style="{StaticResource AttributeValue}"
+                    Text="{Binding NodeClass}"
+                    />
+            <!--<TextBlock Text="{Binding Description}"
+                    Width="200"
+                    TextWrapping="Wrap"/>-->
 
-                <TreeViewItem>
-                    <TreeViewItem.Header>
-                        <StackPanel Orientation="Horizontal">
-                            <Label Content="Namespace Index" Width="120"/>
-                            <Label Content="{Binding NamespaceIndex}" Width="200"/>
-                        </StackPanel>
-                    </TreeViewItem.Header>
-                </TreeViewItem>
+            <TextBlock Grid.Row="1" 
+                    Grid.Column="0"
+                    Style="{StaticResource AttributeHeader}"
+                    Text="Write Mask"
+                    />
+            <TextBlock Grid.Row="1" 
+                    Grid.Column="1"
+                    Style="{StaticResource AttributeValue}"
+                    Text="{Binding WriteMask}"
+                    />
 
+            <TextBlock Grid.Row="2" 
+                    Grid.Column="0"
+                    Style="{StaticResource AttributeHeader}"
+                    Text="User Write Mask"
+                    />
+            <TextBlock Grid.Row="2" 
+                    Grid.Column="1"
+                    Style="{StaticResource AttributeValue}"
+                    Text="{Binding UserWriteMask}"
+                    />
+        </Grid>
+
+        <StackPanel Visibility="{Binding IsVariableType, Converter={local:BooleanToVisibilityConverter}, Mode=OneWay}"
+                    >
+            <!-- TODO separator a treeview -->
+            <Separator Style="{DynamicResource VerticalSeparatorStyle}" />
+
+            <TreeView DataContext="{Binding DataTypeNodeId}"
+                      BorderThickness="0"
+                      >
                 <TreeViewItem>
                     <TreeViewItem.Header >
                         <StackPanel Orientation="Horizontal">
-                            <Label Content="Identifier" Width="120"/>
-                            <Label Content="{Binding Identifier}" Width="200"/>
+                            <Label Content="Data Type" Width="120"/>
+                            <Label Content="{Binding }" Width="200"/>
                         </StackPanel>
                     </TreeViewItem.Header>
-                </TreeViewItem>
 
-                <TreeViewItem>
-                    <TreeViewItem.Header >
-                        <StackPanel Orientation="Horizontal">
-                            <Label Content="Id Type" Width="120"/>
-                            <Label Content="{Binding IdType}" Width="200"/>
-                        </StackPanel>
-                    </TreeViewItem.Header>
-                </TreeViewItem>
+                    <TreeViewItem>
+                        <TreeViewItem.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="Namespace Index" Width="120"/>
+                                <Label Content="{Binding NamespaceIndex}" Width="200"/>
+                            </StackPanel>
+                        </TreeViewItem.Header>
+                    </TreeViewItem>
 
-            </TreeViewItem>
+                    <TreeViewItem>
+                        <TreeViewItem.Header >
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="Identifier" Width="120"/>
+                                <Label Content="{Binding Identifier}" Width="200"/>
+                            </StackPanel>
+                        </TreeViewItem.Header>
+                    </TreeViewItem>
+
+                    <TreeViewItem>
+                        <TreeViewItem.Header >
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="Id Type" Width="120"/>
+                                <Label Content="{Binding IdType}" Width="200"/>
+                            </StackPanel>
+                        </TreeViewItem.Header>
+                    </TreeViewItem>
+
+                </TreeViewItem>
+            </TreeView>
 
             <!-- NodeVariable Data -->
-            <TreeViewItem DataContext="{Binding VariableNode}"
-                          Visibility="{Binding IsVariableType, Converter={local:BooleanToVisibilityConverter}, Mode=TwoWay}">
-                <TreeViewItem.Header >
-                    <StackPanel Orientation="Horizontal">
-                        <Label Content="Value Rank" Width="120"/>
-                        <Label Content="{Binding ValueRank}" Width="200"/>
-                    </StackPanel>
-                </TreeViewItem.Header>
-            </TreeViewItem>
+            <Grid DataContext="{Binding VariableNode}"
+                  >
 
-            <TreeViewItem DataContext="{Binding VariableNode}">
-                <TreeViewItem.Header >
-                    <StackPanel Orientation="Horizontal">
-                        <Label Content="Array Dimensions" Width="120"/>
-                        <Label Content="{Binding ArrayDimensions}" Width="200"/>
-                    </StackPanel>
-                </TreeViewItem.Header>
-            </TreeViewItem>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="120"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
 
-            <TreeViewItem DataContext="{Binding VariableNode}">
-                <TreeViewItem.Header >
-                    <StackPanel Orientation="Horizontal">
-                        <Label Content="Access Level" Width="120"/>
-                        <Label Content="{Binding AccessLevel}" Width="200"/>
-                    </StackPanel>
-                </TreeViewItem.Header>
-            </TreeViewItem>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                </Grid.RowDefinitions>
 
-            <TreeViewItem DataContext="{Binding VariableNode}">
-                <TreeViewItem.Header >
-                    <StackPanel Orientation="Horizontal">
-                        <Label Content="User Access Level" Width="120"/>
-                        <Label Content="{Binding UserAccessLevel}" Width="200"/>
-                    </StackPanel>
-                </TreeViewItem.Header>
-            </TreeViewItem>
+                <TextBlock Grid.Row="0" 
+                    Grid.Column="0"
+                    Style="{StaticResource AttributeHeader}"
+                    Text="Value Rank"
+                    />
+                <TextBlock Grid.Row="0" 
+                    Grid.Column="1"
+                    Style="{StaticResource AttributeValue}"
+                    Text="{Binding ValueRank}"
+                    />
 
-            <TreeViewItem DataContext="{Binding VariableNode}">
-                <TreeViewItem.Header >
-                    <StackPanel Orientation="Horizontal">
-                        <Label Content="Historozing" Width="120"/>
-                        <Label Content="{Binding Historizing}" Width="200"/>
-                    </StackPanel>
-                </TreeViewItem.Header>
-            </TreeViewItem>
+                <TextBlock Grid.Row="1" 
+                    Grid.Column="0"
+                    Style="{StaticResource AttributeHeader}"
+                    Text="Array Dimensions"
+                    />
+                <TextBlock Grid.Row="1" 
+                    Grid.Column="1"
+                    Style="{StaticResource AttributeValue}"
+                    Text="{Binding ArrayDimensions}"
+                    />
 
-            <TreeViewItem DataContext="{Binding VariableNode}">
-                <TreeViewItem.Header >
-                    <StackPanel Orientation="Horizontal">
-                        <Label Content="Min Sampling" Width="120"/>
-                        <Label Content="{Binding MinimumSamplingInterval}" Width="200"/>
-                    </StackPanel>
-                </TreeViewItem.Header>
-            </TreeViewItem>
+                <TextBlock Grid.Row="2" 
+                    Grid.Column="0"
+                    Style="{StaticResource AttributeHeader}"
+                    Text="Access Level"
+                    />
+                <TextBlock Grid.Row="2" 
+                    Grid.Column="1"
+                    Style="{StaticResource AttributeValue}"
+                    Text="{Binding AccessLevel}"
+                    />
+
+                <TextBlock Grid.Row="3" 
+                    Grid.Column="0"
+                    Style="{StaticResource AttributeHeader}"
+                    Text="User Access Level"
+                    />
+                <TextBlock Grid.Row="3" 
+                    Grid.Column="1"
+                    Style="{StaticResource AttributeValue}"
+                    Text="{Binding UserAccessLevel}"
+                    />
+
+                <TextBlock Grid.Row="4" 
+                    Grid.Column="0"
+                    Style="{StaticResource AttributeHeader}"
+                    Text="Historizing"
+                    />
+                <TextBlock Grid.Row="4" 
+                    Grid.Column="1"
+                    Style="{StaticResource AttributeValue}"
+                    Text="{Binding Historizing}"
+                    />
+
+                <TextBlock Grid.Row="5" 
+                    Grid.Column="0"
+                    Style="{StaticResource AttributeHeader}"
+                    Text="Min Sampling"
+                    />
+                <TextBlock Grid.Row="5" 
+                    Grid.Column="1"
+                    Style="{StaticResource AttributeValue}"
+                    Text="{Binding MinimumSamplingInterval}"
+                    />
+            </Grid>
 
             <!-- Value Data -->
-            <TreeViewItem DataContext="{Binding DataValue}">
-                <TreeViewItem.Header >
-                    <StackPanel Orientation="Horizontal">
-                        <Label Content="Value" Width="120"/>
-                        <Viewbox HorizontalAlignment="Center">
-                            <TextBlock Width="200"
-                                       TextWrapping="Wrap">
-                                <Run Text="{Binding Value}"/>
-                            </TextBlock>
-                        </Viewbox>
+            <Grid DataContext="{Binding DataValue}"
+                  >
 
-                    </StackPanel>
-                </TreeViewItem.Header>
-            </TreeViewItem>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="120"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
 
-            <TreeViewItem DataContext="{Binding DataValue}">
-                <TreeViewItem.Header >
-                    <StackPanel Orientation="Horizontal">
-                        <Label Content="Status Code" Width="120"/>
-                        <Label Content="{Binding StatusCode}" Width="200"/>
-                    </StackPanel>
-                </TreeViewItem.Header>
-            </TreeViewItem>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                </Grid.RowDefinitions>
 
-            <TreeViewItem DataContext="{Binding DataValue}">
-                <TreeViewItem.Header >
-                    <StackPanel Orientation="Horizontal">
-                        <Label Content="Time Stamp" Width="120"/>
-                        <Label Content="{Binding ServerTimestamp}" Width="200"/>
-                    </StackPanel>
-                </TreeViewItem.Header>
-            </TreeViewItem>
+                <TextBlock Grid.Row="0" 
+                    Grid.Column="0"
+                    Style="{StaticResource AttributeHeader}"
+                    Text="Value"
+                    />
+                <TextBlock Grid.Row="0" 
+                    Grid.Column="1"
+                    Style="{StaticResource AttributeValue}"
+                    Text="{Binding Value}"
+                    />
 
-            <TreeViewItem>
-                <TreeViewItem.Header>
-                    <StackPanel Orientation="Horizontal">
-                        <Label Content="Data Type" Width="120"/>
-                        <Label Content="{Binding DataType}" Width="200"/>
-                    </StackPanel>
-                </TreeViewItem.Header>
-            </TreeViewItem>
+                <TextBlock Grid.Row="1" 
+                    Grid.Column="0"
+                    Style="{StaticResource AttributeHeader}"
+                    Text="Status Code"
+                    />
+                <TextBlock Grid.Row="1" 
+                    Grid.Column="1"
+                    Style="{StaticResource AttributeValue}"
+                    Text="{Binding StatusCode}"
+                    />
 
-            <TreeViewItem>
-                <TreeViewItem.Header>
-                    <StackPanel Orientation="Horizontal">
-                        <Label Content="Build In Type" Width="120"/>
-                        <Label Content="{Binding BuiltInType}" Width="200"/>
-                    </StackPanel>
-                </TreeViewItem.Header>
-            </TreeViewItem>
+                <TextBlock Grid.Row="2" 
+                    Grid.Column="0"
+                    Style="{StaticResource AttributeHeader}"
+                    Text="Source Timestamp"
+                    />
+                <TextBlock Grid.Row="2" 
+                    Grid.Column="1"
+                    Style="{StaticResource AttributeValue}"
+                    Text="{Binding SourceTimestamp}"
+                    />
+            </Grid>
 
-                <TreeViewItem>
-                    <TreeViewItem.Header>
-                        <StackPanel Orientation="Horizontal">
-                            <Button Width="50" 
-                                Content="Read"
-                                Command="{Binding ReadSingleValueCommand}"/>
-                            <TextBox Margin="100 0 0 0"
-                                    Width="50"
-                                    Text="{Binding ValueToSingleWrite}"/>
-                            <Button Width="50"
-                                Content="Write"
-                                Command="{Binding WriteSingleValueCommand}"/>
-                        </StackPanel>
-                    </TreeViewItem.Header>
-                </TreeViewItem>
-        </TreeView>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="120"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                </Grid.RowDefinitions>
+
+                <TextBlock Grid.Row="1" 
+                       Grid.Column="0"
+                       Style="{StaticResource AttributeHeader}"
+                       Text="Data type"
+                       />
+                <TextBlock Grid.Row="1" 
+                       Grid.Column="1"
+                       Style="{StaticResource AttributeValue}"
+                       Text="{Binding DataType}"
+                       />
+
+                <TextBlock Grid.Row="2" 
+                       Grid.Column="0"
+                       Style="{StaticResource AttributeHeader}"
+                       Text="BuiltInType"
+                       />
+                <TextBlock Grid.Row="2" 
+                       Grid.Column="1"
+                       Style="{StaticResource AttributeValue}"
+                       Text="{Binding BuiltInType}"
+                       />
+            </Grid>
+
+            <StackPanel Orientation="Horizontal"
+                        >
+                <Button Width="50" 
+                    Content="Read"
+                    Command="{Binding ReadSingleValueCommand}"
+                    />
+                <TextBox Margin="100 0 0 0"
+                     Width="50"
+                     Text="{Binding ValueToSingleWrite}"
+                     />
+                <Button Width="50"
+                    Content="Write"
+                    Command="{Binding WriteSingleValueCommand}"
+                    />
+            </StackPanel>
+
+        </StackPanel>
+
     </StackPanel>
 </UserControl>
 

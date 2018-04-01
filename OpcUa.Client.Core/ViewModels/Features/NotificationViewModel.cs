@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.Diagnostics.Eventing.Reader;
 using System.Linq;
 using System.Windows.Input;
 using Opc.Ua;
@@ -12,7 +13,7 @@ namespace OpcUa.Client.Core
 
         private readonly UaClientApi _uaClientApi;
         private readonly DataContext _dataContext;
-        private ReferenceDescription _refDescOfSelectedNode;
+        private ReferenceDescription _selectedNode;
         private Subscription _subscription; 
 
         #endregion
@@ -21,9 +22,6 @@ namespace OpcUa.Client.Core
 
         public ObservableCollection<VariableModel> Notifications { get; set; } = new ObservableCollection<VariableModel>();
         public VariableModel SelectedNotification { get; set; }
-
-        public bool AddIsEnabled { get; set; }
-        public bool DeleteIsEnabled => SelectedNotification != null;
 
         #endregion
 
@@ -36,9 +34,7 @@ namespace OpcUa.Client.Core
 
         #region Constructor
 
-        // TODO prerobit _selectedNode z refDisc na NodeId
         // TODO Prerobit WriteValue v opcuaApi
-        // TODO Stale tam zobrazovat atributy len menit hodnoty !!!
         public NotificationViewModel(UaClientApi uaClientApi, DataContext dataContext)
         {
             _uaClientApi = uaClientApi;
@@ -46,20 +42,17 @@ namespace OpcUa.Client.Core
             _subscription = _uaClientApi.NotificationSubscription();
 
             //AddNotificationCommand = new RelayCommand(AddNotification);
-            //RemoveNotificationCommand = new RelayCommand(DeleteNotification);
-            //AddNotificationCommand = new Rela
+            AddNotificationCommand = new GalaSoft.MvvmLight.CommandWpf.RelayCommand(AddNotification, AddNotificationCanUse);
+            //RemoveNotificationCommand = new RelayCommand(RemoveNotification);
+            RemoveNotificationCommand = new GalaSoft.MvvmLight.CommandWpf.RelayCommand(RemoveNotification, RemoveNotificationCanUse);
 
             MessengerInstance.Register<SendSelectedRefNode>(
                 this,
-                node =>
-                {
-                    _refDescOfSelectedNode = node.RefNode;
-                    AddIsEnabled = _refDescOfSelectedNode.NodeClass == NodeClass.Variable;
-                });
+                msg => _selectedNode = msg.ReferenceNode);
 
             MessengerInstance.Register<SendMonitoredItem>(
                 this,
-                item => AddNotificationToSubscription(item.Item));
+                msg => AddNotificationToSubscription(msg.Item));
         }
 
         #endregion
@@ -68,7 +61,7 @@ namespace OpcUa.Client.Core
 
         private void AddNotification()
         {
-            if (_refDescOfSelectedNode.NodeClass != NodeClass.Variable)
+            if (_selectedNode.NodeClass != NodeClass.Variable)
             {
                 IoC.Ui.ShowMessage(new MessageBoxDialogViewModel()
                 {
@@ -81,7 +74,7 @@ namespace OpcUa.Client.Core
 
             IoC.Ui.ShowAddNotification(new AddNotificationDialogViewModel()
             {
-                NodeId = _refDescOfSelectedNode.NodeId.ToString()
+                NodeId = _selectedNode.NodeId.ToString()
             });
         }
 
@@ -105,7 +98,7 @@ namespace OpcUa.Client.Core
             Notifications.Add(tmp);
         }
 
-        private void DeleteNotification()
+        private void RemoveNotification()
         {
             if (SelectedNotification == null) return;
             _uaClientApi.RemoveMonitoredItem(_subscription, SelectedNotification.NodeId);
@@ -141,6 +134,24 @@ namespace OpcUa.Client.Core
             }
             _subscription.ApplyChanges();
 
+        }
+
+        #endregion
+
+        #region Can use methods
+
+        public bool AddNotificationCanUse()
+        {
+            if (_selectedNode == null)
+                return false;
+            else if (_selectedNode.NodeClass != NodeClass.Variable)
+                return false;
+            else return true;
+        }
+
+        public bool RemoveNotificationCanUse()
+        {
+            return SelectedNotification != null;
         }
 
         #endregion

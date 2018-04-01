@@ -249,13 +249,12 @@ namespace OpcUa.Client.Core
                 PublishingInterval = publishingInterval,
                 TimestampsToReturn = TimestampsToReturn.Both
             };
+            _session.AddSubscription(subscription);
 
             try
             {
                 //Create/Activate the subscription
                 subscription.Create();
-                _session.AddSubscription(subscription);
-
                 return subscription;
             }
             catch (Exception e)
@@ -279,12 +278,11 @@ namespace OpcUa.Client.Core
                 TimestampsToReturn = TimestampsToReturn.Both,
                 DisplayName = "Notifications"
             };
+            _session.AddSubscription(subscription);
 
             try
             {
                 subscription.Create();
-                _session.AddSubscription(subscription);
-
                 return subscription;
             }
             catch (Exception e)
@@ -301,8 +299,6 @@ namespace OpcUa.Client.Core
         {
             //Create a Subscription object
             var subscription = new Subscription(template);
-
-            
 
             try
             {
