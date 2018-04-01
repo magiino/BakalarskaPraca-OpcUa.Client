@@ -25,15 +25,6 @@ namespace OpcUa.Client.Core
             return user;
         }
 
-        private void CreatePasswordHash(SecureString password, out byte[] passwordHash, out byte[] passwordSalt)
-        {
-            using (var hmac = new System.Security.Cryptography.HMACSHA512())
-            {
-                passwordSalt = hmac.Key;
-                passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(SecureStringHelpers.Unsecure(password)));
-            }
-        }
-
         public UserEntity Login(string userName, SecureString password)
         {
             var user = _context.Users.FirstOrDefault(x => x.UserName == userName);
@@ -47,6 +38,20 @@ namespace OpcUa.Client.Core
 
         }
 
+        public bool UserExists(string userName)
+        {
+            return _context.Users.Any(x => x.UserName == userName);
+        }
+
+        private void CreatePasswordHash(SecureString password, out byte[] passwordHash, out byte[] passwordSalt)
+        {
+            using (var hmac = new System.Security.Cryptography.HMACSHA512())
+            {
+                passwordSalt = hmac.Key;
+                passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(SecureStringHelpers.Unsecure(password)));
+            }
+        }
+
         private bool VerifyPasswordHash(SecureString password, byte[] passwordHash, byte[] passwordSalt)
         {
             using (var hmac = new System.Security.Cryptography.HMACSHA512(passwordSalt))
@@ -56,11 +61,6 @@ namespace OpcUa.Client.Core
                     return false;
             }
             return true;
-        }
-
-        public bool UserExists(string userName)
-        {
-            return _context.Users.Any(x => x.UserName == userName);
         }
     }
 }

@@ -103,7 +103,7 @@ namespace OpcUa.Client.Core.DAL
             var var1 = new VariableEntity()
             {
                 Id = 1,
-                ProjectId = 1,
+                ProjectId = 3,
                 Name = "ns=2;s=Demo.Dynamic.Scalar.Int16",
                 Description = "Test Int16 Value",
                 Archive = ArchiveInterval.ThirtySecond,
@@ -114,7 +114,7 @@ namespace OpcUa.Client.Core.DAL
             var var2 = new VariableEntity()
             {
                 Id = 2,
-                ProjectId = 1,
+                ProjectId = 3,
                 Name = "ns=2;s=Demo.Dynamic.Scalar.SByte",
                 Description = "Test Short Byte Value",
                 Archive = ArchiveInterval.ThirtySecond,
@@ -125,7 +125,7 @@ namespace OpcUa.Client.Core.DAL
             var var3 = new VariableEntity()
             {
                 Id = 3,
-                ProjectId = 1,
+                ProjectId = 3,
                 Name = "ns=2;s=Demo.Dynamic.Scalar.UInt64",
                 Description = "Test Unsigned Int64 Value",
                 Archive = ArchiveInterval.ThirtySecond,

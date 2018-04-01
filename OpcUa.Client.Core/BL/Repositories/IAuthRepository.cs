@@ -1,5 +1,4 @@
 ﻿using System.Security;
-using System.Threading.Tasks;
 
 namespace OpcUa.Client.Core
 {
