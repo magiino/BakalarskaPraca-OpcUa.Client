@@ -5,6 +5,7 @@ namespace OpcUa.Client.Core
 {
     public class VariableEntity : BaseEntity
     {
+        public int ProjectId { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public BuiltInType DataType { get; set; }

@@ -98,6 +98,10 @@
     <Compile Include="DAL\Migrations\201803312039133_UserAndProjectEntityAdded.Designer.cs">
       <DependentUpon>201803312039133_UserAndProjectEntityAdded.cs</DependentUpon>
     </Compile>
+    <Compile Include="DAL\Migrations\201804010052014_ProjectIdAddedToVariable.cs" />
+    <Compile Include="DAL\Migrations\201804010052014_ProjectIdAddedToVariable.Designer.cs">
+      <DependentUpon>201804010052014_ProjectIdAddedToVariable.cs</DependentUpon>
+    </Compile>
     <Compile Include="DAL\Migrations\Configuration.cs" />
     <Compile Include="BL\Models\ArchiveListModel.cs" />
     <Compile Include="DAL\Entities\Base\BaseEntity.cs" />
@@ -175,6 +179,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="DAL\Migrations\201803312039133_UserAndProjectEntityAdded.resx">
       <DependentUpon>201803312039133_UserAndProjectEntityAdded.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DAL\Migrations\201804010052014_ProjectIdAddedToVariable.resx">
+      <DependentUpon>201804010052014_ProjectIdAddedToVariable.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup />

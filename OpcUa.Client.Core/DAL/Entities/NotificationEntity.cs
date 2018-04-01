@@ -6,6 +6,5 @@
         public string NodeId { get; set; }
         public double FilterValue { get; set; }
         public string Description { get; set; }
-
     }
 }

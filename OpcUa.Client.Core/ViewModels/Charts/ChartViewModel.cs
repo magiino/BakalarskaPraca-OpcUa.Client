@@ -50,7 +50,7 @@ namespace OpcUa.Client.Core
                 this, val =>
                 {
                     var test = _dataContext.Records.Local;
-                    var testRecords = test.Where(x => x.VariableEntityId == val.Id && _lastTime < x.ArchiveTime);
+                    var testRecords = test.Where(x => x.VariableId == val.Id && _lastTime < x.ArchiveTime);
 
                     foreach (var record in testRecords)
                     {
