@@ -8,11 +8,14 @@ namespace OpcUa.Client.Core
     public class NodeAttributesViewModel : BaseViewModel
     {
         #region Private Fields
+
         private readonly UaClientApi _uaClientApi;
+
         #endregion
 
         #region Public Properties
-        public ObservableCollection<AttributeListModel> SelectedNode { get; set; } = new ObservableCollection<AttributeListModel>();
+        public ObservableCollection<AttributeListModel> SelectedNodeAttributes { get; set; } = new ObservableCollection<AttributeListModel>();
+
         public ExpandedNodeId NodeId { get; set; }
         public ReferenceDescription ReferenceDescription { get; set; }
         public Node Node { get; set; }
@@ -22,40 +25,35 @@ namespace OpcUa.Client.Core
         public Type DataType { get; set; }
         public BuiltInType BuiltInType { get; set; }
         public bool IsVariableType { get; set; }
-        public string ValueToSingleWrite { get; set; }
-
-        public bool IsExpanded { get; set; }
+        public string ValueToWrite { get; set; }
 
         #endregion
 
         #region Commands
 
-        public ICommand WriteSingleValueCommand { get; set; }
-        public ICommand ReadSingleValueCommand { get; set; }
+        public ICommand WriteValueCommand { get; set; }
+        public ICommand ReadValueCommand { get; set; }
 
         #endregion
 
         #region Constructor
 
-        // TODO prerobit _selectedNode z refDisc na NodeId
         // TODO Prerobit WriteValue v opcuaApi
         // TODO vracat z write value ci sa podaril zapis
-        // TODO Stale tam zobrazovat atributy len menit hodnoty !!!
-        // TODO Urobit ViewModel zvlast pre vsetko
         public NodeAttributesViewModel(UaClientApi uaClientApi)
         {
             _uaClientApi = uaClientApi;
 
-            WriteSingleValueCommand = new RelayCommand(WriteSingleValue);
-            ReadSingleValueCommand = new RelayCommand(ReadSingleValue);
+            WriteValueCommand = new RelayCommand(WriteValue);
+            ReadValueCommand = new RelayCommand(ReadValue);
 
             MessengerInstance.Register<SendSelectedRefNode>(
                 this,
-                node =>
+                msg =>
                 {
-                    ReferenceDescription = node.RefNode;
+                    ReferenceDescription = msg.ReferenceNode;
                     UpdateValues(ReferenceDescription);
-                    SelectedNode = GetDataGridModel(ReferenceDescription);
+                    SelectedNodeAttributes = GetDataGridModel(ReferenceDescription);
                 });
         }
 
@@ -63,7 +61,7 @@ namespace OpcUa.Client.Core
 
         #region Command Methods
 
-        private void WriteSingleValue()
+        private void WriteValue()
         {
             var nodeId = ExpandedNodeId.ToNodeId(ReferenceDescription.NodeId, null);
             var variable = new VariableModel()
@@ -77,13 +75,13 @@ namespace OpcUa.Client.Core
             var data = _uaClientApi.ReadValue(nodeId);
             variable.Value = data.Value;
 
-            bool writeStatus = _uaClientApi.WriteValue(variable, ValueToSingleWrite);
+            bool writeStatus = _uaClientApi.WriteValue(variable, ValueToWrite);
 
             if (data.StatusCode.Code != StatusCodes.Good || !writeStatus) return;
-            DataValue.Value = ValueToSingleWrite;
+            DataValue.Value = ValueToWrite;
         }
 
-        private void ReadSingleValue()
+        private void ReadValue()
         {
             var nodeId = ExpandedNodeId.ToNodeId(ReferenceDescription.NodeId, null);
             DataValue = _uaClientApi.ReadValue(nodeId);
@@ -110,11 +108,6 @@ namespace OpcUa.Client.Core
             BuiltInType = TypeInfo.GetBuiltInType(VariableNode.DataType);
         }
 
-        ///// <summary>
-        ///// Takes attributes and values of <see cref="ReferenceDescription"/> object
-        ///// </summary>
-        ///// <param name="referenceDescription"></param>
-        ///// <returns></returns>
         private ObservableCollection<AttributeListModel> GetDataGridModel(ReferenceDescription referenceDescription)
         {
             var data = new ObservableCollection<AttributeListModel>();

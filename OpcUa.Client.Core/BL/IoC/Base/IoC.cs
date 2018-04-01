@@ -35,6 +35,8 @@ namespace OpcUa.Client.Core
         /// </summary>
         public static Messenger Messenger => IoC.Get<Messenger>();
 
+        public static IUIManager Ui => IoC.Get<IUIManager>();
+
         #endregion
 
         #region Setup

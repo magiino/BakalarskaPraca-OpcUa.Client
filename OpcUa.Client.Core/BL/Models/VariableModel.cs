@@ -11,7 +11,7 @@ namespace OpcUa.Client.Core
 
         public object Value { get; set; }
 
-        public Type DataType => Value?.GetType();
+        public BuiltInType DataType { get; set; }
 
         public StatusCode StatusCode { get; set; }
 

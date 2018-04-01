@@ -1,15 +1,16 @@
+using System;
+using System.Data.Entity.Migrations;
 using Opc.Ua;
 
-namespace OpcUa.Client.Core.Migrations
+namespace OpcUa.Client.Core.DAL
 {
-    using System;
-    using System.Data.Entity.Migrations;
-
     internal sealed class Configuration : DbMigrationsConfiguration<DataContext>
     {
         public Configuration()
         {
             AutomaticMigrationsEnabled = false;
+            MigrationsDirectory = @"DAL\Migrations";
+            MigrationsNamespace = "OpcUa.Client.Core.DAL.Migrations";
         }
 
         protected override void Seed(DataContext context)

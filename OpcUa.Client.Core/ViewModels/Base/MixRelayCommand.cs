@@ -7,14 +7,16 @@ namespace OpcUa.Client.Core
     /// <summary>
     /// A basic command that runs an Action with condition for execute
     /// </summary>
-    public class RelayCanExecuteCommand : ICommand
+    public class MixRelayCommand : ICommand
     {
         #region Private Members
 
         /// <summary>
         /// The action to run
         /// </summary>
-        private readonly Action _action;
+        private readonly Action<object> _execute;
+
+        private readonly Predicate<object> _canExecute;
 
         #endregion
 
@@ -25,6 +27,15 @@ namespace OpcUa.Client.Core
         /// </summary>
         public event EventHandler CanExecuteChanged = (sender, e) => { };
 
+        ///// <summary>
+        ///// The event thats fired when the <see cref="CanExecute(object)"/> value has changed
+        ///// </summary>
+        //public event EventHandler CanExecuteChanged
+        //{
+        //    add { CommandManager.RequerySuggested += value; }
+        //    remove { CommandManager.RequerySuggested -= value; }
+        //}
+
         #endregion
 
         #region Constructor
@@ -32,10 +43,13 @@ namespace OpcUa.Client.Core
         /// <summary>
         /// Default constructor
         /// </summary>
-        public RelayCanExecuteCommand(Action action)
+        public MixRelayCommand(Action<object> execute, Predicate<object> canExecute)
         {
-            _action = action;
+            _execute = execute ?? throw new ArgumentNullException("execute");
+            _canExecute = canExecute;
         }
+
+        public MixRelayCommand(Action<object> execute) : this(execute, null) { }
 
         #endregion
 
@@ -48,7 +62,7 @@ namespace OpcUa.Client.Core
         /// <returns></returns>
         public bool CanExecute(object parameter)
         {
-            return true;
+            return _canExecute?.Invoke(parameter) ?? true;
         }
 
         /// <summary>
@@ -57,7 +71,7 @@ namespace OpcUa.Client.Core
         /// <param name="parameter"></param>
         public void Execute(object parameter)
         {
-            _action();
+            _execute(parameter);
         }
 
         #endregion

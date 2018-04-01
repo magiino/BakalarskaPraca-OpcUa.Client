@@ -1,0 +1,67 @@
+﻿<UserControl x:Class="OpcUa.Client.WPF.Notification"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:OpcUa.Client.WPF"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="400">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- ListView of subscribed variables -->
+        <DataGrid ItemsSource="{Binding SubscribedVariables}"
+                  Background="{StaticResource BackgroundLightBrush}"
+                  SelectedItem="{Binding SelectedNotification}"
+                  SelectionMode="Single"
+                  HeadersVisibility="None"
+                  BorderThickness="0"
+                  AutoGenerateColumns="false"
+                  RowHeaderWidth="0"
+                  CanUserResizeColumns="False"
+                  CanUserReorderColumns="False"
+                  IsReadOnly="True"
+                  SelectedIndex="0"
+                  IsManipulationEnabled="False"
+                  CanUserAddRows="False"
+                  >
+            <DataGrid.Columns>
+                <DataGridTextColumn Width="*" Binding="{Binding Name}"/>
+                <DataGridTextColumn Width="*" Binding="{Binding Value}"/>
+                <DataGridTextColumn Width="*" Binding="{Binding DataType}"/>
+                <DataGridTextColumn Width="*" Binding="{Binding StatusCode}"/>
+                <DataGridTextColumn Width="*" Binding="{Binding ServerDateTime}"/>
+                <DataGridTextColumn Width="*" Binding="{Binding SourceDateTime}"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <!-- Separator -->
+        <Separator Grid.Row="1"
+                   Margin="0 0 0 5"/>
+
+        <!-- Subscription control -->
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions >
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="auto"/>
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Grid.Column="1">
+                <Button Content="Add Notification"
+                        Padding="10 5"
+                        Command="{Binding AddNotificationCommand}"
+                        />
+                <Button Content="Delete Notification"
+                        Padding="10 5"
+                        Command="{Binding RemoveNotificationCommand}"
+                        />
+            </StackPanel>
+        </Grid>
+    </Grid>
+</UserControl>
