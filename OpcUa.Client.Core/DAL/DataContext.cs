@@ -11,6 +11,7 @@ namespace OpcUa.Client.Core
         public DbSet<ProjectEntity> Projects { get; set; }
         public DbSet<EndpointEntity> Endpoints { get; set; }
         public DbSet<UserEntity> Users { get; set; }
+        public DbSet<NotificationEntity> Notifications { get; set; }
 
         #endregion
 

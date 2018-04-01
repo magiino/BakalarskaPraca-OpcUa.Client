@@ -14,7 +14,7 @@
         </Grid.RowDefinitions>
 
         <!-- ListView of subscribed variables -->
-        <DataGrid ItemsSource="{Binding SubscribedVariables}"
+        <DataGrid ItemsSource="{Binding Notifications}"
                   Background="{StaticResource BackgroundLightBrush}"
                   SelectedItem="{Binding SelectedNotification}"
                   SelectionMode="Single"

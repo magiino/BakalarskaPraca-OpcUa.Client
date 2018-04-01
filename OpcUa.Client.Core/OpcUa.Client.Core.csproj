@@ -88,6 +88,10 @@
     <Compile Include="BL\Repositories\IRecordRepository.cs" />
     <Compile Include="BL\Repositories\IProjectRepository.cs" />
     <Compile Include="BL\Repositories\Base\IBaseRepository.cs" />
+    <Compile Include="DAL\Migrations\201804011948019_NotificationEntityAdded.cs" />
+    <Compile Include="DAL\Migrations\201804011948019_NotificationEntityAdded.Designer.cs">
+      <DependentUpon>201804011948019_NotificationEntityAdded.cs</DependentUpon>
+    </Compile>
     <Compile Include="DAL\Repositories\ProjectRepository.cs" />
     <Compile Include="DAL\Repositories\VariableRepository.cs" />
     <Compile Include="DAL\Repositories\RecordRepository.cs" />
@@ -203,6 +207,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="DAL\Migrations\201804010144102_EndpointEntityAdded.resx">
       <DependentUpon>201804010144102_EndpointEntityAdded.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DAL\Migrations\201804011948019_NotificationEntityAdded.resx">
+      <DependentUpon>201804011948019_NotificationEntityAdded.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup />
