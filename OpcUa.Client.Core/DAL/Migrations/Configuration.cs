@@ -133,11 +133,21 @@ namespace OpcUa.Client.Core.DAL
             };
             context.Variables.AddOrUpdate(x => x.Id, var3);
 
-            var project = new ProjectEntity()
+            var endpoint = new EndpointEntity()
             {
                 Id = 1,
+                Url = "opc.tcp://A05-226b:48010",
+                MessageSecurityMode = MessageSecurityMode.None,
+                SecurityPolicyUri = SecurityPolicies.None,
+                TransportProfileUri = Profiles.UaTcpTransport
+            };
+            context.Endpoints.AddOrUpdate(x => x.Id, endpoint);
+
+            var project = new ProjectEntity()
+            {
+                Id = 3,
                 Name = "TestProject",
-                Endpoint = "opc.tcp://A05-226b:48010",
+                EndpointId = 1,
                 UserId = null,
                 SessionName = "TestProjectSession"
             };

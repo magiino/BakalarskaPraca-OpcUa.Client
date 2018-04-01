@@ -1,12 +1,12 @@
 ﻿namespace OpcUa.Client.Core
 {
-    public class ProjectEntity : BaseEntity
+    public class ProjectModel : BaseViewModel
     {
+        public int ProjectId { get; set; }
         public string Name { get; set; }
         public int EndpointId { get; set; }
-        public EndpointEntity Endpoint { get; set; }
+        public string EndpointUrl { get; set; }
         public string SessionName { get; set; }
         public int? UserId { get; set; }
-        public UserEntity User { get; set; }
     }
 }

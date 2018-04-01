@@ -1,5 +1,4 @@
 ﻿using System.Collections.ObjectModel;
-using System.Diagnostics.Eventing.Reader;
 using System.Linq;
 using System.Windows.Input;
 using Opc.Ua;
