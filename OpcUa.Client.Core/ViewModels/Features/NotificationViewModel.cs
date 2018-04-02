@@ -39,7 +39,7 @@ namespace OpcUa.Client.Core
             _uaClientApi = uaClientApi;
             _unitOfWork = unitOfWork;
 
-            _subscription = _uaClientApi.NotificationSubscription();
+            _subscription = _uaClientApi.Subscribe(300, "Notifications");
 
             //AddNotificationCommand = new RelayCommand(AddNotification);
             AddNotificationCommand = new GalaSoft.MvvmLight.CommandWpf.RelayCommand(AddNotification, AddNotificationCanUse);

@@ -109,6 +109,9 @@
     <Compile Include="Controls\TabItems\AttributeInfo.xaml.cs">
       <DependentUpon>AttributeInfo.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\TabItems\LiveChart.xaml.cs">
+      <DependentUpon>LiveChart.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\TabItems\ZoomChart.xaml.cs">
       <DependentUpon>ZoomChart.xaml</DependentUpon>
     </Compile>
@@ -172,6 +175,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Controls\TabItems\AttributeInfo.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\TabItems\LiveChart.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

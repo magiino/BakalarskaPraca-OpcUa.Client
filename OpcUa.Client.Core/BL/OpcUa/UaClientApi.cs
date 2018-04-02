@@ -240,48 +240,21 @@ namespace OpcUa.Client.Core
         /// <param name="publishingInterval">The publishing interval</param>
         /// <returns>Subscription</returns>
         /// <exception cref="Exception">Throws and forwards any exception with short error description.</exception>
-        public Subscription Subscribe(int publishingInterval)
+        public Subscription Subscribe(int publishingInterval, string displayName)
         {
             //Create a Subscription object
             var subscription = new Subscription(_session.DefaultSubscription)
             {
                 PublishingEnabled = true,
                 PublishingInterval = publishingInterval,
-                TimestampsToReturn = TimestampsToReturn.Both
+                TimestampsToReturn = TimestampsToReturn.Both,
+                DisplayName = displayName,
             };
             _session.AddSubscription(subscription);
 
             try
             {
                 //Create/Activate the subscription
-                subscription.Create();
-                return subscription;
-            }
-            catch (Exception e)
-            {
-                ShowErrorMessage(e);
-                return null;
-            }
-        }
-
-        /// <summary>Creats a Subscription object to a server</summary>
-        /// <param name="publishingInterval">The publishing interval</param>
-        /// <returns>Subscription</returns>
-        /// <exception cref="Exception">Throws and forwards any exception with short error description.</exception>
-        public Subscription NotificationSubscription()
-        {
-            //Create a Subscription object
-            var subscription = new Subscription(_session.DefaultSubscription)
-            {
-                PublishingEnabled = true,
-                PublishingInterval = 500,
-                TimestampsToReturn = TimestampsToReturn.Both,
-                DisplayName = "Notifications"
-            };
-            _session.AddSubscription(subscription);
-
-            try
-            {
                 subscription.Create();
                 return subscription;
             }
@@ -314,42 +287,6 @@ namespace OpcUa.Client.Core
             }
         }
 
-        /// <summary>Ads a monitored item to an existing subscription</summary>
-        /// <param name="node"></param>
-        /// <param name="subscription"></param>
-        /// <returns>The added item</returns>
-        /// <exception cref="Exception">Throws and forwards any exception with short error description.</exception>
-        public MonitoredItem AddMonitoredItem(ReferenceDescription node, Subscription subscription)
-        {
-            var monitoredItem = new MonitoredItem
-            {
-                DisplayName = node.DisplayName.ToString(),
-                StartNodeId = ExpandedNodeId.ToNodeId(node.NodeId, new NamespaceTable()),
-                AttributeId = Attributes.Value,
-                MonitoringMode = MonitoringMode.Reporting,
-                // -1 minimum if we want sample as subscription publish
-                SamplingInterval = 300,
-                // Cache na strane serveru
-                QueueSize = 5,
-                // Cache na mojej strane, kolko hodnot si ulozim
-                CacheQueueSize = 5,
-                DiscardOldest = true,
-
-                // TODO deadband
-                Filter = new DataChangeFilter()
-                {
-                    DeadbandType = (uint)DeadbandType.Absolute,
-                    DeadbandValue = 2,
-                    Trigger = DataChangeTrigger.StatusValue
-                }
-            };
-
-            if (AddMonitoredItem(monitoredItem, subscription))
-                return monitoredItem;
-
-            return null;
-        }
-
         public bool AddMonitoredItem(MonitoredItem monitoredItem, Subscription subscription)
         {
             try
@@ -366,7 +303,7 @@ namespace OpcUa.Client.Core
             return false;
         }
 
-        public MonitoredItem NotificationMonitoredItem(string displayName, string nodeId, MonitoringFilter filterValue)
+        public MonitoredItem NotificationMonitoredItem(string displayName, string nodeId, MonitoringFilter filterValue, int queueSize=1)
         {
             var monitoredItem = new MonitoredItem
             {
@@ -375,8 +312,8 @@ namespace OpcUa.Client.Core
                 AttributeId = Attributes.Value,
                 MonitoringMode = MonitoringMode.Reporting,
                 SamplingInterval = 300,
-                QueueSize = 1,
-                CacheQueueSize = 1,
+                QueueSize = (uint)queueSize,
+                CacheQueueSize = queueSize,
                 DiscardOldest = true
             };
 

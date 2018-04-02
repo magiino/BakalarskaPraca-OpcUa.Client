@@ -14,6 +14,7 @@
         public MenuBarViewModel MenuBarViewModel { get; set; }
         public MenuToolBarViewModel MenuToolBarViewModel { get; set; }
         public ChartViewModel ChartViewModel { get; set; }
+        public  LiveChartViewModel LiveChartViewModel { get; set; }
 
         private int _selectedIndes = 0;
         public int SelectedIndex
@@ -36,9 +37,6 @@
 
         #endregion
 
-        #region Commands
-        #endregion
-
         #region Constructor
 
         public MainViewModel()
@@ -54,11 +52,9 @@
             MenuToolBarViewModel = new MenuToolBarViewModel(uaClientApi);
             ArchiveViewModel = new ArchiveViewModel(unitOfWork, uaClientApi);
             ChartViewModel = new ChartViewModel(unitOfWork);
+            LiveChartViewModel = new LiveChartViewModel(uaClientApi);
         }
 
-        #endregion
-
-        #region Command Methods
         #endregion
     }
 }

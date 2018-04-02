@@ -15,7 +15,7 @@ namespace OpcUa.Client.Core
 
         private readonly IUnitOfWork _unitOfWork;
         private readonly UaClientApi _uaClientApi;
-        private ReferenceDescription _refDescOfSelectedNode;
+        private ReferenceDescription _selectedNode;
         private readonly Dictionary<ArchiveInterval, Timer> _timers = new Dictionary<ArchiveInterval, Timer>();
         private List<ArchiveReadVariableModel> _registeredNodesForRead;
 
@@ -60,10 +60,10 @@ namespace OpcUa.Client.Core
 
             MessengerInstance.Register<SendSelectedRefNode>(
                 this,
-                node =>
+                msg =>
                 {
-                    _refDescOfSelectedNode = node.ReferenceNode;
-                    AddArchiveVariableIsEnabled = _refDescOfSelectedNode.NodeClass == NodeClass.Variable;
+                    _selectedNode = msg.ReferenceNode;
+                    AddArchiveVariableIsEnabled = _selectedNode.NodeClass == NodeClass.Variable;
                 });
         }
 
@@ -110,10 +110,10 @@ namespace OpcUa.Client.Core
 
         private void AddVariableToArchive()
         {
-            if (_refDescOfSelectedNode == null || SelectedArchiveInfo == null || _refDescOfSelectedNode.NodeClass != NodeClass.Variable) return;
+            if (_selectedNode == null || SelectedArchiveInfo == null || _selectedNode.NodeClass != NodeClass.Variable) return;
             if (SelectedArchiveInfo.Running) return;
 
-            var nodeId = _refDescOfSelectedNode.NodeId.ToString();
+            var nodeId = _selectedNode.NodeId.ToString();
             var type = _uaClientApi.GetBuiltInTypeOfVariableNodeId(nodeId);
 
             var tmp = new VariableEntity()
