@@ -14,7 +14,7 @@ namespace OpcUa.Client.Core
         #endregion
 
         #region Public Properties
-        public ObservableCollection<AttributeListModel> SelectedNodeAttributes { get; set; } = new ObservableCollection<AttributeListModel>();
+        //public ObservableCollection<AttributeListModel> SelectedNodeAttributes { get; set; } = new ObservableCollection<AttributeListModel>();
 
         public ExpandedNodeId NodeId { get; set; }
         public ReferenceDescription ReferenceDescription { get; set; }
@@ -38,7 +38,7 @@ namespace OpcUa.Client.Core
 
         #region Constructor
 
-        // TODO Prerobit WriteValue v opcuaApi
+
         // TODO vracat z write value ci sa podaril zapis
         public NodeAttributesViewModel(UaClientApi uaClientApi)
         {
@@ -53,7 +53,7 @@ namespace OpcUa.Client.Core
                 {
                     ReferenceDescription = msg.ReferenceNode;
                     UpdateValues(ReferenceDescription);
-                    SelectedNodeAttributes = GetDataGridModel(ReferenceDescription);
+                    //SelectedNodeAttributes = GetDataGridModel(ReferenceDescription);
                 });
         }
 
@@ -63,27 +63,18 @@ namespace OpcUa.Client.Core
 
         private void WriteValue()
         {
-            var nodeId = ExpandedNodeId.ToNodeId(ReferenceDescription.NodeId, null);
-            var variable = new VariableModel()
-            {
-                NodeId = nodeId.ToString(),
-                Name = ReferenceDescription.DisplayName.ToString()
-            };
+            var nodeId = ExpandedNodeId.ToNodeId(ReferenceDescription.NodeId, new NamespaceTable());
 
-            // TOTO robim aby som si zistil data type
-            // TODO vymysliet to inak
-            var data = _uaClientApi.ReadValue(nodeId);
-            variable.Value = data.Value;
+            var value = _uaClientApi.WriteValue(nodeId, BuiltInType,  ValueToWrite);
 
-            bool writeStatus = _uaClientApi.WriteValue(variable, ValueToWrite);
+            if (value == null) return;
 
-            if (data.StatusCode.Code != StatusCodes.Good || !writeStatus) return;
-            DataValue.Value = ValueToWrite;
+            DataValue = value;
         }
 
         private void ReadValue()
         {
-            var nodeId = ExpandedNodeId.ToNodeId(ReferenceDescription.NodeId, null);
+            var nodeId = ExpandedNodeId.ToNodeId(ReferenceDescription.NodeId, new NamespaceTable());
             DataValue = _uaClientApi.ReadValue(nodeId);
         }
 
@@ -108,45 +99,46 @@ namespace OpcUa.Client.Core
             BuiltInType = TypeInfo.GetBuiltInType(VariableNode.DataType);
         }
 
-        private ObservableCollection<AttributeListModel> GetDataGridModel(ReferenceDescription referenceDescription)
-        {
-            var data = new ObservableCollection<AttributeListModel>();
+        //private ObservableCollection<AttributeListModel> GetDataGridModel(ReferenceDescription referenceDescription)
+        //{
+        //    var data = new ObservableCollection<AttributeListModel>();
 
-            var tmpNodeId = referenceDescription.NodeId;
+        //    var tmpNodeId = referenceDescription.NodeId;
 
-            data.Add(new AttributeListModel("Node Id", tmpNodeId));
-            data.Add(new AttributeListModel("Namespace Index", tmpNodeId.NamespaceIndex));
-            data.Add(new AttributeListModel("Type", tmpNodeId.IdType));
-            data.Add(new AttributeListModel("Identifier", tmpNodeId.Identifier));
-            data.Add(new AttributeListModel("Node Class", referenceDescription.NodeClass));
-            data.Add(new AttributeListModel("Browse Name", referenceDescription.BrowseName));
-            data.Add(new AttributeListModel("Display Name", referenceDescription.DisplayName));
+        //    data.Add(new AttributeListModel("Node Id", tmpNodeId));
+        //    data.Add(new AttributeListModel("Namespace Index", tmpNodeId.NamespaceIndex));
+        //    data.Add(new AttributeListModel("Type", tmpNodeId.IdType));
+        //    data.Add(new AttributeListModel("Identifier", tmpNodeId.Identifier));
+        //    data.Add(new AttributeListModel("Node Class", referenceDescription.NodeClass));
+        //    data.Add(new AttributeListModel("Browse Name", referenceDescription.BrowseName));
+        //    data.Add(new AttributeListModel("Display Name", referenceDescription.DisplayName));
 
-            var node = _uaClientApi.ReadNode(tmpNodeId);
+        //    var node = _uaClientApi.ReadNode(tmpNodeId);
 
-            data.Add(new AttributeListModel("Description", node.Description));
-            data.Add(new AttributeListModel("Write Mask", node.WriteMask));
-            data.Add(new AttributeListModel("User Write Mask", node.UserWriteMask));
+        //    data.Add(new AttributeListModel("Description", node.Description));
+        //    data.Add(new AttributeListModel("Write Mask", node.WriteMask));
+        //    data.Add(new AttributeListModel("User Write Mask", node.UserWriteMask));
 
-            if (node.NodeClass != NodeClass.Variable) return data;
+        //    if (node.NodeClass != NodeClass.Variable) return data;
 
-            var variableNode = (VariableNode)node.DataLock;
-            data.Add(new AttributeListModel("Value Rank", variableNode.ValueRank));
-            data.Add(new AttributeListModel("Data Type", variableNode.DataType));
-            data.Add(new AttributeListModel("Namespace Index", variableNode.DataType.NamespaceIndex));
-            data.Add(new AttributeListModel("Identifier", variableNode.DataType.Identifier));
-            data.Add(new AttributeListModel("Id Type", variableNode.DataType.IdType));
-            data.Add(new AttributeListModel("Array Dimensions", variableNode.ArrayDimensions));
-            data.Add(new AttributeListModel("Access Level", variableNode.AccessLevel));
-            data.Add(new AttributeListModel("User Access Level", variableNode.UserAccessLevel));
-            data.Add(new AttributeListModel("Historozing", variableNode.Historizing));
-            data.Add(new AttributeListModel("Minimum Sampling", variableNode.MinimumSamplingInterval));
-            data.Add(new AttributeListModel("Value", _uaClientApi.ReadValue(variableNode.NodeId)));
-            data.Add(new AttributeListModel("Data Type", TypeInfo.GetSystemType(variableNode.DataType, new EncodeableFactory())));
-            data.Add(new AttributeListModel("Built In Type", TypeInfo.GetBuiltInType(variableNode.DataType)));
+        //    var variableNode = (VariableNode)node.DataLock;
+        //    data.Add(new AttributeListModel("Value Rank", variableNode.ValueRank));
+        //    data.Add(new AttributeListModel("Data Type", variableNode.DataType));
+        //    data.Add(new AttributeListModel("Namespace Index", variableNode.DataType.NamespaceIndex));
+        //    data.Add(new AttributeListModel("Identifier", variableNode.DataType.Identifier));
+        //    data.Add(new AttributeListModel("Id Type", variableNode.DataType.IdType));
+        //    data.Add(new AttributeListModel("Array Dimensions", variableNode.ArrayDimensions));
+        //    data.Add(new AttributeListModel("Access Level", variableNode.AccessLevel));
+        //    data.Add(new AttributeListModel("User Access Level", variableNode.UserAccessLevel));
+        //    data.Add(new AttributeListModel("Historozing", variableNode.Historizing));
+        //    data.Add(new AttributeListModel("Minimum Sampling", variableNode.MinimumSamplingInterval));
+        //    data.Add(new AttributeListModel("Value", _uaClientApi.ReadValue(variableNode.NodeId)));
+        //    data.Add(new AttributeListModel("Data Type", TypeInfo.GetSystemType(variableNode.DataType, new EncodeableFactory())));
+        //    data.Add(new AttributeListModel("Built In Type", TypeInfo.GetBuiltInType(variableNode.DataType)));
 
-            return data;
-        }
+        //    return data;
+        //}
+
         #endregion
     }
 }

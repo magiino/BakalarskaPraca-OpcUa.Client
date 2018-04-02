@@ -1,5 +1,4 @@
 ﻿using System.Collections.ObjectModel;
-using System.Diagnostics.Eventing.Reader;
 using System.Linq;
 using System.Windows.Input;
 using Opc.Ua;
@@ -12,16 +11,16 @@ namespace OpcUa.Client.Core
         #region Private Fields
 
         private readonly UaClientApi _uaClientApi;
-        private readonly DataContext _dataContext;
+        private readonly IUnitOfWork _unitOfWork;
         private ReferenceDescription _selectedNode;
-        private Subscription _subscription; 
+        private readonly Subscription _subscription; 
 
         #endregion
 
         #region Public Properties
 
-        public ObservableCollection<VariableModel> Notifications { get; set; } = new ObservableCollection<VariableModel>();
-        public VariableModel SelectedNotification { get; set; }
+        public ObservableCollection<ExtendedNotificationModel> Notifications { get; set; } = new ObservableCollection<ExtendedNotificationModel>();
+        public ExtendedNotificationModel SelectedNotification { get; set; }
 
         #endregion
 
@@ -35,10 +34,11 @@ namespace OpcUa.Client.Core
         #region Constructor
 
         // TODO Prerobit WriteValue v opcuaApi
-        public NotificationViewModel(UaClientApi uaClientApi, DataContext dataContext)
+        public NotificationViewModel(IUnitOfWork unitOfWork, UaClientApi uaClientApi)
         {
             _uaClientApi = uaClientApi;
-            _dataContext = dataContext;
+            _unitOfWork = unitOfWork;
+
             _subscription = _uaClientApi.NotificationSubscription();
 
             //AddNotificationCommand = new RelayCommand(AddNotification);
@@ -50,9 +50,9 @@ namespace OpcUa.Client.Core
                 this,
                 msg => _selectedNode = msg.ReferenceNode);
 
-            MessengerInstance.Register<SendMonitoredItem>(
+            MessengerInstance.Register<SendNewNotification>(
                 this,
-                msg => AddNotificationToSubscription(msg.Item));
+                msg => AddNotificationToSubscription(msg.Notification));
         }
 
         #endregion
@@ -78,26 +78,6 @@ namespace OpcUa.Client.Core
             });
         }
 
-        private void AddNotificationToSubscription(MonitoredItem item)
-        {
-            var nodeId = item.StartNodeId.ToString();
-            var type = _uaClientApi.GetBuiltInTypeOfVariableNodeId(nodeId);
-
-            // TODO private metoda opakovany kod
-            var tmp = new VariableModel()
-            {
-                NodeId = nodeId,
-                Name = item.DisplayName,
-                DataType = type,
-                Value = "No change yet",
-            };
-
-            _uaClientApi.AddMonitoredItem(item, _subscription);
-            item.Notification += Notification_MonitoredItem;
-
-            Notifications.Add(tmp);
-        }
-
         private void RemoveNotification()
         {
             if (SelectedNotification == null) return;
@@ -105,36 +85,35 @@ namespace OpcUa.Client.Core
             Notifications.Remove(SelectedNotification);
         }
 
-        private void SaveSubscription()
-        {
-            // TODO save do priecinka /Subscriptions a ukladat s mneom ako datum v stringu
-            _uaClientApi.SaveSubsciption();
-        }
+        //private void SaveSubscription()
+        //{
+        //    // TODO save do priecinka /Subscriptions a ukladat s mneom ako datum v stringu
+        //    _uaClientApi.SaveSubsciption();
+        //}
 
-        private void LoadSubscription()
-        {
-            // TODO opytat sa uzivatela ci chce prepisat existujucu subscription
-            if (_subscription != null) return;
-            _subscription = _uaClientApi.LoadSubsciption();
+        //private void LoadSubscription()
+        //{
+        //    // TODO opytat sa uzivatela ci chce prepisat existujucu subscription
+        //    if (_subscription != null) return;
+        //    _subscription = _uaClientApi.LoadSubsciption();
 
-            if (_subscription == null) return;
+        //    if (_subscription == null) return;
 
-            // TODO private metoda opakovany kod
-            foreach (var item in _subscription.MonitoredItems)
-            {
-                var tmp = new VariableModel()
-                {
-                    NodeId = item.StartNodeId.ToString(),
-                    Name = item.DisplayName
-                    // TODO set up type here
-                };
+        //    // TODO private metoda opakovany kod
+        //    foreach (var item in _subscription.MonitoredItems)
+        //    {
+        //        var tmp = new ExtendedNotificationModel()
+        //        {
+        //            NodeId = item.StartNodeId.ToString(),
+        //            Name = item.DisplayName
+        //            // TODO set up type here
+        //        };
 
-                item.Notification += Notification_MonitoredItem;
-                Notifications.Add(tmp);
-            }
-            _subscription.ApplyChanges();
-
-        }
+        //        item.Notification += Notification_MonitoredItem;
+        //        Notifications.Add(tmp);
+        //    }
+        //    _subscription.ApplyChanges();
+        //}
 
         #endregion
 
@@ -153,6 +132,38 @@ namespace OpcUa.Client.Core
         {
             return SelectedNotification != null;
         }
+
+        #endregion
+
+        #region Helpers
+
+        private void AddNotificationToSubscription(ExtendedNotificationModel notification)
+        {
+            notification.DataType = _uaClientApi.GetBuiltInTypeOfVariableNodeId(notification.NodeId);
+
+            MonitoredItem item;
+            // TODO inak vymysliet notification model
+            if (notification is DigitalNotificationModel)
+                item = _uaClientApi.NotificationMonitoredItem(notification.Name, notification.NodeId, null);
+            else
+            {
+                var analog = (notification as AnalogNotificationModel);
+
+                item = _uaClientApi.NotificationMonitoredItem(notification.Name,
+                    notification.NodeId,
+                    new DataChangeFilter()
+                    {
+                        DeadbandType = (uint)analog.DeadbandType,
+                        DeadbandValue = analog.FilterValue,
+                        Trigger = DataChangeTrigger.StatusValue
+                    });
+            }
+
+            _uaClientApi.AddMonitoredItem(item, _subscription);
+            item.Notification += Notification_MonitoredItem;
+
+            Notifications.Add(notification);
+        } 
 
         #endregion
 
@@ -176,7 +187,6 @@ namespace OpcUa.Client.Core
 
             variable.Value = value.Value;
             variable.StatusCode = value.StatusCode;
-            variable.ServerDateTime = value.ServerTimestamp;
             variable.SourceDateTime = value.SourceTimestamp;
         }
 

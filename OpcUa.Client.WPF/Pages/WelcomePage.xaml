@@ -5,48 +5,101 @@
                 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                 xmlns:local="clr-namespace:OpcUa.Client.WPF"
                 xmlns:core="clr-namespace:OpcUa.Client.Core;assembly=OpcUa.Client.Core"
+                xmlns:fa="http://schemas.fontawesome.io/icons/"
                 mc:Ignorable="d" 
-                d:DesignHeight="300" d:DesignWidth="400">
+                d:DesignHeight="300" 
+                d:DesignWidth="400"
+                >
 
     <StackPanel VerticalAlignment="Center"
                 HorizontalAlignment="Center"
-                TextBlock.TextAlignment="Center">
+                TextBlock.TextAlignment="Center"
+                >
 
         <!-- Welcome main content white box -->
         <Border Background="{StaticResource ForegroundLightBrush}" 
-                            CornerRadius="10"
-                            Padding="15 50 15 15"
-                            Width="330">
+                CornerRadius="10"
+                Padding="15 50 15 15"
+                Width="330"
+                >
 
             <StackPanel>
-
                 <!-- Welcome header -->
                 <TextBlock Text="Welcome!" 
-                                   FontSize="{StaticResource FontSizeXXLarge}" 
-                                   FontFamily="{StaticResource LatoRegular}"
-                                   Foreground="{StaticResource WordBlueBrush}" />
+                           FontSize="{StaticResource FontSizeXXLarge}" 
+                           FontFamily="{StaticResource LatoRegular}"
+                           Foreground="{StaticResource WordBlueBrush}"
+                           />
+
                 <!-- Welcome multiline text -->
-                <StackPanel Orientation="Vertical" Width="250" Margin="0 10 0 40">
+                <StackPanel Orientation="Vertical"
+                            Width="250" 
+                            Margin="0 10 0 10"
+                            >
                     <TextBlock FontSize="{StaticResource FontSizeRegular}"
-                                           FontFamily="{StaticResource LatoRegular}"
-                                           TextWrapping="Wrap" 
-                                           Text="{Binding WelcomeText, FallbackValue=Loreipsum}" />
+                               FontFamily="{StaticResource LatoRegular}"
+                               TextWrapping="Wrap"
+                               Text="{Binding WelcomeText, FallbackValue=Loreipsum}"
+                               />
                 </StackPanel>
 
-                <!-- New setting button -->
-                <Button Content="New Session" 
-                                    IsDefault="True"
-                                    Command="{Binding NewSessionCommand}"
-                                    HorizontalAlignment="Center" />
+                <TextBlock Text="Choose Server"
+                           HorizontalAlignment="Center"
+                           />
+                <ScrollViewer VerticalScrollBarVisibility="auto">
+                    <ListView ItemsSource="{Binding Projects}"
+                              SelectedItem="{Binding SelectedProject}"
+                              Background="{StaticResource ForegroundLightBrush}"
+                              BorderThickness="0"
+                              SelectionMode="Single"
+                              SelectedIndex="0"
+                              MinHeight="75px"
+                              >
+
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <fa:ImageAwesome 
+                                        Width="10" 
+                                        Margin="3"
+                                        Foreground="{StaticResource WordBlueBrush}"
+                                        Icon="AngleRight"
+                                        />
+                                    <TextBlock Padding="10 5"
+                                               VerticalAlignment="Center" 
+                                               Text="{Binding Name}"
+                                               />
+                                    <TextBlock Padding="10 5"
+                                               VerticalAlignment="Center" 
+                                               Text="{Binding EndpointUrl}"
+                                               />
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </ScrollViewer>
+
 
                 <!-- Load setting button -->
-                <Button Content="Load Session" 
-                                    IsDefault="True"
-                                    Command="{Binding LoadSessionCommand}"
-                                    HorizontalAlignment="Center" />
+                <Button Content="Load Project" 
+                        IsDefault="True"
+                        Command="{Binding LoadProjectCommand}"
+                        HorizontalAlignment="right"
+                        />
+
+                <TextBlock Text="OR"
+                           HorizontalAlignment="Center"
+                           Padding="0 10"
+                           />
+                <!-- New setting button -->
+                <Button Content="Create Project" 
+                        IsDefault="True"
+                        Command="{Binding CreateProjectCommand}"
+                        HorizontalAlignment="Center"
+                        />
+
 
             </StackPanel>
-
         </Border>
     </StackPanel>
 </local:BasePage>

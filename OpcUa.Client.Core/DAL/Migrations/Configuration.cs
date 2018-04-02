@@ -22,7 +22,7 @@ namespace OpcUa.Client.Core.DAL
             var record1 = new RecordEntity()
             {
                 Id = 1,
-                VariableEntityId = 1,
+                VariableId = 1,
                 Value = "566",
                 ArchiveTime = DateTime.Now
             };
@@ -31,7 +31,7 @@ namespace OpcUa.Client.Core.DAL
             var record2 = new RecordEntity()
             {
                 Id = 2,
-                VariableEntityId = 2,
+                VariableId = 2,
                 Value = "20",
                 ArchiveTime = DateTime.Now
             };
@@ -40,7 +40,7 @@ namespace OpcUa.Client.Core.DAL
             var record3 = new RecordEntity()
             {
                 Id = 3,
-                VariableEntityId = 3,
+                VariableId = 3,
                 Value = "1500",
                 ArchiveTime = DateTime.Now
             };
@@ -49,7 +49,7 @@ namespace OpcUa.Client.Core.DAL
             var record4 = new RecordEntity()
             {
                 Id = 4,
-                VariableEntityId = 1,
+                VariableId = 1,
                 Value = "576",
                 ArchiveTime = DateTime.Now + TimeSpan.FromSeconds(30)
             };
@@ -58,7 +58,7 @@ namespace OpcUa.Client.Core.DAL
             var record5 = new RecordEntity()
             {
                 Id = 5,
-                VariableEntityId = 2,
+                VariableId = 2,
                 Value = "26",
                 ArchiveTime = DateTime.Now + TimeSpan.FromSeconds(30)
             };
@@ -67,7 +67,7 @@ namespace OpcUa.Client.Core.DAL
             var record6 = new RecordEntity()
             {
                 Id = 6,
-                VariableEntityId = 3,
+                VariableId = 3,
                 Value = "1566",
                 ArchiveTime = DateTime.Now + TimeSpan.FromSeconds(30)
             };
@@ -76,7 +76,7 @@ namespace OpcUa.Client.Core.DAL
             var record7 = new RecordEntity()
             {
                 Id = 7,
-                VariableEntityId = 1,
+                VariableId = 1,
                 Value = "586",
                 ArchiveTime = DateTime.Now + TimeSpan.FromSeconds(60)
             };
@@ -85,7 +85,7 @@ namespace OpcUa.Client.Core.DAL
             var record8 = new RecordEntity()
             {
                 Id = 8,
-                VariableEntityId = 2,
+                VariableId = 2,
                 Value = "33",
                 ArchiveTime = DateTime.Now + TimeSpan.FromSeconds(60)
             };
@@ -94,7 +94,7 @@ namespace OpcUa.Client.Core.DAL
             var record9 = new RecordEntity()
             {
                 Id = 9,
-                VariableEntityId = 3,
+                VariableId = 3,
                 Value = "1570",
                 ArchiveTime = DateTime.Now + TimeSpan.FromSeconds(60)
             };
@@ -103,6 +103,7 @@ namespace OpcUa.Client.Core.DAL
             var var1 = new VariableEntity()
             {
                 Id = 1,
+                ProjectId = 3,
                 Name = "ns=2;s=Demo.Dynamic.Scalar.Int16",
                 Description = "Test Int16 Value",
                 Archive = ArchiveInterval.ThirtySecond,
@@ -113,6 +114,7 @@ namespace OpcUa.Client.Core.DAL
             var var2 = new VariableEntity()
             {
                 Id = 2,
+                ProjectId = 3,
                 Name = "ns=2;s=Demo.Dynamic.Scalar.SByte",
                 Description = "Test Short Byte Value",
                 Archive = ArchiveInterval.ThirtySecond,
@@ -123,12 +125,33 @@ namespace OpcUa.Client.Core.DAL
             var var3 = new VariableEntity()
             {
                 Id = 3,
+                ProjectId = 3,
                 Name = "ns=2;s=Demo.Dynamic.Scalar.UInt64",
                 Description = "Test Unsigned Int64 Value",
                 Archive = ArchiveInterval.ThirtySecond,
                 DataType = BuiltInType.UInt64,
             };
             context.Variables.AddOrUpdate(x => x.Id, var3);
+
+            var endpoint = new EndpointEntity()
+            {
+                Id = 1,
+                Url = "opc.tcp://A05-226b:48010",
+                MessageSecurityMode = MessageSecurityMode.None,
+                SecurityPolicyUri = SecurityPolicies.None,
+                TransportProfileUri = Profiles.UaTcpTransport
+            };
+            context.Endpoints.AddOrUpdate(x => x.Id, endpoint);
+
+            var project = new ProjectEntity()
+            {
+                Id = 3,
+                Name = "TestProject",
+                EndpointId = 1,
+                UserId = null,
+                SessionName = "TestProjectSession"
+            };
+            context.Projects.AddOrUpdate(x => x.Id, project);
         }
     }
 }

@@ -3,9 +3,10 @@
     public class ProjectEntity : BaseEntity
     {
         public string Name { get; set; }
-        public string Endpoint { get; set; }
-        public double SessionName { get; set; }
-        public int? UserEntityId { get; set; }
+        public int EndpointId { get; set; }
+        public EndpointEntity Endpoint { get; set; }
+        public string SessionName { get; set; }
+        public int? UserId { get; set; }
         public UserEntity User { get; set; }
     }
 }

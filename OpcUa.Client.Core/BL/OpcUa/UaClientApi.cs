@@ -366,7 +366,7 @@ namespace OpcUa.Client.Core
             return false;
         }
 
-        public MonitoredItem NotificationMonitoredItem(string displayName, string nodeId, double filterValue)
+        public MonitoredItem NotificationMonitoredItem(string displayName, string nodeId, MonitoringFilter filterValue)
         {
             var monitoredItem = new MonitoredItem
             {
@@ -380,15 +380,9 @@ namespace OpcUa.Client.Core
                 DiscardOldest = true
             };
 
-            if (filterValue == 0d) return monitoredItem;
+            if (filterValue == null) return monitoredItem;
 
-            monitoredItem.Filter = new DataChangeFilter()
-            {
-                DeadbandType = (uint) DeadbandType.Absolute,
-                DeadbandValue = filterValue,
-                Trigger = DataChangeTrigger.Status
-            };
-
+            monitoredItem.Filter = filterValue;
             return monitoredItem;
         }
 
@@ -514,16 +508,16 @@ namespace OpcUa.Client.Core
             }
         }
 
-        public bool WriteValue(VariableModel variableModel, object newValue)
+        public DataValue WriteValue(NodeId ndoeId, BuiltInType datayType, object newValue)
         {
-            var wrapedValue = new Variant( Convert.ChangeType(newValue, TypeInfo.GetSystemType(variableModel.DataType, -1)) );
+            var wrapedValue = new Variant( Convert.ChangeType(newValue, TypeInfo.GetSystemType(datayType, -1)) );
             var data = new DataValue(wrapedValue);
 
             var valueToWrite = new WriteValue()
             {
                 Value = data,
-                NodeId = new NodeId(variableModel.NodeId),
-                AttributeId = Attributes.Value,   
+                NodeId = ndoeId,
+                AttributeId = Attributes.Value,
             };
 
             try
@@ -532,11 +526,12 @@ namespace OpcUa.Client.Core
 
                 if (statusCodes.FirstOrDefault().Code == StatusCodes.Good) { 
                     Utils.Trace(Utils.TraceMasks.Information, "Value successfully written to server!");
-                    return true;
+                    data.SourceTimestamp= DateTime.Now;
+                    return data;
                 }
 
                 Utils.Trace(Utils.TraceMasks.Error, "Value was not written to server!");
-                return false;
+                return null;
             }
             catch (Exception e)
             {

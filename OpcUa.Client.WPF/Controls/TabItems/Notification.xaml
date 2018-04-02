@@ -13,8 +13,8 @@
             <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
 
-        <!-- ListView of subscribed variables -->
-        <DataGrid ItemsSource="{Binding SubscribedVariables}"
+        <!-- ListView of notifications -->
+        <DataGrid ItemsSource="{Binding Notifications}"
                   Background="{StaticResource BackgroundLightBrush}"
                   SelectedItem="{Binding SelectedNotification}"
                   SelectionMode="Single"
@@ -34,7 +34,6 @@
                 <DataGridTextColumn Width="*" Binding="{Binding Value}"/>
                 <DataGridTextColumn Width="*" Binding="{Binding DataType}"/>
                 <DataGridTextColumn Width="*" Binding="{Binding StatusCode}"/>
-                <DataGridTextColumn Width="*" Binding="{Binding ServerDateTime}"/>
                 <DataGridTextColumn Width="*" Binding="{Binding SourceDateTime}"/>
             </DataGrid.Columns>
         </DataGrid>
@@ -43,7 +42,7 @@
         <Separator Grid.Row="1"
                    Margin="0 0 0 5"/>
 
-        <!-- Subscription control -->
+        <!-- Buttons -->
         <Grid Grid.Row="2">
             <Grid.ColumnDefinitions >
                 <ColumnDefinition Width="auto"/>

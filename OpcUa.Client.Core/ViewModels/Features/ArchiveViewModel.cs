@@ -13,7 +13,7 @@ namespace OpcUa.Client.Core
     {
         #region Private Fields
 
-        private readonly DataContext _dataContext;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly UaClientApi _uaClientApi;
         private ReferenceDescription _refDescOfSelectedNode;
         private readonly Dictionary<ArchiveInterval, Timer> _timers = new Dictionary<ArchiveInterval, Timer>();
@@ -43,15 +43,14 @@ namespace OpcUa.Client.Core
 
         #region Constructor
 
-        public ArchiveViewModel(DataContext dataContext, UaClientApi uaClientApi)
+        public ArchiveViewModel(IUnitOfWork unitOfWork, UaClientApi uaClientApi)
         {
-            _dataContext = dataContext;
+            _unitOfWork = unitOfWork;
             _uaClientApi = uaClientApi;
 
             LoadDataFromDataBase();
             InitializeTables();
 
-            // TODO registrovat vsetky nody
             RegisterLoadedNodes();
 
             AddVariableToArchiveCommand = new RelayCommand(AddVariableToArchive);
@@ -123,8 +122,8 @@ namespace OpcUa.Client.Core
                 Name = nodeId,
                 DataType = type,
             };
-            _dataContext.Variables.Add(tmp);
-            if (_dataContext.SaveChanges() != 1) return;
+            _unitOfWork.Variables.Add(tmp);
+            _unitOfWork.Complete();
 
             var registeredNode = _uaClientApi.RegisterNode(nodeId);
             _registeredNodesForRead.Add( new ArchiveReadVariableModel()
@@ -151,8 +150,8 @@ namespace OpcUa.Client.Core
             }
 
             // vymazanie z databaze
-            _dataContext.Variables.Remove(SelectedArchiveVariable);
-            _dataContext.SaveChanges();
+            _unitOfWork.Variables.Remove(SelectedArchiveVariable);
+            _unitOfWork.Complete();
 
             var index = ArchiveVariables.IndexOf(SelectedArchiveVariable);
             // Vymazanie z tabulky
@@ -179,17 +178,15 @@ namespace OpcUa.Client.Core
             // Vytvorenie zaznamov
             var records = variablesForRead.Select(x => new RecordEntity()
             {
-                VariableEntityId = x.VariableId,
+                VariableId = x.VariableId,
                 Value = x.Value.ToString(),
                 ArchiveTime = DateTime.Now
             }).ToList();
 
             // Archivacia
-            _dataContext.Records.AddRange(records);
+            _unitOfWork.Records.AddRange(records);
             MessengerInstance.Send(new SendArchivedValue(1));
-            _dataContext.SaveChanges();
-            
-            // TODO ako sa disposuje session
+            _unitOfWork.Complete();
         }
 
         private bool IsTimerAlive(ArchiveInterval interval)
@@ -200,7 +197,7 @@ namespace OpcUa.Client.Core
 
         private void LoadDataFromDataBase()
         {
-            ArchiveVariables = new ObservableCollection<VariableEntity>(_dataContext.Variables.ToList());
+            ArchiveVariables = new ObservableCollection<VariableEntity>(_unitOfWork.Variables.GetAll());
         }
 
         private void RegisterLoadedNodes()

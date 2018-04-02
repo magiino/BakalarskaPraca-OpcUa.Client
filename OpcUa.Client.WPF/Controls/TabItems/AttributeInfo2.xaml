@@ -76,31 +76,29 @@
             <TextBlock Grid.Row="1" 
                     Grid.Column="0"
                     Style="{StaticResource AttributeHeader}"
-                    Text="Description"
+                    Text="Node Class"
                     />
             <TextBlock Grid.Row="1" 
                     Grid.Column="1"
                     Style="{StaticResource AttributeValue}"
-                    Text="{Binding Description}"
+                    Text="{Binding NodeClass}"
                     />
 
             <TextBlock Grid.Row="0" 
                     Grid.Column="0"
                     Style="{StaticResource AttributeHeader}"
-                    Text="Node Class"
+                    Text="Browse Name"
                     />
-
             <TextBlock Grid.Row="0" 
                     Grid.Column="1"
                     Style="{StaticResource AttributeValue}"
-                    Text="{Binding NodeClass}"
+                    Text="{Binding BrowseName}"
                     />
 
             <TextBlock Grid.Row="2" 
                     Grid.Column="0"
                     Style="{StaticResource AttributeHeader}"
                     Text="Display Name"
-                         
                     />
             <TextBlock Grid.Row="2" 
                     Grid.Column="1"
@@ -126,12 +124,12 @@
             <TextBlock Grid.Row="0" 
                     Grid.Column="0"
                     Style="{StaticResource AttributeHeader}"
-                    Text="Node Class"
+                    Text="Description"
                     />
             <TextBlock Grid.Row="0" 
                     Grid.Column="1"
                     Style="{StaticResource AttributeValue}"
-                    Text="{Binding NodeClass}"
+                    Text="{Binding Description}"
                     />
             <!--<TextBlock Text="{Binding Description}"
                     Width="200"
@@ -348,29 +346,25 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto"/>
                     <RowDefinition Height="auto"/>
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition Height="auto"/>
                 </Grid.RowDefinitions>
 
-                <TextBlock Grid.Row="1" 
+                <TextBlock Grid.Row="0" 
                        Grid.Column="0"
                        Style="{StaticResource AttributeHeader}"
                        Text="Data type"
                        />
-                <TextBlock Grid.Row="1" 
+                <TextBlock Grid.Row="0" 
                        Grid.Column="1"
                        Style="{StaticResource AttributeValue}"
                        Text="{Binding DataType}"
                        />
 
-                <TextBlock Grid.Row="2" 
+                <TextBlock Grid.Row="1" 
                        Grid.Column="0"
                        Style="{StaticResource AttributeHeader}"
                        Text="BuiltInType"
                        />
-                <TextBlock Grid.Row="2" 
+                <TextBlock Grid.Row="1" 
                        Grid.Column="1"
                        Style="{StaticResource AttributeValue}"
                        Text="{Binding BuiltInType}"
@@ -381,15 +375,15 @@
                         >
                 <Button Width="50" 
                     Content="Read"
-                    Command="{Binding ReadSingleValueCommand}"
+                    Command="{Binding ReadValueCommand}"
                     />
                 <TextBox Margin="100 0 0 0"
                      Width="50"
-                     Text="{Binding ValueToSingleWrite}"
+                     Text="{Binding ValueToWrite}"
                      />
                 <Button Width="50"
                     Content="Write"
-                    Command="{Binding WriteSingleValueCommand}"
+                    Command="{Binding WriteValueCommand}"
                     />
             </StackPanel>
 
