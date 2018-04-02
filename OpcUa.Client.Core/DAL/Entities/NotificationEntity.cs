@@ -4,6 +4,7 @@ namespace OpcUa.Client.Core
 {
     public class NotificationEntity : BaseEntity
     {
+        public int ProjectId { get; set; }
         public string Name { get; set; }
         public string NodeId { get; set; }
         public double FilterValue { get; set; }

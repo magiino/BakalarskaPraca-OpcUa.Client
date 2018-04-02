@@ -4,6 +4,7 @@ using System.Linq.Expressions;
 
 namespace OpcUa.Client.Core
 {
+    // TODO ako spravit aby som s jendou instanciou pristupoval k vsetkym entitam
     public interface IBaseRepository<TEntity> where TEntity : class, IEntity
     {
         TEntity GetById(int id);

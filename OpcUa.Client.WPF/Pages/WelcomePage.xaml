@@ -65,10 +65,12 @@
                                         Foreground="{StaticResource WordBlueBrush}"
                                         Icon="AngleRight"
                                         />
-                                    <TextBlock VerticalAlignment="Center" 
+                                    <TextBlock Padding="10 5"
+                                               VerticalAlignment="Center" 
                                                Text="{Binding Name}"
                                                />
-                                    <TextBlock VerticalAlignment="Center" 
+                                    <TextBlock Padding="10 5"
+                                               VerticalAlignment="Center" 
                                                Text="{Binding EndpointUrl}"
                                                />
                                 </StackPanel>

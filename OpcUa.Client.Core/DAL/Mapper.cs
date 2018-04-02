@@ -6,11 +6,11 @@ namespace OpcUa.Client.Core
 {
     public static class Mapper
     {
-        public static ICollection<ProjectModel> ProjectToListModel(ICollection<ProjectEntity> projectEntities)
+        public static ICollection<ProjectModel> ProjectToListModel(IEnumerable<ProjectEntity> projectEntities)
         {
             return projectEntities.Select(x => new ProjectModel()
             {
-                ProjectId = x.Id,
+                Id = x.Id,
                 Name = x.Name,
                 EndpointId = x.EndpointId,
                 EndpointUrl = x.Endpoint.Url,

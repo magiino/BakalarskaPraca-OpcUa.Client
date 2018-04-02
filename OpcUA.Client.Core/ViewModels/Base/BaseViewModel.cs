@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel;
 using PropertyChanged;
-using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Messaging;
 
 namespace OpcUa.Client.Core
@@ -11,12 +10,12 @@ namespace OpcUa.Client.Core
     [AddINotifyPropertyChangedInterface]
     public class BaseViewModel : INotifyPropertyChanged
     {
-        // TODO Prejst na ineho messengera
         /// <summary>
         /// The event that is fired when any child property changes its value
         /// </summary>
         public event PropertyChangedEventHandler PropertyChanged = (sender, e) => { };
 
+        // TODO Prejst na ineho messengera
         public Messenger MessengerInstance = IoC.Messenger;
     }
 }

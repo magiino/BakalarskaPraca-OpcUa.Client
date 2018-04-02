@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.ObjectModel;
-using System.Linq;
 using System.Security;
 using System.Windows.Input;
 
@@ -8,9 +7,8 @@ namespace OpcUa.Client.Core
 {
     public class WelcomeViewModel : BaseViewModel
     {
-        private UaClientApi _uaClientApi;
-        private DataContext _dataContext;
-        private IAuthRepository _authRepo;
+        private readonly UaClientApi _uaClientApi;
+        private readonly IUnitOfWork _unitOfWork;
 
         #region Public Properties
 
@@ -22,21 +20,21 @@ namespace OpcUa.Client.Core
 
         #region Commands
 
-        public ICommand CreateProjectCommand { get; set; }
         public ICommand LoadProjectCommand { get; set; }
-
+        public ICommand CreateProjectCommand { get; set; }
+        
         #endregion
 
         public WelcomeViewModel()
         {
+            // TODO vsetkych pages predavat IoC veci cey konstruktor z Page Convertora !
             _uaClientApi = IoC.UaClientApi;
-            // TODO repository pre project
-            _dataContext = IoC.DataContext;
-            _authRepo = new AuthRepository(_dataContext);
-            Projects = LoadProjects(_dataContext);
+            _unitOfWork = IoC.UnitOfWork;
 
-            CreateProjectCommand = new RelayCommand(() => IoC.Application.GoToPage(ApplicationPage.Endpoints));
+            LoadProjects();
+
             LoadProjectCommand = new RelayCommand(LoadProject);
+            CreateProjectCommand = new RelayCommand(() => IoC.Application.GoToPage(ApplicationPage.Endpoints));
 
             MessengerInstance.Register<SendCredentials>(
                 this,
@@ -47,10 +45,11 @@ namespace OpcUa.Client.Core
         {
             try
             {
-                var endpoint = _dataContext.Endpoints.SingleOrDefault(x => x.Id == SelectedProject.EndpointId);
+                var endpoint = _unitOfWork.Endpoints.SingleOrDefault(x => x.Id == SelectedProject.EndpointId);
                 if (SelectedProject.UserId == null)
                 {
                     _uaClientApi.ConnectAnonymous(Mapper.CreateEndpointDescription(endpoint), SelectedProject.SessionName);
+                    _unitOfWork.ProjectId = SelectedProject.Id;
                     IoC.Application.GoToPage(ApplicationPage.Main);
                 }
                 else
@@ -69,12 +68,9 @@ namespace OpcUa.Client.Core
 
         private void Login(string userName, SecureString password)
         {
-            //// IMPORTANT: Never store unsecure password in variable like this
-            //var pass = (parameter as IHavePassword).SecurePassword.Unsecure();
-
             try
             {
-                var user = _authRepo.Login(userName, password);
+                var user = _unitOfWork.Auth.Login(userName, password);
                 if (user == null)
                 {
                     IoC.Ui.ShowMessage(new MessageBoxDialogViewModel()
@@ -84,7 +80,7 @@ namespace OpcUa.Client.Core
                         OkText = "ok"
                     });
                 }
-                var endpoint = _dataContext.Endpoints.SingleOrDefault(x => x.Id == SelectedProject.EndpointId);
+                var endpoint = _unitOfWork.Endpoints.SingleOrDefault(x => x.Id == SelectedProject.EndpointId);
                 _uaClientApi.Connect(Mapper.CreateEndpointDescription(endpoint), userName, SecureStringHelpers.Unsecure(password), SelectedProject.SessionName);
             }
             catch (Exception e)
@@ -98,18 +94,22 @@ namespace OpcUa.Client.Core
                 });
             }
 
-
             IoC.Application.GoToPage(ApplicationPage.Main);
         }
 
-        private ObservableCollection<ProjectModel> LoadProjects(DataContext dataContext)
+        private void LoadProjects()
         {
-            var projectsEntities = dataContext.Projects.ToList();
-            projectsEntities.ForEach((project) =>
-                {
-                    project.Endpoint = dataContext.Endpoints.SingleOrDefault(x => x.Id == project.EndpointId);
-                });
-            return new ObservableCollection<ProjectModel>(Mapper.ProjectToListModel(projectsEntities));
+            var projectsEntities = _unitOfWork.Projects.GetAll();
+
+            // TODO preco sa mi nenacita ta referencia na endpoint
+            if (projectsEntities == null) return;
+
+            foreach (var project in projectsEntities)
+            {
+                project.Endpoint = _unitOfWork.Endpoints.SingleOrDefault(x => x.Id == project.EndpointId);
+            }
+
+            Projects = new ObservableCollection<ProjectModel>(Mapper.ProjectToListModel(projectsEntities));
         }
     }
 }

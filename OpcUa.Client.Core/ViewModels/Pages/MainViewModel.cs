@@ -44,16 +44,16 @@
         public MainViewModel()
         {
             var uaClientApi = IoC.UaClientApi;
-            var dataContext = IoC.DataContext;
+            var unitOfWork = IoC.UnitOfWork;
 
             // Set up child view models
             NodetreeViewModel = new NodeTreeViewModel();
             NodeAttributesViewModel = new NodeAttributesViewModel(uaClientApi);
-            NotificationViewModel = new NotificationViewModel(uaClientApi, dataContext);
+            NotificationViewModel = new NotificationViewModel(unitOfWork, uaClientApi);
             MenuBarViewModel = new MenuBarViewModel(uaClientApi);
             MenuToolBarViewModel = new MenuToolBarViewModel(uaClientApi);
-            ArchiveViewModel = new ArchiveViewModel(dataContext, uaClientApi);
-            ChartViewModel = new ChartViewModel(dataContext);
+            ArchiveViewModel = new ArchiveViewModel(unitOfWork, uaClientApi);
+            ChartViewModel = new ChartViewModel(unitOfWork);
         }
 
         #endregion

@@ -24,7 +24,7 @@ namespace OpcUa.Client.Core
             //TODO nepouzivat tu IOC?
             // Get the root nodes
             var children = IoC.UaClientApi.BrowseRoot();
-
+            
             //Create the view models from the root ndoes
             Items = new ObservableCollection<NodeTreeItemViewModel>(
                 children.Select(content => new NodeTreeItemViewModel(content)).OrderBy(x => x.Name));

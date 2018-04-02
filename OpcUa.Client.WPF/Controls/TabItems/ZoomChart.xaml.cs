@@ -92,7 +92,7 @@ namespace OpcUa.Client.WPF
         {
             var values = new ChartValues<DateTimePoint>();
 
-            var variable = IoC.DataContext.Variables.FirstOrDefault(x => x.Id == 1);
+            var variable = IoC.UnitOfWork.Variables.SingleOrDefault(x => x.Id == 1);
             if (variable == null) return null;
             foreach (var record in variable.Records)
             {

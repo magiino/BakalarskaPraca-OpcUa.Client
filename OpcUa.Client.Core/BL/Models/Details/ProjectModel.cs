@@ -2,7 +2,7 @@
 {
     public class ProjectModel : BaseViewModel
     {
-        public int ProjectId { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; }
         public int EndpointId { get; set; }
         public string EndpointUrl { get; set; }

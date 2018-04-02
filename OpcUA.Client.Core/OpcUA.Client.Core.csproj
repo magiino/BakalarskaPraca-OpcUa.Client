@@ -81,18 +81,28 @@
     <Compile Include="BL\IoC\Interfaces\IUIManager.cs" />
     <Compile Include="BL\IUnitOfWork.cs" />
     <Compile Include="BL\Messages\SendArchivedValue.cs" />
-    <Compile Include="BL\Messages\SendMonitoredItem.cs" />
+    <Compile Include="BL\Messages\SendNewNotification.cs" />
     <Compile Include="BL\Messages\SendCredentials.cs" />
-    <Compile Include="BL\Models\ProjectModel.cs" />
+    <Compile Include="BL\Models\Details\ProjectModel.cs" />
+    <Compile Include="BL\Models\AnalogNotificationModel.cs" />
+    <Compile Include="BL\Models\DigitalNotificationModel.cs" />
+    <Compile Include="BL\Repositories\IProjectRepository.cs" />
+    <Compile Include="BL\Repositories\INotificationRepository.cs" />
+    <Compile Include="BL\Repositories\IEndpointRepository.cs" />
     <Compile Include="BL\Repositories\IVariableRepository.cs" />
     <Compile Include="BL\Repositories\IRecordRepository.cs" />
-    <Compile Include="BL\Repositories\IProjectRepository.cs" />
     <Compile Include="BL\Repositories\Base\IBaseRepository.cs" />
     <Compile Include="DAL\Migrations\201804011948019_NotificationEntityAdded.cs" />
     <Compile Include="DAL\Migrations\201804011948019_NotificationEntityAdded.Designer.cs">
       <DependentUpon>201804011948019_NotificationEntityAdded.cs</DependentUpon>
     </Compile>
+    <Compile Include="DAL\Migrations\201804020018017_ProjectIdAddedToNotification.cs" />
+    <Compile Include="DAL\Migrations\201804020018017_ProjectIdAddedToNotification.Designer.cs">
+      <DependentUpon>201804020018017_ProjectIdAddedToNotification.cs</DependentUpon>
+    </Compile>
     <Compile Include="DAL\Repositories\ProjectRepository.cs" />
+    <Compile Include="DAL\Repositories\NotificationRepository.cs" />
+    <Compile Include="DAL\Repositories\EndpointRepository.cs" />
     <Compile Include="DAL\Repositories\VariableRepository.cs" />
     <Compile Include="DAL\Repositories\RecordRepository.cs" />
     <Compile Include="DAL\Entities\EndpointEntity.cs" />
@@ -121,7 +131,7 @@
       <DependentUpon>201804010144102_EndpointEntityAdded.cs</DependentUpon>
     </Compile>
     <Compile Include="DAL\Migrations\Configuration.cs" />
-    <Compile Include="BL\Models\ArchiveListModel.cs" />
+    <Compile Include="BL\Models\Lists\ArchiveListModel.cs" />
     <Compile Include="DAL\Entities\Base\BaseEntity.cs" />
     <Compile Include="DAL\Entities\Base\IEntity.cs" />
     <Compile Include="DAL\DataContext.cs" />
@@ -131,8 +141,8 @@
     <Compile Include="BL\Models\ArchiveReadVariableModel.cs" />
     <Compile Include="BL\OpcUa\Utils\CertificateUtils.cs" />
     <Compile Include="BL\Enums\ApplicationPage.cs" />
-    <Compile Include="BL\Models\AttributeListModel.cs" />
-    <Compile Include="BL\Models\EndpointListModel.cs" />
+    <Compile Include="BL\Models\Lists\AttributeListModel.cs" />
+    <Compile Include="BL\Models\Lists\EndpointListModel.cs" />
     <Compile Include="BL\Enums\ArchiveInterval.cs" />
     <Compile Include="BL\Enums\MessageEncoding.cs" />
     <Compile Include="BL\OpcUa\Utils\EndpointUtils.cs" />
@@ -147,7 +157,7 @@
     <Compile Include="BL\SecurityStringHelpers.cs" />
     <Compile Include="BL\OpcUa\Utils\ClientUtils.cs" />
     <Compile Include="BL\OpcUa\UaClientApi.cs" />
-    <Compile Include="BL\Models\VariableModel.cs" />
+    <Compile Include="BL\Models\ExtendedNotificationModel.cs" />
     <Compile Include="ViewModels\Base\MixRelayCommand.cs" />
     <Compile Include="ViewModels\Dialogs\LogInDialogViewModel.cs" />
     <Compile Include="ViewModels\Dialogs\AddNotificationDialogViewModel.cs" />
@@ -210,6 +220,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="DAL\Migrations\201804011948019_NotificationEntityAdded.resx">
       <DependentUpon>201804011948019_NotificationEntityAdded.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DAL\Migrations\201804020018017_ProjectIdAddedToNotification.resx">
+      <DependentUpon>201804020018017_ProjectIdAddedToNotification.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup />

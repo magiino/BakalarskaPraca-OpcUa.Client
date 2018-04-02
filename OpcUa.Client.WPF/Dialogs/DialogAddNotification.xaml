@@ -6,12 +6,9 @@
              xmlns:local="clr-namespace:OpcUa.Client.WPF"
              xmlns:core="clr-namespace:OpcUa.Client.Core;assembly=OpcUa.Client.Core"
              mc:Ignorable="d"
-             d:DesignHeight="150"
-             d:DesignWidth="200"
+             d:DesignHeight="250"
+             d:DesignWidth="250"
              >
-
-    <!--<Border  Background="{StaticResource BackgroundLightBrush}"
-             Padding="5">-->
     <StackPanel>
         <Grid>
             <Grid.ColumnDefinitions>
@@ -26,12 +23,13 @@
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
             </Grid.RowDefinitions>
 
             <!-- Fields -->
             <TextBlock Grid.Row="0" 
                        Grid.Column="0"
-                       Text="Display Name"
+                       Text="Name"
                        HorizontalAlignment="Left"
                        />
             <TextBlock Grid.Row="1" 
@@ -39,74 +37,77 @@
                        Text="Node Id"
                        HorizontalAlignment="Left"
                        />
-            <TextBlock Grid.Row="2"
+            <!--<TextBlock Grid.Row="2"
                        Grid.Column="0"
                        Text="Description"
                        HorizontalAlignment="Left"
-                       />
-            <TextBlock Grid.Row="4" 
-                       Grid.Column="0"
-                       Grid.ColumnSpan="2"
-                       Text="Hlasit zmenu hodnoty o"
-                       HorizontalAlignment="Left"
-                       Visibility="{Binding Converter={local:BooleanToVisibilityConverter}, ElementName=AllowFilter, Path=IsChecked}"
-                       />
-
+                       />-->
             <!-- Values -->
             <TextBox Grid.Row="0" 
                      Grid.Column="1"
-                     Text="{Binding DisplayName}"
+                     Text="{Binding Name}"
                      />
             <TextBox Grid.Row="1" 
                      Grid.Column="1"
                      Text="{Binding NodeId}"
                      />
-            <TextBox Grid.Row="2" 
+            <!--<TextBox Grid.Row="2" 
                      Grid.Column="1"
                      TextWrapping="Wrap"
                      AcceptsReturn="True"
                      AcceptsTab="True"
                      VerticalScrollBarVisibility="Auto"
                      Text="{Binding Description}"
-                     />
-            <CheckBox Margin="0 10 0 0"
-                      Grid.Row="3" 
-                      Grid.Column="0"
-                      Grid.ColumnSpan="2"
-                      Content="Nastavit filter"
-                      x:Name="AllowFilter"
-                      />
-            <TextBox Grid.Row="5" 
-                     Grid.Column="0" 
-                     Grid.ColumnSpan="2"
-                     IsEnabled="{Binding IsChecked, ElementName=AllowFilter}"
-                     Visibility="{Binding Converter={local:BooleanToVisibilityConverter}, ElementName=AllowFilter, Path=IsChecked}"
+                     />-->
+        </Grid>
+
+        <CheckBox Margin="0 10 0 0"
+                  Content="Dvojstavová hodnota"
+                  IsChecked="{Binding IsDigital}"
+                  x:Name="IsDigital"
+                  />
+        <StackPanel Orientation="Horizontal"
+                    Visibility="{Binding Converter={local:BooleanToVisibilityConverter}
+                                         ,ConverterParameter=true
+                                         ,ElementName=IsDigital
+                                         ,Path=IsChecked}"
+                    >
+            <TextBlock Text="Hlasit zmenu hodnoty o"
+                       HorizontalAlignment="Left"
+                       />
+            <TextBox Width="50"
                      Text="{Binding FilterValue}"
                      />
-        </Grid>
+            <ComboBox SelectedIndex="{Binding SelectedFilterType, Mode=TwoWay}"
+                      >
+                <ComboBoxItem Content="| |"/>
+                <ComboBoxItem Content="%"/>
+            </ComboBox>
+        </StackPanel>
+
+        <StackPanel Visibility="{Binding Converter={local:BooleanToVisibilityConverter}
+                                         ,ElementName=IsDigital
+                                         ,Path=IsChecked}"
+                    >
+            <TextBlock Text="Hlásanie pri hodnote 0:"
+                       HorizontalAlignment="Left"
+                       />
+            <TextBox Text="{Binding IsZeroDescription}"
+                     />
+
+            <TextBlock Text="Hlásanie pri hodnote 1:"
+                       HorizontalAlignment="Left"
+                       />
+            <TextBox Text="{Binding IsOneDescription}"
+                     />
+        </StackPanel>
+
         <Button Margin="0 10 0 0"
                 Padding="10 3"
                 Content="Add"
                 FontSize="{StaticResource FontSizeRegular}"
                 Command="{Binding AddItemCommand}"
                 HorizontalAlignment="Center"
-        />
-    </StackPanel>
-    <!--</Border>-->
-</local:BaseDialogUserControl>
-
-
-<!--<StackPanel Background="{StaticResource ForegroundLightBrush}"
-                >
-        <TextBlock Text="asdada"
-                   Padding="5"
-                   Foreground="{StaticResource ForegroundVeryDarkBrush}"
-                   />
-
-        <Button Content="{Binding OkText}"
-                FontSize="{StaticResource FontSizeRegular}"
-                Command="{Binding CloseCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:BaseDialogUserControl}}}"
-                HorizontalAlignment="Center"
                 />
-        
-    </StackPanel>-->
+    </StackPanel>
+</local:BaseDialogUserControl>

@@ -10,7 +10,7 @@ namespace OpcUa.Client.Core
 {
     public class ChartViewModel : BaseViewModel
     {
-        private readonly DataContext _dataContext;
+        private readonly IUnitOfWork _unitOfWork;
         private DateTime _lastTime;
 
         public ChartValues<DateTimePoint> Values { get; set; }
@@ -23,9 +23,10 @@ namespace OpcUa.Client.Core
 
         public ICommand StopCommand { get; set; }
 
-        public ChartViewModel(DataContext dataContext)
+        public ChartViewModel(IUnitOfWork IunitOfWork)
         {
-            _dataContext = dataContext;
+            _unitOfWork = IunitOfWork;
+
             var mapper = Mappers.Xy<DateTimePoint>()
                 .X(model => model.DateTime.Ticks)   //use DateTime.Ticks as X
                 .Y(model => model.Value);           //use the value property as Y
@@ -49,7 +50,7 @@ namespace OpcUa.Client.Core
             MessengerInstance.Register<SendArchivedValue>(
                 this, val =>
                 {
-                    var test = _dataContext.Records.Local;
+                    var test = _unitOfWork.Records.Local();
                     var testRecords = test.Where(x => x.VariableId == val.Id && _lastTime < x.ArchiveTime);
 
                     foreach (var record in testRecords)
@@ -66,7 +67,7 @@ namespace OpcUa.Client.Core
 
         private void Read()
         {
-            var variable = _dataContext.Variables.FirstOrDefault(x => x.Id == 1);
+            var variable = _unitOfWork.Variables.SingleOrDefault(x => x.Id == 1);
             if (variable == null) return;
             foreach (var record in variable.Records)
             {

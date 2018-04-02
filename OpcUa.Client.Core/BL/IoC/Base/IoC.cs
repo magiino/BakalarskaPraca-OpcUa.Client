@@ -26,15 +26,19 @@ namespace OpcUa.Client.Core
         public static UaClientApi UaClientApi => IoC.Get<UaClientApi>();
 
         /// <summary>
-        /// A shortcut to access the <see cref="DataContext"/>
+        /// A shortcut to access the <see cref="UnitOfWork"/>
         /// </summary>
-        public static DataContext DataContext => IoC.Get<DataContext>();
+        public static IUnitOfWork UnitOfWork => IoC.Get<IUnitOfWork>();
 
+        // TODO MVVM light zrusit a messenger spravit ako singleton a dat ho do baseViewModel priamo
         /// <summary>
         /// A shortcut to access the <see cref="Messenger"/>
         /// </summary>
         public static Messenger Messenger => IoC.Get<Messenger>();
 
+        /// <summary>
+        /// A shortcut to access the <see cref="IUIManager"/>
+        /// </summary>
         public static IUIManager Ui => IoC.Get<IUIManager>();
 
         #endregion
@@ -43,11 +47,26 @@ namespace OpcUa.Client.Core
 
         public static void Configure()
         {
-            // Bind all required view models
             BindViewModels();
             BindUaApi();
-            BindDataContext();
+            BindUnitOfWork();
             BindMessenger();
+        }
+
+        private static void BindViewModels()
+        {
+            Kernel.Bind<ApplicationViewModel>().ToConstant(new ApplicationViewModel());
+        }
+
+        private static void BindUaApi()
+        {
+            Kernel.Bind<UaClientApi>().ToConstant(new UaClientApi());
+        }
+
+        private static void BindUnitOfWork()
+        {
+            var dataContext = new DataContext();
+            Kernel.Bind<IUnitOfWork>().ToConstant(new UnitOfWork(dataContext));
         }
 
         private static void BindMessenger()
@@ -55,32 +74,11 @@ namespace OpcUa.Client.Core
             Kernel.Bind<Messenger>().ToConstant(new Messenger());
         }
 
-        /// <summary>
-        /// Binds all singleton view models
-        /// </summary>
-        private static void BindViewModels()
-        {
-            // Bind to a single instance of Application view model
-            Kernel.Bind<ApplicationViewModel>().ToConstant(new ApplicationViewModel());
-        }
-
-        private static void BindUaApi()
-        {
-            // Bind to a single instance of UaClientHelperApi
-            Kernel.Bind<UaClientApi>().ToConstant(new UaClientApi());
-        }
-
-        private static void BindDataContext()
-        {
-            // Bind to a single instance of Data Context
-            Kernel.Bind<DataContext>().ToConstant(new DataContext());
-        }
-
         public static void DisposeAll()
         {
+            // TODO UaClientApi spravit ako repository do UnitOfWork
             UaClientApi?.Disconnect();
-            DataContext?.Dispose();
-            Messenger?.Cleanup();
+            UnitOfWork.Dispose();
         }
 
         #endregion
