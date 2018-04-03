@@ -30,20 +30,31 @@ namespace OpcUa.Client.Core
 
         private void AddItem()
         {
-            ExtendedNotificationModel notification;
+            var notification = new ExtendedNotificationModel();
 
             if (IsDigital)
-                notification = new DigitalNotificationModel()
-                {
-                    IsZeroDescription = IsZeroDescription,
-                    IsOneDescription = IsOneDescription,
-                };
+            {
+                notification.IsZeroDescription = IsZeroDescription;
+                notification.IsOneDescription = IsOneDescription;
+            }
             else
-                notification = new AnalogNotificationModel()
-                {
-                    FilterValue = Convert.ToDouble(FilterValue),
-                    DeadbandType = _selectedFilterType
-                };
+            {
+                notification.FilterValue = Convert.ToDouble(FilterValue);
+                notification.DeadbandType = _selectedFilterType;
+            }
+
+            //if (IsDigital)
+            //    notification = new DigitalNotificationModel()
+            //    {
+            //        IsZeroDescription = IsZeroDescription,
+            //        IsOneDescription = IsOneDescription,
+            //    };
+            //else
+            //    notification = new AnalogNotificationModel()
+            //    {
+            //        FilterValue = Convert.ToDouble(FilterValue),
+            //        DeadbandType = _selectedFilterType
+            //    };
 
             notification.Name = Name;
             notification.NodeId = NodeId;

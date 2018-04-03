@@ -87,6 +87,7 @@ namespace OpcUa.Client.Core
         public ICommand SearchCommand { get; set; }
         public ICommand ConnectCommand { get; set; }
         public ICommand StartFilterCommand { get; set; }
+        public ICommand LoadProjectCommand { get; set; }
 
         #endregion
 
@@ -99,6 +100,7 @@ namespace OpcUa.Client.Core
             SearchCommand = new RelayCommand(SearchEndpoints);
             ConnectCommand = new RelayParameterizedCommand(ConnectToServer);
             StartFilterCommand = new RelayCommand(EndpointFilter);
+            LoadProjectCommand = new RelayCommand(LoadprojectPage);
         }
 
         #endregion
@@ -142,6 +144,11 @@ namespace OpcUa.Client.Core
             }
 
             IoC.Application.GoToPage(ApplicationPage.Main);
+        }
+
+        private void LoadprojectPage()
+        {
+            IoC.Application.GoToPage(ApplicationPage.Welcome);
         }
 
         private void SearchEndpoints()

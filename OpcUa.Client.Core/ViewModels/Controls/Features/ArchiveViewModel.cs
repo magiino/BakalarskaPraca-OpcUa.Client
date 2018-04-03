@@ -43,13 +43,14 @@ namespace OpcUa.Client.Core
 
         #region Constructor
 
+        // TODO can use metody
         public ArchiveViewModel(IUnitOfWork unitOfWork, UaClientApi uaClientApi)
         {
             _unitOfWork = unitOfWork;
             _uaClientApi = uaClientApi;
 
             LoadDataFromDataBase();
-            InitializeTables();
+            InitializeArchiveTable();
 
             RegisterLoadedNodes();
 
@@ -79,6 +80,7 @@ namespace OpcUa.Client.Core
             if (SelectedArchiveInfo.ArchiveInterval == ArchiveInterval.None)
             {
                 // TODO spusti subscription
+                // spusti timer ktory kazdych 10s nacita premennu ak sa nezmeni zo subscription
                 return;
             } 
 
@@ -95,7 +97,7 @@ namespace OpcUa.Client.Core
 
             if (SelectedArchiveInfo.ArchiveInterval == ArchiveInterval.None)
             {
-                // TODO stopnut subscription
+                // TODO stopnut subscription (reporting)
                 return;
             }
 
@@ -121,9 +123,9 @@ namespace OpcUa.Client.Core
                 Archive = SelectedArchiveInfo.ArchiveInterval,
                 Name = nodeId,
                 DataType = type,
+                ProjectId = IoC.AppManager.ProjectId
             };
             _unitOfWork.Variables.Add(tmp);
-            //_unitOfWork.Complete();
 
             var registeredNode = _uaClientApi.RegisterNode(nodeId);
             _registeredNodesForRead.Add( new ArchiveReadVariableModel()
@@ -197,7 +199,7 @@ namespace OpcUa.Client.Core
 
         private void LoadDataFromDataBase()
         {
-            ArchiveVariables = new ObservableCollection<VariableEntity>(_unitOfWork.Variables.GetAll());
+            ArchiveVariables = new ObservableCollection<VariableEntity>(_unitOfWork.Variables.Find(x => x.ProjectId == IoC.AppManager.ProjectId));
         }
 
         private void RegisterLoadedNodes()
@@ -217,7 +219,7 @@ namespace OpcUa.Client.Core
             }).ToList();
         }
 
-        private void InitializeTables()
+        private void InitializeArchiveTable()
         {
             var archiveIntervals = Enum.GetValues(typeof(ArchiveInterval)).Cast<ArchiveInterval>();
             ArchiveInfo = new ObservableCollection<ArchiveListModel>();
