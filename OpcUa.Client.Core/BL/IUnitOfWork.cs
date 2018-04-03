@@ -11,6 +11,7 @@ namespace OpcUa.Client.Core
         IEndpointRepository Endpoints { get; }
         IAuthRepository Auth { get; }
         int Complete();
+        void CompleteAsync();
         bool HasUnsavedChanges();
     }
 }

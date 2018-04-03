@@ -32,7 +32,7 @@ namespace OpcUa.Client.Core
 
         private void SaveProject()
         {
-            IoC.UnitOfWork.Complete();
+            IoC.UnitOfWork.CompleteAsync();
         }
 
         #endregion

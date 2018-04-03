@@ -24,7 +24,7 @@ namespace OpcUa.Client.Core
         public MenuBarViewModel()
         {
             NewProjectCommand = new RelayCommand(() => GoToPageIfSaved(ApplicationPage.Endpoints));
-            SaveProjectCommand = new GalaSoft.MvvmLight.CommandWpf.RelayCommand(() => IoC.UnitOfWork.Complete(), SaveprojectCanUse);
+            SaveProjectCommand = new GalaSoft.MvvmLight.CommandWpf.RelayCommand(() => IoC.UnitOfWork.CompleteAsync(), SaveprojectCanUse);
             OpenProjectCommand = new RelayCommand(() => GoToPageIfSaved(ApplicationPage.Welcome));
             ExitApplicationCommand = new RelayCommand(ExitApplication);
             OpenGitHubCommand = new RelayCommand(OpenGitHub);
@@ -55,8 +55,8 @@ namespace OpcUa.Client.Core
         private void Save(bool option)
         {
             if (option)
-                IoC.UnitOfWork.Complete();
-            
+                IoC.UnitOfWork.CompleteAsync();
+
             IoC.Application.GoToPage(_goTo);
         }
 

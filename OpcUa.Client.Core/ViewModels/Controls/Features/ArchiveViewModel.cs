@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading;
 using System.Windows.Input;
 using Opc.Ua;
+using Opc.Ua.Client;
 
 namespace OpcUa.Client.Core
 {
@@ -15,6 +15,8 @@ namespace OpcUa.Client.Core
 
         private readonly IUnitOfWork _unitOfWork;
         private readonly UaClientApi _uaClientApi;
+        private readonly Subscription _subscription;
+
         private ReferenceDescription _selectedNode;
         private readonly Dictionary<ArchiveInterval, Timer> _timers = new Dictionary<ArchiveInterval, Timer>();
         private List<ArchiveReadVariableModel> _registeredNodesForRead;
@@ -28,10 +30,6 @@ namespace OpcUa.Client.Core
        
         public ObservableCollection<ArchiveListModel> ArchiveInfo { get; set; }
         public ArchiveListModel SelectedArchiveInfo { get; set; }
-
-        public bool ArchiveInfoIsSelected => SelectedArchiveInfo != null;
-        public bool AddArchiveVariableIsEnabled { get; set; }
-        public bool DeleteArchiveVariableIsEnabled { get; set; }
         #endregion
 
         #region Commands
@@ -43,29 +41,30 @@ namespace OpcUa.Client.Core
 
         #region Constructor
 
-        // TODO can use metody
         public ArchiveViewModel(IUnitOfWork unitOfWork, UaClientApi uaClientApi)
         {
             _unitOfWork = unitOfWork;
             _uaClientApi = uaClientApi;
 
+            _subscription = _uaClientApi.Subscribe(2000, "Archivation");
+
             LoadDataFromDataBase();
+            RegisterLoadedNodes();
             InitializeArchiveTable();
 
-            RegisterLoadedNodes();
+            //AddVariableToArchiveCommand = new RelayCommand(AddVariableToArchive);
+            //DeleteVariableFromArchiveCommand = new RelayCommand(DeleteVariableFromArchive);
+            //StartArchiveCommand = new RelayCommand(StartArchive);
+            //StopArchiveCommand = new RelayCommand(StopArchive);
 
-            AddVariableToArchiveCommand = new RelayCommand(AddVariableToArchive);
-            DeleteVariableFromArchiveCommand = new RelayCommand(DeleteVariableFromArchive);
-            StartArchiveCommand = new RelayCommand(StartArchive);
-            StopArchiveCommand = new RelayCommand(StopArchive);
+            AddVariableToArchiveCommand = new GalaSoft.MvvmLight.CommandWpf.RelayCommand(AddVariableToArchive, AddVariableCanUse);
+            DeleteVariableFromArchiveCommand = new GalaSoft.MvvmLight.CommandWpf.RelayCommand(DeleteVariableFromArchive, DeleteVariableCanUse);
+            StartArchiveCommand = new GalaSoft.MvvmLight.CommandWpf.RelayCommand(StartArchive, StartArchiveCanUse);
+            StopArchiveCommand = new GalaSoft.MvvmLight.CommandWpf.RelayCommand(StopArchive, StopArchiveCanUse);
 
             MessengerInstance.Register<SendSelectedRefNode>(
                 this,
-                msg =>
-                {
-                    _selectedNode = msg.ReferenceNode;
-                    AddArchiveVariableIsEnabled = _selectedNode.NodeClass == NodeClass.Variable;
-                });
+                msg => _selectedNode = msg.ReferenceNode);
         }
 
         #endregion
@@ -74,95 +73,138 @@ namespace OpcUa.Client.Core
 
         private void StartArchive()
         {
-            if (SelectedArchiveInfo == null) return;
-            if (SelectedArchiveInfo.Running) return;
-
-            if (SelectedArchiveInfo.ArchiveInterval == ArchiveInterval.None)
-            {
-                // TODO spusti subscription
-                // spusti timer ktory kazdych 10s nacita premennu ak sa nezmeni zo subscription
-                return;
-            } 
-
             var interval = SelectedArchiveInfo.ArchiveInterval;
-            var timer = new Timer(Archive, interval,TimeSpan.FromSeconds(1),TimeSpan.FromSeconds((int)interval));
-            _timers.Add(interval, timer);
+
+            if (interval == ArchiveInterval.None)
+            {
+                _subscription.SetMonitoringMode(MonitoringMode.Reporting, _subscription.MonitoredItems.ToList());
+                _subscription.ApplyChanges();
+                // spustim timer ktory doplni hodnotu s aktualnym casom ak sa ta hodnota behom 5s nenacita
+            }
+            else
+            {
+                var timer = new Timer(Archive, interval, TimeSpan.FromSeconds(1), TimeSpan.FromSeconds((int)interval));
+                _timers.Add(interval, timer);
+            }
+          
             SelectedArchiveInfo.Running = true;
         }
 
         private void StopArchive()
         {
-            if (SelectedArchiveInfo == null) return;
-            if (!SelectedArchiveInfo.Running) return;
-
-            if (SelectedArchiveInfo.ArchiveInterval == ArchiveInterval.None)
+            var interval = SelectedArchiveInfo.ArchiveInterval;
+            if (interval == ArchiveInterval.None)
             {
-                // TODO stopnut subscription (reporting)
-                return;
+                _subscription.SetMonitoringMode(MonitoringMode.Disabled, _subscription.MonitoredItems.ToList());
+                _subscription.ApplyChanges();
+            }
+            else
+            {
+                _timers.TryGetValue(interval, out var timer);
+
+                if (timer == null) return;
+                timer.Dispose();
+                _timers.Remove(interval);
             }
 
-            var interval = SelectedArchiveInfo.ArchiveInterval;
-            _timers.TryGetValue(interval, out var timer);
-
-            if (timer == null) return;
-            timer.Dispose();
-            _timers.Remove(interval);
             SelectedArchiveInfo.Running = false;
         }
 
         private void AddVariableToArchive()
         {
-            if (_selectedNode == null || SelectedArchiveInfo == null || _selectedNode.NodeClass != NodeClass.Variable) return;
-            if (SelectedArchiveInfo.Running) return;
-
             var nodeId = _selectedNode.NodeId.ToString();
             var type = _uaClientApi.GetBuiltInTypeOfVariableNodeId(nodeId);
+            var interval = SelectedArchiveInfo.ArchiveInterval;
 
             var tmp = new VariableEntity()
             {
-                Archive = SelectedArchiveInfo.ArchiveInterval,
+                Archive = interval,
                 Name = nodeId,
                 DataType = type,
                 ProjectId = IoC.AppManager.ProjectId
             };
             _unitOfWork.Variables.Add(tmp);
-
-            var registeredNode = _uaClientApi.RegisterNode(nodeId);
-            _registeredNodesForRead.Add( new ArchiveReadVariableModel()
-            {
-                Interval = SelectedArchiveInfo.ArchiveInterval,
-                RegisteredNodeId = registeredNode,
-                Type = type,
-                VariableId = tmp.Id
-            });
+            _unitOfWork.Complete();
             ArchiveVariables.Add(tmp);
 
+            if (interval != ArchiveInterval.None)
+            {
+                var registeredNode = _uaClientApi.RegisterNode(nodeId);
+                _registeredNodesForRead.Add(new ArchiveReadVariableModel()
+                {
+                    Interval = interval,
+                    RegisteredNodeId = registeredNode,
+                    Type = type,
+                    VariableId = tmp.Id
+                });
+            }
+            else
+            {
+                var item = _uaClientApi.CreateMonitoredItem(_selectedNode.DisplayName.ToString(), nodeId, 500, null, 4, MonitoringMode.Disabled);
+                _uaClientApi.AddMonitoredItem(item, _subscription);
+                item.Notification += Notification_MonitoredItem;
+            }
+           
             SelectedArchiveInfo.VariablesCount++;
         }
 
         private void DeleteVariableFromArchive()
         {
-            if (SelectedArchiveVariable == null) return;
+            var interval = SelectedArchiveVariable.Archive;
+
             foreach (var archive in ArchiveInfo)
-            {
-                if (archive.ArchiveInterval == SelectedArchiveVariable.Archive && archive.Running) return;
-
-                if (archive.ArchiveInterval == SelectedArchiveVariable.Archive && !archive.Running)
+                if (archive.ArchiveInterval == interval)
                     archive.VariablesCount--;
-            }
 
-            // vymazanie z databaze
+            // Vymazanie z databaze
             _unitOfWork.Variables.Remove(SelectedArchiveVariable);
-            //_unitOfWork.Complete();
-
+            // Najdenie indexu
             var index = ArchiveVariables.IndexOf(SelectedArchiveVariable);
             // Vymazanie z tabulky
             ArchiveVariables.Remove(SelectedArchiveVariable);
-            // Odregistrovanie
-            _uaClientApi.UnRegisterNode(_registeredNodesForRead[index].RegisteredNodeId);
-            // Vymazanie z nodes for read
-            _registeredNodesForRead.RemoveAt(index);
+            if (interval == ArchiveInterval.None)
+                _uaClientApi.RemoveMonitoredItem(_subscription, SelectedArchiveVariable.Name);
+            else
+            {
+                // Odregistrovanie
+                _uaClientApi.UnRegisterNode(_registeredNodesForRead[index].RegisteredNodeId);
+                // Vymazanie z nodes for read
+                _registeredNodesForRead.RemoveAt(index);
+            }
         }
+        #endregion
+
+        #region Can use methods
+
+        public bool DeleteVariableCanUse()
+        {
+            ArchiveListModel first = null;
+            foreach (var x in ArchiveInfo)
+            {
+                if (x.ArchiveInterval != SelectedArchiveVariable?.Archive) continue;
+                first = x;
+                break;
+            }
+
+            return first != null && (SelectedArchiveVariable != null && !first.Running);
+        }
+
+        public bool AddVariableCanUse()
+        {
+            return _selectedNode != null && SelectedArchiveInfo != null &&
+                   _selectedNode.NodeClass == NodeClass.Variable && !SelectedArchiveInfo.Running;
+        }
+
+        public bool StartArchiveCanUse()
+        {
+            return SelectedArchiveInfo != null && !SelectedArchiveInfo.Running && SelectedArchiveInfo.VariablesCount != 0;
+        }
+
+        public bool StopArchiveCanUse()
+        {
+            return SelectedArchiveInfo != null && SelectedArchiveInfo.Running;
+        }
+
         #endregion
 
         #region Private Methods
@@ -172,7 +214,6 @@ namespace OpcUa.Client.Core
             var interval = (ArchiveInterval)objectInfo;
             if (!IsTimerAlive(interval)) return;
 
-            // TODO keby nahodou pridal pocas archivacie premennu tak sa nacita ?? prerobit to ??
             // Vytriedenie premennych pre tento interval a ancitanie hodnot
             var variablesForRead = _registeredNodesForRead.Where(x => x.Interval == interval).ToList();
             _uaClientApi.ReadValues(ref variablesForRead);
@@ -182,13 +223,12 @@ namespace OpcUa.Client.Core
             {
                 VariableId = x.VariableId,
                 Value = x.Value.ToString(),
-                ArchiveTime = DateTime.Now
+                ArchiveTime = DateTime.Now,
             }).ToList();
 
             // Archivacia
             _unitOfWork.Records.AddRange(records);
-            MessengerInstance.Send(new SendArchivedValue(1));
-            //_unitOfWork.Complete();
+            _unitOfWork.Complete();
         }
 
         private bool IsTimerAlive(ArchiveInterval interval)
@@ -207,16 +247,21 @@ namespace OpcUa.Client.Core
             var nodeIds = ArchiveVariables.Select(x => x.Name).ToList();
             var registeredNodes =_uaClientApi.RegisterNodes(nodeIds);
 
-            // TODO prerobit
-            if(registeredNodes.Count != ArchiveVariables.Count) throw  new ValidationException("Pocty sa nerovnaju");
+            _registeredNodesForRead = ArchiveVariables.Where(x => x.Archive != ArchiveInterval.None)
+                                                      .Zip(registeredNodes, (entity, regNode) => new ArchiveReadVariableModel()
+                                                      {
+                                                          VariableId = entity.Id,
+                                                          RegisteredNodeId = regNode,
+                                                          Type = entity.DataType,
+                                                          Interval = entity.Archive
+                                                      }).ToList();
 
-            _registeredNodesForRead = ArchiveVariables.Zip(registeredNodes, (entity, regNode) => new ArchiveReadVariableModel()
+            foreach (var variable in ArchiveVariables.Where(x => x.Archive == ArchiveInterval.None))
             {
-                VariableId = entity.Id,
-                RegisteredNodeId = regNode,
-                Type = entity.DataType,
-                Interval = entity.Archive
-            }).ToList();
+                var item = _uaClientApi.CreateMonitoredItem(variable.Name, variable.Name, 500, null, 4, MonitoringMode.Disabled);
+                _uaClientApi.AddMonitoredItem(item, _subscription);
+                item.Notification += Notification_MonitoredItem;
+            }
         }
 
         private void InitializeArchiveTable()
@@ -233,7 +278,38 @@ namespace OpcUa.Client.Core
                     Running = false
                 });
             }
-        } 
+        }
+        #endregion
+
+        #region CallBack Methods
+
+        /// <summary>
+        /// Callback method for updating values of subscibed nodes
+        /// </summary>
+        /// <param name="monitoredItem"></param>
+        /// <param name="e"></param>
+        private void Notification_MonitoredItem(MonitoredItem monitoredItem, MonitoredItemNotificationEventArgs e)
+        {
+            if (!(e.NotificationValue is MonitoredItemNotification notification))
+                return;
+
+            var value = notification.Value;
+
+            // TODO same sa nato vola tostring?
+            var variable = ArchiveVariables.FirstOrDefault(x => x.Name == monitoredItem.StartNodeId);
+
+            if (variable == null) return;
+
+            _unitOfWork.Records.Add(new RecordEntity()
+            {
+                ArchiveTime = value.SourceTimestamp,
+                VariableId = variable.Id,
+                Value = value.Value.ToString()
+            });
+
+            _unitOfWork.Complete();
+        }
+
         #endregion
     }
 }

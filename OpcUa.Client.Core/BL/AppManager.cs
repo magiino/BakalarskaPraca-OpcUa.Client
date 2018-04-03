@@ -13,5 +13,7 @@ namespace OpcUa.Client.Core
             IoC.DisposeAll();
             CloseAction();
         }
+
+        // TODO z tadeto vypisovat okná, aspon message dialogy
     }
 }

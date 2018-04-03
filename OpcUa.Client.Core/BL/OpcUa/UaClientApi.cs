@@ -237,14 +237,16 @@ namespace OpcUa.Client.Core
 
         /// <summary>Creats a Subscription object to a server</summary>
         /// <param name="publishingInterval">The publishing interval</param>
+        /// <param name="displayName"></param>
+        /// <param name="enablePublishing"></param>
         /// <returns>Subscription</returns>
         /// <exception cref="Exception">Throws and forwards any exception with short error description.</exception>
-        public Subscription Subscribe(int publishingInterval, string displayName)
+        public Subscription Subscribe(int publishingInterval, string displayName, bool enablePublishing = true)
         {
             //Create a Subscription object
             var subscription = new Subscription(_session.DefaultSubscription)
             {
-                PublishingEnabled = true,
+                PublishingEnabled = enablePublishing,
                 PublishingInterval = publishingInterval,
                 TimestampsToReturn = TimestampsToReturn.Both,
                 DisplayName = displayName,
@@ -302,14 +304,14 @@ namespace OpcUa.Client.Core
             return false;
         }
 
-        public MonitoredItem CreateMonitoredItem(string displayName, string nodeId,int samplingInterval ,MonitoringFilter filterValue=null, int queueSize=1)
+        public MonitoredItem CreateMonitoredItem(string displayName, string nodeId,int samplingInterval ,MonitoringFilter filterValue=null, int queueSize=1, MonitoringMode mode = MonitoringMode.Reporting)
         {
             var monitoredItem = new MonitoredItem
             {
                 DisplayName = displayName,
                 StartNodeId = new NodeId(nodeId),
                 AttributeId = Attributes.Value,
-                MonitoringMode = MonitoringMode.Reporting,
+                MonitoringMode = mode,
                 SamplingInterval = samplingInterval,
                 QueueSize = (uint)queueSize,
                 CacheQueueSize = queueSize,
@@ -494,11 +496,9 @@ namespace OpcUa.Client.Core
 
             try
             {
-                // TODO osetrit ak nepatria tomu serveru
-                _session.RegisterNodes(null, nodeIdsToRegister, out var registeredNodeIds);
+                var a =_session.RegisterNodes(null, nodeIdsToRegister, out var registeredNodeIds);
                 _registeredNodes.AddRange(registeredNodeIds);
                 return registeredNodeIds;
-                // return registeredNodeIds.Select(x => x.ToString()).ToList();
             }
             catch (Exception e)
             {

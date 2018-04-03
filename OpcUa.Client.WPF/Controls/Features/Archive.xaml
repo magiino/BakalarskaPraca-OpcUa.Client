@@ -5,7 +5,9 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:OpcUa.Client.WPF"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="500">
+             d:DesignHeight="450" 
+             d:DesignWidth="500"
+             >
     <Grid>
         <Grid.RowDefinitions >
             <RowDefinition Height="3*"/>
@@ -17,6 +19,7 @@
         <DataGrid ItemsSource="{Binding ArchiveVariables}"
                   Background="{StaticResource BackgroundLightBrush}"
                   SelectedItem="{Binding SelectedArchiveVariable}"
+                  x:Name="Variables"
                   SelectionMode="Single"
                   HeadersVisibility="None"
                   BorderThickness="0"
@@ -27,17 +30,25 @@
                   IsReadOnly="True"
                   SelectedIndex="0"
                   IsManipulationEnabled="False"
-                  CanUserAddRows="False">
+                  CanUserAddRows="False"
+                  >
             <DataGrid.Columns>
-                <DataGridTextColumn Width="*" Binding="{Binding Name}"/>
-                <DataGridTextColumn Width="*" Binding="{Binding DataType}"/>
-                <DataGridTextColumn Width="*" Binding="{Binding Archive}"/>
+                <DataGridTextColumn Width="*" 
+                                    Binding="{Binding Name}"
+                                    />
+                <DataGridTextColumn Width="*" 
+                                    Binding="{Binding DataType}"
+                                    />
+                <DataGridTextColumn Width="*" 
+                                    Binding="{Binding Archive}"
+                                    />
             </DataGrid.Columns>
         </DataGrid>
 
         <!-- Separator -->
         <Separator Grid.Row="1"
-                   Margin="0 0 0 5"/>
+                   Margin="0 0 0 5"
+                   />
 
         <!-- Archive control -->
         <Grid Grid.Row="2">
@@ -51,42 +62,53 @@
                 <Button Content="Start archive"
                         Padding="10 5"
                         Command="{Binding StartArchiveCommand}"
-                        IsEnabled="{Binding ArchiveInfoIsSelected}"/>
+                        />
                 <Button Content="Stop archive"
                         Padding="10 5"
                         Command="{Binding StopArchiveCommand}"
-                        IsEnabled="{Binding ArchiveInfoIsSelected}"/>
+                        />
             </StackPanel>
 
             <StackPanel Grid.Column="1">
                 <Button Content="Add Node"
                         Padding="10 5"
                         Command="{Binding AddVariableToArchiveCommand}"
-                        IsEnabled="{Binding AddArchiveVariableIsEnabled}"/>
+                        />
                 <Button Content="Delete Node"
                         Padding="10 5"
                         Command="{Binding DeleteVariableFromArchiveCommand}"
-                        IsEnabled="{Binding DeleteArchiveVariableIsEnabled}"/>
+                        />
             </StackPanel>
+
             <!-- DataGrid of archive types -->
             <DataGrid Grid.Column="2"
-                          ItemsSource="{Binding ArchiveInfo}"
-                          Background="{StaticResource BackgroundLightBrush}"
-                          SelectedItem="{Binding SelectedArchiveInfo}"
-                          SelectionMode="Single"
-                          BorderThickness="0"
-                          AutoGenerateColumns="false"
-                          RowHeaderWidth="0"
-                          CanUserResizeColumns="False"
-                          CanUserReorderColumns="False"
-                          IsReadOnly="True"
-                          SelectedIndex="0"
-                          IsManipulationEnabled="False"
-                          CanUserAddRows="False">
+                      ItemsSource="{Binding ArchiveInfo}"
+                      Background="{StaticResource BackgroundLightBrush}"
+                      SelectedItem="{Binding SelectedArchiveInfo}"
+                      SelectionMode="Single"
+                      BorderThickness="0"
+                      AutoGenerateColumns="false"
+                      RowHeaderWidth="0"
+                      CanUserResizeColumns="False"
+                      CanUserReorderColumns="False"
+                      IsReadOnly="True"
+                      SelectedIndex="0"
+                      IsManipulationEnabled="False"
+                      CanUserAddRows="False"
+                      >
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Archive Interval" Width="*" Binding="{Binding ArchiveInterval}"/>
-                    <DataGridTextColumn Header="Num of Variables" Width="*" Binding="{Binding VariablesCount}"/>
-                    <DataGridTextColumn Header="Status" Width="*" Binding="{Binding Running}"/>
+                    <DataGridTextColumn Header="Archive Interval" 
+                                        Width="*" 
+                                        Binding="{Binding ArchiveInterval}"
+                                        />
+                    <DataGridTextColumn Header="Num of Variables"
+                                        Width="*"
+                                        Binding="{Binding VariablesCount}"
+                                        />
+                    <DataGridTextColumn Header="Status"
+                                        Width="*"
+                                        Binding="{Binding Running}"
+                                        />
                 </DataGrid.Columns>
             </DataGrid>
         </Grid>

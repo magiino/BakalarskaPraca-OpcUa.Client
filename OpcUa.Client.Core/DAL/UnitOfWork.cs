@@ -1,4 +1,6 @@
-﻿namespace OpcUa.Client.Core
+﻿using System.Threading;
+
+namespace OpcUa.Client.Core
 {
     public class UnitOfWork : IUnitOfWork
     {
@@ -14,6 +16,7 @@
             Auth = new AuthRepository(_dataContext);
             Endpoints = new EndpointRepository(_dataContext);
         }
+
         public IProjectRepository Projects { get; }
         public IVariableRepository Variables { get; }
         public IRecordRepository Records { get; private set; }
@@ -23,7 +26,12 @@
 
         public int Complete()
         {
-            return _dataContext.SaveChanges();
+             return _dataContext.SaveChanges();
+        }
+
+        public void CompleteAsync()
+        {
+            _dataContext.SaveChangesAsync();
         }
 
         public bool HasUnsavedChanges()

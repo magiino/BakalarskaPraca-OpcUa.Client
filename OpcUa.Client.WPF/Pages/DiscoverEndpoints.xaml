@@ -294,7 +294,7 @@
                                     Command="{Binding ConnectCommand}" 
                                     CommandParameter="{Binding ElementName=Page}"
                                     />
-                            <Button Content="Connect"
+                            <Button Content="Welcome Page"
                                     IsDefault="True"
                                     Command="{Binding LoadProjectCommand}" 
                                     VerticalContentAlignment="Bottom"
