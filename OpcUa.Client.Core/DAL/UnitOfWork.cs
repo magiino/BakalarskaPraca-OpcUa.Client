@@ -3,7 +3,6 @@
     public class UnitOfWork : IUnitOfWork
     {
         private readonly DataContext _dataContext;
-        public int ProjectId { get; set; }
 
         public UnitOfWork(DataContext context)
         {
@@ -25,6 +24,11 @@
         public int Complete()
         {
             return _dataContext.SaveChanges();
+        }
+
+        public bool HasUnsavedChanges()
+        {
+            return _dataContext.ChangeTracker.HasChanges();
         }
 
         public void Dispose()

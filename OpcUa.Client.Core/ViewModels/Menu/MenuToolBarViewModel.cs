@@ -3,45 +3,43 @@
 namespace OpcUa.Client.Core
 {
     public class MenuToolBarViewModel : BaseViewModel
-    {
-        #region Private Fields
-
-        private readonly UaClientApi _uaClientApi;
-
-        #endregion
-
-        #region Public Properties
-
-        #endregion
-
+    { 
         #region Commands
-        public ICommand ConnectSessionCommand { get; set; }
+        //public ICommand ConnectSessionCommand { get; set; }
         public ICommand DisconnectSessionCommand { get; set; }
+        public ICommand SaveProjectCommand { get; set; }
 
         #endregion
 
         #region Constructor
 
-        public MenuToolBarViewModel(UaClientApi uaClientApi)
+        public MenuToolBarViewModel()
         {
-            _uaClientApi = uaClientApi;
 
-            ConnectSessionCommand = new RelayCommand(ConnectSession);
             DisconnectSessionCommand = new RelayCommand(DisconnectSession);
+            SaveProjectCommand = new GalaSoft.MvvmLight.CommandWpf.RelayCommand(SaveProject, SaveprojectCanUse);
         }
 
         #endregion
 
-        #region Command Methods
-
-        private void ConnectSession() { }
+        #region Command Method
 
         private void DisconnectSession()
         {
-            _uaClientApi.Disconnect();
-            IoC.Application.GoToPage(ApplicationPage.Endpoints);
+            IoC.UaClientApi.Disconnect();
+            IoC.Application.GoToPage(ApplicationPage.Welcome);
+        }
+
+        private void SaveProject()
+        {
+            IoC.UnitOfWork.Complete();
         }
 
         #endregion
+
+        private bool SaveprojectCanUse()
+        {
+            return IoC.UnitOfWork.HasUnsavedChanges();
+        }
     }
 }

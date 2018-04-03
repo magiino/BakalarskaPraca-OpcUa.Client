@@ -103,7 +103,7 @@ namespace OpcUa.Client.Core
                 }
             );
 
-            var item = _uaClientApi.NotificationMonitoredItem(variable.Name, variable.NodeId, null, 4);
+            var item = _uaClientApi.CreateMonitoredItem(variable.Name, variable.NodeId, 500, null, 4);
             _uaClientApi.AddMonitoredItem(item, _subscription);
             item.Notification += Notification_MonitoredItem;
 

@@ -13,13 +13,13 @@
         <!--<Button x:Name="TbStart" ToolTip="Start communication">
             <fa:ImageAwesome Icon="PlayCircle"/>
         </Button>-->
-        <Button x:Name="TbStop" 
-                ToolTip="Stop communication"
+        <Button ToolTip="Stop communication"
                 Command="{Binding DisconnectSessionCommand}">
-            <StackPanel Orientation="Horizontal">
-                <fa:ImageAwesome Icon="StopCircle"/>
-                <TextBlock VerticalAlignment="Center" Text="Disconnect"/>
-            </StackPanel>
+            <fa:ImageAwesome Icon="StopCircle"/>
+        </Button>
+        <Button ToolTip="Save Project"
+                Command="{Binding SaveProjectCommand}">
+            <fa:ImageAwesome Icon="Save"/>
         </Button>
     </ToolBar>
 </UserControl>

@@ -10,22 +10,38 @@
     <Menu>
         <!-- File items -->
         <MenuItem Header="_File">
-            <MenuItem x:Name="MenuNew" Header="_new" InputGestureText="Ctrl+N" Command="{Binding NewSessionCommand}">
+            <MenuItem x:Name="MenuNew" 
+                      Header="_new" 
+                      InputGestureText="Ctrl+N" 
+                      Command="{Binding NewProjectCommand}"
+                      >
                 <MenuItem.Icon>
                     <fa:ImageAwesome Icon="File"/>
                 </MenuItem.Icon>
             </MenuItem>
-            <MenuItem x:Name="MenuSave" Header="_Save" InputGestureText="Ctrl+S" Command="{Binding SaveSessionCommand}">
+            <MenuItem x:Name="MenuSave" 
+                      Header="_Save" 
+                      InputGestureText="Ctrl+S" 
+                      Command="{Binding SaveProjectCommand}"
+                      >
                 <MenuItem.Icon>
                     <fa:ImageAwesome Icon="Save" />
                 </MenuItem.Icon>
             </MenuItem>
-            <MenuItem x:Name="MenuOpen" Header="_Open" InputGestureText="Ctrl+O" Command="{Binding OpenSessionCommand}">
+            <MenuItem x:Name="MenuOpen" 
+                      Header="_Open" 
+                      InputGestureText="Ctrl+O" 
+                      Command="{Binding OpenProjectCommand}"
+                      >
                 <MenuItem.Icon>
                     <fa:ImageAwesome Icon="FolderOpen"/>
                 </MenuItem.Icon>
             </MenuItem>
-            <MenuItem x:Name="MenuExit" Header="_Exit" InputGestureText="Alt+F4" Command="{Binding ExitSessionCommand}">
+            <MenuItem x:Name="MenuExit" 
+                      Header="_Exit" 
+                      InputGestureText="Alt+F4" 
+                      Command="{Binding ExitApplicationCommand}"
+                      >
                 <MenuItem.Icon>
                     <fa:ImageAwesome Icon="SignOut"/>
                 </MenuItem.Icon>
@@ -33,37 +49,61 @@
         </MenuItem>
         <!-- Edit items -->
         <MenuItem Header="_Edit">
-            <MenuItem x:Name="MenuCut" Header="_Cut" InputGestureText="Ctrl+X" Command="ApplicationCommands.Cut">
+            <MenuItem x:Name="MenuCut" 
+                      Header="_Cut" 
+                      InputGestureText="Ctrl+X" 
+                      Command="ApplicationCommands.Cut"
+                      >
                 <MenuItem.Icon>
                     <fa:ImageAwesome Icon="Cut"/>
                 </MenuItem.Icon>
             </MenuItem>
-            <MenuItem x:Name="MenuCopy" Header="_Copy" InputGestureText="Ctrl+C" Command="ApplicationCommands.Copy">
+            <MenuItem x:Name="MenuCopy" 
+                      Header="_Copy" 
+                      InputGestureText="Ctrl+C" 
+                      Command="ApplicationCommands.Copy"
+                      >
                 <MenuItem.Icon>
                     <fa:ImageAwesome Icon="Copy"/>
                 </MenuItem.Icon>
             </MenuItem>
-            <MenuItem x:Name="MenuPaste" Header="_Paste" InputGestureText="Ctrl+V" Command="ApplicationCommands.Paste">
+            <MenuItem x:Name="MenuPaste" 
+                      Header="_Paste" 
+                      InputGestureText="Ctrl+V" 
+                      Command="ApplicationCommands.Paste"
+                      >
                 <MenuItem.Icon>
                     <fa:ImageAwesome Icon="paste"/>
                 </MenuItem.Icon>
             </MenuItem>
-            <MenuItem x:Name="MenuFont" Header="_Font" InputGestureText="Ctrl+F">
+            <!--<MenuItem x:Name="MenuFont" Header="_Font" InputGestureText="Ctrl+F">
                 <MenuItem.Icon>
                     <fa:ImageAwesome Icon="Font"/>
                 </MenuItem.Icon>
-            </MenuItem>
+            </MenuItem>-->
         </MenuItem>
         <!-- Help items -->
         <MenuItem Header="_Help">
-            <MenuItem x:Name="MenuVersion" Header="_Version">
+            <MenuItem x:Name="MenuVersion" 
+                      Header="_Version"
+                      >
                 <MenuItem.Icon>
                     <fa:ImageAwesome Icon="Codepen"/>
                 </MenuItem.Icon>
             </MenuItem>
-            <MenuItem x:Name="MenuAbout" Header="_About">
+            <MenuItem x:Name="MenuAbout" 
+                      Header="_About"
+                      >
                 <MenuItem.Icon>
                     <fa:ImageAwesome Icon="book"/>
+                </MenuItem.Icon>
+            </MenuItem>
+            <MenuItem x:Name="GitHub" 
+                      Header="_Git Repository"
+                      Command="{Binding OpenGitHubCommand}"
+                      >
+                <MenuItem.Icon>
+                    <fa:ImageAwesome Icon="Github"/>
                 </MenuItem.Icon>
             </MenuItem>
         </MenuItem>

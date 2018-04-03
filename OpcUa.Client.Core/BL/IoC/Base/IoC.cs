@@ -37,6 +37,11 @@ namespace OpcUa.Client.Core
         public static Messenger Messenger => IoC.Get<Messenger>();
 
         /// <summary>
+        /// A shortcut to access the <see cref="Messenger"/>
+        /// </summary>
+        public static AppManager AppManager => IoC.Get<AppManager>();
+
+        /// <summary>
         /// A shortcut to access the <see cref="IUIManager"/>
         /// </summary>
         public static IUIManager Ui => IoC.Get<IUIManager>();
@@ -50,6 +55,7 @@ namespace OpcUa.Client.Core
             BindViewModels();
             BindUaApi();
             BindUnitOfWork();
+            BindStateManager();
             BindMessenger();
         }
 
@@ -72,6 +78,11 @@ namespace OpcUa.Client.Core
         private static void BindMessenger()
         {
             Kernel.Bind<Messenger>().ToConstant(new Messenger());
+        }
+
+        private static void BindStateManager()
+        {
+            Kernel.Bind<AppManager>().ToConstant(new AppManager());
         }
 
         public static void DisposeAll()

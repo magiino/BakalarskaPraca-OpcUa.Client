@@ -48,8 +48,8 @@
             NodetreeViewModel = new NodeTreeViewModel();
             NodeAttributesViewModel = new NodeAttributesViewModel(uaClientApi);
             NotificationViewModel = new NotificationViewModel(unitOfWork, uaClientApi);
-            MenuBarViewModel = new MenuBarViewModel(uaClientApi);
-            MenuToolBarViewModel = new MenuToolBarViewModel(uaClientApi);
+            MenuBarViewModel = new MenuBarViewModel();
+            MenuToolBarViewModel = new MenuToolBarViewModel();
             ArchiveViewModel = new ArchiveViewModel(unitOfWork, uaClientApi);
             ChartViewModel = new ChartViewModel(unitOfWork);
             LiveChartViewModel = new LiveChartViewModel(uaClientApi);

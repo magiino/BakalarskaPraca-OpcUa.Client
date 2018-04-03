@@ -49,7 +49,7 @@ namespace OpcUa.Client.Core
                 if (SelectedProject.UserId == null)
                 {
                     _uaClientApi.ConnectAnonymous(Mapper.CreateEndpointDescription(endpoint), SelectedProject.SessionName);
-                    _unitOfWork.ProjectId = SelectedProject.Id;
+                    IoC.AppManager.ProjectId = SelectedProject.Id;
                     IoC.Application.GoToPage(ApplicationPage.Main);
                 }
                 else

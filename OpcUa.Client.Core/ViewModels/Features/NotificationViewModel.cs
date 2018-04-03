@@ -144,13 +144,14 @@ namespace OpcUa.Client.Core
             MonitoredItem item;
             // TODO inak vymysliet notification model
             if (notification is DigitalNotificationModel)
-                item = _uaClientApi.NotificationMonitoredItem(notification.Name, notification.NodeId, null);
+                item = _uaClientApi.CreateMonitoredItem(notification.Name, notification.NodeId, 300);
             else
             {
                 var analog = (notification as AnalogNotificationModel);
 
-                item = _uaClientApi.NotificationMonitoredItem(notification.Name,
+                item = _uaClientApi.CreateMonitoredItem(notification.Name,
                     notification.NodeId,
+                    300,
                     new DataChangeFilter()
                     {
                         DeadbandType = (uint)analog.DeadbandType,

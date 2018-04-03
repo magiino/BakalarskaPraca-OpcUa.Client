@@ -220,9 +220,8 @@ namespace OpcUa.Client.Core
             if (_session == null) return;
             try
             {
-                //RemoveAllSubscriptions();
                 UnRegisterNodes();
-                _session.Close(10000);
+                _session.Close(5000);
                 _session.Dispose();
                 _session = null;
             }
@@ -303,7 +302,7 @@ namespace OpcUa.Client.Core
             return false;
         }
 
-        public MonitoredItem NotificationMonitoredItem(string displayName, string nodeId, MonitoringFilter filterValue, int queueSize=1)
+        public MonitoredItem CreateMonitoredItem(string displayName, string nodeId,int samplingInterval ,MonitoringFilter filterValue=null, int queueSize=1)
         {
             var monitoredItem = new MonitoredItem
             {
@@ -311,7 +310,7 @@ namespace OpcUa.Client.Core
                 StartNodeId = new NodeId(nodeId),
                 AttributeId = Attributes.Value,
                 MonitoringMode = MonitoringMode.Reporting,
-                SamplingInterval = 300,
+                SamplingInterval = samplingInterval,
                 QueueSize = (uint)queueSize,
                 CacheQueueSize = queueSize,
                 DiscardOldest = true
@@ -355,22 +354,6 @@ namespace OpcUa.Client.Core
                 subscription.Dispose();
 
                 _session.RemoveSubscription(subscription);
-            }
-            catch (Exception e)
-            {
-                // TODO handle Exception here
-                throw e;
-            }
-        }
-
-        /// <summary>Removes an existing Subscription.</summary>
-        /// <exception cref="Exception">Throws and forwards any exception with short error description.</exception>
-        private void RemoveAllSubscriptions()
-        {
-            try
-            {
-                foreach (var subscription in _session.Subscriptions)
-                    RemoveSubscription(subscription);
             }
             catch (Exception e)
             {

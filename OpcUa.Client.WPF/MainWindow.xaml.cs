@@ -16,6 +16,7 @@ namespace OpcUa.Client.WPF
         {
             InitializeComponent();
             DataContext = new WindowViewModel();
+            IoC.AppManager.CloseAction = Close;
         }
 
         #endregion

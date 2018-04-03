@@ -89,6 +89,7 @@
     <Compile Include="BL\Models\Details\ProjectModel.cs" />
     <Compile Include="BL\Models\AnalogNotificationModel.cs" />
     <Compile Include="BL\Models\DigitalNotificationModel.cs" />
+    <Compile Include="BL\Models\UserModel.cs" />
     <Compile Include="BL\Models\VariableLiveChartModel.cs" />
     <Compile Include="BL\Repositories\IProjectRepository.cs" />
     <Compile Include="BL\Repositories\INotificationRepository.cs" />
@@ -96,6 +97,7 @@
     <Compile Include="BL\Repositories\IVariableRepository.cs" />
     <Compile Include="BL\Repositories\IRecordRepository.cs" />
     <Compile Include="BL\Repositories\Base\IBaseRepository.cs" />
+    <Compile Include="BL\AppManager.cs" />
     <Compile Include="DAL\Migrations\201804011948019_NotificationEntityAdded.cs" />
     <Compile Include="DAL\Migrations\201804011948019_NotificationEntityAdded.Designer.cs">
       <DependentUpon>201804011948019_NotificationEntityAdded.cs</DependentUpon>
@@ -168,6 +170,7 @@
     <Compile Include="ViewModels\Dialogs\Base\BaseDialogViewModel.cs" />
     <Compile Include="ViewModels\Dialogs\Design\MessageBoxDialogDesignModel.cs" />
     <Compile Include="ViewModels\Dialogs\MessageBoxDialogViewModel.cs" />
+    <Compile Include="ViewModels\Dialogs\OptionDialogViewModel.cs" />
     <Compile Include="ViewModels\Helper\ApplicationViewModel.cs" />
     <Compile Include="ViewModels\Menu\MenuToolBarViewModel.cs" />
     <Compile Include="ViewModels\Menu\MenuBarViewModel.cs" />

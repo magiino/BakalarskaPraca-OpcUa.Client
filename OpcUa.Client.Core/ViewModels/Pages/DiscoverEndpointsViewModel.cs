@@ -52,6 +52,7 @@ namespace OpcUa.Client.Core
             #region Filter
 
             public string SessionName { get; set; } = "MySession";
+            public string ProjectName { get; set; } = "MyProject";
 
             public IEnumerable<TransportProtocol> EProtocols { get; set; } = Enum.GetValues(typeof(TransportProtocol)).Cast<TransportProtocol>();
 
@@ -110,30 +111,43 @@ namespace OpcUa.Client.Core
 
         private void ConnectToServer(object parameter)
         {
-            if (UserPwIsSelected)
+            try
             {
-                var userName = UserName;
-                var pass = (parameter as IHavePassword)?.SecurePassword.Unsecure();
-            }
-            else
-            {
-                try
+                if (UserPwIsSelected)
                 {
-                    _uaClientApi.ConnectAnonymous(SelectedEndpoint, SessionName);
+                    _uaClientApi.Connect(SelectedEndpoint, UserName, (parameter as IHavePassword)?.SecurePassword.Unsecure(), SessionName);
+
+                    IoC.AppManager.ProjectId = IoC.UnitOfWork.Projects.Add(new ProjectEntity()
+                    {
+                        Name = ProjectName,
+                        SessionName = SessionName,
+                        Endpoint = Mapper.CreateEndpointEntity(SelectedEndpoint),
+                        User = IoC.UnitOfWork.Auth.Register(new UserEntity(){UserName = UserName}, (parameter as IHavePassword)?.SecurePassword)
+                    }).Id;
+
                     IoC.Application.GoToPage(ApplicationPage.Main);
                 }
-                catch (Exception e)
+                else
                 {
-                    System.Windows.MessageBox.Show(e.Message, "Error");
+                    _uaClientApi.ConnectAnonymous(SelectedEndpoint, SessionName);
+                    IoC.AppManager.ProjectId = IoC.UnitOfWork.Projects.Add(new ProjectEntity()
+                    {
+                        Name = ProjectName,
+                        SessionName = SessionName,
+                        Endpoint = Mapper.CreateEndpointEntity(SelectedEndpoint),
+                        User = IoC.UnitOfWork.Auth.Register(new UserEntity() { UserName = UserName }, (parameter as IHavePassword)?.SecurePassword)
+                    }).Id;
                 }
-
+            }
+            catch (Exception e)
+            {
+                System.Windows.MessageBox.Show(e.Message, "Error");
             }
         }
 
         private void SearchEndpoints()
         {
             _discoveredEndpoints.Clear();
-
             try
             {
                 FoundedServers = new ObservableCollection<ApplicationDescription>(_uaClientApi.FindServers(DiscoveryUrl));

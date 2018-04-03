@@ -20,8 +20,6 @@ namespace OpcUa.Client.Core
             user.PasswordSalt = passwordSalt;
 
              _context.Users.Add(user);
-             _context.SaveChangesAsync();
-
             return user;
         }
 

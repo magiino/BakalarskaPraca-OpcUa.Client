@@ -215,9 +215,13 @@
 
                     <!-- User Authentication -->
                     <GroupBox Grid.Row="1" 
-                              Header="User Authentication"
+                              Header="Project Setup"
                               Grid.Column="0">
                         <StackPanel>
+
+                            <!-- Session Name -->
+                            <TextBlock Text="Project Name"/>
+                            <TextBox Text="{Binding ProjectName}"/>
 
                             <!-- Session Name -->
                             <TextBlock Text="Session Name"/>

@@ -123,7 +123,7 @@ namespace OpcUa.Client.Core
                 DataType = type,
             };
             _unitOfWork.Variables.Add(tmp);
-            _unitOfWork.Complete();
+            //_unitOfWork.Complete();
 
             var registeredNode = _uaClientApi.RegisterNode(nodeId);
             _registeredNodesForRead.Add( new ArchiveReadVariableModel()
@@ -151,7 +151,7 @@ namespace OpcUa.Client.Core
 
             // vymazanie z databaze
             _unitOfWork.Variables.Remove(SelectedArchiveVariable);
-            _unitOfWork.Complete();
+            //_unitOfWork.Complete();
 
             var index = ArchiveVariables.IndexOf(SelectedArchiveVariable);
             // Vymazanie z tabulky
@@ -186,7 +186,7 @@ namespace OpcUa.Client.Core
             // Archivacia
             _unitOfWork.Records.AddRange(records);
             MessengerInstance.Send(new SendArchivedValue(1));
-            _unitOfWork.Complete();
+            //_unitOfWork.Complete();
         }
 
         private bool IsTimerAlive(ArchiveInterval interval)

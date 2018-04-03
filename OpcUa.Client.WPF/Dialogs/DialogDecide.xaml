@@ -1,0 +1,31 @@
+﻿<local:BaseDialogUserControl x:Class="OpcUa.Client.WPF.DialogDecide"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:OpcUa.Client.WPF"
+             xmlns:core="clr-namespace:OpcUa.Client.Core;assembly=OpcUa.Client.Core"
+             mc:Ignorable="d"
+             >
+    <StackPanel Background="{StaticResource ForegroundLightBrush}"
+                >
+        <TextBlock Text="{Binding Message}"
+                   Padding="5"
+                   Foreground="{StaticResource ForegroundVeryDarkBrush}"
+                   />
+        <StackPanel Orientation="Horizontal"
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="Center"
+                    >
+            <Button Content="{Binding Option1}"
+                    FontSize="{StaticResource FontSizeRegular}"
+                    Command="{Binding Option1Command}"
+                    HorizontalAlignment="Center"
+                    />
+            <Button Content="{Binding Option2}"
+                    FontSize="{StaticResource FontSizeRegular}"
+                    Command="{Binding Option2Command}"
+                    />
+        </StackPanel>
+    </StackPanel>
+</local:BaseDialogUserControl>

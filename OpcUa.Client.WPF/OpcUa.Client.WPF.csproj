@@ -134,6 +134,9 @@
     <Compile Include="Dialogs\DialogAddNotification.xaml.cs">
       <DependentUpon>DialogAddNotification.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Dialogs\DialogDecide.xaml.cs">
+      <DependentUpon>DialogDecide.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Dialogs\DialogMessageBox.xaml.cs">
       <DependentUpon>DialogMessageBox.xaml</DependentUpon>
     </Compile>
@@ -207,6 +210,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Dialogs\DialogAddNotification.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Dialogs\DialogDecide.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
