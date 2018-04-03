@@ -11,13 +11,9 @@ namespace OpcUa.Client.Core
     public class DiscoverEndpointsViewModel : BaseViewModel
     {
         #region Private Fields
-
         private readonly UaClientApi _uaClientApi;
-
         private ApplicationDescription _selectedServer;
-
         private readonly EndpointDescriptionCollection _discoveredEndpoints = new EndpointDescriptionCollection();
-
         #endregion
 
         #region Public Properties
@@ -116,7 +112,6 @@ namespace OpcUa.Client.Core
                 if (UserPwIsSelected)
                 {
                     _uaClientApi.Connect(SelectedEndpoint, UserName, (parameter as IHavePassword)?.SecurePassword.Unsecure(), SessionName);
-
                     IoC.AppManager.ProjectId = IoC.UnitOfWork.Projects.Add(new ProjectEntity()
                     {
                         Name = ProjectName,
@@ -124,8 +119,6 @@ namespace OpcUa.Client.Core
                         Endpoint = Mapper.CreateEndpointEntity(SelectedEndpoint),
                         User = IoC.UnitOfWork.Auth.Register(new UserEntity(){UserName = UserName}, (parameter as IHavePassword)?.SecurePassword)
                     }).Id;
-
-                    IoC.Application.GoToPage(ApplicationPage.Main);
                 }
                 else
                 {
@@ -135,14 +128,20 @@ namespace OpcUa.Client.Core
                         Name = ProjectName,
                         SessionName = SessionName,
                         Endpoint = Mapper.CreateEndpointEntity(SelectedEndpoint),
-                        User = IoC.UnitOfWork.Auth.Register(new UserEntity() { UserName = UserName }, (parameter as IHavePassword)?.SecurePassword)
                     }).Id;
                 }
             }
             catch (Exception e)
             {
-                System.Windows.MessageBox.Show(e.Message, "Error");
+                IoC.Ui.ShowMessage(new MessageBoxDialogViewModel()
+                {
+                    Title = "Error",
+                    Message = e.Message,
+                    OkText = "Ok"
+                });
             }
+
+            IoC.Application.GoToPage(ApplicationPage.Main);
         }
 
         private void SearchEndpoints()

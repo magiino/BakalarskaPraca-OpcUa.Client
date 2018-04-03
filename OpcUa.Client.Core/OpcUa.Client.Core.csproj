@@ -89,6 +89,7 @@
     <Compile Include="BL\Models\Details\ProjectModel.cs" />
     <Compile Include="BL\Models\AnalogNotificationModel.cs" />
     <Compile Include="BL\Models\DigitalNotificationModel.cs" />
+    <Compile Include="BL\Models\UserModel.cs" />
     <Compile Include="BL\Models\VariableLiveChartModel.cs" />
     <Compile Include="BL\Repositories\IProjectRepository.cs" />
     <Compile Include="BL\Repositories\INotificationRepository.cs" />
@@ -96,6 +97,7 @@
     <Compile Include="BL\Repositories\IVariableRepository.cs" />
     <Compile Include="BL\Repositories\IRecordRepository.cs" />
     <Compile Include="BL\Repositories\Base\IBaseRepository.cs" />
+    <Compile Include="BL\AppManager.cs" />
     <Compile Include="DAL\Migrations\201804011948019_NotificationEntityAdded.cs" />
     <Compile Include="DAL\Migrations\201804011948019_NotificationEntityAdded.Designer.cs">
       <DependentUpon>201804011948019_NotificationEntityAdded.cs</DependentUpon>
@@ -168,12 +170,13 @@
     <Compile Include="ViewModels\Dialogs\Base\BaseDialogViewModel.cs" />
     <Compile Include="ViewModels\Dialogs\Design\MessageBoxDialogDesignModel.cs" />
     <Compile Include="ViewModels\Dialogs\MessageBoxDialogViewModel.cs" />
+    <Compile Include="ViewModels\Dialogs\OptionDialogViewModel.cs" />
     <Compile Include="ViewModels\Helper\ApplicationViewModel.cs" />
-    <Compile Include="ViewModels\Menu\MenuToolBarViewModel.cs" />
-    <Compile Include="ViewModels\Menu\MenuBarViewModel.cs" />
-    <Compile Include="ViewModels\Features\ArchiveViewModel.cs" />
-    <Compile Include="ViewModels\Features\NotificationViewModel.cs" />
-    <Compile Include="ViewModels\Features\NodeAttributesViewModel.cs" />
+    <Compile Include="ViewModels\Controls\Menu\MenuToolBarViewModel.cs" />
+    <Compile Include="ViewModels\Controls\Menu\MenuBarViewModel.cs" />
+    <Compile Include="ViewModels\Controls\Features\ArchiveViewModel.cs" />
+    <Compile Include="ViewModels\Controls\Features\NotificationViewModel.cs" />
+    <Compile Include="ViewModels\Controls\Features\NodeAttributesViewModel.cs" />
     <Compile Include="ViewModels\Pages\MainViewModel.cs" />
     <Compile Include="ViewModels\Helper\ViewModelLocator.cs" />
     <Compile Include="ViewModels\Pages\DiscoverEndpointsViewModel.cs" />
@@ -185,9 +188,9 @@
     <Compile Include="ViewModels\Base\RelayParameterizedCommand.cs" />
     <Compile Include="ViewModels\TreeView\NodeTreeItemViewModel.cs" />
     <Compile Include="ViewModels\TreeView\NodeTreeViewModel.cs" />
-    <Compile Include="ViewModels\Charts\ChartViewModel.cs" />
-    <Compile Include="ViewModels\Charts\LiveChartViewModel.cs" />
-    <Compile Include="ViewModels\Charts\StaticChartViewModel.cs" />
+    <Compile Include="ViewModels\Controls\Charts\ChartViewModel.cs" />
+    <Compile Include="ViewModels\Controls\Charts\LiveChartViewModel.cs" />
+    <Compile Include="ViewModels\Controls\Charts\StaticChartViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

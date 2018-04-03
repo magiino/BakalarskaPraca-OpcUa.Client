@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
 using OpcUa.Client.Core;
 
 namespace OpcUa.Client.WPF
@@ -85,7 +84,7 @@ namespace OpcUa.Client.WPF
                     _dialogWindow.ViewModel.Content = this;
 
                     // Create close command
-                    viewModel.CloseAction = () => _dialogWindow.Close();
+                    viewModel.CloseAction = _dialogWindow.Close;
                         
 
                     // Setup this controls data context binding to the view model

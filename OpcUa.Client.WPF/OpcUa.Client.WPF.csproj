@@ -100,28 +100,28 @@
     <Compile Include="Controls\Menu\MenuToolBar.xaml.cs">
       <DependentUpon>MenuToolBar.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\TabItems\Archive.xaml.cs">
+    <Compile Include="Controls\Features\Archive.xaml.cs">
       <DependentUpon>Archive.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\TabItems\AttributeInfo2.xaml.cs">
+    <Compile Include="Controls\Features\AttributeInfo2.xaml.cs">
       <DependentUpon>AttributeInfo2.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\TabItems\AttributeInfo.xaml.cs">
+    <Compile Include="Controls\Features\AttributeInfo.xaml.cs">
       <DependentUpon>AttributeInfo.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\TabItems\LiveChart.xaml.cs">
+    <Compile Include="Controls\Charts\LiveChart.xaml.cs">
       <DependentUpon>LiveChart.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\TabItems\ZoomChart.xaml.cs">
+    <Compile Include="Controls\Charts\ZoomChart.xaml.cs">
       <DependentUpon>ZoomChart.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\TabItems\Chart.xaml.cs">
+    <Compile Include="Controls\Charts\Chart.xaml.cs">
       <DependentUpon>Chart.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\TabItems\Notification.xaml.cs">
+    <Compile Include="Controls\Features\Notification.xaml.cs">
       <DependentUpon>Notification.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\TabItems\TreeView.xaml.cs">
+    <Compile Include="Controls\Features\TreeView.xaml.cs">
       <DependentUpon>TreeView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\UaClientSettings.xaml.cs">
@@ -169,35 +169,35 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\TabItems\Archive.xaml">
+    <Page Include="Controls\Features\Archive.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\TabItems\AttributeInfo2.xaml">
+    <Page Include="Controls\Features\AttributeInfo2.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Controls\TabItems\AttributeInfo.xaml">
+    <Page Include="Controls\Features\AttributeInfo.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\TabItems\LiveChart.xaml">
+    <Page Include="Controls\Charts\LiveChart.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\TabItems\ZoomChart.xaml">
+    <Page Include="Controls\Charts\ZoomChart.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Controls\TabItems\Chart.xaml">
+    <Page Include="Controls\Charts\Chart.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\TabItems\Notification.xaml">
+    <Page Include="Controls\Features\Notification.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\TabItems\TreeView.xaml">
+    <Page Include="Controls\Features\TreeView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
