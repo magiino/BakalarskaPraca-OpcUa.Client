@@ -1,5 +1,4 @@
-﻿using GalaSoft.MvvmLight.Messaging;
-using Ninject;
+﻿using Ninject;
 
 namespace OpcUa.Client.Core
 {
@@ -71,8 +70,7 @@ namespace OpcUa.Client.Core
 
         private static void BindUnitOfWork()
         {
-            var dataContext = new DataContext();
-            Kernel.Bind<IUnitOfWork>().ToConstant(new UnitOfWork(dataContext));
+            Kernel.Bind<IUnitOfWork>().ToConstant(new UnitOfWork(new DataContext()));
         }
 
         private static void BindMessenger()

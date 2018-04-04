@@ -62,9 +62,7 @@ namespace OpcUa.Client.Core
             StartArchiveCommand = new GalaSoft.MvvmLight.CommandWpf.RelayCommand(StartArchive, StartArchiveCanUse);
             StopArchiveCommand = new GalaSoft.MvvmLight.CommandWpf.RelayCommand(StopArchive, StopArchiveCanUse);
 
-            MessengerInstance.Register<SendSelectedRefNode>(
-                this,
-                msg => _selectedNode = msg.ReferenceNode);
+            MessengerInstance.Register<SendSelectedRefNode>(msg => _selectedNode = msg.ReferenceNode);
         }
 
         #endregion

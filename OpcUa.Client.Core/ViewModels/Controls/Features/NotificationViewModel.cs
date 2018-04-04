@@ -46,13 +46,9 @@ namespace OpcUa.Client.Core
             //RemoveNotificationCommand = new RelayCommand(RemoveNotification);
             RemoveNotificationCommand = new GalaSoft.MvvmLight.CommandWpf.RelayCommand(RemoveNotification, RemoveNotificationCanUse);
 
-            MessengerInstance.Register<SendSelectedRefNode>(
-                this,
-                msg => _selectedNode = msg.ReferenceNode);
+            MessengerInstance.Register<SendSelectedRefNode>(msg => _selectedNode = msg.ReferenceNode);
 
-            MessengerInstance.Register<SendNewNotification>(
-                this,
-                msg => AddNotificationToSubscription(msg.Notification));
+            MessengerInstance.Register<SendNewNotification>(msg => AddNotificationToSubscription(msg.Notification));
         }
 
         #endregion

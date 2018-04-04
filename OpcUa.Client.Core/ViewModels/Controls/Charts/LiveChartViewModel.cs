@@ -53,9 +53,7 @@ namespace OpcUa.Client.Core
             AxisUnit = TimeSpan.TicksPerSecond;
             SetAxisLimits(DateTime.Now);
 
-            MessengerInstance.Register<SendSelectedRefNode>(
-                this,
-                msg => _selectedNode = msg.ReferenceNode);
+            MessengerInstance.Register<SendSelectedRefNode>(msg => _selectedNode = msg.ReferenceNode);
         }
 
         private void AddVariable()

@@ -36,9 +36,7 @@ namespace OpcUa.Client.Core
             LoadProjectCommand = new RelayCommand(LoadProject);
             CreateProjectCommand = new RelayCommand(() => IoC.Application.GoToPage(ApplicationPage.Endpoints));
 
-            MessengerInstance.Register<SendCredentials>(
-                this,
-                msg => Login(msg.UserName, msg.Password));
+            MessengerInstance.Register<SendCredentials>(msg => Login(msg.UserName, msg.Password));
         }
 
         private void LoadProject()

@@ -12,7 +12,6 @@ namespace OpcUa.Client.WPF
         public ZoomChart()
         {
             InitializeComponent();
-            var b = Y;
         }
 
         private void ListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
