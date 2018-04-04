@@ -14,6 +14,7 @@
         public MenuBarViewModel MenuBarViewModel { get; set; }
         public MenuToolBarViewModel MenuToolBarViewModel { get; set; }
         public ChartViewModel ChartViewModel { get; set; }
+        public ZoomChartViewModel ZoomChartViewModel { get; set; }
         public  LiveChartViewModel LiveChartViewModel { get; set; }
 
         private int _selectedIndes = 0;
@@ -52,6 +53,7 @@
             MenuToolBarViewModel = new MenuToolBarViewModel();
             ArchiveViewModel = new ArchiveViewModel(unitOfWork, uaClientApi);
             ChartViewModel = new ChartViewModel(unitOfWork);
+            ZoomChartViewModel = new ZoomChartViewModel(unitOfWork);
             LiveChartViewModel = new LiveChartViewModel(uaClientApi);
         }
 

@@ -157,30 +157,24 @@ namespace OpcUa.Client.Core
         /// <exception cref="Exception">Throws and forwards any exception with short error description.</exception>
         public void Connect(EndpointDescription endpointDescription, string userName, string password, string sessionName)
         {
-            try
-            {
-                var endpointConfiguration = EndpointConfiguration.Create(_applicationConfig);
-                var endpoint = new ConfiguredEndpoint(null, endpointDescription, endpointConfiguration);
 
-                _applicationConfig.CertificateValidator.CertificateValidation += CertificateValidation;
-                _applicationConfig.CertificateValidator.Update(_applicationConfig);
+            var endpointConfiguration = EndpointConfiguration.Create(_applicationConfig);
+            var endpoint = new ConfiguredEndpoint(null, endpointDescription, endpointConfiguration);
 
-                var userIdentity = new UserIdentity(userName, password);
+            _applicationConfig.CertificateValidator.CertificateValidation += CertificateValidation;
+            _applicationConfig.CertificateValidator.Update(_applicationConfig);
 
-                _session = Session.Create(
-                    _applicationConfig,
-                    endpoint,
-                    true,
-                    sessionName,
-                    60000,
-                    userIdentity,
-                    null
-                    );
-            }
-            catch (Exception e)
-            {
-                ShowErrorMessage(e);
-            }
+            var userIdentity = new UserIdentity(userName, password);
+
+            _session = Session.Create(
+                _applicationConfig,
+                endpoint,
+                true,
+                sessionName,
+                60000,
+                userIdentity,
+                null
+                );
         }
 
         /// <summary>Establishes the connection to an OPC UA server and creates a session using an EndpointDescription.</summary>
@@ -189,28 +183,22 @@ namespace OpcUa.Client.Core
         /// <exception cref="Exception">Throws and forwards any exception with short error description.</exception>
         public void ConnectAnonymous(EndpointDescription endpointDescription, string sessionName)
         {
-            try
-            {
-                var endpointConfiguration = EndpointConfiguration.Create(_applicationConfig);
-                var endpoint = new ConfiguredEndpoint(null, endpointDescription, endpointConfiguration);
 
-                _applicationConfig.CertificateValidator.CertificateValidation += CertificateValidation;
-                _applicationConfig.CertificateValidator.Update(_applicationConfig);
+            var endpointConfiguration = EndpointConfiguration.Create(_applicationConfig);
+            var endpoint = new ConfiguredEndpoint(null, endpointDescription, endpointConfiguration);
 
-                _session = Session.Create(
-                    _applicationConfig,
-                    endpoint,
-                    true,
-                    sessionName,
-                    60000,
-                    null,
-                    null
-                    );
-            }
-            catch (Exception e)
-            {
-                ShowErrorMessage(e);
-            }
+            _applicationConfig.CertificateValidator.CertificateValidation += CertificateValidation;
+            _applicationConfig.CertificateValidator.Update(_applicationConfig);
+
+            _session = Session.Create(
+                _applicationConfig,
+                endpoint,
+                true,
+                sessionName,
+                60000,
+                null,
+                null
+                );
         }
 
         /// <summary>Closes an existing session and disconnects from the server.</summary>

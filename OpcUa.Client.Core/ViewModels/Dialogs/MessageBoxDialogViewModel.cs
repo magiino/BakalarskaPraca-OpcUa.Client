@@ -1,4 +1,6 @@
-﻿namespace OpcUa.Client.Core
+﻿using System.Windows.Input;
+
+namespace OpcUa.Client.Core
 { 
     /// <summary>
     /// Details for a message box dialog
@@ -14,5 +16,12 @@
         /// The text to use for the OK button
         /// </summary>
         public string OkText { get; set; }
+
+        public ICommand CloseActionCommand { get; set; }
+
+        public MessageBoxDialogViewModel()
+        {
+            CloseActionCommand = new RelayCommand(() => CloseAction());
+        }
     }
 }

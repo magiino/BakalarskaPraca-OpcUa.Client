@@ -61,7 +61,7 @@ namespace OpcUa.Client.Core
                 {
                     Title = "Error",
                     Message = e.Message,
-                    OkText = "ok"
+                    OkText = "ok",
                 });
             }
         }

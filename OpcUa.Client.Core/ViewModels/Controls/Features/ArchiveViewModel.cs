@@ -140,7 +140,7 @@ namespace OpcUa.Client.Core
             }
             else
             {
-                var item = _uaClientApi.CreateMonitoredItem(_selectedNode.DisplayName.ToString(), nodeId, 500, null, 4, MonitoringMode.Disabled);
+                var item = _uaClientApi.CreateMonitoredItem(interval.ToString(), nodeId, 500, null, 2, MonitoringMode.Disabled);
                 _uaClientApi.AddMonitoredItem(item, _subscription);
                 item.Notification += Notification_MonitoredItem;
             }
@@ -258,7 +258,7 @@ namespace OpcUa.Client.Core
 
             foreach (var variable in ArchiveVariables.Where(x => x.Archive == ArchiveInterval.None))
             {
-                var item = _uaClientApi.CreateMonitoredItem(variable.Name, variable.Name, 500, null, 4, MonitoringMode.Disabled);
+                var item = _uaClientApi.CreateMonitoredItem(variable.Name, variable.Name, 500, null, 2, MonitoringMode.Disabled);
                 _uaClientApi.AddMonitoredItem(item, _subscription);
                 item.Notification += Notification_MonitoredItem;
             }
@@ -295,8 +295,8 @@ namespace OpcUa.Client.Core
 
             var value = notification.Value;
 
-            // TODO same sa nato vola tostring?
-            var variable = ArchiveVariables.FirstOrDefault(x => x.Name == monitoredItem.StartNodeId);
+            var variable = ArchiveVariables.FirstOrDefault(x =>
+                x.Name == monitoredItem.StartNodeId && monitoredItem.DisplayName == ArchiveInterval.None.ToString());
 
             if (variable == null) return;
 

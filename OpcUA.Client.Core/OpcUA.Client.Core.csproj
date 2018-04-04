@@ -165,6 +165,7 @@
     <Compile Include="BL\OpcUa\UaClientApi.cs" />
     <Compile Include="BL\Models\ExtendedNotificationModel.cs" />
     <Compile Include="ViewModels\Base\MixRelayCommand.cs" />
+    <Compile Include="ViewModels\Controls\Charts\ZoomChartViewModel.cs" />
     <Compile Include="ViewModels\Controls\Features\NotificationViewModel - Copy.cs" />
     <Compile Include="ViewModels\Dialogs\LogInDialogViewModel.cs" />
     <Compile Include="ViewModels\Dialogs\AddNotificationDialogViewModel.cs" />
@@ -191,7 +192,6 @@
     <Compile Include="ViewModels\TreeView\NodeTreeViewModel.cs" />
     <Compile Include="ViewModels\Controls\Charts\ChartViewModel.cs" />
     <Compile Include="ViewModels\Controls\Charts\LiveChartViewModel.cs" />
-    <Compile Include="ViewModels\Controls\Charts\StaticChartViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

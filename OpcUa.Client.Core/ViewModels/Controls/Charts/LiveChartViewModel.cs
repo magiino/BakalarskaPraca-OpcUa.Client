@@ -2,10 +2,8 @@
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
-using System.Windows.Media;
 using LiveCharts;
 using LiveCharts.Configurations;
-using LiveCharts.Defaults;
 using LiveCharts.Wpf;
 using Opc.Ua;
 using Opc.Ua.Client;
@@ -74,24 +72,6 @@ namespace OpcUa.Client.Core
                 {
                     Title = variable.Name,
                     Values = new ChartValues<MeasureModel>(),
-                    //{
-                    //    new MeasureModel()
-                    //    {
-                    //        Value = 5,
-                    //        DateTime = DateTime.Now,
-                    //    },
-                    //    new MeasureModel()
-                    //    {
-                    //        Value = 7,
-                    //        DateTime = DateTime.Now.AddSeconds(5),
-                    //    },
-                    //    new MeasureModel()
-                    //    {
-                    //        Value = 10,
-                    //        DateTime = DateTime.Now.AddSeconds(10),
-                    //    }
-
-                    //},
                     PointGeometrySize = 15,
                     PointGeometry = DefaultGeometries.Cross,
                     //PointForeground = new SolidColorBrush(Color.FromRgb((byte)r.Next(1, 255),
