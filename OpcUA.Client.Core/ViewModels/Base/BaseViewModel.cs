@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel;
 using PropertyChanged;
-using GalaSoft.MvvmLight.Messaging;
 
 namespace OpcUa.Client.Core
 {

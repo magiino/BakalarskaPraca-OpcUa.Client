@@ -16,7 +16,7 @@
 
         <Button Content="{Binding OkText}"
                 FontSize="{StaticResource FontSizeRegular}"
-                Command="{Binding CloseAction}"
+                Command="{Binding CloseActionCommand}"
                 HorizontalAlignment="Center"
                 />
         

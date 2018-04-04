@@ -14,6 +14,8 @@
         public MenuBarViewModel MenuBarViewModel { get; set; }
         public MenuToolBarViewModel MenuToolBarViewModel { get; set; }
         public ChartViewModel ChartViewModel { get; set; }
+        public ZoomChartViewModel ZoomChartViewModel { get; set; }
+        public  LiveChartViewModel LiveChartViewModel { get; set; }
 
         private int _selectedIndes = 0;
         public int SelectedIndex
@@ -36,9 +38,6 @@
 
         #endregion
 
-        #region Commands
-        #endregion
-
         #region Constructor
 
         public MainViewModel()
@@ -50,15 +49,14 @@
             NodetreeViewModel = new NodeTreeViewModel();
             NodeAttributesViewModel = new NodeAttributesViewModel(uaClientApi);
             NotificationViewModel = new NotificationViewModel(unitOfWork, uaClientApi);
-            MenuBarViewModel = new MenuBarViewModel(uaClientApi);
-            MenuToolBarViewModel = new MenuToolBarViewModel(uaClientApi);
+            MenuBarViewModel = new MenuBarViewModel();
+            MenuToolBarViewModel = new MenuToolBarViewModel();
             ArchiveViewModel = new ArchiveViewModel(unitOfWork, uaClientApi);
             ChartViewModel = new ChartViewModel(unitOfWork);
+            ZoomChartViewModel = new ZoomChartViewModel(unitOfWork);
+            LiveChartViewModel = new LiveChartViewModel(uaClientApi);
         }
 
-        #endregion
-
-        #region Command Methods
         #endregion
     }
 }

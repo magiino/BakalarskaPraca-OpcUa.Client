@@ -33,26 +33,22 @@ namespace OpcUa.Client.Core
 
         #region Constructor
 
-        // TODO Prerobit WriteValue v opcuaApi
         public NotificationViewModel(IUnitOfWork unitOfWork, UaClientApi uaClientApi)
         {
             _uaClientApi = uaClientApi;
             _unitOfWork = unitOfWork;
 
-            _subscription = _uaClientApi.NotificationSubscription();
+            _subscription = _uaClientApi.Subscribe(300, "Notifications");
+            LoadAndRegisterNotifications();
 
             //AddNotificationCommand = new RelayCommand(AddNotification);
             AddNotificationCommand = new GalaSoft.MvvmLight.CommandWpf.RelayCommand(AddNotification, AddNotificationCanUse);
             //RemoveNotificationCommand = new RelayCommand(RemoveNotification);
             RemoveNotificationCommand = new GalaSoft.MvvmLight.CommandWpf.RelayCommand(RemoveNotification, RemoveNotificationCanUse);
 
-            MessengerInstance.Register<SendSelectedRefNode>(
-                this,
-                msg => _selectedNode = msg.ReferenceNode);
+            MessengerInstance.Register<SendSelectedRefNode>(msg => _selectedNode = msg.ReferenceNode);
 
-            MessengerInstance.Register<SendNewNotification>(
-                this,
-                msg => AddNotificationToSubscription(msg.Notification));
+            MessengerInstance.Register<SendNewNotification>(msg => AddNotificationToSubscription(msg.Notification));
         }
 
         #endregion
@@ -61,17 +57,6 @@ namespace OpcUa.Client.Core
 
         private void AddNotification()
         {
-            if (_selectedNode.NodeClass != NodeClass.Variable)
-            {
-                IoC.Ui.ShowMessage(new MessageBoxDialogViewModel()
-                {
-                    Title = "Error",
-                    Message = "Musíte zvoliť Nodu typu Variable!",
-                    OkText = "Ok"
-                });
-                return;
-            }
-
             IoC.Ui.ShowAddNotification(new AddNotificationDialogViewModel()
             {
                 NodeId = _selectedNode.NodeId.ToString()
@@ -80,40 +65,9 @@ namespace OpcUa.Client.Core
 
         private void RemoveNotification()
         {
-            if (SelectedNotification == null) return;
             _uaClientApi.RemoveMonitoredItem(_subscription, SelectedNotification.NodeId);
             Notifications.Remove(SelectedNotification);
         }
-
-        //private void SaveSubscription()
-        //{
-        //    // TODO save do priecinka /Subscriptions a ukladat s mneom ako datum v stringu
-        //    _uaClientApi.SaveSubsciption();
-        //}
-
-        //private void LoadSubscription()
-        //{
-        //    // TODO opytat sa uzivatela ci chce prepisat existujucu subscription
-        //    if (_subscription != null) return;
-        //    _subscription = _uaClientApi.LoadSubsciption();
-
-        //    if (_subscription == null) return;
-
-        //    // TODO private metoda opakovany kod
-        //    foreach (var item in _subscription.MonitoredItems)
-        //    {
-        //        var tmp = new ExtendedNotificationModel()
-        //        {
-        //            NodeId = item.StartNodeId.ToString(),
-        //            Name = item.DisplayName
-        //            // TODO set up type here
-        //        };
-
-        //        item.Notification += Notification_MonitoredItem;
-        //        Notifications.Add(tmp);
-        //    }
-        //    _subscription.ApplyChanges();
-        //}
 
         #endregion
 
@@ -142,28 +96,54 @@ namespace OpcUa.Client.Core
             notification.DataType = _uaClientApi.GetBuiltInTypeOfVariableNodeId(notification.NodeId);
 
             MonitoredItem item;
-            // TODO inak vymysliet notification model
-            if (notification is DigitalNotificationModel)
-                item = _uaClientApi.NotificationMonitoredItem(notification.Name, notification.NodeId, null);
+
+           var notificationEntity = new NotificationEntity()
+            {
+                Name = notification.Name,
+                NodeId = notification.NodeId,
+                ProjectId = IoC.AppManager.ProjectId,
+            };
+
+            if (notification.IsDigital)
+            {
+                item = _uaClientApi.CreateMonitoredItem(notification.Name, notification.NodeId, 300);
+
+                notificationEntity.IsDigital = true;
+                notificationEntity.IsZeroDescription = notification.IsZeroDescription;
+                notificationEntity.IsOneDescription = notification.IsOneDescription;
+            }
             else
             {
-                var analog = (notification as AnalogNotificationModel);
-
-                item = _uaClientApi.NotificationMonitoredItem(notification.Name,
+                item = _uaClientApi.CreateMonitoredItem(notification.Name,
                     notification.NodeId,
+                    300,
                     new DataChangeFilter()
                     {
-                        DeadbandType = (uint)analog.DeadbandType,
-                        DeadbandValue = analog.FilterValue,
+                        DeadbandType = (uint)notification.DeadbandType,
+                        DeadbandValue = notification.FilterValue,
                         Trigger = DataChangeTrigger.StatusValue
                     });
+
+                notificationEntity.FilterValue = notification.FilterValue;
+                notificationEntity.DeadbandType = notification.DeadbandType;
             }
 
             _uaClientApi.AddMonitoredItem(item, _subscription);
             item.Notification += Notification_MonitoredItem;
 
+            _unitOfWork.Notifications.Add(notificationEntity);
+
             Notifications.Add(notification);
-        } 
+        }
+
+        private void LoadAndRegisterNotifications()
+        {
+            var extendedNotifications =
+                Mapper.NotificationsToExtended(_unitOfWork.Notifications.Find(x => x.ProjectId == IoC.AppManager.ProjectId));
+
+            foreach (var extendedNonotification in extendedNotifications)
+                AddNotificationToSubscription(extendedNonotification);
+        }
 
         #endregion
 

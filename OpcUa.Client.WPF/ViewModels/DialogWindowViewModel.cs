@@ -1,11 +1,13 @@
 ﻿using System.Windows.Controls;
 using OpcUa.Client.Core;
+using PropertyChanged;
 
 namespace OpcUa.Client.WPF
 {
     /// <summary>
     /// The View Model for the custom flat window
     /// </summary>
+    [DoNotNotify]
     public class DialogWindowViewModel : WindowViewModel
     {
         #region Public Properties

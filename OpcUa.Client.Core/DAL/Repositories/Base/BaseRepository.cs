@@ -48,9 +48,9 @@ namespace OpcUa.Client.Core
             return Context.Set<TEntity>().SingleOrDefault(predicate);
         }
 
-        public void Add(TEntity entity)
+        public TEntity Add(TEntity entity)
         {
-            Context.Set<TEntity>().Add(entity);
+            return Context.Set<TEntity>().Add(entity);
         }
 
         public void AddRange(IEnumerable<TEntity> entities)

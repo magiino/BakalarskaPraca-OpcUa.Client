@@ -11,13 +11,9 @@ namespace OpcUa.Client.Core
     public class DiscoverEndpointsViewModel : BaseViewModel
     {
         #region Private Fields
-
         private readonly UaClientApi _uaClientApi;
-
         private ApplicationDescription _selectedServer;
-
         private readonly EndpointDescriptionCollection _discoveredEndpoints = new EndpointDescriptionCollection();
-
         #endregion
 
         #region Public Properties
@@ -52,6 +48,7 @@ namespace OpcUa.Client.Core
             #region Filter
 
             public string SessionName { get; set; } = "MySession";
+            public string ProjectName { get; set; } = "MyProject";
 
             public IEnumerable<TransportProtocol> EProtocols { get; set; } = Enum.GetValues(typeof(TransportProtocol)).Cast<TransportProtocol>();
 
@@ -90,6 +87,7 @@ namespace OpcUa.Client.Core
         public ICommand SearchCommand { get; set; }
         public ICommand ConnectCommand { get; set; }
         public ICommand StartFilterCommand { get; set; }
+        public ICommand LoadProjectCommand { get; set; }
 
         #endregion
 
@@ -102,6 +100,7 @@ namespace OpcUa.Client.Core
             SearchCommand = new RelayCommand(SearchEndpoints);
             ConnectCommand = new RelayParameterizedCommand(ConnectToServer);
             StartFilterCommand = new RelayCommand(EndpointFilter);
+            LoadProjectCommand = new RelayCommand(LoadprojectPage);
         }
 
         #endregion
@@ -110,30 +109,51 @@ namespace OpcUa.Client.Core
 
         private void ConnectToServer(object parameter)
         {
-            if (UserPwIsSelected)
+            try
             {
-                var userName = UserName;
-                var pass = (parameter as IHavePassword)?.SecurePassword.Unsecure();
-            }
-            else
-            {
-                try
+                if (UserPwIsSelected)
+                {
+                    _uaClientApi.Connect(SelectedEndpoint, UserName, (parameter as IHavePassword)?.SecurePassword.Unsecure(), SessionName);
+                    IoC.AppManager.ProjectId = IoC.UnitOfWork.Projects.Add(new ProjectEntity()
+                    {
+                        Name = ProjectName,
+                        SessionName = SessionName,
+                        Endpoint = Mapper.CreateEndpointEntity(SelectedEndpoint),
+                        User = IoC.UnitOfWork.Auth.Register(new UserEntity(){UserName = UserName}, (parameter as IHavePassword)?.SecurePassword)
+                    }).Id;
+                }
+                else
                 {
                     _uaClientApi.ConnectAnonymous(SelectedEndpoint, SessionName);
-                    IoC.Application.GoToPage(ApplicationPage.Main);
+                    IoC.AppManager.ProjectId = IoC.UnitOfWork.Projects.Add(new ProjectEntity()
+                    {
+                        Name = ProjectName,
+                        SessionName = SessionName,
+                        Endpoint = Mapper.CreateEndpointEntity(SelectedEndpoint),
+                    }).Id;
                 }
-                catch (Exception e)
-                {
-                    System.Windows.MessageBox.Show(e.Message, "Error");
-                }
-
             }
+            catch (Exception e)
+            {
+                IoC.Ui.ShowMessage(new MessageBoxDialogViewModel()
+                {
+                    Title = "Error",
+                    Message = e.Message,
+                    OkText = "Ok"
+                });
+            }
+
+            IoC.Application.GoToPage(ApplicationPage.Main);
+        }
+
+        private void LoadprojectPage()
+        {
+            IoC.Application.GoToPage(ApplicationPage.Welcome);
         }
 
         private void SearchEndpoints()
         {
             _discoveredEndpoints.Clear();
-
             try
             {
                 FoundedServers = new ObservableCollection<ApplicationDescription>(_uaClientApi.FindServers(DiscoveryUrl));

@@ -157,30 +157,24 @@ namespace OpcUa.Client.Core
         /// <exception cref="Exception">Throws and forwards any exception with short error description.</exception>
         public void Connect(EndpointDescription endpointDescription, string userName, string password, string sessionName)
         {
-            try
-            {
-                var endpointConfiguration = EndpointConfiguration.Create(_applicationConfig);
-                var endpoint = new ConfiguredEndpoint(null, endpointDescription, endpointConfiguration);
 
-                _applicationConfig.CertificateValidator.CertificateValidation += CertificateValidation;
-                _applicationConfig.CertificateValidator.Update(_applicationConfig);
+            var endpointConfiguration = EndpointConfiguration.Create(_applicationConfig);
+            var endpoint = new ConfiguredEndpoint(null, endpointDescription, endpointConfiguration);
 
-                var userIdentity = new UserIdentity(userName, password);
+            _applicationConfig.CertificateValidator.CertificateValidation += CertificateValidation;
+            _applicationConfig.CertificateValidator.Update(_applicationConfig);
 
-                _session = Session.Create(
-                    _applicationConfig,
-                    endpoint,
-                    true,
-                    sessionName,
-                    60000,
-                    userIdentity,
-                    null
-                    );
-            }
-            catch (Exception e)
-            {
-                ShowErrorMessage(e);
-            }
+            var userIdentity = new UserIdentity(userName, password);
+
+            _session = Session.Create(
+                _applicationConfig,
+                endpoint,
+                true,
+                sessionName,
+                60000,
+                userIdentity,
+                null
+                );
         }
 
         /// <summary>Establishes the connection to an OPC UA server and creates a session using an EndpointDescription.</summary>
@@ -189,28 +183,22 @@ namespace OpcUa.Client.Core
         /// <exception cref="Exception">Throws and forwards any exception with short error description.</exception>
         public void ConnectAnonymous(EndpointDescription endpointDescription, string sessionName)
         {
-            try
-            {
-                var endpointConfiguration = EndpointConfiguration.Create(_applicationConfig);
-                var endpoint = new ConfiguredEndpoint(null, endpointDescription, endpointConfiguration);
 
-                _applicationConfig.CertificateValidator.CertificateValidation += CertificateValidation;
-                _applicationConfig.CertificateValidator.Update(_applicationConfig);
+            var endpointConfiguration = EndpointConfiguration.Create(_applicationConfig);
+            var endpoint = new ConfiguredEndpoint(null, endpointDescription, endpointConfiguration);
 
-                _session = Session.Create(
-                    _applicationConfig,
-                    endpoint,
-                    true,
-                    sessionName,
-                    60000,
-                    null,
-                    null
-                    );
-            }
-            catch (Exception e)
-            {
-                ShowErrorMessage(e);
-            }
+            _applicationConfig.CertificateValidator.CertificateValidation += CertificateValidation;
+            _applicationConfig.CertificateValidator.Update(_applicationConfig);
+
+            _session = Session.Create(
+                _applicationConfig,
+                endpoint,
+                true,
+                sessionName,
+                60000,
+                null,
+                null
+                );
         }
 
         /// <summary>Closes an existing session and disconnects from the server.</summary>
@@ -220,9 +208,8 @@ namespace OpcUa.Client.Core
             if (_session == null) return;
             try
             {
-                //RemoveAllSubscriptions();
                 UnRegisterNodes();
-                _session.Close(10000);
+                _session.Close(5000);
                 _session.Dispose();
                 _session = null;
             }
@@ -238,50 +225,25 @@ namespace OpcUa.Client.Core
 
         /// <summary>Creats a Subscription object to a server</summary>
         /// <param name="publishingInterval">The publishing interval</param>
+        /// <param name="displayName"></param>
+        /// <param name="enablePublishing"></param>
         /// <returns>Subscription</returns>
         /// <exception cref="Exception">Throws and forwards any exception with short error description.</exception>
-        public Subscription Subscribe(int publishingInterval)
+        public Subscription Subscribe(int publishingInterval, string displayName, bool enablePublishing = true)
         {
             //Create a Subscription object
             var subscription = new Subscription(_session.DefaultSubscription)
             {
-                PublishingEnabled = true,
+                PublishingEnabled = enablePublishing,
                 PublishingInterval = publishingInterval,
-                TimestampsToReturn = TimestampsToReturn.Both
+                TimestampsToReturn = TimestampsToReturn.Both,
+                DisplayName = displayName,
             };
             _session.AddSubscription(subscription);
 
             try
             {
                 //Create/Activate the subscription
-                subscription.Create();
-                return subscription;
-            }
-            catch (Exception e)
-            {
-                ShowErrorMessage(e);
-                return null;
-            }
-        }
-
-        /// <summary>Creats a Subscription object to a server</summary>
-        /// <param name="publishingInterval">The publishing interval</param>
-        /// <returns>Subscription</returns>
-        /// <exception cref="Exception">Throws and forwards any exception with short error description.</exception>
-        public Subscription NotificationSubscription()
-        {
-            //Create a Subscription object
-            var subscription = new Subscription(_session.DefaultSubscription)
-            {
-                PublishingEnabled = true,
-                PublishingInterval = 500,
-                TimestampsToReturn = TimestampsToReturn.Both,
-                DisplayName = "Notifications"
-            };
-            _session.AddSubscription(subscription);
-
-            try
-            {
                 subscription.Create();
                 return subscription;
             }
@@ -314,42 +276,6 @@ namespace OpcUa.Client.Core
             }
         }
 
-        /// <summary>Ads a monitored item to an existing subscription</summary>
-        /// <param name="node"></param>
-        /// <param name="subscription"></param>
-        /// <returns>The added item</returns>
-        /// <exception cref="Exception">Throws and forwards any exception with short error description.</exception>
-        public MonitoredItem AddMonitoredItem(ReferenceDescription node, Subscription subscription)
-        {
-            var monitoredItem = new MonitoredItem
-            {
-                DisplayName = node.DisplayName.ToString(),
-                StartNodeId = ExpandedNodeId.ToNodeId(node.NodeId, new NamespaceTable()),
-                AttributeId = Attributes.Value,
-                MonitoringMode = MonitoringMode.Reporting,
-                // -1 minimum if we want sample as subscription publish
-                SamplingInterval = 300,
-                // Cache na strane serveru
-                QueueSize = 5,
-                // Cache na mojej strane, kolko hodnot si ulozim
-                CacheQueueSize = 5,
-                DiscardOldest = true,
-
-                // TODO deadband
-                Filter = new DataChangeFilter()
-                {
-                    DeadbandType = (uint)DeadbandType.Absolute,
-                    DeadbandValue = 2,
-                    Trigger = DataChangeTrigger.StatusValue
-                }
-            };
-
-            if (AddMonitoredItem(monitoredItem, subscription))
-                return monitoredItem;
-
-            return null;
-        }
-
         public bool AddMonitoredItem(MonitoredItem monitoredItem, Subscription subscription)
         {
             try
@@ -366,17 +292,17 @@ namespace OpcUa.Client.Core
             return false;
         }
 
-        public MonitoredItem NotificationMonitoredItem(string displayName, string nodeId, MonitoringFilter filterValue)
+        public MonitoredItem CreateMonitoredItem(string displayName, string nodeId,int samplingInterval ,MonitoringFilter filterValue=null, int queueSize=1, MonitoringMode mode = MonitoringMode.Reporting)
         {
             var monitoredItem = new MonitoredItem
             {
                 DisplayName = displayName,
                 StartNodeId = new NodeId(nodeId),
                 AttributeId = Attributes.Value,
-                MonitoringMode = MonitoringMode.Reporting,
-                SamplingInterval = 300,
-                QueueSize = 1,
-                CacheQueueSize = 1,
+                MonitoringMode = mode,
+                SamplingInterval = samplingInterval,
+                QueueSize = (uint)queueSize,
+                CacheQueueSize = queueSize,
                 DiscardOldest = true
             };
 
@@ -418,22 +344,6 @@ namespace OpcUa.Client.Core
                 subscription.Dispose();
 
                 _session.RemoveSubscription(subscription);
-            }
-            catch (Exception e)
-            {
-                // TODO handle Exception here
-                throw e;
-            }
-        }
-
-        /// <summary>Removes an existing Subscription.</summary>
-        /// <exception cref="Exception">Throws and forwards any exception with short error description.</exception>
-        private void RemoveAllSubscriptions()
-        {
-            try
-            {
-                foreach (var subscription in _session.Subscriptions)
-                    RemoveSubscription(subscription);
             }
             catch (Exception e)
             {
@@ -574,11 +484,9 @@ namespace OpcUa.Client.Core
 
             try
             {
-                // TODO osetrit ak nepatria tomu serveru
-                _session.RegisterNodes(null, nodeIdsToRegister, out var registeredNodeIds);
+                var a =_session.RegisterNodes(null, nodeIdsToRegister, out var registeredNodeIds);
                 _registeredNodes.AddRange(registeredNodeIds);
                 return registeredNodeIds;
-                // return registeredNodeIds.Select(x => x.ToString()).ToList();
             }
             catch (Exception e)
             {

@@ -61,15 +61,19 @@
                     </TabItem>
 
                     <TabItem Header="Archive">
-                        <local:Archive DataContext="{Binding ArchiveViewModel}" />
+                        <local:Archive DataContext="{Binding ArchiveViewModel}"/>
                     </TabItem>
 
-                    <TabItem Header="Chart">
-                        <local:Chart DataContext="{Binding ChartViewModel}" />
+                    <TabItem Header="Zoom Chart">
+                        <local:ZoomChart DataContext="{Binding ZoomChartViewModel}"/>
                     </TabItem>
 
-                    <TabItem Header="ZoomChart">
-                        <local:ZoomChart/>
+                    <TabItem Header="ZoomChart 2">
+                        <local:ZoomChartCodeBehind/>
+                    </TabItem>
+
+                    <TabItem Header="Live Chart">
+                        <local:LiveChart DataContext="{Binding LiveChartViewModel}"/>
                     </TabItem>
                 </TabControl>
             </Grid>

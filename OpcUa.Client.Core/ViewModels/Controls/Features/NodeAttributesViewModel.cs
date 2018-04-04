@@ -48,7 +48,6 @@ namespace OpcUa.Client.Core
             ReadValueCommand = new RelayCommand(ReadValue);
 
             MessengerInstance.Register<SendSelectedRefNode>(
-                this,
                 msg =>
                 {
                     ReferenceDescription = msg.ReferenceNode;

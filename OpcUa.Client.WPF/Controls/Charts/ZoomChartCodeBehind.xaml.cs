@@ -1,10 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Globalization;
-using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Media;
 using LiveCharts;
 using LiveCharts.Defaults;
@@ -17,11 +14,11 @@ namespace OpcUa.Client.WPF
     /// <summary>
     /// Interaction logic for Chart.xaml
     /// </summary>
-    public partial class ZoomChart : UserControl
+    public partial class ZoomChartCodeBehind : UserControl
     {
         private ZoomingOptions _zoomingMode;
 
-        public ZoomChart()
+        public ZoomChartCodeBehind()
         {
             InitializeComponent();
 
@@ -48,7 +45,7 @@ namespace OpcUa.Client.WPF
             ZoomingMode = ZoomingOptions.X;
 
             XFormatter = value => new DateTime((long)value).ToString("dd MMM H:mm:ss");
-            //YFormatter = val => val.ToString("C");
+            YFormatter = val => val.ToString("C");
 
             DataContext = this;
         }
@@ -124,31 +121,6 @@ namespace OpcUa.Client.WPF
             X.MaxValue = double.NaN;
             Y.MinValue = double.NaN;
             Y.MaxValue = double.NaN;
-        }
-    }
-
-    public class ZoomingModeCoverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            switch ((ZoomingOptions)value)
-            {
-                case ZoomingOptions.None:
-                    return "None";
-                case ZoomingOptions.X:
-                    return "X";
-                case ZoomingOptions.Y:
-                    return "Y";
-                case ZoomingOptions.Xy:
-                    return "XY";
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            throw new NotImplementedException();
         }
     }
 }

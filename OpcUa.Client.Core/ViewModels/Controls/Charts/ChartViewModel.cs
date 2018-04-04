@@ -45,24 +45,6 @@ namespace OpcUa.Client.Core
 
             //lets set how to display the X Labels
             DateTimeFormatter = value => new DateTime((long)value).ToString("dd MMM H:mm:ss");
-
-
-            MessengerInstance.Register<SendArchivedValue>(
-                this, val =>
-                {
-                    var test = _unitOfWork.Records.Local();
-                    var testRecords = test.Where(x => x.VariableId == val.Id && _lastTime < x.ArchiveTime);
-
-                    foreach (var record in testRecords)
-                    {
-                        Values.Add(new DateTimePoint()
-                        {
-                            Value = Convert.ToDouble(record.Value),
-                            DateTime = record.ArchiveTime,
-                        });
-                        MaxAxisLimit(record.ArchiveTime);
-                    }
-                });
         }
 
         private void Read()

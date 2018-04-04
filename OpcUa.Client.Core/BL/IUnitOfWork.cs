@@ -4,8 +4,6 @@ namespace OpcUa.Client.Core
 {
     public interface IUnitOfWork : IDisposable
     {
-        int ProjectId { get; set; }
-
         IProjectRepository Projects { get; }
         IVariableRepository Variables { get; }
         IRecordRepository Records { get; }
@@ -13,5 +11,7 @@ namespace OpcUa.Client.Core
         IEndpointRepository Endpoints { get; }
         IAuthRepository Auth { get; }
         int Complete();
+        void CompleteAsync();
+        bool HasUnsavedChanges();
     }
 }

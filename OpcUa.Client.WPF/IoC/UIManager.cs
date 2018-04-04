@@ -37,5 +37,15 @@ namespace OpcUa.Client.WPF
         {
             return new DialogLogin().ShowDialog(viewModel);
         }
+
+        /// <summary>
+        /// Displays a add notification window to user
+        /// </summary>
+        /// <param name="viewModel">The view model</param>
+        /// <returns></returns>
+        public Task ShowOption(OptionDialogViewModel viewModel)
+        {
+            return new DialogDecide().ShowDialog(viewModel);
+        }
     }
 }

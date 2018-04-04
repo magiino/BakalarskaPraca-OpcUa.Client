@@ -36,9 +36,7 @@ namespace OpcUa.Client.Core
             LoadProjectCommand = new RelayCommand(LoadProject);
             CreateProjectCommand = new RelayCommand(() => IoC.Application.GoToPage(ApplicationPage.Endpoints));
 
-            MessengerInstance.Register<SendCredentials>(
-                this,
-                msg => Login(msg.UserName, msg.Password));
+            MessengerInstance.Register<SendCredentials>(msg => Login(msg.UserName, msg.Password));
         }
 
         private void LoadProject()
@@ -49,7 +47,7 @@ namespace OpcUa.Client.Core
                 if (SelectedProject.UserId == null)
                 {
                     _uaClientApi.ConnectAnonymous(Mapper.CreateEndpointDescription(endpoint), SelectedProject.SessionName);
-                    _unitOfWork.ProjectId = SelectedProject.Id;
+                    IoC.AppManager.ProjectId = SelectedProject.Id;
                     IoC.Application.GoToPage(ApplicationPage.Main);
                 }
                 else
@@ -61,7 +59,7 @@ namespace OpcUa.Client.Core
                 {
                     Title = "Error",
                     Message = e.Message,
-                    OkText = "ok"
+                    OkText = "ok",
                 });
             }
         }

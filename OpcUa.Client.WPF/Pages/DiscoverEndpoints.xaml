@@ -10,9 +10,9 @@
       x:Name="Page"
       d:DesignHeight="600" d:DesignWidth="800">
 
-    <!-- -->
     <Border  Background="{StaticResource BackgroundLightBrush}"
-             Padding="5">
+             Padding="5"
+             >
         <Grid>
             <Grid.RowDefinitions>
                 <!-- First Row -->
@@ -33,14 +33,16 @@
                 <!-- Text box for URL -->
                 <TextBox Grid.Column="0"
                          Grid.Row="0"
-                         Text="{Binding DiscoveryUrl, Mode=TwoWay}"/>
+                         Text="{Binding DiscoveryUrl, Mode=TwoWay}"
+                         />
 
                 <!-- Search Button -->
                 <Button Grid.Column="1"
                         Grid.Row="0"
                         Content="Search"
                         Padding="10 5"
-                        Command="{Binding SearchCommand}"/>
+                        Command="{Binding SearchCommand}"
+                        />
             </Grid>
 
             <!-- Second Row -->
@@ -81,7 +83,6 @@
                             <TextBlock  Text="{Binding ApplicationUri}"/>
                             <TextBlock  Text="{Binding ProductUri}"/>
                         </StackPanel>
-                            
                     </Grid>
                 </GroupBox>
 
@@ -89,13 +90,13 @@
 
                 <!-- Endpoints List -->
                 <GroupBox Grid.Row="1"
-                            Grid.Column="0"
-                            Header="Endpoints" 
-                            Padding="0 5 0 0" >
-                    <ScrollViewer 
-                        Height="auto" 
-                        VerticalScrollBarVisibility="auto">
-
+                          Grid.Column="0"
+                          Header="Endpoints" 
+                          Padding="0 5 0 0"
+                          >
+                    <ScrollViewer Height="auto" 
+                                  VerticalScrollBarVisibility="auto"
+                                  >
                         <DataGrid AutoGenerateColumns="false"
                                   RowHeaderWidth="0"
                                   CanUserResizeColumns="False"
@@ -107,13 +108,29 @@
                                   SelectedIndex="0"
                                   SelectionMode="Single"
                                   IsManipulationEnabled="False"
-                                  CanUserAddRows="False">
+                                  CanUserAddRows="False"
+                                  >
                             <DataGrid.Columns>
-                                <DataGridTextColumn Width="*" Header="Endpoint Url" Binding="{Binding EndpointUrl}"/>
-                                <DataGridTextColumn Width="auto" Header="Sec. Mode" Binding="{Binding SecurityMode}"/>
-                                <DataGridTextColumn Width="auto" Header="Sec. Policy" Binding="{Binding SecurityPolicy}"/>
-                                <DataGridTextColumn Width="auto" Header="Sec. level" Binding="{Binding SecurityLevel}"/>
-                                <DataGridTextColumn Width="*" Header="Transport profile" Binding="{Binding TransportProfileUri}"/>
+                                <DataGridTextColumn Width="*" 
+                                                    Header="Endpoint Url"
+                                                    Binding="{Binding EndpointUrl}"
+                                                    />
+                                <DataGridTextColumn Width="auto" 
+                                                    Header="Sec. Mode" 
+                                                    Binding="{Binding SecurityMode}"
+                                                    />
+                                <DataGridTextColumn Width="auto" 
+                                                    Header="Sec. Policy" 
+                                                    Binding="{Binding SecurityPolicy}"
+                                                    />
+                                <DataGridTextColumn Width="auto" 
+                                                    Header="Sec. level" 
+                                                    Binding="{Binding SecurityLevel}"
+                                                    />
+                                <DataGridTextColumn Width="*" 
+                                                    Header="Transport profile" 
+                                                    Binding="{Binding TransportProfileUri}"
+                                                    />
                             </DataGrid.Columns>
                         </DataGrid>
                     </ScrollViewer>
@@ -122,7 +139,8 @@
                 <!-- Filter -->
                 <Grid Grid.RowSpan="2"
                       Grid.Row="0" 
-                      Grid.Column="1">
+                      Grid.Column="1"
+                      >
 
                     <Grid.RowDefinitions>
                         <!-- First Row -->
@@ -133,18 +151,20 @@
 
                     <GroupBox Grid.Row="0"
                               Header="Filter" 
-                              Padding="5px" Grid.ColumnSpan="2" >
+                              Padding="5px" Grid.ColumnSpan="2"
+                              >
                         <StackPanel>
 
                             <!-- Server List -->
-                            <TextBlock Text="Choose Server"/>
+                            <TextBlock Text="Servers"/>
                             <ScrollViewer VerticalScrollBarVisibility="auto">
                                 <ListView ItemsSource="{Binding FoundedServers}"
-                                              SelectedItem="{Binding SelectedServer, Mode=TwoWay}"
-                                              Background="{StaticResource BackgroundLightBrush}"
-                                              SelectionMode="Single"
-                                              SelectedIndex="0"
-                                              MinHeight="75px">
+                                          SelectedItem="{Binding SelectedServer, Mode=TwoWay}"
+                                          Background="{StaticResource BackgroundLightBrush}"
+                                          SelectionMode="Single"
+                                          SelectedIndex="0"
+                                          MinHeight="75px"
+                                          >
 
                                     <ListView.ItemTemplate>
                                         <DataTemplate>
@@ -153,8 +173,11 @@
                                                         Width="10" 
                                                         Margin="3"
                                                         Foreground="{StaticResource WordBlueBrush}"
-                                                        Icon="Server"/>
-                                                <TextBlock VerticalAlignment="Center" Text="{Binding ApplicationName}" />
+                                                        Icon="Server"
+                                                        />
+                                                <TextBlock VerticalAlignment="Center" 
+                                                           Text="{Binding ApplicationName}"
+                                                           />
                                             </StackPanel>
                                         </DataTemplate>
                                     </ListView.ItemTemplate>
@@ -165,7 +188,8 @@
                             <TextBlock Text="TransportProtocol"/>
                             <ComboBox SelectedIndex="0"
                                       ItemsSource="{Binding EProtocols}"
-                                      SelectedItem="{Binding SelectedTransportProtocol, Mode=TwoWay}"/>
+                                      SelectedItem="{Binding SelectedTransportProtocol, Mode=TwoWay}"
+                                      />
 
                             <!-- Security Modes/Policies -->
                             <Grid Margin="0 10 0 0">
@@ -181,13 +205,16 @@
                                     <TextBlock Text="Security Modes"/>
                                     <CheckBox Content="None"
                                               IsChecked="{Binding NoneIsSelected}"
-                                              Command="{Binding StartFilterCommand}"/>
+                                              Command="{Binding StartFilterCommand}"
+                                              />
                                     <CheckBox Content="Sign"
                                               IsChecked="{Binding SignIsSelected}"
-                                              Command="{Binding StartFilterCommand}"/>
+                                              Command="{Binding StartFilterCommand}"
+                                              />
                                     <CheckBox Content="Sign&amp;Encrypt"
                                               IsChecked="{Binding SignEncryptIsSelected}"
-                                              Command="{Binding StartFilterCommand}"/>
+                                              Command="{Binding StartFilterCommand}"
+                                              />
                                 </StackPanel>
 
                                 <!-- Security Policies -->
@@ -195,13 +222,16 @@
                                     <TextBlock Text="Security Policies"/>
                                     <CheckBox Content="Basic128Rsa15"
                                               IsChecked="{Binding Basic128Rsa15IsSelected}"
-                                              Command="{Binding StartFilterCommand}"/>
+                                              Command="{Binding StartFilterCommand}"
+                                              />
                                     <CheckBox Content="Basic256"
                                               IsChecked="{Binding Basic256IsSelected}"
-                                              Command="{Binding StartFilterCommand}"/>
+                                              Command="{Binding StartFilterCommand}"
+                                              />
                                     <CheckBox Content="Basic256Sha256"
                                               IsChecked="{Binding Basic256Sha256IsSelected}"
-                                              Command="{Binding StartFilterCommand}"/>
+                                              Command="{Binding StartFilterCommand}"
+                                              />
                                 </StackPanel>
                             </Grid>
 
@@ -209,19 +239,27 @@
                             <TextBlock Text="Message Encoding"/>
                             <ComboBox SelectedIndex="0"
                                       ItemsSource="{Binding EMessageEncodings}"
-                                      SelectedItem="{Binding SelectedEncoding, Mode=TwoWay}"/>
+                                      SelectedItem="{Binding SelectedEncoding, Mode=TwoWay}"
+                                      />
                         </StackPanel>
                     </GroupBox>
 
                     <!-- User Authentication -->
                     <GroupBox Grid.Row="1" 
-                              Header="User Authentication"
-                              Grid.Column="0">
-                        <StackPanel>
+                              Header="Project Setup"
+                              Grid.Column="0"
+                              >
+                        <StackPanel VerticalAlignment="Stretch">
+
+                            <!-- Project Name -->
+                            <TextBlock Text="Project Name"/>
+                            <TextBox Text="{Binding ProjectName}"
+                                     />
 
                             <!-- Session Name -->
                             <TextBlock Text="Session Name"/>
-                            <TextBox Text="{Binding SessionName}"/>
+                            <TextBox Text="{Binding SessionName}"
+                                     />
 
                             <!-- Radio Buttons -->
                             <RadioButton Content="Anonymous"
@@ -231,23 +269,36 @@
                             <RadioButton Content="User/Password"
                                          GroupName="Group1"
                                          x:Name="UserPasswordChBox"
-                                         IsChecked="{Binding UserPwIsSelected}"/>
+                                         IsChecked="{Binding UserPwIsSelected}"
+                                         />
 
-                            <!-- User Name -->
-                            <TextBlock Text="User Name"/>
-                            <TextBox Text="{Binding UserName}"
-                                     Tag="User Name"
-                                     IsEnabled="{Binding IsChecked, ElementName=UserPasswordChBox}"/>
-                            <TextBlock Text="Passord"/>
+                            <StackPanel Visibility="{Binding Converter={local:BooleanToVisibilityConverter}
+                                         ,ElementName=UserPasswordChBox
+                                         ,Path=IsChecked}">
+                                <!-- User Name -->
+                                <TextBlock Text="User Name"/>
+                                <TextBox Text="{Binding UserName}"
+                                         Tag="User Name"
+                                         IsEnabled="{Binding IsChecked, ElementName=UserPasswordChBox}"
+                                         />
+                                <TextBlock Text="Passord"/>
 
-                            <!-- User Password -->
-                            <PasswordBox x:Name="PasswordText"   
-                                         Tag="Password"
-                                         IsEnabled="{Binding IsChecked, ElementName=UserPasswordChBox}"/>
+                                <!-- User Password -->
+                                <PasswordBox x:Name="PasswordText"   
+                                             Tag="Password"
+                                             IsEnabled="{Binding IsChecked, ElementName=UserPasswordChBox}"
+                                             />
+                            </StackPanel>
                             <Button Content="Connect"
                                     IsDefault="True"
                                     Command="{Binding ConnectCommand}" 
-                                    CommandParameter="{Binding ElementName=Page}"/>
+                                    CommandParameter="{Binding ElementName=Page}"
+                                    />
+                            <Button Content="Welcome Page"
+                                    IsDefault="True"
+                                    Command="{Binding LoadProjectCommand}" 
+                                    VerticalContentAlignment="Bottom"
+                                    />
                         </StackPanel>
                     </GroupBox>
 

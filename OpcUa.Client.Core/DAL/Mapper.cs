@@ -29,5 +29,30 @@ namespace OpcUa.Client.Core
                 TransportProfileUri = endpoint.TransportProfileUri
             };
         }
+
+        public static EndpointEntity CreateEndpointEntity(EndpointDescription endpoint)
+        {
+            return new EndpointEntity()
+            {
+                Url = endpoint.EndpointUrl,
+                MessageSecurityMode = endpoint.SecurityMode,
+                SecurityPolicyUri = endpoint.SecurityPolicyUri,
+                TransportProfileUri = endpoint.TransportProfileUri
+            };
+        }
+
+        public static ICollection<ExtendedNotificationModel> NotificationsToExtended(IEnumerable<NotificationEntity> notifications)
+        {
+            return notifications.Select(notification => new ExtendedNotificationModel()
+                {
+                    Name = notification.Name,
+                    NodeId = notification.NodeId,
+                    IsDigital = notification.IsDigital,
+                    IsOneDescription = notification.IsOneDescription,
+                    IsZeroDescription = notification.IsZeroDescription,
+                    FilterValue = notification.FilterValue,
+                    DeadbandType = notification.DeadbandType
+                }).ToList();
+        }
     }
 }
