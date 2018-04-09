@@ -21,6 +21,7 @@ namespace OpcUa.Client.Core
         #region Commands
 
         public ICommand LoadProjectCommand { get; set; }
+        public ICommand DeleteProjectCommand { get; set; }
         public ICommand CreateProjectCommand { get; set; }
         
         #endregion
@@ -34,6 +35,7 @@ namespace OpcUa.Client.Core
             LoadProjects();
 
             LoadProjectCommand = new RelayCommand(LoadProject);
+            DeleteProjectCommand = new RelayCommand(DeleteProject);
             CreateProjectCommand = new RelayCommand(() => IoC.Application.GoToPage(ApplicationPage.Endpoints));
 
             MessengerInstance.Register<SendCredentials>(msg => Login(msg.UserName, msg.Password));
@@ -62,6 +64,11 @@ namespace OpcUa.Client.Core
                     OkText = "ok",
                 });
             }
+        }
+
+        private void DeleteProject()
+        {
+            // TODO remove functionality
         }
 
         private void Login(string userName, SecureString password)

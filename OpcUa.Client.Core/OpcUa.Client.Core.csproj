@@ -87,6 +87,7 @@
     <Compile Include="BL\Messages\SendArchivedValue.cs" />
     <Compile Include="BL\Messages\SendNewNotification.cs" />
     <Compile Include="BL\Messages\SendCredentials.cs" />
+    <Compile Include="BL\Messages\SendResetAxises.cs" />
     <Compile Include="BL\Messenger.cs" />
     <Compile Include="BL\Models\Details\ProjectModel.cs" />
     <Compile Include="BL\Models\AnalogNotificationModel.cs" />

@@ -81,6 +81,12 @@
 
 
                 <!-- Load setting button -->
+                <Button Content="Delete" 
+                        IsDefault="True"
+                        Command="{Binding DeleteProjectCommand}"
+                        HorizontalAlignment="right"
+                />
+                <!-- Load setting button -->
                 <Button Content="Load Project" 
                         IsDefault="True"
                         Command="{Binding LoadProjectCommand}"
