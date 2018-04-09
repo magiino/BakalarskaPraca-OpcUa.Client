@@ -11,10 +11,5 @@ namespace OpcUa.Client.WPF
         {
             InitializeComponent();
         }
-
-        public MainPage(MainViewModel viewModel)
-        {
-            InitializeComponent();
-        }
     }
 }

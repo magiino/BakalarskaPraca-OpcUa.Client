@@ -13,12 +13,19 @@ namespace OpcUa.Client.Core
 
         public AppManager()
         {
-            var mapper = Mappers.Xy<DateTimePoint>()
+            var dateTimePointCfg = Mappers.Xy<DateTimePoint>()
                 .X(model => model.DateTime.Ticks)
                 .Y(model => model.Value);
 
             // Set up mapper for charts globally
-            Charting.For<DateTimePoint>(mapper);
+            Charting.For<DateTimePoint>(dateTimePointCfg);
+
+            var measureModelCfg = Mappers.Xy<MeasureModel>()
+            .X(model => model.DateTime.Ticks)
+            .Y(model => model.Value);
+            Charting.For<MeasureModel>(measureModelCfg);
+
+
         }
 
         public void CloseApplication()

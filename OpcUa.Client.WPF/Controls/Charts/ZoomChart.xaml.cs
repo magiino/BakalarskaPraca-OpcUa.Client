@@ -12,6 +12,14 @@ namespace OpcUa.Client.WPF
         public ZoomChart()
         {
             InitializeComponent();
+
+            IoC.Messenger.Register<SendResetAxises>((msg) =>
+            {
+                X.MinValue = double.NaN;
+                X.MaxValue = double.NaN;
+                Y.MinValue = double.NaN;
+                Y.MaxValue = double.NaN;
+            });
         }
 
         private void ListView_SelectionChanged(object sender, SelectionChangedEventArgs e)

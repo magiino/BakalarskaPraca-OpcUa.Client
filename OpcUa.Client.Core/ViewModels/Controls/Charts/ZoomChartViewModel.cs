@@ -16,11 +16,6 @@ namespace OpcUa.Client.Core
         public SeriesCollection SeriesCollection { get; set; } = new SeriesCollection();
         public ObservableCollection<VariableEntity> Variables { get; set; }
 
-        //public VariableEntity SelectedVariable
-        //{
-        //    set => ShowChosenVariable(value);
-        //}
-
         public List<VariableEntity> SelectedVariables
         {
             set => ShowChosenVariables(value);
@@ -33,44 +28,20 @@ namespace OpcUa.Client.Core
         public double YAxisMax { get; set; } = double.NaN;
 
         public Func<double, string> XFormatter { get; set; }
-        public ZoomingOptions ZoomingMode { get; set; }
+        public ZoomingOptions ZoomingMode { get; set; } = ZoomingOptions.Xy;
 
         public ICommand ResetZoomCommand { get; set; }
-        public ICommand ToogleZoomModeCommand { get; set; }
 
         public ZoomChartViewModel(IUnitOfWork unityOfWork)
         {
             _unityOfWork = unityOfWork;
 
             XFormatter = value => new DateTime((long)value).ToString("dd MMM H:mm:ss");
-
             OnLoad();
 
-            ResetZoomCommand = new RelayCommand(ResetZoom);
-            ToogleZoomModeCommand = new RelayCommand(ToogleZoomMode);
+            ResetZoomCommand = new RelayCommand(() => IoC.Messenger.Send(new SendResetAxises()) );
+            MessengerInstance.Register<SendManageArchivedValue>(msg => ManageArchiveVariables(msg.Delete, msg.Variable));
         }
-
-        //private void ShowChosenVariable(VariableEntity selectedVariable)
-        //{
-        //    SeriesCollection.Clear();
-
-        //    var values = new ChartValues<DateTimePoint>(selectedVariable.Records.Select(x => new DateTimePoint()
-        //    {
-        //        Value = Convert.ToDouble(x.Value),
-        //        DateTime = x.ArchiveTime
-        //    }));
-
-        //    SeriesCollection.Add(
-        //        new LineSeries()
-        //        {
-        //            Title = selectedVariable.Name,
-        //            Values = values,
-        //            PointGeometrySize = 15,
-        //            PointGeometry = DefaultGeometries.Cross,
-        //            Fill = Brushes.Transparent
-        //        }
-        //    );
-        //}
 
         private void ShowChosenVariables(List<VariableEntity> selectedVariables)
         {
@@ -97,38 +68,24 @@ namespace OpcUa.Client.Core
             }
         }
 
-        private void ResetZoom()
+        private void ManageArchiveVariables(bool delete, VariableEntity variable)
         {
-            XAxisMin = double.NaN;
-            XAxisMax = double.NaN;
-            YAxisMin = double.NaN;
-            YAxisMax = double.NaN;
-        }
-
-        private void ToogleZoomMode()
-        {
-            switch (ZoomingMode)
+            if (delete)
             {
-                case ZoomingOptions.None:
-                    ZoomingMode = ZoomingOptions.X;
-                    break;
-                case ZoomingOptions.X:
-                    ZoomingMode = ZoomingOptions.Y;
-                    break;
-                case ZoomingOptions.Y:
-                    ZoomingMode = ZoomingOptions.Xy;
-                    break;
-                case ZoomingOptions.Xy:
-                    ZoomingMode = ZoomingOptions.None;
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
+                Variables.Remove(variable);
+                var seriesToDelete = SeriesCollection.SingleOrDefault(x => x.Title == variable.Name);
+                SeriesCollection.Remove(seriesToDelete);
+            }
+            else
+            {
+                Variables.Add(variable);
             }
         }
 
         private void OnLoad()
         {
             var variables = _unityOfWork.Variables.Find(x => x.ProjectId == IoC.AppManager.ProjectId);
+            if (variables == null) return;
             Variables = new ObservableCollection<VariableEntity>(variables);
         }
     }

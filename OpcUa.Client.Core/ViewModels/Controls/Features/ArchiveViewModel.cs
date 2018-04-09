@@ -46,7 +46,7 @@ namespace OpcUa.Client.Core
             _unitOfWork = unitOfWork;
             _uaClientApi = uaClientApi;
 
-            _subscription = _uaClientApi.Subscribe(2000, "Archivation");
+            _subscription = _uaClientApi.Subscribe(2000, "Archivation", false);
 
             LoadDataFromDataBase();
             RegisterLoadedNodes();
@@ -75,9 +75,9 @@ namespace OpcUa.Client.Core
 
             if (interval == ArchiveInterval.None)
             {
+                _subscription.PublishingEnabled = true;
                 _subscription.SetMonitoringMode(MonitoringMode.Reporting, _subscription.MonitoredItems.ToList());
                 _subscription.ApplyChanges();
-                // spustim timer ktory doplni hodnotu s aktualnym casom ak sa ta hodnota behom 5s nenacita
             }
             else
             {
@@ -93,6 +93,7 @@ namespace OpcUa.Client.Core
             var interval = SelectedArchiveInfo.ArchiveInterval;
             if (interval == ArchiveInterval.None)
             {
+                _subscription.PublishingEnabled = false;
                 _subscription.SetMonitoringMode(MonitoringMode.Disabled, _subscription.MonitoredItems.ToList());
                 _subscription.ApplyChanges();
             }
@@ -123,6 +124,7 @@ namespace OpcUa.Client.Core
             };
             _unitOfWork.Variables.Add(tmp);
             _unitOfWork.Complete();
+            MessengerInstance.Send(new SendManageArchivedValue(false, tmp));
             ArchiveVariables.Add(tmp);
 
             if (interval != ArchiveInterval.None)
@@ -156,6 +158,8 @@ namespace OpcUa.Client.Core
 
             // Vymazanie z databaze
             _unitOfWork.Variables.Remove(SelectedArchiveVariable);
+            MessengerInstance.Send(new SendManageArchivedValue(true, SelectedArchiveVariable));
+
             // Najdenie indexu
             var index = ArchiveVariables.IndexOf(SelectedArchiveVariable);
             // Vymazanie z tabulky

@@ -35,11 +35,11 @@
                                         />
                     </TabItem>
 
-                    <TabItem Header="PLC info">
+                    <!--<TabItem Header="PLC info">
                     </TabItem>
 
                     <TabItem Header="Server info">
-                    </TabItem>
+                    </TabItem>-->
 
                 </TabControl>
 
@@ -66,10 +66,6 @@
 
                     <TabItem Header="Zoom Chart">
                         <local:ZoomChart DataContext="{Binding ZoomChartViewModel}"/>
-                    </TabItem>
-
-                    <TabItem Header="ZoomChart 2">
-                        <local:ZoomChartCodeBehind/>
                     </TabItem>
 
                     <TabItem Header="Live Chart">

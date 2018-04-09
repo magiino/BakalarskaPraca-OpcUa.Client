@@ -2,8 +2,9 @@
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
+using System.Windows.Media;
 using LiveCharts;
-using LiveCharts.Configurations;
+using LiveCharts.Defaults;
 using LiveCharts.Wpf;
 using Opc.Ua;
 using Opc.Ua.Client;
@@ -21,10 +22,6 @@ namespace OpcUa.Client.Core
         private readonly UaClientApi _uaClientApi;
         private ReferenceDescription _selectedNode;
         private readonly Subscription _subscription;
-        // TODO spravit globalny
-        private readonly CartesianMapper<MeasureModel> _configuration = Mappers.Xy<MeasureModel>()
-            .X(model => model.DateTime.Ticks)
-            .Y(model => model.Value);
 
         public SeriesCollection SeriesCollection { get; set; } = new SeriesCollection();
         public ObservableCollection<VariableLiveChartModel> Variables { get; set; } = new ObservableCollection<VariableLiveChartModel>();
@@ -58,7 +55,6 @@ namespace OpcUa.Client.Core
 
         private void AddVariable()
         {
-            var r = new Random();
             var variable = new VariableLiveChartModel()
             {
                 Name = _selectedNode.DisplayName.ToString(),
@@ -66,18 +62,13 @@ namespace OpcUa.Client.Core
             };
 
             SeriesCollection.Add(
-                new LineSeries(_configuration)
+                new LineSeries()
                 {
                     Title = variable.Name,
-                    Values = new ChartValues<MeasureModel>(),
+                    Values = new ChartValues<DateTimePoint>(),
                     PointGeometrySize = 15,
                     PointGeometry = DefaultGeometries.Cross,
-                    //PointForeground = new SolidColorBrush(Color.FromRgb((byte)r.Next(1, 255),
-                    //    (byte)r.Next(1, 255), (byte)r.Next(1, 233))),
-                    //LineSmoothness = 1,
-                    //StrokeThickness = 3,
-                    //Stroke = Brushes.Aqua,
-                    //Fill = Brushes.Transparent
+                    Fill = Brushes.Transparent
                 }
             );
 
@@ -97,8 +88,8 @@ namespace OpcUa.Client.Core
 
         private void SetAxisLimits(DateTime now)
         {
-            AxisMax = now.Ticks + TimeSpan.FromSeconds(10).Ticks; // lets force the axis to be 1 second ahead
-            AxisMin = now.Ticks - TimeSpan.FromSeconds(120).Ticks; // and 8 seconds behind
+            AxisMax = now.Ticks + TimeSpan.FromSeconds(2).Ticks; // lets force the axis to be 5 second ahead
+            AxisMin = now.Ticks - TimeSpan.FromSeconds(60).Ticks; // and 20 seconds behind
         }
 
         #region Can use methods
@@ -144,7 +135,7 @@ namespace OpcUa.Client.Core
 
             // OSetrit ak niekto da stringovu premennu
             var index = Variables.IndexOf(variable);
-            SeriesCollection[index].Values.Add(new MeasureModel()
+            SeriesCollection[index].Values.Add(new DateTimePoint()
             {
                 Value = Convert.ToDouble(value.Value),
                 DateTime = time,
@@ -152,7 +143,7 @@ namespace OpcUa.Client.Core
 
             SetAxisLimits(DateTime.Now);
 
-            if (SeriesCollection[index].Values.Count > 200)
+            if (SeriesCollection[index].Values.Count > 100)
                 SeriesCollection[index].Values.RemoveAt(0);
         }
 

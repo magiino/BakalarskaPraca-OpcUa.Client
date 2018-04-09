@@ -24,6 +24,7 @@
                 <wpf:Axis LabelFormatter="{Binding XFormatter}" 
                           MinValue="{Binding XAxisMin}"
                           MaxValue="{Binding XAxisMax}"
+                          Name="X"
                           Separator="{x:Static wpf:DefaultAxes.CleanSeparator}"
                           >
                 </wpf:Axis>
@@ -47,14 +48,14 @@
                     Padding="10 5"
                     Command="{Binding ResetZoomCommand}"
                     />
-            <Button Grid.Row="1"
+            <!--<Button Grid.Row="1"
                     Padding="10 5"
                     Command="{Binding ToogleZoomModeCommand}"
                     >
                 <TextBlock>Zoming mode: 
                     <TextBlock Text="{Binding ZoomingMode, Converter={local:ZoomingModeCoverter}}"/>
                 </TextBlock>
-            </Button>
+            </Button>-->
 
             <ListView Grid.Row="2"
                       ItemsSource="{Binding Variables}"
