@@ -104,15 +104,15 @@ namespace OpcUa.Client.Core
 
         private void LoadProjects()
         {
-            var projectsEntities = _unitOfWork.Projects.GetAll();
+            var projectsEntities = _unitOfWork.Projects.GetAllWithEndpoints();
 
             // TODO preco sa mi nenacita ta referencia na endpoint
             if (projectsEntities == null) return;
 
-            foreach (var project in projectsEntities)
-            {
-                project.Endpoint = _unitOfWork.Endpoints.SingleOrDefault(x => x.Id == project.EndpointId);
-            }
+            //foreach (var project in projectsEntities)
+            //{
+            //    project.Endpoint = _unitOfWork.Endpoints.SingleOrDefault(x => x.Id == project.EndpointId);
+            //}
 
             Projects = new ObservableCollection<ProjectModel>(Mapper.ProjectToListModel(projectsEntities));
         }

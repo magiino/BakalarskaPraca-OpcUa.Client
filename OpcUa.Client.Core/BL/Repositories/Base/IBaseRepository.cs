@@ -8,7 +8,7 @@ namespace OpcUa.Client.Core
     public interface IBaseRepository<TEntity> where TEntity : class, IEntity
     {
         TEntity GetById(int id);
-        IEnumerable<TEntity> GetAll();
+        IEnumerable<TEntity> GetAllWithEndpoints();
         IEnumerable<TEntity> Find(Expression<Func<TEntity, bool>> predicate);
         TEntity SingleOrDefault(Expression<Func<TEntity, bool>> predicate);
 
