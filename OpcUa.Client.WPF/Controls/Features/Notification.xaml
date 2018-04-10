@@ -7,13 +7,56 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="400">
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="auto"/>
+        </Grid.ColumnDefinitions>
 
-        <!-- ListView of notifications -->
+        <local:NotificationList DataContext="{Binding NotificationListVm}"/>
+
+        <!-- Buttons -->
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Button Grid.Row="0"
+                    Content="Add"
+                    Padding="10 5"
+                    Command="{Binding AddNotificationCommand}"
+                    />
+            <Button Grid.Row="1"
+                    Content="Delete"
+                    Padding="10 5"
+                    Command="{Binding RemoveNotificationCommand}"
+                    />
+            <ListView Grid.Row="2"
+                      ItemsSource="{Binding Notifications}"
+                      SelectedItem="{Binding SelectedNotification}"
+                      Background="Transparent"
+                      SelectionMode="Single"
+                      BorderThickness="0"
+                      >
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <Border BorderThickness="1">
+                            <TextBlock Padding="10 5"
+                                           VerticalAlignment="Center" 
+                                           Text="{Binding Name}"
+                                           />
+                        </Border>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+
+        </Grid>
+    </Grid>
+</UserControl>
+
+
+<!-- ListView of notifications -->
+<!--
         <DataGrid ItemsSource="{Binding Notifications}"
                   Background="{StaticResource BackgroundLightBrush}"
                   SelectedItem="{Binding SelectedNotification}"
@@ -31,36 +74,11 @@
                   >
             <DataGrid.Columns>
                 <DataGridTextColumn Width="*" Binding="{Binding Name}"/>
-                <DataGridTextColumn Width="*" Binding="{Binding Value}"/>
+                -->
+<!--<DataGridTextColumn Width="*" Binding="{Binding Value}"/>
                 <DataGridTextColumn Width="*" Binding="{Binding DataType}"/>
                 <DataGridTextColumn Width="*" Binding="{Binding StatusCode}"/>
-                <DataGridTextColumn Width="*" Binding="{Binding SourceDateTime}"/>
+                <DataGridTextColumn Width="*" Binding="{Binding SourceDateTime}"/>-->
+<!--
             </DataGrid.Columns>
-        </DataGrid>
-
-        <!-- Separator -->
-        <Separator Grid.Row="1"
-                   Margin="0 0 0 5"/>
-
-        <!-- Buttons -->
-        <Grid Grid.Row="2">
-            <Grid.ColumnDefinitions >
-                <ColumnDefinition Width="auto"/>
-                <ColumnDefinition Width="auto"/>
-                <ColumnDefinition Width="auto"/>
-                <ColumnDefinition Width="auto"/>
-            </Grid.ColumnDefinitions>
-
-            <StackPanel Grid.Column="1">
-                <Button Content="Add Notification"
-                        Padding="10 5"
-                        Command="{Binding AddNotificationCommand}"
-                        />
-                <Button Content="Delete Notification"
-                        Padding="10 5"
-                        Command="{Binding RemoveNotificationCommand}"
-                        />
-            </StackPanel>
-        </Grid>
-    </Grid>
-</UserControl>
+        </DataGrid>-->

@@ -103,6 +103,9 @@
     <Compile Include="Controls\Features\Notification.xaml.cs">
       <DependentUpon>Notification.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\Features\Notifications\NotificationList.xaml.cs">
+      <DependentUpon>NotificationList.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\Features\Notifications\NotificationMessage.xaml.cs">
       <DependentUpon>NotificationMessage.xaml</DependentUpon>
     </Compile>
@@ -179,6 +182,10 @@
     <Page Include="Controls\Features\Notification.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\Features\Notifications\NotificationList.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\Features\Notifications\NotificationMessage.xaml">
       <SubType>Designer</SubType>

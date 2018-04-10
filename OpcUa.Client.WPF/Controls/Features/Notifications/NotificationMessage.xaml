@@ -70,7 +70,8 @@
                                 </Border>
                                 <!-- Confirm -->
                                 <CheckBox Grid.Column="2"
-                                          VerticalAlignment="Center">
+                                          VerticalAlignment="Center"
+                                          Command="{Binding ConfirmCommand}">
 
                                 </CheckBox>
 

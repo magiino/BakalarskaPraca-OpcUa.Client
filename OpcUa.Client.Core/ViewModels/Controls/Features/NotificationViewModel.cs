@@ -19,6 +19,7 @@ namespace OpcUa.Client.Core
 
         #region Public Properties
 
+        public NotificationListViewModel NotificationListVm { get; set; } = new NotificationListViewModel();
         public ObservableCollection<ExtendedNotificationModel> Notifications { get; set; } = new ObservableCollection<ExtendedNotificationModel>();
         public ExtendedNotificationModel SelectedNotification { get; set; }
 
@@ -168,6 +169,8 @@ namespace OpcUa.Client.Core
             variable.Value = value.Value;
             variable.StatusCode = value.StatusCode;
             variable.SourceDateTime = value.SourceTimestamp;
+
+            NotificationListVm.Items.Add(new NotificationMessageViewModel(variable));
         }
 
         #endregion

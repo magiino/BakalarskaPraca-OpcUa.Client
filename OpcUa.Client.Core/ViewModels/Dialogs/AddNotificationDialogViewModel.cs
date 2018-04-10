@@ -8,7 +8,6 @@ namespace OpcUa.Client.Core
     {
         public string Name { get; set; }
         public string NodeId { get; set; }
-        //public string Description { get; set; }
         public bool IsDigital { get; set; }
         public string FilterValue { get; set; } = "0";
         private DeadbandType _selectedFilterType;
@@ -36,25 +35,13 @@ namespace OpcUa.Client.Core
             {
                 notification.IsZeroDescription = IsZeroDescription;
                 notification.IsOneDescription = IsOneDescription;
+                notification.IsDigital = true;
             }
             else
             {
                 notification.FilterValue = Convert.ToDouble(FilterValue);
                 notification.DeadbandType = _selectedFilterType;
             }
-
-            //if (IsDigital)
-            //    notification = new DigitalNotificationModel()
-            //    {
-            //        IsZeroDescription = IsZeroDescription,
-            //        IsOneDescription = IsOneDescription,
-            //    };
-            //else
-            //    notification = new AnalogNotificationModel()
-            //    {
-            //        FilterValue = Convert.ToDouble(FilterValue),
-            //        DeadbandType = _selectedFilterType
-            //    };
 
             notification.Name = Name;
             notification.NodeId = NodeId;
