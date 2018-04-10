@@ -100,6 +100,12 @@
     <Compile Include="Controls\Charts\ZoomChart.xaml.cs">
       <DependentUpon>ZoomChart.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\Features\Notification.xaml.cs">
+      <DependentUpon>Notification.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Features\Notifications\NotificationMessage.xaml.cs">
+      <DependentUpon>NotificationMessage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\Menu\MenuToolBar.xaml.cs">
       <DependentUpon>MenuToolBar.xaml</DependentUpon>
     </Compile>
@@ -120,9 +126,6 @@
     </Compile>
     <Compile Include="Controls\Charts\Chart.xaml.cs">
       <DependentUpon>Chart.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\Features\Notification.xaml.cs">
-      <DependentUpon>Notification.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\Features\TreeView.xaml.cs">
       <DependentUpon>TreeView.xaml</DependentUpon>
@@ -173,6 +176,14 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Controls\Features\Notification.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\Features\Notifications\NotificationMessage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\Menu\MenuToolBar.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -198,10 +209,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Controls\Charts\Chart.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Controls\Features\Notification.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
