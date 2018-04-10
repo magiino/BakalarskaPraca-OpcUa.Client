@@ -169,7 +169,6 @@
     <Compile Include="BL\Models\ExtendedNotificationModel.cs" />
     <Compile Include="ViewModels\Base\MixRelayCommand.cs" />
     <Compile Include="ViewModels\Controls\Charts\ZoomChartViewModel.cs" />
-    <Compile Include="ViewModels\Controls\Features\NotificationViewModel - Copy.cs" />
     <Compile Include="ViewModels\Dialogs\LogInDialogViewModel.cs" />
     <Compile Include="ViewModels\Dialogs\AddNotificationDialogViewModel.cs" />
     <Compile Include="ViewModels\Dialogs\Base\BaseDialogViewModel.cs" />

@@ -32,7 +32,7 @@ namespace OpcUa.Client.Core
             _uaClientApi = IoC.UaClientApi;
             _unitOfWork = IoC.UnitOfWork;
 
-            LoadProjects();
+            OnLoad();
 
             LoadProjectCommand = new RelayCommand(LoadProject);
             DeleteProjectCommand = new RelayCommand(DeleteProject);
@@ -90,7 +90,6 @@ namespace OpcUa.Client.Core
             }
             catch (Exception e)
             {
-
                 IoC.Ui.ShowMessage(new MessageBoxDialogViewModel()
                 {
                     Title = "Error",
@@ -98,22 +97,13 @@ namespace OpcUa.Client.Core
                     OkText = "ok"
                 });
             }
-
             IoC.Application.GoToPage(ApplicationPage.Main);
         }
 
-        private void LoadProjects()
+        private void OnLoad()
         {
             var projectsEntities = _unitOfWork.Projects.GetAllWithEndpoints();
-
-            // TODO preco sa mi nenacita ta referencia na endpoint
             if (projectsEntities == null) return;
-
-            //foreach (var project in projectsEntities)
-            //{
-            //    project.Endpoint = _unitOfWork.Endpoints.SingleOrDefault(x => x.Id == project.EndpointId);
-            //}
-
             Projects = new ObservableCollection<ProjectModel>(Mapper.ProjectToListModel(projectsEntities));
         }
     }
