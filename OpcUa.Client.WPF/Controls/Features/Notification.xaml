@@ -9,6 +9,7 @@
              d:DesignWidth="400">
     <Grid>
         <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="4*"/>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="auto"/>
         </Grid.ColumnDefinitions>
@@ -16,7 +17,7 @@
         <local:NotificationList DataContext="{Binding NotificationListVm}"/>
 
         <!-- Buttons -->
-        <Grid Grid.Column="1">
+        <Grid Grid.Column="2">
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="auto"/>

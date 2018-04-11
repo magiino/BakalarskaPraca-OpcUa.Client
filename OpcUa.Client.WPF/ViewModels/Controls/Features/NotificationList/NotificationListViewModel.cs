@@ -26,7 +26,8 @@ namespace OpcUa.Client.WPF
                     {
                         Message = msg.Message,
                         Name = msg.Name,
-                        Time = msg.Time
+                        NodeId = msg.NodeId,
+                        Time = msg.Time,
                     });
                 });
 

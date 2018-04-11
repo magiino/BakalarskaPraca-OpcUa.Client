@@ -1,4 +1,6 @@
-﻿namespace OpcUa.Client.WPF
+﻿using System;
+
+namespace OpcUa.Client.WPF
 {
     public class NotificationMessageDesignModel : NotificationMessageViewModel
     {
@@ -18,8 +20,10 @@
         /// </summary>
         public NotificationMessageDesignModel()
         {
-            Name = "ns=asdad;a=54a545";
-            Message = "This chat app is awesome! I bet it will be fast too";
+            Name = "Pocet Bedniciek";
+            NodeId = "ns=3;s=Int16DataItem";
+            Message = "Hodnota sa zmenila o 66!";
+            Time = new DateTime();
         }
 
         #endregion

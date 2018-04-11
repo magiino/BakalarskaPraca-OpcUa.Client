@@ -30,8 +30,7 @@
                           Unit="{Binding AxisUnit}"
                           >
                     <wpf:Axis.Separator>
-                        <wpf:Separator Step="{Binding AxisStep}"
-                                       />
+                        <wpf:Separator Step="{Binding AxisStep}"/>
                     </wpf:Axis.Separator>
                 </wpf:Axis>
             </wpf:CartesianChart.AxisX>
@@ -73,7 +72,6 @@
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
-
         </StackPanel>
     </Grid>
 </UserControl>

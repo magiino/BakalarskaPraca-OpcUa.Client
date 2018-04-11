@@ -180,9 +180,9 @@ namespace OpcUa.Client.WPF
             else if (variable.IsDigital && !(bool)value.Value)
                 message = variable.IsZeroDescription;
             else if (!variable.IsDigital)
-                message = $"Hodnota premennej {variable.Name} sa zmenila o {notification.Value.Value} {variable.DeadbandType.ToString()}";
+                message = $"Hodnota premennej sa zmenila o {variable.FilterValue} [{variable.DeadbandType.ToString()}] na {notification.Value.Value}. ";
 
-            _messenger.Send(new SendNotificationAdd(variable.Name, message, value.SourceTimestamp));
+            _messenger.Send(new SendNotificationAdd(variable.Name, variable.NodeId,message, value.SourceTimestamp));
         }
 
         #endregion

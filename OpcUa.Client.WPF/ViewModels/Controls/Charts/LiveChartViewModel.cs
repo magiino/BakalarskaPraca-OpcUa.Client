@@ -87,8 +87,8 @@ namespace OpcUa.Client.WPF
 
         private void SetAxisLimits(DateTime now)
         {
-            AxisMax = now.Ticks + TimeSpan.FromSeconds(2).Ticks; // lets force the axis to be 5 second ahead
-            AxisMin = now.Ticks - TimeSpan.FromSeconds(60).Ticks; // and 20 seconds behind
+            AxisMax = now.Ticks + TimeSpan.FromSeconds(2).Ticks;
+            AxisMin = now.Ticks - TimeSpan.FromSeconds(60).Ticks;
         }
 
         #region Can use methods
