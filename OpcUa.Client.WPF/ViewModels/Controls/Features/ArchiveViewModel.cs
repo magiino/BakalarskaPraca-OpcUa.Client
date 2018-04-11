@@ -112,7 +112,7 @@ namespace OpcUa.Client.WPF
                 ProjectId = IoC.AppManager.ProjectId
             };
             _unitOfWork.Variables.Add(tmp);
-            _unitOfWork.Complete();
+            //_unitOfWork.Complete();
             _messenger.Send(new SendManageArchivedValue(false, tmp));
             ArchiveVariables.Add(tmp);
 
@@ -225,7 +225,7 @@ namespace OpcUa.Client.WPF
 
             // Archivacia
             _unitOfWork.Records.AddRange(records);
-            _unitOfWork.Complete();
+            //_unitOfWork.Complete();
         }
 
         private bool IsTimerAlive(ArchiveInterval interval)
@@ -304,7 +304,7 @@ namespace OpcUa.Client.WPF
                 Value = value.Value.ToString()
             });
 
-            _unitOfWork.Complete();
+            //_unitOfWork.Complete();
         }
 
         #endregion

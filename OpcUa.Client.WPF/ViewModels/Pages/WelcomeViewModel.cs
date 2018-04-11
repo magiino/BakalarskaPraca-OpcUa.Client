@@ -71,7 +71,27 @@ namespace OpcUa.Client.WPF
 
         private void DeleteProject(object parameter)
         {
-            // TODO remove functionality
+            // TODO opztat sa uyivatela ci si je isty
+            var project = _unitOfWork.Projects.SingleOrDefault(x => x.Id == SelectedProject.Id);
+            _unitOfWork.Endpoints.Remove(project.Endpoint);
+            if(project.UserId != null)
+                //todo remove user
+
+            _unitOfWork.Projects.Remove(project);
+
+            var notifications = _unitOfWork.Notifications.Find(x => x.ProjectId == SelectedProject.Id);
+            _unitOfWork.Notifications.RemoveRange(notifications);
+
+            var variables = _unitOfWork.Variables.Find(x => x.ProjectId == SelectedProject.Id);
+
+            if (variables == null) return;
+
+            foreach (var variable in variables)
+                _unitOfWork.Records.RemoveRange(variable.Records);
+
+            _unitOfWork.Variables.RemoveRange(variables);
+
+            
         }
 
         private void Login(string userName, SecureString password)

@@ -68,6 +68,15 @@ namespace OpcUa.Client.WPF
                     DateTime = x.ArchiveTime
                 }));
 
+                // Get unsaved variables
+                var localValues = new ChartValues<DateTimePoint>(_unityOfWork.Records.Find(x => x.VariableId == variable.Id).Select(x => new DateTimePoint()
+                {
+                    Value = Convert.ToDouble(x.Value),
+                    DateTime = x.ArchiveTime
+                }));
+
+                values.AddRange(localValues);
+
                 SeriesCollection.Add(
                     new LineSeries()
                     {
