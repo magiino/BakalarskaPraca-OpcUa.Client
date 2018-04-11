@@ -4,14 +4,13 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:OpcUa.Client.WPF"
-             xmlns:core="clr-namespace:OpcUa.Client.Core;assembly=OpcUa.Client.Core"
              mc:Ignorable="d"
              Height="60"
              d:DesignWidth="300">
 
     <!-- Content -->
     <Grid Background="Transparent"
-          d:DataContext="{x:Static core:NotificationMessageDesignModel.Instance}"
+          d:DataContext="{x:Static local:NotificationMessageDesignModel.Instance}"
           >
         <Grid.ColumnDefinitions>
             <!-- Type of notification -->
@@ -26,7 +25,6 @@
         <Border Background="Red" 
                 Width="4"
                 HorizontalAlignment="Left"
-                Visibility="{Binding NewContentAvailable, Converter={local:BooleanToVisibilityConverter}, ConverterParameter=True}"
                 />
 
         <!-- Profile picture padding -->

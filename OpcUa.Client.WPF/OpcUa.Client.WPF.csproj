@@ -124,9 +124,6 @@
     <Compile Include="Controls\Charts\LiveChart.xaml.cs">
       <DependentUpon>LiveChart.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\Charts\ZoomChartCodeBehind.xaml.cs">
-      <DependentUpon>ZoomChartCodeBehind.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Controls\Charts\Chart.xaml.cs">
       <DependentUpon>Chart.xaml</DependentUpon>
     </Compile>
@@ -157,7 +154,6 @@
       <DependentUpon>DiscoverEndpoints.xaml</DependentUpon>
     </Compile>
     <Compile Include="IoC\UIManager.cs" />
-    <Compile Include="ValueConverters\ZoomingModeCoverter.cs" />
     <Compile Include="ValueConverters\OpacityConverter.cs" />
     <Compile Include="ValueConverters\BooleanToVisibilityConverter.cs" />
     <Compile Include="ValueConverters\BooleanConverter.cs" />
@@ -230,10 +226,6 @@
     <Page Include="Controls\Charts\LiveChart.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Controls\Charts\ZoomChartCodeBehind.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
     </Page>
     <Page Include="Controls\Charts\Chart.xaml">
       <SubType>Designer</SubType>
