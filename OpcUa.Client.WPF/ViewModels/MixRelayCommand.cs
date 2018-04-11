@@ -3,10 +3,6 @@ using System.Windows.Input;
 
 namespace OpcUa.Client.WPF
 {
-    /// <inheritdoc />
-    /// <summary>
-    /// A basic command that runs an Action with condition for execute
-    /// </summary>
     public class MixRelayCommand : ICommand
     {
         #region Private Members
