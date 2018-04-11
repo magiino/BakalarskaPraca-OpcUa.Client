@@ -1,18 +1,13 @@
 ﻿using System.Windows;
+using LiveCharts;
+using LiveCharts.Configurations;
+using LiveCharts.Defaults;
 using OpcUa.Client.Core;
 
 namespace OpcUa.Client.WPF
 {
-    /// <inheritdoc />
-    /// <summary>
-    /// Interaction logic for App.xaml
-    /// </summary>
     public partial class App : Application
     {
-        /// <inheritdoc />
-        /// <summary>
-        /// </summary>
-        /// <param name="e"></param>
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
@@ -30,6 +25,19 @@ namespace OpcUa.Client.WPF
             IoC.Configure();
 
             IoC.Kernel.Bind<IUIManager>().ToConstant(new UIManager());
+
+            // Set up mappers for charts globally
+
+            var dateTimePointCfg = Mappers.Xy<DateTimePoint>()
+                .X(model => model.DateTime.Ticks)
+                .Y(model => model.Value);
+            Charting.For<DateTimePoint>(dateTimePointCfg);
+
+
+            var measureModelCfg = Mappers.Xy<MeasureModel>()
+                .X(model => model.DateTime.Ticks)
+                .Y(model => model.Value);
+            Charting.For<MeasureModel>(measureModelCfg);
         }
     }
 }
