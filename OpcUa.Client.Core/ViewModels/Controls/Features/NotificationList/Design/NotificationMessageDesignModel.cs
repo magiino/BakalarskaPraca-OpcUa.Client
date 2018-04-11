@@ -16,7 +16,7 @@
         /// <summary>
         /// Default constructor
         /// </summary>
-        public NotificationMessageDesignModel() : base(null)
+        public NotificationMessageDesignModel()
         {
             Name = "ns=asdad;a=54a545";
             Message = "This chat app is awesome! I bet it will be fast too";

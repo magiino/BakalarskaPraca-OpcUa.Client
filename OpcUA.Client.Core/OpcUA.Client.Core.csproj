@@ -85,7 +85,8 @@
     <Compile Include="BL\IoC\Interfaces\IUIManager.cs" />
     <Compile Include="BL\IUnitOfWork.cs" />
     <Compile Include="BL\Messages\SendArchivedValue.cs" />
-    <Compile Include="BL\Messages\SendConfirm.cs" />
+    <Compile Include="BL\Messages\SendNotificationAdd.cs" />
+    <Compile Include="BL\Messages\SendNotificationDelete.cs" />
     <Compile Include="BL\Messages\SendNewNotification.cs" />
     <Compile Include="BL\Messages\SendCredentials.cs" />
     <Compile Include="BL\Messages\SendResetAxises.cs" />

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace OpcUa.Client.Core
 {
@@ -20,30 +21,30 @@ namespace OpcUa.Client.Core
         /// </summary>
         public NotificationListDesignModel()
         {
-            
-            //Items = new List<NotificationMessageViewModel>
-            //{
-            //    new NotificationMessageViewModel(null)
-            //    {
-            //        Name = "ns=asdad;a=54a545",
-            //        Message = "This chat app is awesome! I bet it will be fast too",
-            //    },
-            //    new NotificationMessageViewModel(null)
-            //    {
-            //        Name = "ns=asdad;a=54a545",
-            //        Message = "This chat app is awesome! I bet it will be fast too",
-            //    },
-            //    new NotificationMessageViewModel(null)
-            //    {
-            //        Name = "ns=asdad;a=54a545",
-            //        Message = "This chat app is awesome! I bet it will be fast too",
-            //    },
-            //    new NotificationMessageViewModel(null)
-            //    {
-            //        Name = "ns=asdad;a=54a545",
-            //        Message = "This chat app is awesome! I bet it will be fast too",
-            //    },
-            //};
+
+            Items = new ObservableCollection<NotificationMessageViewModel>()
+            {
+                new NotificationMessageViewModel
+                {
+                    Name = "ns=asdad;a=54a545",
+                    Message = "This chat app is awesome! I bet it will be fast too",
+                },
+                new NotificationMessageViewModel
+                {
+                    Name = "ns=asdad;a=54a545",
+                    Message = "This chat app is awesome! I bet it will be fast too",
+                },
+                new NotificationMessageViewModel
+                {
+                    Name = "ns=asdad;a=54a545",
+                    Message = "This chat app is awesome! I bet it will be fast too",
+                },
+                new NotificationMessageViewModel
+                {
+                    Name = "ns=asdad;a=54a545",
+                    Message = "This chat app is awesome! I bet it will be fast too",
+                },
+            };
         }
 
         #endregion

@@ -166,11 +166,22 @@ namespace OpcUa.Client.Core
 
             if (variable == null) return;
 
-            variable.Value = value.Value;
-            variable.StatusCode = value.StatusCode;
-            variable.SourceDateTime = value.SourceTimestamp;
+            var message = "";
+            if (variable.IsDigital && (bool)value.Value)
+                message = variable.IsOneDescription;
+            else if (variable.IsDigital && !(bool)value.Value)
+                message = variable.IsZeroDescription;
+            else if (!variable.IsDigital)
+                message = $"Hodnota premennej {variable.Name} sa zmenila o {notification.Value.Value} {variable.DeadbandType.ToString()}";
 
-            NotificationListVm.Items.Add(new NotificationMessageViewModel(variable));
+            var tmp = new NotificationMessageViewModel()
+            {
+                Message = message,
+                Name = variable.Name,
+                Time = value.SourceTimestamp
+            };
+
+            MessengerInstance.Send(new SendNotificationAdd(tmp));
         }
 
         #endregion
