@@ -13,6 +13,7 @@ namespace OpcUa.Client.Core
         public string Name { get; set; }
         [Required]
         [Index(IsUnique = true)]
+        [MaxLength(50)]
         public string NodeId { get; set; }
         public double FilterValue { get; set; }
         public DeadbandType DeadbandType { get; set; }

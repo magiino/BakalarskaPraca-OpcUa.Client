@@ -105,7 +105,6 @@ namespace OpcUa.Client.WPF
 
         private void OnLoad()
         {
-            var projects= _unitOfWork.Projects.GetAll();
             var projectsEntities = _unitOfWork.Projects.GetAllWithEndpoints();
 
             if (projectsEntities == null) return;

@@ -57,6 +57,10 @@
   <ItemGroup>
     <Compile Include="BL\IoC\Interfaces\IUIManager.cs" />
     <Compile Include="BL\Models\MeasureModel.cs" />
+    <Compile Include="DAL\Migrations\201804112202122_InitialCreate.cs" />
+    <Compile Include="DAL\Migrations\201804112202122_InitialCreate.Designer.cs">
+      <DependentUpon>201804112202122_InitialCreate.cs</DependentUpon>
+    </Compile>
     <Compile Include="ViewModels\Base\BaseViewModel.cs" />
     <Compile Include="BL\Messenger\IMessenger.cs" />
     <Compile Include="BL\IoC\Base\IoC.cs" />
@@ -78,14 +82,6 @@
     <Compile Include="BL\Repositories\Interfaces\IRecordRepository.cs" />
     <Compile Include="BL\Repositories\Interfaces\Base\IBaseRepository.cs" />
     <Compile Include="BL\AppManager.cs" />
-    <Compile Include="DAL\Migrations\201804011948019_NotificationEntityAdded.cs" />
-    <Compile Include="DAL\Migrations\201804011948019_NotificationEntityAdded.Designer.cs">
-      <DependentUpon>201804011948019_NotificationEntityAdded.cs</DependentUpon>
-    </Compile>
-    <Compile Include="DAL\Migrations\201804020018017_ProjectIdAddedToNotification.cs" />
-    <Compile Include="DAL\Migrations\201804020018017_ProjectIdAddedToNotification.Designer.cs">
-      <DependentUpon>201804020018017_ProjectIdAddedToNotification.cs</DependentUpon>
-    </Compile>
     <Compile Include="BL\Repositories\ProjectRepository.cs" />
     <Compile Include="BL\Repositories\NotificationRepository.cs" />
     <Compile Include="BL\Repositories\EndpointRepository.cs" />
@@ -96,26 +92,6 @@
     <Compile Include="DAL\Entities\ProjectEntity.cs" />
     <Compile Include="DAL\Entities\NotificationEntity.cs" />
     <Compile Include="BL\Mapper.cs" />
-    <Compile Include="DAL\Migrations\201803192156523_InitialCreate.cs" />
-    <Compile Include="DAL\Migrations\201803192156523_InitialCreate.Designer.cs">
-      <DependentUpon>201803192156523_InitialCreate.cs</DependentUpon>
-    </Compile>
-    <Compile Include="DAL\Migrations\201803252146502_VarDescriptionAdded.cs" />
-    <Compile Include="DAL\Migrations\201803252146502_VarDescriptionAdded.Designer.cs">
-      <DependentUpon>201803252146502_VarDescriptionAdded.cs</DependentUpon>
-    </Compile>
-    <Compile Include="DAL\Migrations\201803312039133_UserAndProjectEntityAdded.cs" />
-    <Compile Include="DAL\Migrations\201803312039133_UserAndProjectEntityAdded.Designer.cs">
-      <DependentUpon>201803312039133_UserAndProjectEntityAdded.cs</DependentUpon>
-    </Compile>
-    <Compile Include="DAL\Migrations\201804010052014_ProjectIdAddedToVariable.cs" />
-    <Compile Include="DAL\Migrations\201804010052014_ProjectIdAddedToVariable.Designer.cs">
-      <DependentUpon>201804010052014_ProjectIdAddedToVariable.cs</DependentUpon>
-    </Compile>
-    <Compile Include="DAL\Migrations\201804010144102_EndpointEntityAdded.cs" />
-    <Compile Include="DAL\Migrations\201804010144102_EndpointEntityAdded.Designer.cs">
-      <DependentUpon>201804010144102_EndpointEntityAdded.cs</DependentUpon>
-    </Compile>
     <Compile Include="DAL\Migrations\Configuration.cs" />
     <Compile Include="BL\Models\Lists\ArchiveListModel.cs" />
     <Compile Include="DAL\Entities\Base\BaseEntity.cs" />
@@ -172,29 +148,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="DAL\Migrations\201803192156523_InitialCreate.resx">
-      <DependentUpon>201803192156523_InitialCreate.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="DAL\Migrations\201803252146502_VarDescriptionAdded.resx">
-      <DependentUpon>201803252146502_VarDescriptionAdded.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="DAL\Migrations\201803312039133_UserAndProjectEntityAdded.resx">
-      <DependentUpon>201803312039133_UserAndProjectEntityAdded.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="DAL\Migrations\201804010052014_ProjectIdAddedToVariable.resx">
-      <DependentUpon>201804010052014_ProjectIdAddedToVariable.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="DAL\Migrations\201804010144102_EndpointEntityAdded.resx">
-      <DependentUpon>201804010144102_EndpointEntityAdded.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="DAL\Migrations\201804011948019_NotificationEntityAdded.resx">
-      <DependentUpon>201804011948019_NotificationEntityAdded.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="DAL\Migrations\201804020018017_ProjectIdAddedToNotification.resx">
-      <DependentUpon>201804020018017_ProjectIdAddedToNotification.cs</DependentUpon>
+    <EmbeddedResource Include="DAL\Migrations\201804112202122_InitialCreate.resx">
+      <DependentUpon>201804112202122_InitialCreate.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Fody.2.4.4\build\Fody.targets" Condition="Exists('..\packages\Fody.2.4.4\build\Fody.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

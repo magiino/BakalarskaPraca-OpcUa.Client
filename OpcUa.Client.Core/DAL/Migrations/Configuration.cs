@@ -11,6 +11,7 @@ namespace OpcUa.Client.Core.DAL
             AutomaticMigrationsEnabled = false;
             MigrationsDirectory = @"DAL\Migrations";
             MigrationsNamespace = "OpcUa.Client.Core.DAL.Migrations";
+            AutomaticMigrationDataLossAllowed = true;
         }
 
         protected override void Seed(DataContext context)
@@ -77,8 +78,8 @@ namespace OpcUa.Client.Core.DAL
                 Id = 8,
                 VariableId = 2,
                 Value = "33",
+                ArchiveTime = DateTime.Now + TimeSpan.FromSeconds(60)
             };
-            context.Records.AddOrUpdate(x => x.Id, record8);
 
             var record9 = new RecordEntity()
             {

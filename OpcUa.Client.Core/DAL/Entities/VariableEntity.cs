@@ -12,6 +12,7 @@ namespace OpcUa.Client.Core
         public Guid ProjectId { get; set; }
         [Required]
         [Index(IsUnique = true)]
+        [MaxLength(50)]
         public string Name { get; set; }
         public string Description { get; set; }
         public BuiltInType DataType { get; set; }

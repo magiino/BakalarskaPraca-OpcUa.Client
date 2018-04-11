@@ -7,7 +7,6 @@ namespace OpcUa.Client.Core
     public class EndpointEntity : BaseEntity
     {
         [Required]
-        [Index(IsUnique = true)]
         public string Url { get; set; }
         [Required]
         public string SecurityPolicyUri { get; set; }
