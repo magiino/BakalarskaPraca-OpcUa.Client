@@ -13,15 +13,21 @@ namespace OpcUa.Client.WPF
 {
     public class ZoomChartViewModel : BaseViewModel
     {
+
+        #region Private Fields
         private readonly IUnitOfWork _unityOfWork;
-        private readonly Messenger _messenger;
+        #endregion
+
+        #region Public Properties
+
         public SeriesCollection SeriesCollection { get; set; } = new SeriesCollection();
         public ObservableCollection<VariableEntity> Variables { get; set; }
-
         public List<VariableEntity> SelectedVariables
         {
             set => ShowChosenVariables(value);
         }
+
+        public Func<double, string> XFormatter { get; set; }
 
         public double XAxisMin { get; set; } = double.NaN;
         public double XAxisMax { get; set; } = double.NaN;
@@ -29,23 +35,27 @@ namespace OpcUa.Client.WPF
         public double YAxisMin { get; set; } = double.NaN;
         public double YAxisMax { get; set; } = double.NaN;
 
-        public Func<double, string> XFormatter { get; set; }
+        #endregion
+
+        #region Commands
         public ZoomingOptions ZoomingMode { get; set; } = ZoomingOptions.Xy;
-
         public ICommand ResetZoomCommand { get; set; }
+        #endregion
 
+        #region Constructor
         public ZoomChartViewModel(IUnitOfWork unityOfWork, Messenger messenger)
         {
-            _messenger = messenger;
             _unityOfWork = unityOfWork;
 
             XFormatter = value => new DateTime((long)value).ToString("dd MMM H:mm:ss");
             OnLoad();
 
-            ResetZoomCommand = new RelayCommand((obj) => IoC.Messenger.Send(new SendResetAxises()) );
-            _messenger.Register<SendManageArchivedValue>(msg => ManageArchiveVariables(msg.Delete, msg.Variable));
-        }
+            ResetZoomCommand = new MixRelayCommand((obj) => IoC.Messenger.Send(new SendResetAxises()));
+            messenger.Register<SendManageArchivedValue>(msg => ManageArchiveVariables(msg.Delete, msg.Variable));
+        } 
+        #endregion
 
+        #region Private Methods
         private void ShowChosenVariables(IEnumerable<VariableEntity> selectedVariables)
         {
             SeriesCollection.Clear();
@@ -70,7 +80,7 @@ namespace OpcUa.Client.WPF
                 );
             }
         }
-
+        
         private void ManageArchiveVariables(bool delete, VariableEntity variable)
         {
             if (delete)
@@ -84,12 +94,12 @@ namespace OpcUa.Client.WPF
                 Variables.Add(variable);
             }
         }
-
         private void OnLoad()
         {
             var variables = _unityOfWork.Variables.Find(x => x.ProjectId == IoC.AppManager.ProjectId);
             if (variables == null) return;
             Variables = new ObservableCollection<VariableEntity>(variables);
-        }
+        } 
+        #endregion
     }
 }

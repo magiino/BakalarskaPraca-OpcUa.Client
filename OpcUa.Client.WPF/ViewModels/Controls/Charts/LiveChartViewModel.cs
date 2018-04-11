@@ -14,12 +14,13 @@ namespace OpcUa.Client.WPF
 {
     public class LiveChartViewModel : BaseViewModel
     {
+        #region Private Fields
         private readonly UaClientApi _uaClientApi;
-        private readonly Messenger _messenger;
-
         private ReferenceDescription _selectedNode;
         private readonly Subscription _subscription;
+        #endregion
 
+        #region Public Properties
         public SeriesCollection SeriesCollection { get; set; } = new SeriesCollection();
         public ObservableCollection<VariableLiveChartModel> Variables { get; set; } = new ObservableCollection<VariableLiveChartModel>();
         public VariableLiveChartModel SelectedVariable { get; set; }
@@ -29,19 +30,22 @@ namespace OpcUa.Client.WPF
         public double AxisUnit { get; set; }
         public double AxisMax { get; set; }
         public double AxisMin { get; set; }
+        #endregion
 
+        #region Commands
         public ICommand AddCommand { get; set; }
         public ICommand RemoveCommand { get; set; }
+        #endregion
 
+        #region Constructor
         public LiveChartViewModel(UaClientApi uaClientApi, Messenger messenger)
         {
             _uaClientApi = uaClientApi;
-            _messenger = messenger;
 
             _subscription = _uaClientApi.Subscribe(2000, "LiveCharts");
 
-            AddCommand = new RelayCommand(AddVariable);
-            RemoveCommand = new RelayCommand(RemoveVariable);
+            AddCommand = new MixRelayCommand(AddVariable);
+            RemoveCommand = new MixRelayCommand(RemoveVariable);
 
             // Nastavenia grafu
             DateTimeFormatter = value => new DateTime((long)value).ToString("mm:ss");
@@ -49,9 +53,11 @@ namespace OpcUa.Client.WPF
             AxisUnit = TimeSpan.TicksPerSecond;
             SetAxisLimits(DateTime.Now);
 
-            _messenger.Register<SendSelectedRefNode>(msg => _selectedNode = msg.ReferenceNode);
+            messenger.Register<SendSelectedRefNode>(msg => _selectedNode = msg.ReferenceNode);
         }
+        #endregion
 
+        #region Command Methods
         private void AddVariable(object parameter)
         {
             var variable = new VariableLiveChartModel()
@@ -83,13 +89,8 @@ namespace OpcUa.Client.WPF
             SeriesCollection.RemoveAt(Variables.IndexOf(SelectedVariable));
             Variables.Remove(SelectedVariable);
             SelectedVariable = null;
-        }
-
-        private void SetAxisLimits(DateTime now)
-        {
-            AxisMax = now.Ticks + TimeSpan.FromSeconds(2).Ticks;
-            AxisMin = now.Ticks - TimeSpan.FromSeconds(60).Ticks;
-        }
+        } 
+        #endregion
 
         #region Can use methods
 
@@ -107,6 +108,14 @@ namespace OpcUa.Client.WPF
             return SelectedVariable != null;
         }
 
+        #endregion
+
+        #region Private Methods
+        private void SetAxisLimits(DateTime now)
+        {
+            AxisMax = now.Ticks + TimeSpan.FromSeconds(2).Ticks;
+            AxisMin = now.Ticks - TimeSpan.FromSeconds(60).Ticks;
+        } 
         #endregion
 
         #region CallBack Methods

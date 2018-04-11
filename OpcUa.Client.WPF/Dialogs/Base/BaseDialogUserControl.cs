@@ -50,7 +50,7 @@ namespace OpcUa.Client.WPF
             {
                 // Create a new dialog window
                 _dialogWindow = new DialogWindow();
-                _dialogWindow.ViewModel = new DialogWindowViewModel();
+                _dialogWindow.ViewModel = new WindowDialogViewModel();
             }
         }
 

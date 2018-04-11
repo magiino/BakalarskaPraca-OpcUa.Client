@@ -47,10 +47,8 @@ namespace OpcUa.Client.WPF
 
             NotificationListVm = new NotificationListViewModel();
 
-            //AddNotificationCommand = new RelayCommand(AddNotification);
-            AddNotificationCommand = new GalaSoft.MvvmLight.CommandWpf.RelayCommand(AddNotification, AddNotificationCanUse);
-            //RemoveNotificationCommand = new RelayCommand(RemoveNotification);
-            RemoveNotificationCommand = new GalaSoft.MvvmLight.CommandWpf.RelayCommand(RemoveNotification, RemoveNotificationCanUse);
+            AddNotificationCommand = new MixRelayCommand(AddNotification, AddNotificationCanUse);
+            RemoveNotificationCommand = new MixRelayCommand(RemoveNotification, RemoveNotificationCanUse);
 
             _messenger.Register<SendSelectedRefNode>(msg => _selectedNode = msg.ReferenceNode);
 
@@ -61,7 +59,7 @@ namespace OpcUa.Client.WPF
 
         #region Command Methods
 
-        private void AddNotification()
+        private void AddNotification(object parameter)
         {
             var isDigital = _uaClientApi.GetBuiltInTypeOfVariableNodeId(_selectedNode.NodeId.ToString()) == BuiltInType.Boolean;
 
@@ -72,7 +70,7 @@ namespace OpcUa.Client.WPF
             });
         }
 
-        private void RemoveNotification()
+        private void RemoveNotification(object parameter)
         {
             _uaClientApi.RemoveMonitoredItem(_subscription, SelectedNotification.NodeId);
             Notifications.Remove(SelectedNotification);
@@ -82,7 +80,7 @@ namespace OpcUa.Client.WPF
 
         #region Can use methods
 
-        public bool AddNotificationCanUse()
+        public bool AddNotificationCanUse(object parameter)
         {
             if (_selectedNode == null)
                 return false;
@@ -91,7 +89,7 @@ namespace OpcUa.Client.WPF
             else return true;
         }
 
-        public bool RemoveNotificationCanUse()
+        public bool RemoveNotificationCanUse(object parameter)
         {
             return SelectedNotification != null;
         }

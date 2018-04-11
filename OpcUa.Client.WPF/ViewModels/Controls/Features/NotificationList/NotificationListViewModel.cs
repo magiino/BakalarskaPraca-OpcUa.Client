@@ -12,12 +12,14 @@ namespace OpcUa.Client.WPF
 
         public NotificationListViewModel()
         {
+            // Removing notification after confirmation
             IoC.Messenger.Register<SendNotificationDelete>((msg) =>
             {
                 var itemToDelete = Items.SingleOrDefault(x => x.Guid == msg.Identifier);
                 Items.Remove(itemToDelete);
             });
 
+            // Adding notification when value changes
             IoC.Messenger.Register<SendNotificationAdd>((msg) =>
             {
                 Application.Current.Dispatcher.Invoke((Action)delegate
@@ -30,7 +32,6 @@ namespace OpcUa.Client.WPF
                         Time = msg.Time,
                     });
                 });
-
             });
         }
     }

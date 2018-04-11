@@ -22,7 +22,6 @@ namespace OpcUa.Client.WPF
 
         public NodeTreeViewModel()
         {
-            //TODO nepouzivat tu IOC?
             // Get the root nodes
             var children = IoC.UaClientApi.BrowseRoot();
             

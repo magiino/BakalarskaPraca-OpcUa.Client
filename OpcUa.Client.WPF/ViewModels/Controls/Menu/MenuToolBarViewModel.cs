@@ -6,7 +6,6 @@ namespace OpcUa.Client.WPF
     public class MenuToolBarViewModel : BaseViewModel
     { 
         #region Commands
-        //public ICommand ConnectSessionCommand { get; set; }
         public ICommand DisconnectSessionCommand { get; set; }
         public ICommand SaveProjectCommand { get; set; }
 
@@ -16,9 +15,8 @@ namespace OpcUa.Client.WPF
 
         public MenuToolBarViewModel()
         {
-
-            DisconnectSessionCommand = new RelayCommand(DisconnectSession);
-            SaveProjectCommand = new GalaSoft.MvvmLight.CommandWpf.RelayCommand(SaveProject, SaveprojectCanUse);
+            DisconnectSessionCommand = new MixRelayCommand(DisconnectSession);
+            SaveProjectCommand = new MixRelayCommand(SaveProject, SaveprojectCanUse);
         }
 
         #endregion
@@ -31,16 +29,20 @@ namespace OpcUa.Client.WPF
             IoC.Application.GoToPage(ApplicationPage.Welcome);
         }
 
-        private void SaveProject()
+        private void SaveProject(object parameter)
         {
             IoC.UnitOfWork.CompleteAsync();
         }
 
         #endregion
 
-        private bool SaveprojectCanUse()
+        #region CanUse methods
+
+        private bool SaveprojectCanUse(object parameter)
         {
             return IoC.UnitOfWork.HasUnsavedChanges();
-        }
+        } 
+
+        #endregion
     }
 }

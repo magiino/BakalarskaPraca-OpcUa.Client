@@ -27,7 +27,7 @@ namespace OpcUa.Client.WPF
         /// <summary>
         /// Indicates if this item can be expanded
         /// </summary>
-        public bool CanExpand => Type != NodeClass.Unspecified;       
+        public bool CanExpand => Type != NodeClass.Unspecified;
 
         /// <summary>
         /// Indicates if the current item is expanded or not
@@ -75,13 +75,9 @@ namespace OpcUa.Client.WPF
 
         #region Constructor
 
-        /// <summary>
-        /// Default constructor
-        /// </summary>
-        /// <param name="node"></param>
         public NodeTreeItemViewModel(ReferenceDescription node)
         {
-            ExpandCommand = new RelayCommand(Expand);
+            ExpandCommand = new MixRelayCommand(Expand);
 
             Node = node;
 

@@ -6,22 +6,12 @@ namespace OpcUa.Client.WPF
     public class NotificationListDesignModel : NotificationListViewModel
     {
         #region Singleton
-
-        /// <summary>
-        /// A single instance of the design model
-        /// </summary>
         public static NotificationListDesignModel Instance => new NotificationListDesignModel();
-
         #endregion
 
         #region Constructor
-
-        /// <summary>
-        /// Default constructor
-        /// </summary>
         public NotificationListDesignModel()
         {
-
             Items = new ObservableCollection<NotificationMessageViewModel>()
             {
                 new NotificationMessageViewModel
@@ -54,7 +44,6 @@ namespace OpcUa.Client.WPF
                 },
             };
         }
-
         #endregion
     }
 }

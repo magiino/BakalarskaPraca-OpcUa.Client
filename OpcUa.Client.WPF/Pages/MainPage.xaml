@@ -10,7 +10,6 @@
 
     <Border Background="{StaticResource ForegroundLightBrush}">
         <DockPanel>
-
             <StackPanel DockPanel.Dock="Top">
                 <local:MenuBar DataContext="{Binding MenuBarViewModel}"/>
                 <local:MenuToolBar DataContext="{Binding MenuToolBarViewModel}"/>
@@ -18,9 +17,9 @@
 
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
                 <!-- First Column-->
@@ -34,13 +33,6 @@
                                         DataContext="{Binding NodetreeViewModel}"
                                         />
                     </TabItem>
-
-                    <!--<TabItem Header="PLC info">
-                    </TabItem>
-
-                    <TabItem Header="Server info">
-                    </TabItem>-->
-
                 </TabControl>
 
                 <!-- Second Column-->

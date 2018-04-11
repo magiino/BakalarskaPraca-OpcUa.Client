@@ -37,9 +37,9 @@ namespace OpcUa.Client.WPF
 
             OnLoad();
 
-            LoadProjectCommand = new RelayCommand(LoadProject);
-            DeleteProjectCommand = new RelayCommand(DeleteProject);
-            CreateProjectCommand = new RelayCommand((obj) => IoC.Application.GoToPage(ApplicationPage.Endpoints));
+            LoadProjectCommand = new MixRelayCommand(LoadProject);
+            DeleteProjectCommand = new MixRelayCommand(DeleteProject);
+            CreateProjectCommand = new MixRelayCommand((obj) => IoC.Application.GoToPage(ApplicationPage.Endpoints));
 
             _messenger.Register<SendCredentials>(msg => Login(msg.UserName, msg.Password));
         }

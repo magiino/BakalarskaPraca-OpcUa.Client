@@ -7,12 +7,12 @@ namespace OpcUa.Client.WPF
 {
     public class NotificationMessageViewModel : BaseViewModel
     {
+        #region Public Properties
         public Guid Guid = Guid.NewGuid();
         public string Name { get; set; }
         public string NodeId { get; set; }
         public string Message { get; set; }
         public DateTime Time { get; set; }
-        public ICommand ConfirmCommand { get; set; }
 
         public Brush NotificationColor
         {
@@ -23,17 +23,24 @@ namespace OpcUa.Client.WPF
                     (byte)r.Next(1, 255), (byte)r.Next(1, 233)));
             }
         }
-           
+        #endregion
 
+        #region Commands
+        public ICommand ConfirmCommand { get; set; } 
+        #endregion
 
+        #region Constructor
         public NotificationMessageViewModel()
         {
-            ConfirmCommand = new RelayCommand(SendConfirm);
+            ConfirmCommand = new MixRelayCommand(SendConfirm);
         }
+        #endregion
 
+        #region Command Methods
         private void SendConfirm(object parameter)
         {
             IoC.Messenger.Send(new SendNotificationDelete(Guid));
-        }
+        } 
+        #endregion
     }
 }

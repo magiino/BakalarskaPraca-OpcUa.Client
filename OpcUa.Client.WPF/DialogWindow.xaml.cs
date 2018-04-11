@@ -12,7 +12,7 @@ namespace OpcUa.Client.WPF
         /// <summary>
         /// The view model for this window
         /// </summary>
-        private DialogWindowViewModel _viewModel;
+        private WindowDialogViewModel _viewModel;
 
         #endregion
 
@@ -21,7 +21,7 @@ namespace OpcUa.Client.WPF
         /// <summary>
         /// The view model for this window
         /// </summary>
-        public DialogWindowViewModel ViewModel
+        public WindowDialogViewModel ViewModel
         {
             get => _viewModel;
             set

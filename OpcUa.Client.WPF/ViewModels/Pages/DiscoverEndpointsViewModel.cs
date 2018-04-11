@@ -98,10 +98,10 @@ namespace OpcUa.Client.WPF
         {
             _uaClientApi = IoC.UaClientApi;
             
-            SearchCommand = new RelayCommand(SearchEndpoints);
-            ConnectCommand = new RelayParameterizedCommand(ConnectToServer);
-            StartFilterCommand = new RelayCommand(EndpointFilter);
-            LoadProjectCommand = new RelayCommand(LoadprojectPage);
+            SearchCommand = new MixRelayCommand(SearchEndpoints);
+            ConnectCommand = new MixRelayCommand(ConnectToServer);
+            StartFilterCommand = new MixRelayCommand(EndpointFilter);
+            LoadProjectCommand = new MixRelayCommand(LoadprojectPage);
         }
 
         #endregion

@@ -13,16 +13,14 @@ namespace OpcUa.Client.WPF
     public class ArchiveViewModel : BaseViewModel
     {
         #region Private Fields
-
         private readonly IUnitOfWork _unitOfWork;
         private readonly UaClientApi _uaClientApi;
         private readonly Messenger _messenger;
-        private readonly Subscription _subscription;
+        private Subscription _subscription;
 
         private ReferenceDescription _selectedNode;
         private readonly Dictionary<ArchiveInterval, Timer> _timers = new Dictionary<ArchiveInterval, Timer>();
         private List<ArchiveReadVariableModel> _registeredNodesForRead;
-
         #endregion
 
         #region Public Properties
@@ -42,37 +40,25 @@ namespace OpcUa.Client.WPF
         #endregion
 
         #region Constructor
-
         public ArchiveViewModel(IUnitOfWork unitOfWork, UaClientApi uaClientApi, Messenger messenger)
         {
             _unitOfWork = unitOfWork;
             _uaClientApi = uaClientApi;
             _messenger = messenger;
 
-            _subscription = _uaClientApi.Subscribe(2000, "Archivation", false);
-
-            LoadDataFromDataBase();
-            RegisterLoadedNodes();
-            InitializeArchiveTable();
-
-            //AddVariableToArchiveCommand = new RelayCommand(AddVariableToArchive);
-            //DeleteVariableFromArchiveCommand = new RelayCommand(DeleteVariableFromArchive);
-            //StartArchiveCommand = new RelayCommand(StartArchive);
-            //StopArchiveCommand = new RelayCommand(StopArchive);
-
-            AddVariableToArchiveCommand = new GalaSoft.MvvmLight.CommandWpf.RelayCommand(AddVariableToArchive, AddVariableCanUse);
-            DeleteVariableFromArchiveCommand = new GalaSoft.MvvmLight.CommandWpf.RelayCommand(DeleteVariableFromArchive, DeleteVariableCanUse);
-            StartArchiveCommand = new GalaSoft.MvvmLight.CommandWpf.RelayCommand(StartArchive, StartArchiveCanUse);
-            StopArchiveCommand = new GalaSoft.MvvmLight.CommandWpf.RelayCommand(StopArchive, StopArchiveCanUse);
+            OnLoad();
+           
+            AddVariableToArchiveCommand = new MixRelayCommand(AddVariableToArchive, AddVariableCanUse);
+            DeleteVariableFromArchiveCommand = new MixRelayCommand(DeleteVariableFromArchive, DeleteVariableCanUse);
+            StartArchiveCommand = new MixRelayCommand(StartArchive, StartArchiveCanUse);
+            StopArchiveCommand = new MixRelayCommand(StopArchive, StopArchiveCanUse);
 
             _messenger.Register<SendSelectedRefNode>(msg => _selectedNode = msg.ReferenceNode);
         }
-
         #endregion
 
         #region Command Methods
-
-        private void StartArchive()
+        private void StartArchive(object parameter)
         {
             var interval = SelectedArchiveInfo.ArchiveInterval;
 
@@ -91,7 +77,7 @@ namespace OpcUa.Client.WPF
             SelectedArchiveInfo.Running = true;
         }
 
-        private void StopArchive()
+        private void StopArchive(object parameter)
         {
             var interval = SelectedArchiveInfo.ArchiveInterval;
             if (interval == ArchiveInterval.None)
@@ -112,7 +98,7 @@ namespace OpcUa.Client.WPF
             SelectedArchiveInfo.Running = false;
         }
 
-        private void AddVariableToArchive()
+        private void AddVariableToArchive(object parameter)
         {
             var nodeId = _selectedNode.NodeId.ToString();
             var type = _uaClientApi.GetBuiltInTypeOfVariableNodeId(nodeId);
@@ -151,7 +137,7 @@ namespace OpcUa.Client.WPF
             SelectedArchiveInfo.VariablesCount++;
         }
 
-        private void DeleteVariableFromArchive()
+        private void DeleteVariableFromArchive(object parameter)
         {
             var interval = SelectedArchiveVariable.Archive;
 
@@ -180,8 +166,7 @@ namespace OpcUa.Client.WPF
         #endregion
 
         #region Can use methods
-
-        public bool DeleteVariableCanUse()
+        public bool DeleteVariableCanUse(object parameter)
         {
             ArchiveListModel first = null;
             foreach (var x in ArchiveInfo)
@@ -194,25 +179,32 @@ namespace OpcUa.Client.WPF
             return first != null && (SelectedArchiveVariable != null && !first.Running);
         }
 
-        public bool AddVariableCanUse()
+        public bool AddVariableCanUse(object parameter)
         {
             return _selectedNode != null && SelectedArchiveInfo != null &&
                    _selectedNode.NodeClass == NodeClass.Variable && !SelectedArchiveInfo.Running;
         }
 
-        public bool StartArchiveCanUse()
+        public bool StartArchiveCanUse(object parameter)
         {
             return SelectedArchiveInfo != null && !SelectedArchiveInfo.Running && SelectedArchiveInfo.VariablesCount != 0;
         }
 
-        public bool StopArchiveCanUse()
+        public bool StopArchiveCanUse(object parameter)
         {
             return SelectedArchiveInfo != null && SelectedArchiveInfo.Running;
         }
-
         #endregion
 
         #region Private Methods
+        private void OnLoad()
+        {
+            _subscription = _uaClientApi.Subscribe(2000, "Archivation", false);
+
+            LoadDataFromDataBase();
+            RegisterLoadedNodes();
+            InitializeArchiveTable();
+        }
 
         private void Archive(object objectInfo)
         {

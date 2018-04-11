@@ -7,7 +7,9 @@ namespace OpcUa.Client.WPF
     public class MenuBarViewModel : BaseViewModel
     {
         #region Private Fields
+
         private ApplicationPage _goTo;
+
         #endregion
 
         #region Commands
@@ -24,11 +26,11 @@ namespace OpcUa.Client.WPF
 
         public MenuBarViewModel()
         {
-            NewProjectCommand = new RelayCommand((obj) => GoToPageIfSaved(ApplicationPage.Endpoints));
-            SaveProjectCommand = new GalaSoft.MvvmLight.CommandWpf.RelayCommand(() => IoC.UnitOfWork.CompleteAsync(), SaveprojectCanUse);
-            OpenProjectCommand = new RelayCommand((obj) => GoToPageIfSaved(ApplicationPage.Welcome));
-            ExitApplicationCommand = new RelayCommand((obj) => IoC.AppManager.CloseApplication());
-            OpenGitHubCommand = new RelayCommand((obj) => Process.Start("https://github.com/magiino/BakalarskaPraca-OpcUa.Client"));
+            NewProjectCommand = new MixRelayCommand((obj) => GoToPageIfSaved(ApplicationPage.Endpoints));
+            SaveProjectCommand = new MixRelayCommand((obj) => IoC.UnitOfWork.CompleteAsync(), SaveprojectCanUse);
+            OpenProjectCommand = new MixRelayCommand((obj) => GoToPageIfSaved(ApplicationPage.Welcome));
+            ExitApplicationCommand = new MixRelayCommand((obj) => IoC.AppManager.CloseApplication());
+            OpenGitHubCommand = new MixRelayCommand((obj) => Process.Start("https://github.com/magiino/BakalarskaPraca-OpcUa.Client"));
         }
 
         #endregion
@@ -68,7 +70,7 @@ namespace OpcUa.Client.WPF
             });
         }
 
-        private bool SaveprojectCanUse()
+        private bool SaveprojectCanUse(object parameter)
         {
             return IoC.UnitOfWork.HasUnsavedChanges();
         }
