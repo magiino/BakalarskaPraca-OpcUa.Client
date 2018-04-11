@@ -85,13 +85,13 @@
     <Compile Include="BL\IoC\Interfaces\IUIManager.cs" />
     <Compile Include="BL\IUnitOfWork.cs" />
     <Compile Include="BL\Messages\SendArchivedValue.cs" />
+    <Compile Include="BL\Messages\SendNotificationAdd.cs" />
+    <Compile Include="BL\Messages\SendNotificationDelete.cs" />
     <Compile Include="BL\Messages\SendNewNotification.cs" />
     <Compile Include="BL\Messages\SendCredentials.cs" />
     <Compile Include="BL\Messages\SendResetAxises.cs" />
     <Compile Include="BL\Messenger.cs" />
     <Compile Include="BL\Models\Details\ProjectModel.cs" />
-    <Compile Include="BL\Models\AnalogNotificationModel.cs" />
-    <Compile Include="BL\Models\DigitalNotificationModel.cs" />
     <Compile Include="BL\Models\UserModel.cs" />
     <Compile Include="BL\Models\VariableLiveChartModel.cs" />
     <Compile Include="BL\Repositories\IProjectRepository.cs" />
@@ -169,6 +169,10 @@
     <Compile Include="BL\Models\ExtendedNotificationModel.cs" />
     <Compile Include="ViewModels\Base\MixRelayCommand.cs" />
     <Compile Include="ViewModels\Controls\Charts\ZoomChartViewModel.cs" />
+    <Compile Include="ViewModels\Controls\Features\NotificationList\Design\NotificationListDesignModel.cs" />
+    <Compile Include="ViewModels\Controls\Features\NotificationList\Design\NotificationMessageDesignModel.cs" />
+    <Compile Include="ViewModels\Controls\Features\NotificationList\NotificationListViewModel.cs" />
+    <Compile Include="ViewModels\Controls\Features\NotificationList\NotificationMessageViewModel.cs" />
     <Compile Include="ViewModels\Dialogs\LogInDialogViewModel.cs" />
     <Compile Include="ViewModels\Dialogs\AddNotificationDialogViewModel.cs" />
     <Compile Include="ViewModels\Dialogs\Base\BaseDialogViewModel.cs" />
