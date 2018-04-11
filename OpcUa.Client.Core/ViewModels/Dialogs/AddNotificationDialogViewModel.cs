@@ -6,6 +6,7 @@ namespace OpcUa.Client.Core
 {
     public class AddNotificationDialogViewModel : BaseDialogViewModel
     {
+        private readonly Messenger _messenger;
         public string Name { get; set; }
         public string NodeId { get; set; }
         public bool IsDigital { get; set; }
@@ -14,7 +15,7 @@ namespace OpcUa.Client.Core
         public int SelectedFilterType
         {
             get => 0;
-            set => _selectedFilterType = (DeadbandType)(value + 1);
+            set => _selectedFilterType = (DeadbandType)(value);
         }
 
         public string IsZeroDescription { get; set; }
@@ -22,12 +23,14 @@ namespace OpcUa.Client.Core
 
         public ICommand AddItemCommand { get; set; }
 
-        public AddNotificationDialogViewModel()
+        public AddNotificationDialogViewModel(Messenger messenger)
         {
+            _messenger = messenger;
+
             AddItemCommand = new RelayCommand(AddItem);
         }
 
-        private void AddItem()
+        private void AddItem(object parameter)
         {
             var notification = new ExtendedNotificationModel();
 
@@ -46,7 +49,7 @@ namespace OpcUa.Client.Core
             notification.Name = Name;
             notification.NodeId = NodeId;
             
-            MessengerInstance.Send(new SendNewNotification(notification));
+            _messenger.Send(new SendNewNotification(notification));
             CloseAction.Invoke();
         }
     }

@@ -1,4 +1,5 @@
 ﻿using System;
+using OpcUa.Client.Core;
 
 namespace OpcUa.Client.Core
 {

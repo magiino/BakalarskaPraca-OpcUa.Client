@@ -1,4 +1,4 @@
-﻿<local:BasePage x:TypeArguments="core:DiscoverEndpointsViewModel" x:Class="OpcUa.Client.WPF.DiscoverEndpoints"
+﻿<local:BasePage x:TypeArguments="local:DiscoverEndpointsViewModel" x:Class="OpcUa.Client.WPF.DiscoverEndpoints"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 

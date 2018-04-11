@@ -1,21 +1,23 @@
-﻿using System;
-using System.Windows.Input;
+﻿using System.Windows.Input;
 
 namespace OpcUa.Client.Core
 {
     public class LogInDialogViewModel : BaseDialogViewModel
     {
+        private readonly Messenger _messenger;
+
         public string UserName { get; set; }
         public ICommand LogInCommand { get; set; }
 
-        public LogInDialogViewModel()
+        public LogInDialogViewModel(Messenger messenger)
         {
-            LogInCommand = new RelayParameterizedCommand(LogIn);
+            _messenger = messenger;
+            LogInCommand = new RelayCommand(LogIn);
         }
 
         private void LogIn(object parameter)
         {
-            MessengerInstance.Send(new SendCredentials(UserName, (parameter as IHavePassword)?.SecurePassword));
+            _messenger.Send(new SendCredentials(UserName, (parameter as IHavePassword)?.SecurePassword));
 
             CloseAction();
         }

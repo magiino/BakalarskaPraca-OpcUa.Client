@@ -1,12 +1,18 @@
-﻿namespace OpcUa.Client.Core
+﻿using System;
+
+namespace OpcUa.Client.Core
 {
     public class SendNotificationAdd
     {
-        public NotificationMessageViewModel Notification { get; set; }
+        public string Name { get; set; }
+        public string Message { get; set; }
+        public DateTime Time { get; set; }
 
-        public SendNotificationAdd(NotificationMessageViewModel notificationToAdd)
+        public SendNotificationAdd(string name, string message, DateTime time)
         {
-            Notification = notificationToAdd;
+            Name = name;
+            Message = message;
+            Time = time;
         }
     }
 }

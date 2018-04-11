@@ -37,11 +37,6 @@
                        Text="Node Id"
                        HorizontalAlignment="Left"
                        />
-            <!--<TextBlock Grid.Row="2"
-                       Grid.Column="0"
-                       Text="Description"
-                       HorizontalAlignment="Left"
-                       />-->
             <!-- Values -->
             <TextBox Grid.Row="0" 
                      Grid.Column="1"
@@ -51,26 +46,11 @@
                      Grid.Column="1"
                      Text="{Binding NodeId}"
                      />
-            <!--<TextBox Grid.Row="2" 
-                     Grid.Column="1"
-                     TextWrapping="Wrap"
-                     AcceptsReturn="True"
-                     AcceptsTab="True"
-                     VerticalScrollBarVisibility="Auto"
-                     Text="{Binding Description}"
-                     />-->
         </Grid>
-
-        <CheckBox Margin="0 10 0 0"
-                  Content="Dvojstavová hodnota"
-                  IsChecked="{Binding IsDigital}"
-                  x:Name="IsDigital"
-                  />
         <StackPanel Orientation="Horizontal"
-                    Visibility="{Binding Converter={local:BooleanToVisibilityConverter}
-                                         ,ConverterParameter=true
-                                         ,ElementName=IsDigital
-                                         ,Path=IsChecked}"
+                    Visibility="{Binding IsDigital 
+                                         ,Converter={local:BooleanToVisibilityConverter}
+                                         ,ConverterParameter=true}"
                     >
             <TextBlock Text="Hlasit zmenu hodnoty o"
                        HorizontalAlignment="Left"
@@ -80,14 +60,14 @@
                      />
             <ComboBox SelectedIndex="{Binding SelectedFilterType, Mode=TwoWay}"
                       >
+                <ComboBoxItem Content="--"/>
                 <ComboBoxItem Content="| |"/>
                 <ComboBoxItem Content="%"/>
             </ComboBox>
         </StackPanel>
 
-        <StackPanel Visibility="{Binding Converter={local:BooleanToVisibilityConverter}
-                                         ,ElementName=IsDigital
-                                         ,Path=IsChecked}"
+        <StackPanel Visibility="{Binding IsDigital 
+                                         ,Converter={local:BooleanToVisibilityConverter}}"
                     >
             <TextBlock Text="Hlásanie pri hodnote 0:"
                        HorizontalAlignment="Left"

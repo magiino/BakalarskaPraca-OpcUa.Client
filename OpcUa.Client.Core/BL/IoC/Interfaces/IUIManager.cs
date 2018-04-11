@@ -12,27 +12,27 @@ namespace OpcUa.Client.Core
         /// </summary>
         /// <param name="viewModel">The view model</param>
         /// <returns></returns>
-        Task ShowMessage(MessageBoxDialogViewModel viewModel);
+        Task ShowMessage(BaseDialogViewModel viewModel);
 
         /// <summary>
         /// Displays a add notification window to user
         /// </summary>
         /// <param name="viewModel">The view model</param>
         /// <returns></returns>
-        Task ShowAddNotification(AddNotificationDialogViewModel viewModel);
+        Task ShowAddNotification(BaseDialogViewModel viewModel);
 
         /// <summary>
         /// Displays a log in window to user
         /// </summary>
         /// <param name="viewModel">The view model</param>
         /// <returns></returns>
-        Task ShowLogIn(LogInDialogViewModel viewModel);
+        Task ShowLogIn(BaseDialogViewModel viewModel);
 
         /// <summary>
         /// Displays a option window to user
         /// </summary>
         /// <param name="viewModel">The view model</param>
         /// <returns></returns>
-        Task ShowOption(OptionDialogViewModel viewModel);
+        Task ShowOption(BaseDialogViewModel viewModel);
     }
 }

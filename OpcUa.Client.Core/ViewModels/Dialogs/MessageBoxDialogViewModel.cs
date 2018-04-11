@@ -21,7 +21,7 @@ namespace OpcUa.Client.Core
 
         public MessageBoxDialogViewModel()
         {
-            CloseActionCommand = new RelayCommand(() => CloseAction());
+            CloseActionCommand = new RelayCommand((obj) => CloseAction());
         }
     }
 }

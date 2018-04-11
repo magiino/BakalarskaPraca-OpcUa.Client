@@ -1,6 +1,4 @@
-﻿using OpcUa.Client.Core;
-
-namespace OpcUa.Client.WPF
+﻿namespace OpcUa.Client.WPF
 {
     /// <summary>
     /// Interaction logic for WelcomePage.xaml

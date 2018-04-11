@@ -23,13 +23,13 @@ namespace OpcUa.Client.Core
             Option2Command = new RelayCommand(Option2Cmd);
         }
 
-        private void Option1Cmd()
+        private void Option1Cmd(object parameter)
         {
             OptionAction(true);
             CloseAction();
         }
 
-        private void Option2Cmd()
+        private void Option2Cmd(object parameter)
         {
             OptionAction(false);
             CloseAction();

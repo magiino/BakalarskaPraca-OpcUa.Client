@@ -29,7 +29,6 @@ namespace OpcUa.Client.Core
         /// </summary>
         public static IUnitOfWork UnitOfWork => IoC.Get<IUnitOfWork>();
 
-        // TODO MVVM light zrusit a messenger spravit ako singleton a dat ho do baseViewModel priamo
         /// <summary>
         /// A shortcut to access the <see cref="Messenger"/>
         /// </summary>

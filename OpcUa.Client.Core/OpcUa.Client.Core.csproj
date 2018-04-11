@@ -61,8 +61,8 @@
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
-    <Reference Include="PropertyChanged, Version=2.4.0.0, Culture=neutral, PublicKeyToken=ee3ee20bcf148ddd, processorArchitecture=MSIL">
-      <HintPath>..\packages\PropertyChanged.Fody.2.4.0\lib\net452\PropertyChanged.dll</HintPath>
+    <Reference Include="PropertyChanged, Version=2.2.9.0, Culture=neutral, PublicKeyToken=ee3ee20bcf148ddd, processorArchitecture=MSIL">
+      <HintPath>..\packages\PropertyChanged.Fody.2.2.9\lib\net452\PropertyChanged.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -81,8 +81,11 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BL\IMessenger.cs" />
     <Compile Include="BL\IoC\Interfaces\IUIManager.cs" />
+    <Compile Include="BL\Models\MeasureModel.cs" />
+    <Compile Include="ViewModels\Base\BaseViewModel.cs" />
+    <Compile Include="BL\IMessenger.cs" />
+    <Compile Include="BL\IoC\Base\IoC.cs" />
     <Compile Include="BL\IUnitOfWork.cs" />
     <Compile Include="BL\Messages\SendArchivedValue.cs" />
     <Compile Include="BL\Messages\SendNotificationAdd.cs" />
@@ -157,7 +160,6 @@
     <Compile Include="BL\OpcUa\Utils\EndpointUtils.cs" />
     <Compile Include="BL\Enums\TransportProtocol.cs" />
     <Compile Include="BL\Enums\SecurityPolicy.cs" />
-    <Compile Include="BL\IoC\Base\IoC.cs" />
     <Compile Include="DAL\Repositories\AuthRepository.cs" />
     <Compile Include="BL\Repositories\IAuthRepository.cs" />
     <Compile Include="DAL\Repositories\Base\BaseRepository.cs" />
@@ -167,37 +169,16 @@
     <Compile Include="BL\OpcUa\Utils\ClientUtils.cs" />
     <Compile Include="BL\OpcUa\UaClientApi.cs" />
     <Compile Include="BL\Models\ExtendedNotificationModel.cs" />
-    <Compile Include="ViewModels\Base\MixRelayCommand.cs" />
-    <Compile Include="ViewModels\Controls\Charts\ZoomChartViewModel.cs" />
-    <Compile Include="ViewModels\Controls\Features\NotificationList\Design\NotificationListDesignModel.cs" />
-    <Compile Include="ViewModels\Controls\Features\NotificationList\Design\NotificationMessageDesignModel.cs" />
-    <Compile Include="ViewModels\Controls\Features\NotificationList\NotificationListViewModel.cs" />
-    <Compile Include="ViewModels\Controls\Features\NotificationList\NotificationMessageViewModel.cs" />
-    <Compile Include="ViewModels\Dialogs\LogInDialogViewModel.cs" />
     <Compile Include="ViewModels\Dialogs\AddNotificationDialogViewModel.cs" />
     <Compile Include="ViewModels\Dialogs\Base\BaseDialogViewModel.cs" />
     <Compile Include="ViewModels\Dialogs\Design\MessageBoxDialogDesignModel.cs" />
+    <Compile Include="ViewModels\Dialogs\LogInDialogViewModel.cs" />
     <Compile Include="ViewModels\Dialogs\MessageBoxDialogViewModel.cs" />
     <Compile Include="ViewModels\Dialogs\OptionDialogViewModel.cs" />
     <Compile Include="ViewModels\Helper\ApplicationViewModel.cs" />
-    <Compile Include="ViewModels\Controls\Menu\MenuToolBarViewModel.cs" />
-    <Compile Include="ViewModels\Controls\Menu\MenuBarViewModel.cs" />
-    <Compile Include="ViewModels\Controls\Features\ArchiveViewModel.cs" />
-    <Compile Include="ViewModels\Controls\Features\NotificationViewModel.cs" />
-    <Compile Include="ViewModels\Controls\Features\NodeAttributesViewModel.cs" />
-    <Compile Include="ViewModels\Pages\MainViewModel.cs" />
+    <Compile Include="ViewModels\Helper\IHavePassword.cs" />
     <Compile Include="ViewModels\Helper\ViewModelLocator.cs" />
-    <Compile Include="ViewModels\Pages\DiscoverEndpointsViewModel.cs" />
-    <Compile Include="ViewModels\Pages\WelcomeViewModel.cs" />
-    <Compile Include="ViewModels\Window\WindowViewModel.cs" />
-    <Compile Include="ViewModels\Base\BaseViewModel.cs" />
-    <Compile Include="ViewModels\Base\IHavePassword.cs" />
-    <Compile Include="ViewModels\Base\RelayCommand.cs" />
-    <Compile Include="ViewModels\Base\RelayParameterizedCommand.cs" />
-    <Compile Include="ViewModels\TreeView\NodeTreeItemViewModel.cs" />
-    <Compile Include="ViewModels\TreeView\NodeTreeViewModel.cs" />
-    <Compile Include="ViewModels\Controls\Charts\ChartViewModel.cs" />
-    <Compile Include="ViewModels\Controls\Charts\LiveChartViewModel.cs" />
+    <Compile Include="ViewModels\RelayCommand.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -241,11 +222,11 @@
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="..\packages\Fody.3.0.1\build\Fody.targets" Condition="Exists('..\packages\Fody.3.0.1\build\Fody.targets')" />
+  <Import Project="..\packages\Fody.2.4.4\build\Fody.targets" Condition="Exists('..\packages\Fody.2.4.4\build\Fody.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\packages\Fody.3.0.1\build\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Fody.3.0.1\build\Fody.targets'))" />
+    <Error Condition="!Exists('..\packages\Fody.2.4.4\build\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Fody.2.4.4\build\Fody.targets'))" />
   </Target>
 </Project>

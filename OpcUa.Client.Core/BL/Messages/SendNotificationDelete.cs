@@ -1,12 +1,14 @@
-﻿namespace OpcUa.Client.Core
+﻿using System;
+
+namespace OpcUa.Client.Core
 {
     public class SendNotificationDelete
     {
-        public NotificationMessageViewModel Notification { get; set; }
+        public Guid Identifier { get; set; }
 
-        public SendNotificationDelete(NotificationMessageViewModel notificationToDelete)
+        public SendNotificationDelete(Guid identifier)
         {
-            Notification = notificationToDelete;
+            Identifier = identifier;
         }
     }
 }

@@ -13,7 +13,7 @@ namespace OpcUa.Client.WPF
         /// </summary>
         /// <param name="viewModel">The view model</param>
         /// <returns></returns>
-        public Task ShowMessage(MessageBoxDialogViewModel viewModel)
+        public Task ShowMessage(BaseDialogViewModel viewModel)
         {
             return new DialogMessageBox().ShowDialog(viewModel);
         }
@@ -23,7 +23,7 @@ namespace OpcUa.Client.WPF
         /// </summary>
         /// <param name="viewModel">The view model</param>
         /// <returns></returns>
-        public Task ShowAddNotification(AddNotificationDialogViewModel viewModel)
+        public Task ShowAddNotification(BaseDialogViewModel viewModel)
         {
             return new DialogAddNotification().ShowDialog(viewModel);
         }
@@ -33,7 +33,7 @@ namespace OpcUa.Client.WPF
         /// </summary>
         /// <param name="viewModel">The view model</param>
         /// <returns></returns>
-        public Task ShowLogIn(LogInDialogViewModel viewModel)
+        public Task ShowLogIn(BaseDialogViewModel viewModel)
         {
             return new DialogLogin().ShowDialog(viewModel);
         }
@@ -43,7 +43,7 @@ namespace OpcUa.Client.WPF
         /// </summary>
         /// <param name="viewModel">The view model</param>
         /// <returns></returns>
-        public Task ShowOption(OptionDialogViewModel viewModel)
+        public Task ShowOption(BaseDialogViewModel viewModel)
         {
             return new DialogDecide().ShowDialog(viewModel);
         }

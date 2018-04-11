@@ -13,8 +13,5 @@ namespace OpcUa.Client.Core
         /// The event that is fired when any child property changes its value
         /// </summary>
         public event PropertyChangedEventHandler PropertyChanged = (sender, e) => { };
-
-        // TODO Prejst na ineho messengera
-        public Messenger MessengerInstance = IoC.Messenger;
     }
 }
