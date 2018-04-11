@@ -1,11 +1,17 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using Opc.Ua;
 
 namespace OpcUa.Client.Core
 {
     public class VariableEntity : BaseEntity
     {
-        public int ProjectId { get; set; }
+        [Required]
+        public Guid ProjectId { get; set; }
+        [Required]
+        [Index(IsUnique = true)]
         public string Name { get; set; }
         public string Description { get; set; }
         public BuiltInType DataType { get; set; }

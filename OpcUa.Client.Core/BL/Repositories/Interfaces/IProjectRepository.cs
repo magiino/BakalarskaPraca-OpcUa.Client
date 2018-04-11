@@ -4,6 +4,6 @@ namespace OpcUa.Client.Core
 {
     public interface IProjectRepository : IBaseRepository<ProjectEntity>
     {
-        new IEnumerable<ProjectEntity> GetAllWithEndpoints();
+        IEnumerable<ProjectEntity> GetAllWithEndpoints();
     }
 }

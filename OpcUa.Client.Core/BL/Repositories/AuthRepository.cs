@@ -49,7 +49,6 @@ namespace OpcUa.Client.Core
                 passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(SecureStringHelpers.Unsecure(password)));
             }
         }
-
         private bool VerifyPasswordHash(SecureString password, byte[] passwordHash, byte[] passwordSalt)
         {
             using (var hmac = new System.Security.Cryptography.HMACSHA512(passwordSalt))

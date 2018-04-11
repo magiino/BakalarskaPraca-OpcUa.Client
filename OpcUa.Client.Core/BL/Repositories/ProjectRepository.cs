@@ -8,7 +8,7 @@ namespace OpcUa.Client.Core
         private DataContext DataContect => Context as DataContext;
         public ProjectRepository(DataContext dataDontext): base(dataDontext) {}
 
-        public new IEnumerable<ProjectEntity> GetAllWithEndpoints()
+        public IEnumerable<ProjectEntity> GetAllWithEndpoints()
         {
             return DataContect.Projects.Include(x => x.Endpoint);
         }

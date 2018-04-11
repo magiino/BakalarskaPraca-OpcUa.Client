@@ -6,7 +6,7 @@ using System.Linq.Expressions;
 
 namespace OpcUa.Client.Core
 {
-    public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : class, IEntity
+    public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : class
     {
         protected readonly DbContext Context;
 
@@ -22,7 +22,7 @@ namespace OpcUa.Client.Core
             return DbSet.Find(id);
         }
 
-        public IEnumerable<TEntity> GetAllWithEndpoints()
+        public IEnumerable<TEntity> GetAll()
         {
             return DbSet.ToList();
         }

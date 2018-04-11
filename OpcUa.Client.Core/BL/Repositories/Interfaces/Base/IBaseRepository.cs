@@ -4,11 +4,10 @@ using System.Linq.Expressions;
 
 namespace OpcUa.Client.Core
 {
-    // TODO ako spravit aby som s jendou instanciou pristupoval k vsetkym entitam
-    public interface IBaseRepository<TEntity> where TEntity : class, IEntity
+    public interface IBaseRepository<TEntity> where TEntity : class
     {
         TEntity GetById(int id);
-        IEnumerable<TEntity> GetAllWithEndpoints();
+        IEnumerable<TEntity> GetAll();
         IEnumerable<TEntity> Find(Expression<Func<TEntity, bool>> predicate);
         TEntity SingleOrDefault(Expression<Func<TEntity, bool>> predicate);
 
