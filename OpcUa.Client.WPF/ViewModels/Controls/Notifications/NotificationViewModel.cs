@@ -26,6 +26,7 @@ namespace OpcUa.Client.WPF
         #region Commands
         public ICommand AddNotificationCommand { get; }
         public ICommand RemoveNotificationCommand { get; }
+        public ICommand DeleteAllNotificationsCommand { get; }
         #endregion
 
         #region Constructor
@@ -42,6 +43,7 @@ namespace OpcUa.Client.WPF
 
             AddNotificationCommand = new MixRelayCommand(AddNotification, AddNotificationCanUse);
             RemoveNotificationCommand = new MixRelayCommand(RemoveNotification, RemoveNotificationCanUse);
+            DeleteAllNotificationsCommand = new MixRelayCommand(DeleteAllNotifications, DeleteAllCanUse);
 
             _messenger.Register<SendSelectedRefNode>(msg => _selectedNode = msg.ReferenceNode);
 
@@ -67,6 +69,12 @@ namespace OpcUa.Client.WPF
             _uaClientApi.RemoveMonitoredItem(_subscription, SelectedNotification.NodeId);
             Notifications.Remove(SelectedNotification);
         }
+
+        private void DeleteAllNotifications(object parameter)
+        {
+            NotificationListVm.Items.Clear();
+        }
+
         #endregion
 
         #region Can use methods
@@ -83,6 +91,12 @@ namespace OpcUa.Client.WPF
         {
             return SelectedNotification != null;
         }
+
+        public bool DeleteAllCanUse(object parameter)
+        {
+            return NotificationListVm.Items.Count != 0;
+        }
+
         #endregion
 
         #region Helpers
