@@ -265,11 +265,13 @@
                             <RadioButton Content="Anonymous"
                                          GroupName="Group1"
                                          IsChecked="{Binding AnonymousIsSelected}"
+                                         IsEnabled="{Binding AnonymAllowed}"
                                          />
                             <RadioButton Content="User/Password"
                                          GroupName="Group1"
                                          x:Name="UserPasswordChBox"
                                          IsChecked="{Binding UserPwIsSelected}"
+                                         IsEnabled="{Binding UserAllowed}"
                                          />
 
                             <StackPanel Visibility="{Binding Converter={local:BooleanToVisibilityConverter}

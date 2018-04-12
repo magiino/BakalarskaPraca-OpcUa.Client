@@ -6,7 +6,8 @@ namespace OpcUa.Client.Core
 {
     public static class Mapper
     {
-        public static ICollection<ProjectModel> ProjectToListModel(IEnumerable<ProjectEntity> projectEntities)
+        // Projects
+        public static ICollection<ProjectModel> ProjectEntityToProjectListModel(IEnumerable<ProjectEntity> projectEntities)
         {
             return projectEntities.Select(x => new ProjectModel()
             {
@@ -19,6 +20,46 @@ namespace OpcUa.Client.Core
             }).ToList();
         }
 
+        // Variables
+        public static ICollection<VariableModel> VariableEntitiesToVariableListModels(IEnumerable<VariableEntity> variableEntities)
+        {
+            return variableEntities.Select(x => new VariableModel()
+            {
+                Id = x.Id,
+                ProjectId = x.ProjectId,
+                Name = x.Name,
+                Description = x.Description,
+                Archive = x.Archive,
+                DataType = x.DataType
+            }).ToList();
+        }
+
+        public static VariableModel VariableEntityToVariableModel(VariableEntity variableEntity)
+        {
+            return new VariableModel()
+            {
+                Name = variableEntity.Name,
+                Description = variableEntity.Description,
+                DataType = variableEntity.DataType,
+                ProjectId = variableEntity.ProjectId,
+                Archive = variableEntity.Archive
+            };
+        }
+
+        public static VariableEntity VariableModelToVariableEntity(VariableModel variableModel)
+        {
+            return new VariableEntity()
+            {
+                Id = variableModel.Id,
+                Name = variableModel.Name,
+                Description = variableModel.Description,
+                DataType = variableModel.DataType,
+                ProjectId = variableModel.ProjectId,
+                Archive = variableModel.Archive
+            };
+        }
+
+        // Endpoints
         public static EndpointDescription CreateEndpointDescription(EndpointEntity endpoint)
         {
             return new EndpointDescription()
@@ -41,6 +82,7 @@ namespace OpcUa.Client.Core
             };
         }
 
+        // Notifications
         public static ICollection<ExtendedNotificationModel> NotificationsToExtended(IEnumerable<NotificationEntity> notifications)
         {
             return notifications.Select(notification => new ExtendedNotificationModel()

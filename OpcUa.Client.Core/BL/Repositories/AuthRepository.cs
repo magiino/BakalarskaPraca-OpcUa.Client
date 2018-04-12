@@ -33,7 +33,6 @@ namespace OpcUa.Client.Core
                 return null;
 
             return user;
-
         }
 
         public bool UserExists(string userName)
@@ -58,6 +57,13 @@ namespace OpcUa.Client.Core
                     return false;
             }
             return true;
+        }
+
+        public void RemoveUser(int id)
+        {
+            var user = _context.Users.SingleOrDefault(x => x.Id == id);
+            if (user != null) _context.Users.Remove(user);
+            IoC.UnitOfWork.Complete();
         }
     }
 }

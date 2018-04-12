@@ -56,6 +56,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BL\IoC\Interfaces\IUIManager.cs" />
+    <Compile Include="BL\Models\Details\VariableModel.cs" />
     <Compile Include="BL\Models\MeasureModel.cs" />
     <Compile Include="DAL\Migrations\201804112202122_InitialCreate.cs" />
     <Compile Include="DAL\Migrations\201804112202122_InitialCreate.Designer.cs">

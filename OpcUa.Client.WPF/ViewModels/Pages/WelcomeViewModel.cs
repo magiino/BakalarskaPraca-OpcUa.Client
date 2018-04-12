@@ -60,24 +60,19 @@ namespace OpcUa.Client.WPF
             }
             catch (Exception e)
             {
-                IoC.Ui.ShowMessage(new MessageBoxDialogViewModel()
-                {
-                    Title = "Error",
-                    Message = e.Message,
-                    OkText = "ok",
-                });
+                IoC.AppManager.ShowErrorMessage(e);
             }
         }
 
         private void DeleteProject(object parameter)
         {
-            // TODO opytat sa uzivatela ci si je isty
             var project = _unitOfWork.Projects.SingleOrDefault(x => x.Id == SelectedProject.Id);
             _unitOfWork.Endpoints.Remove(project.Endpoint);
-            if (project.UserId != null)
-                //todo remove user
 
-                _unitOfWork.Projects.Remove(project);
+            if (project.UserId != null)
+                _unitOfWork.Auth.RemoveUser(project.UserId.Value);
+
+            _unitOfWork.Projects.Remove(project);
 
             var notifications = _unitOfWork.Notifications.Find(x => x.ProjectId == SelectedProject.Id);
             _unitOfWork.Notifications.RemoveRange(notifications);
@@ -128,7 +123,7 @@ namespace OpcUa.Client.WPF
             var projectsEntities = _unitOfWork.Projects.GetAllWithEndpoints();
 
             if (projectsEntities == null) return;
-            Projects = new ObservableCollection<ProjectModel>(Mapper.ProjectToListModel(projectsEntities));
+            Projects = new ObservableCollection<ProjectModel>(Mapper.ProjectEntityToProjectListModel(projectsEntities));
         } 
         #endregion
     }

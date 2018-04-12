@@ -4,9 +4,9 @@
     {
         public bool Delete { get; set; }
 
-        public VariableEntity Variable { get; set; }
+        public VariableModel Variable { get; set; }
 
-        public SendManageArchivedValue(bool delete, VariableEntity variable)
+        public SendManageArchivedValue(bool delete, VariableModel variable)
         {
             Delete = delete;
             Variable = variable;

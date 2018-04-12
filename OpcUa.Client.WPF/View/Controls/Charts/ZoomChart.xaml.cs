@@ -25,7 +25,7 @@ namespace OpcUa.Client.WPF
         private void ListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var viewmodel = (ZoomChartViewModel)DataContext;
-            viewmodel.SelectedVariables = Variables.SelectedItems.Cast<VariableEntity>().ToList();
+            viewmodel.SelectedVariables = Variables.SelectedItems.Cast<VariableModel>().ToList();
         }
     }
 }

@@ -20,8 +20,8 @@ namespace OpcUa.Client.WPF
 
         #region Public Properties
         public SeriesCollection SeriesCollection { get; set; } = new SeriesCollection();
-        public ObservableCollection<VariableEntity> Variables { get; set; }
-        public List<VariableEntity> SelectedVariables
+        public ObservableCollection<VariableModel> Variables { get; set; }
+        public List<VariableModel> SelectedVariables
         {
             set => ShowChosenVariables(value);
         }
@@ -54,26 +54,17 @@ namespace OpcUa.Client.WPF
         #endregion
 
         #region Private Methods
-        private void ShowChosenVariables(IEnumerable<VariableEntity> selectedVariables)
+        private void ShowChosenVariables(IEnumerable<VariableModel> selectedVariables)
         {
             SeriesCollection.Clear();
 
             foreach (var variable in selectedVariables)
             {
-                var values = new ChartValues<DateTimePoint>(variable.Records.Select(x => new DateTimePoint()
+                var values = new ChartValues<DateTimePoint>(_unityOfWork.Records.Find(x => x.VariableId == variable.Id).OrderBy(x => x.ArchiveTime).Select(x => new DateTimePoint()
                 {
                     Value = Convert.ToDouble(x.Value),
                     DateTime = x.ArchiveTime
                 }));
-
-                // Get unsaved variables
-                var localValues = new ChartValues<DateTimePoint>(_unityOfWork.Records.Find(x => x.VariableId == variable.Id).Select(x => new DateTimePoint()
-                {
-                    Value = Convert.ToDouble(x.Value),
-                    DateTime = x.ArchiveTime
-                }));
-
-                values.AddRange(localValues);
 
                 SeriesCollection.Add(
                     new LineSeries()
@@ -88,7 +79,7 @@ namespace OpcUa.Client.WPF
             }
         }
         
-        private void ManageArchiveVariables(bool delete, VariableEntity variable)
+        private void ManageArchiveVariables(bool delete, VariableModel variable)
         {
             if (delete)
             {
@@ -103,9 +94,9 @@ namespace OpcUa.Client.WPF
         }
         private void OnLoad()
         {
-            var variables = _unityOfWork.Variables.Find(x => x.ProjectId == IoC.AppManager.ProjectId);
+            var variables = Mapper.VariableEntitiesToVariableListModels( _unityOfWork.Variables.Find(x => x.ProjectId == IoC.AppManager.ProjectId) );
             if (variables == null) return;
-            Variables = new ObservableCollection<VariableEntity>(variables);
+            Variables = new ObservableCollection<VariableModel>(variables);
         } 
         #endregion
     }

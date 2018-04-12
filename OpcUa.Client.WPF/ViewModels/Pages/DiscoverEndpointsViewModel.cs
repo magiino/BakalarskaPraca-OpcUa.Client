@@ -41,6 +41,7 @@ namespace OpcUa.Client.WPF
             {
                 _selectedEndpoint = value?.EndpointDesciption;
                 SetMessegeEncoding();
+                SetAllowedAuth();
             }
         }
 
@@ -74,6 +75,9 @@ namespace OpcUa.Client.WPF
             public bool AnonymousIsSelected { get; set; } = true;
             public bool UserPwIsSelected { get; set; } = false;
             public string UserName { get; set; } 
+            public bool UserAllowed { get; set; }
+            public bool AnonymAllowed { get; set; }
+
             #endregion
         #endregion
 
@@ -192,6 +196,15 @@ namespace OpcUa.Client.WPF
                 selectedModes.Add(securityModes[3]);
 
             return selectedModes;
+        }
+
+        private void SetAllowedAuth()
+        {
+            _selectedEndpoint.UserIdentityTokens.ForEach(x =>
+            {
+                AnonymAllowed = x.TokenType == UserTokenType.Anonymous;
+                UserAllowed = x.TokenType == UserTokenType.UserName;
+            });
         }
 
         private List<string> GetSelectedPolicies()

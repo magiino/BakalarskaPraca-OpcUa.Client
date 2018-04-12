@@ -10,13 +10,15 @@
              >
     <Grid>
         <Grid.RowDefinitions >
+            <RowDefinition Height="auto"/>
             <RowDefinition Height="3*"/>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions >
-
+        <TextBlock Text="Variables for archive:"/>
         <!-- ListView of subscribed variables -->
-        <DataGrid ItemsSource="{Binding ArchiveVariables}"
+        <DataGrid Grid.Row="1"
+                  ItemsSource="{Binding ArchiveVariables}"
                   Background="{StaticResource BackgroundLightBrush}"
                   SelectedItem="{Binding SelectedArchiveVariable}"
                   x:Name="Variables"
@@ -33,9 +35,12 @@
                   CanUserAddRows="False"
                   >
             <DataGrid.Columns>
-                <DataGridTextColumn Width="*" 
+                <DataGridTextColumn Width="2*" 
                                     Binding="{Binding Name}"
                                     />
+                <DataGridTextColumn Width="3*" 
+                                    Binding="{Binding Description}"
+                />
                 <DataGridTextColumn Width="*" 
                                     Binding="{Binding DataType}"
                                     />
@@ -46,12 +51,12 @@
         </DataGrid>
 
         <!-- Separator -->
-        <Separator Grid.Row="1"
+        <Separator Grid.Row="2"
                    Margin="0 0 0 5"
                    />
 
         <!-- Archive control -->
-        <Grid Grid.Row="2">
+        <Grid Grid.Row="3">
             <Grid.ColumnDefinitions >
                 <ColumnDefinition Width="auto"/>
                 <ColumnDefinition Width="auto"/>

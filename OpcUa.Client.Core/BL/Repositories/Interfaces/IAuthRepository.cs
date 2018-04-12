@@ -7,5 +7,6 @@ namespace OpcUa.Client.Core
         UserEntity Register(UserEntity user, SecureString password);
         UserEntity Login(string userName, SecureString password);
         bool UserExists(string userName);
+        void RemoveUser(int id);
     }
 }

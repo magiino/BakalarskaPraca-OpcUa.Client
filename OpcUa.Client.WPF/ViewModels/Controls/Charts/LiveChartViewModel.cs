@@ -60,8 +60,16 @@ namespace OpcUa.Client.WPF
         #region Command Methods
         private void AddVariable(object parameter)
         {
+            if (Variables.Count > 4) return;
+
+            var r = new Random();
+            Brush brush = new SolidColorBrush(Color.FromRgb((byte)r.Next(1, 255),
+                (byte)r.Next(1, 255), (byte)r.Next(1, 233)));
+            var color = new BrushConverter().ConvertToString(brush);
+
             var variable = new VariableLiveChartModel()
             {
+                Color = color,
                 Name = _selectedNode.DisplayName.ToString(),
                 NodeId = _selectedNode.NodeId.ToString()
             };
@@ -72,8 +80,11 @@ namespace OpcUa.Client.WPF
                     Title = variable.Name,
                     Values = new ChartValues<DateTimePoint>(),
                     PointGeometrySize = 15,
-                    PointGeometry = DefaultGeometries.Cross,
-                    Fill = Brushes.Transparent
+                    PointGeometry = DefaultGeometries.Circle,
+                    Fill = Brushes.Transparent,
+                    PointForeground = Brushes.White,
+                    Stroke = brush,
+                    StrokeThickness = 4
                 }
             );
 

@@ -25,8 +25,8 @@ namespace OpcUa.Client.WPF
 
         #region Public Properties
 
-        public ObservableCollection<VariableEntity> ArchiveVariables { get; set; }
-        public VariableEntity SelectedArchiveVariable { get; set; }
+        public ObservableCollection<VariableModel> ArchiveVariables { get; set; }
+        public VariableModel SelectedArchiveVariable { get; set; }
        
         public ObservableCollection<ArchiveListModel> ArchiveInfo { get; set; }
         public ArchiveListModel SelectedArchiveInfo { get; set; }
@@ -113,8 +113,10 @@ namespace OpcUa.Client.WPF
             };
             _unitOfWork.Variables.Add(tmp);
             //_unitOfWork.Complete();
-            _messenger.Send(new SendManageArchivedValue(false, tmp));
-            ArchiveVariables.Add(tmp);
+
+            var variableModel = Mapper.VariableEntityToVariableModel(tmp);
+            _messenger.Send(new SendManageArchivedValue(false, variableModel));
+            ArchiveVariables.Add(variableModel);
 
             if (interval != ArchiveInterval.None)
             {
@@ -146,11 +148,14 @@ namespace OpcUa.Client.WPF
                     archive.VariablesCount--;
 
             // Vymazanie z databaze
-            _unitOfWork.Variables.Remove(SelectedArchiveVariable);
+
+
+            _unitOfWork.Variables.Remove(Mapper.VariableModelToVariableEntity(SelectedArchiveVariable));
             _messenger.Send(new SendManageArchivedValue(true, SelectedArchiveVariable));
 
             // Najdenie indexu
             var index = ArchiveVariables.IndexOf(SelectedArchiveVariable);
+
             // Vymazanie z tabulky
             ArchiveVariables.Remove(SelectedArchiveVariable);
             if (interval == ArchiveInterval.None)
@@ -206,28 +211,6 @@ namespace OpcUa.Client.WPF
             InitializeArchiveTable();
         }
 
-        private void Archive(object objectInfo)
-        {
-            var interval = (ArchiveInterval)objectInfo;
-            if (!IsTimerAlive(interval)) return;
-
-            // Vytriedenie premennych pre tento interval a ancitanie hodnot
-            var variablesForRead = _registeredNodesForRead.Where(x => x.Interval == interval).ToList();
-            _uaClientApi.ReadValues(ref variablesForRead);
-
-            // Vytvorenie zaznamov
-            var records = variablesForRead.Select(x => new RecordEntity()
-            {
-                VariableId = x.VariableId,
-                Value = x.Value.ToString(),
-                ArchiveTime = DateTime.Now,
-            }).ToList();
-
-            // Archivacia
-            _unitOfWork.Records.AddRange(records);
-            //_unitOfWork.Complete();
-        }
-
         private bool IsTimerAlive(ArchiveInterval interval)
         {
             _timers.TryGetValue(interval, out var timer);
@@ -236,7 +219,8 @@ namespace OpcUa.Client.WPF
 
         private void LoadDataFromDataBase()
         {
-            ArchiveVariables = new ObservableCollection<VariableEntity>(_unitOfWork.Variables.Find(x => x.ProjectId == IoC.AppManager.ProjectId));
+            ArchiveVariables = new ObservableCollection<VariableModel>(
+                Mapper.VariableEntitiesToVariableListModels( _unitOfWork.Variables.Find(x => x.ProjectId == IoC.AppManager.ProjectId) ));
         }
 
         private void RegisterLoadedNodes()
@@ -275,6 +259,28 @@ namespace OpcUa.Client.WPF
                     Running = false
                 });
             }
+        }
+
+        private void Archive(object objectInfo)
+        {
+            var interval = (ArchiveInterval)objectInfo;
+            if (!IsTimerAlive(interval)) return;
+
+            // Vytriedenie premennych pre tento interval a ancitanie hodnot
+            var variablesForRead = _registeredNodesForRead.Where(x => x.Interval == interval).ToList();
+            _uaClientApi.ReadValues(ref variablesForRead);
+
+            // Vytvorenie zaznamov
+            var records = variablesForRead.Select(x => new RecordEntity()
+            {
+                VariableId = x.VariableId,
+                Value = x.Value.ToString(),
+                ArchiveTime = DateTime.Now,
+            }).ToList();
+
+            // Archivacia
+            _unitOfWork.Records.AddRange(records);
+            //_unitOfWork.Complete();
         }
         #endregion
 

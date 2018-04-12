@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:OpcUa.Client.WPF"
              xmlns:wpf="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
+             xmlns:fa="http://schemas.fontawesome.io/icons/"
              mc:Ignorable="d" 
              d:DesignHeight="450" 
              d:DesignWidth="800"
@@ -14,15 +15,14 @@
             <ColumnDefinition Width="*"></ColumnDefinition>
             <ColumnDefinition Width="auto"></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        
+
         <wpf:CartesianChart Grid.Column="0" 
-                            Grid.ColumnSpan="2"
                             AnimationsSpeed="0:0:0.5" 
                             Hoverable="True"
+                            Zoom="Xy"
                             Series="{Binding SeriesCollection}" 
-                            LegendLocation="Right"
                             >
-          
+
             <wpf:CartesianChart.AxisX>
                 <wpf:Axis LabelFormatter="{Binding DateTimeFormatter}" 
                           MaxValue="{Binding AxisMax}" 
@@ -57,21 +57,34 @@
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <Border BorderThickness="1">
-                            <StackPanel>
-                            
-                                <TextBlock Padding="10 5"
-                                           VerticalAlignment="Center" 
-                                           Text="{Binding Name}"
-                                           />
-                                <TextBlock Padding="10 5"
-                                           VerticalAlignment="Center" 
-                                           Text="{Binding NodeId}"
-                                           />
-                            </StackPanel>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+
+                                <fa:ImageAwesome Width="10" 
+                                                 Margin="3"
+                                                 Foreground="{Binding Color, Converter={local:StringRgbToBrushConverter}}"
+                                                 Icon="Times"
+                                                 />
+
+                                <StackPanel Grid.Column="1">
+                                    <TextBlock Padding="10 5"
+                                               VerticalAlignment="Center" 
+                                               Text="{Binding Name}"
+                                    />
+                                    <TextBlock Padding="10 5"
+                                               VerticalAlignment="Center" 
+                                               Text="{Binding NodeId}"
+                                    />
+                                </StackPanel>
+                            </Grid>
                         </Border>
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
+
         </StackPanel>
     </Grid>
 </UserControl>
