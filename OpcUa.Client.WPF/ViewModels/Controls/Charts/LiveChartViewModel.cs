@@ -44,8 +44,11 @@ namespace OpcUa.Client.WPF
 
             _subscription = _uaClientApi.Subscribe(2000, "LiveCharts");
 
-            AddCommand = new MixRelayCommand(AddVariable);
-            RemoveCommand = new MixRelayCommand(RemoveVariable);
+            if (_subscription == null)
+                IoC.AppManager.ShowWarningMessage("Subscription creation failed, please restart application!");
+
+            AddCommand = new MixRelayCommand(AddVariable, AddVariableCanUse);
+            RemoveCommand = new MixRelayCommand(RemoveVariable, RemoveVariableCanUse);
 
             // Nastavenia grafu
             DateTimeFormatter = value => new DateTime((long)value).ToString("mm:ss");
@@ -89,6 +92,7 @@ namespace OpcUa.Client.WPF
             );
 
             var item = _uaClientApi.CreateMonitoredItem(variable.Name, variable.NodeId, 500, null, 4);
+
             _uaClientApi.AddMonitoredItem(item, _subscription);
             item.Notification += Notification_MonitoredItem;
 
@@ -114,6 +118,18 @@ namespace OpcUa.Client.WPF
         }
 
         public bool RemoveNotificationCanUse()
+        {
+            return SelectedVariable != null;
+        }
+        #endregion
+
+        #region CanUse Methods
+        public bool AddVariableCanUse(object parameter)
+        {
+            return _selectedNode != null && _selectedNode.NodeClass == NodeClass.Variable;
+        }
+
+        public bool RemoveVariableCanUse(object parameter)
         {
             return SelectedVariable != null;
         }

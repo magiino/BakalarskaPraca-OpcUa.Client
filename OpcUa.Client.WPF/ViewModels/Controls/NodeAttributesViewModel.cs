@@ -53,7 +53,11 @@ namespace OpcUa.Client.WPF
 
             var value = _uaClientApi.WriteValue(nodeId, BuiltInType,  ValueToWrite);
 
-            if (value == null) return;
+            if (value == null)
+            {
+                IoC.AppManager.ShowWarningMessage("Value failed write to server!");
+                return;
+            }
 
             DataValue = value;
         }
@@ -61,7 +65,15 @@ namespace OpcUa.Client.WPF
         private void ReadValue(object parameter)
         {
             var nodeId = ExpandedNodeId.ToNodeId(ReferenceDescription.NodeId, new NamespaceTable());
-            DataValue = _uaClientApi.ReadValue(nodeId);
+            try
+            {
+                DataValue = _uaClientApi.ReadValue(nodeId);
+            }
+            catch (Exception e)
+            {
+                Utils.Trace(Utils.TraceMasks.Error, $"{e.Message}");
+                IoC.AppManager.ShowExceptionErrorMessage(e);
+            }
         }
         #endregion
 
@@ -71,14 +83,33 @@ namespace OpcUa.Client.WPF
             IsVariableType = false;
 
             NodeId = referenceDescription.NodeId;
-            Node = _uaClientApi.ReadNode(NodeId);
+            try
+            {
+                Node = _uaClientApi.ReadNode(NodeId);
+            }
+            catch (Exception e)
+            {
+
+                Utils.Trace(Utils.TraceMasks.Error, $"{e.Message}");
+                IoC.AppManager.ShowExceptionErrorMessage(e);
+            }
 
             if (Node.NodeClass != NodeClass.Variable) return;
 
             IsVariableType = true;
             VariableNode = (VariableNode)Node.DataLock;
             DataTypeNodeId = VariableNode.DataType;
-            DataValue = _uaClientApi.ReadValue(VariableNode.NodeId);
+
+            try
+            {
+                DataValue = _uaClientApi.ReadValue(VariableNode.NodeId);
+            }
+            catch (Exception e)
+            {
+                Utils.Trace(Utils.TraceMasks.Error, $"{e.Message}");
+                IoC.AppManager.ShowExceptionErrorMessage(e);
+            }
+
             DataType = TypeInfo.GetSystemType(VariableNode.DataType, new EncodeableFactory());
             BuiltInType = TypeInfo.GetBuiltInType(VariableNode.DataType);
         }

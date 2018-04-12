@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
 using Opc.Ua;
@@ -37,6 +38,10 @@ namespace OpcUa.Client.WPF
             _messenger = messenger;
 
             _subscription = _uaClientApi.Subscribe(300, "Notifications");
+
+            if (_subscription == null)
+                IoC.AppManager.ShowWarningMessage("Subscription creation failed, please restart application!");
+
             LoadAndRegisterNotifications();
 
             NotificationListVm = new NotificationListViewModel();
@@ -66,8 +71,16 @@ namespace OpcUa.Client.WPF
 
         private void RemoveNotification(object parameter)
         {
-            _uaClientApi.RemoveMonitoredItem(_subscription, SelectedNotification.NodeId);
-            Notifications.Remove(SelectedNotification);
+            try
+            {
+                _uaClientApi.RemoveMonitoredItem(_subscription, SelectedNotification.NodeId);
+                Notifications.Remove(SelectedNotification);
+            }
+            catch (Exception e)
+            {
+                Utils.Trace(Utils.TraceMasks.Error, $"{e.Message}");
+                IoC.AppManager.ShowExceptionErrorMessage(e);
+            }
         }
 
         private void DeleteAllNotifications(object parameter)
@@ -106,12 +119,13 @@ namespace OpcUa.Client.WPF
 
             MonitoredItem item;
 
-           var notificationEntity = new NotificationEntity()
+            var notificationEntity = new NotificationEntity()
             {
                 Name = notification.Name,
                 NodeId = notification.NodeId,
                 ProjectId = IoC.AppManager.ProjectId,
             };
+
 
             if (notification.IsDigital)
             {
@@ -137,12 +151,14 @@ namespace OpcUa.Client.WPF
                 notificationEntity.DeadbandType = notification.DeadbandType;
             }
 
-            _uaClientApi.AddMonitoredItem(item, _subscription);
-            item.Notification += Notification_MonitoredItem;
-
-            _unitOfWork.Notifications.Add(notificationEntity);
-
-            Notifications.Add(notification);
+            if (_uaClientApi.AddMonitoredItem(item, _subscription) == false)
+                IoC.AppManager.ShowWarningMessage("Notification could not be created!");
+            else
+            {
+                item.Notification += Notification_MonitoredItem;
+                _unitOfWork.Notifications.Add(notificationEntity);
+                Notifications.Add(notification);
+            }
         }
 
         private void LoadAndRegisterNotifications()

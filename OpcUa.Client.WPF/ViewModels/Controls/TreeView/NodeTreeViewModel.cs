@@ -1,5 +1,7 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.Linq;
+using Opc.Ua;
 using OpcUa.Client.Core;
 
 namespace OpcUa.Client.WPF
@@ -20,11 +22,18 @@ namespace OpcUa.Client.WPF
         public NodeTreeViewModel()
         {
             // Get the root nodes
-            var children = IoC.UaClientApi.BrowseRoot();
-            
-            //Create the view models from the root ndoes
-            Items = new ObservableCollection<NodeTreeItemViewModel>(
-                children.Select(content => new NodeTreeItemViewModel(content)).OrderBy(x => x.Name));
+            try
+            {
+                var children = IoC.UaClientApi.BrowseRoot();
+                //Create the view models from the root ndoes
+                Items = new ObservableCollection<NodeTreeItemViewModel>(
+                    children.Select(content => new NodeTreeItemViewModel(content)).OrderBy(x => x.Name));
+            }
+            catch (Exception e)
+            {
+                Utils.Trace(Utils.TraceMasks.Error, $"{e.Message}");
+                IoC.AppManager.ShowExceptionErrorMessage(e);
+            }
         }
         #endregion
     }

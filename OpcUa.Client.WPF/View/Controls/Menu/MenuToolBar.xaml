@@ -7,19 +7,29 @@
              xmlns:local="clr-namespace:OpcUa.Client.WPF"
              mc:Ignorable="d"
              x:Name="Toolbar"
-             Height="30"
              d:DesignHeight="30" d:DesignWidth="500">
-    <ToolBar>
-        <!--<Button x:Name="TbStart" ToolTip="Start communication">
-            <fa:ImageAwesome Icon="PlayCircle"/>
-        </Button>-->
-        <Button ToolTip="Stop communication"
-                Command="{Binding DisconnectSessionCommand}">
-            <fa:ImageAwesome Icon="StopCircle"/>
-        </Button>
-        <Button ToolTip="Save Project"
-                Command="{Binding SaveProjectCommand}">
-            <fa:ImageAwesome Icon="Save"/>
-        </Button>
-    </ToolBar>
+    <ToolBarTray >
+        <ToolBar Height="30">
+            <Button ToolTip="Stop communication"
+                    Command="{Binding DisconnectSessionCommand}">
+                <fa:ImageAwesome Icon="StopCircle"/>
+            </Button>
+            <Button ToolTip="Save Project"
+                    Command="{Binding SaveProjectCommand}">
+                <fa:ImageAwesome Icon="Save"/>
+            </Button>
+        </ToolBar>
+        <ToolBar Height="30">
+            <TextBlock Text="Session state"
+                       TextWrapping="Wrap"
+                       Width="50"
+                       FontSize="{StaticResource FontSizeSmall}"
+                       VerticalAlignment="Center"
+                       HorizontalAlignment="Center"/>
+
+            <fa:ImageAwesome Icon="Circle"
+                                Foreground="{Binding SessionIsActive, Converter={local:BooleanToColorConverter}}"/>
+        </ToolBar>
+    </ToolBarTray>
+
 </UserControl>

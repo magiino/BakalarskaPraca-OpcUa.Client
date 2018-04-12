@@ -13,12 +13,22 @@ namespace OpcUa.Client.Core
             CloseAction();
         }
 
-        public void ShowErrorMessage(Exception e)
+        public void ShowExceptionErrorMessage(Exception e)
         {
             IoC.Ui.ShowMessage(new MessageBoxDialogViewModel()
             {
                 Title = "Error",
                 Message = e.Message,
+                OkText = "Ok"
+            });
+        }
+
+        public void ShowWarningMessage(string msg)
+        {
+            IoC.Ui.ShowMessage(new MessageBoxDialogViewModel()
+            {
+                Title = "Error",
+                Message = msg,
                 OkText = "Ok"
             });
         }

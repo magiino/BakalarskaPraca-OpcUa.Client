@@ -13,46 +13,33 @@ namespace OpcUa.Client.Core
     public class UaClientApi
     {
         #region Private Fields
-
         private ApplicationConfiguration _applicationConfig;
         private Session _session;
         private readonly NodeIdCollection _registeredNodes = new NodeIdCollection();
-
         #endregion
 
         #region Constructors
-
         public UaClientApi()
         {
             _applicationConfig = CreateClientConfiguration();
             CertificateUtils.CheckApplicationInstanceCertificate(_applicationConfig, false, 2048);
         }
-
         #endregion
 
         #region Discovery Client
-
         /// <summary>Finds Servers based on a discovery url</summary>
         /// <param name="discoveryUrl">The discovery url</param>
         /// <returns>ApplicationDescriptionCollection containing found servers</returns>
         /// <exception cref="Exception">Throws and forwards any exception with short error description.</exception>
         public ApplicationDescriptionCollection FindServers(string discoveryUrl)
         {
-            //Create a URI using the discovery URL
             var uri = new Uri(discoveryUrl);
-            try
+
+            using (var client = DiscoveryClient.Create(uri))
             {
-                //Ceate a DiscoveryClient
-                using (var client = DiscoveryClient.Create(uri))
-                {
-                    //Find servers
-                    var servers = client.FindServers(null);
-                    return servers;
-                }
-            }
-            catch (Exception e)
-            {
-                throw e;
+                //Find servers
+                var servers = client.FindServers(null);
+                return servers;
             }
         }
 
@@ -64,22 +51,15 @@ namespace OpcUa.Client.Core
         {
             //Create a URI using the server's URL
             var uri = new Uri(serverUrl);
-            try
+
+            ////Create a DiscoveryClient
+            using (var discoveryClient = DiscoveryClient.Create(uri))
             {
-                ////Create a DiscoveryClient
-                using (var discoveryClient = DiscoveryClient.Create(uri))
-                {
-                    //Search for available endpoints
-                    var endpoints = discoveryClient.GetEndpoints(null);
-                    return endpoints;
-                }
-            }
-            catch (Exception e)
-            {
-                throw e;
+                //Search for available endpoints
+                var endpoints = discoveryClient.GetEndpoints(null);
+                return endpoints;
             }
         }
-
         #endregion
 
         #region Browse
@@ -89,26 +69,19 @@ namespace OpcUa.Client.Core
         /// <exception cref="Exception">Throws and forwards any exception with short error description.</exception>
         public ReferenceDescriptionCollection BrowseRoot()
         {
-            try
-            {
-                //Browse the RootFolder for variables, objects and methods
-                _session.Browse(null,
-                                null,
-                                ObjectIds.RootFolder,
-                                0u,
-                                BrowseDirection.Forward,
-                                ReferenceTypeIds.HierarchicalReferences,
-                                true,
-                                (uint)NodeClass.Variable | (uint)NodeClass.Object | (uint)NodeClass.Method,
-                                out var continuationPoint,
-                                out var referenceDescriptionCollection);
+            //Browse the RootFolder for variables, objects and methods
+            _session.Browse(null,
+                            null,
+                            ObjectIds.RootFolder,
+                            0u,
+                            BrowseDirection.Forward,
+                            ReferenceTypeIds.HierarchicalReferences,
+                            true,
+                            (uint)NodeClass.Variable | (uint)NodeClass.Object | (uint)NodeClass.Method,
+                            out var continuationPoint,
+                            out var referenceDescriptionCollection);
 
-                return referenceDescriptionCollection;
-            }
-            catch (Exception e)
-            {
-                throw e;
-            }
+            return referenceDescriptionCollection;
         }
 
         /// <summary>Browses a node ID provided by a ReferenceDescription</summary>
@@ -120,26 +93,19 @@ namespace OpcUa.Client.Core
             var expNodeId = referenceDescription.NodeId;
             var nodeId = ExpandedNodeId.ToNodeId(expNodeId, new NamespaceTable());
 
-            try
-            {
-                //Browse from starting point for all object types
-                _session.Browse(null, 
-                                null, 
-                                nodeId, 
-                                0u, 
-                                BrowseDirection.Forward,
-                                ReferenceTypeIds.HierarchicalReferences, 
-                                true, 
-                                0,
-                                out var continuationPoint,
-                                out var referenceDescriptionCollection);
+            //Browse from starting point for all object types
+            _session.Browse(null, 
+                            null, 
+                            nodeId, 
+                            0u, 
+                            BrowseDirection.Forward,
+                            ReferenceTypeIds.HierarchicalReferences, 
+                            true, 
+                            0,
+                            out var continuationPoint,
+                            out var referenceDescriptionCollection);
 
-                return referenceDescriptionCollection;
-            }
-            catch (Exception e)
-            {
-                throw e;
-            }
+            return referenceDescriptionCollection;
         }
 
         #endregion
@@ -211,7 +177,7 @@ namespace OpcUa.Client.Core
             }
             catch (Exception e)
             {
-                ShowErrorMessage(e);
+                Utils.Trace(Utils.TraceMasks.Error, $"{e.Message}");
             }
         } 
 
@@ -245,7 +211,7 @@ namespace OpcUa.Client.Core
             }
             catch (Exception e)
             {
-                ShowErrorMessage(e);
+                Utils.Trace(Utils.TraceMasks.Error, $"{e.Message}");
                 return null;
             }
         }
@@ -253,7 +219,7 @@ namespace OpcUa.Client.Core
         /// <summary>Creats a Subscription object to a server</summary>
         /// <returns>Subscription</returns>
         /// <exception cref="Exception">Throws and forwards any exception with short error description.</exception>
-        public Subscription CreateSubscriptionFromTemplate(Subscription template)
+        private Subscription CreateSubscriptionFromTemplate(Subscription template)
         {
             //Create a Subscription object
             var subscription = new Subscription(template);
@@ -262,14 +228,13 @@ namespace OpcUa.Client.Core
             {
                 subscription.Create();
                 _session.AddSubscription(subscription);
-
                 return subscription;
             }
             catch (Exception e)
             {
-                ShowErrorMessage(e);
-                return null;
+                Utils.Trace(Utils.TraceMasks.Error, $"{e.Message}");
             }
+            return null;
         }
 
         public bool AddMonitoredItem(MonitoredItem monitoredItem, Subscription subscription)
@@ -282,7 +247,7 @@ namespace OpcUa.Client.Core
             }
             catch (Exception e)
             {
-                ShowErrorMessage(e);
+                Utils.Trace(Utils.TraceMasks.Error, $"{e.Message}");
             }
 
             return false;
@@ -314,16 +279,9 @@ namespace OpcUa.Client.Core
         /// <exception cref="Exception">Throws and forwards any exception with short error description.</exception>
         public void RemoveMonitoredItem(Subscription subscription, string monitoredItemNodeId)
         {
-            try
-            {
-                var tmp = subscription.MonitoredItems.FirstOrDefault(x => x.StartNodeId.ToString() == monitoredItemNodeId);
-                subscription.RemoveItem(tmp);
-                subscription.ApplyChanges();
-            }
-            catch (Exception e)
-            {
-                throw e;
-            }
+            var tmp = subscription.MonitoredItems.FirstOrDefault(x => x.StartNodeId.ToString() == monitoredItemNodeId);
+            subscription.RemoveItem(tmp);
+            subscription.ApplyChanges();
         }
 
         /// <summary>Removes an existing Subscription.</summary>
@@ -397,17 +355,10 @@ namespace OpcUa.Client.Core
         public Node ReadNode(ExpandedNodeId expandedNodeId)
         {
             var nodeId = ExpandedNodeId.ToNodeId(expandedNodeId, new NamespaceTable());
-            try
-            {
-                //Read the dataValue
-                var node = _session.ReadNode(nodeId);
-                return node;
-            }
-            catch (Exception e)
-            {
-                Utils.Trace(Utils.TraceMasks.Error, $"{e.Message}");
-                throw e;
-            }
+
+            //Read the dataValue
+            var node = _session.ReadNode(nodeId);
+            return node;
         }
 
         public DataValue WriteValue(NodeId ndoeId, BuiltInType datayType, object newValue)
@@ -433,12 +384,12 @@ namespace OpcUa.Client.Core
                 }
 
                 Utils.Trace(Utils.TraceMasks.Error, "Value was not written to server!");
-                return null;
             }
             catch (Exception e)
             {
-                throw e;
+                Utils.Trace(Utils.TraceMasks.Error, $"{e.Message}");
             }
+            return null;
         }
 
         public DataValue ReadValue(NodeId nodeId)
@@ -448,21 +399,14 @@ namespace OpcUa.Client.Core
 
         public void ReadValues(ref List<ArchiveReadVariableModel> variables)
         {
-            try
-            {
-                var dataTypes = variables.Select(x => TypeInfo.GetSystemType(x.Type, -1)).ToList();
-                var nodeIds = variables.Select(x => x.RegisteredNodeId).ToList();
-                _session.ReadValues(nodeIds, dataTypes, out var values, out var results);
+            var dataTypes = variables.Select(x => TypeInfo.GetSystemType(x.Type, -1)).ToList();
+            var nodeIds = variables.Select(x => x.RegisteredNodeId).ToList();
+            _session.ReadValues(nodeIds, dataTypes, out var values, out var results);
 
-                for (var i = 0; i < values.Count; ++i)
-                {
-                    variables[i].Value = values[i];
-                    variables[i].Result = results[i];
-                }
-            }
-            catch (Exception e)
+            for (var i = 0; i < values.Count; ++i)
             {
-                throw e;
+                variables[i].Value = values[i];
+                variables[i].Result = results[i];
             }
         }
         #endregion
@@ -473,16 +417,10 @@ namespace OpcUa.Client.Core
             if (nodesToRegister.Count == 0) return new List<NodeId>();
             var nodeIdsToRegister = new NodeIdCollection(nodesToRegister.Select(x => new NodeId(x)).ToEnumerable());
 
-            try
-            {
-                var a =_session.RegisterNodes(null, nodeIdsToRegister, out var registeredNodeIds);
-                _registeredNodes.AddRange(registeredNodeIds);
-                return registeredNodeIds;
-            }
-            catch (Exception e)
-            {
-                throw e;
-            }
+
+            var a =_session.RegisterNodes(null, nodeIdsToRegister, out var registeredNodeIds);
+            _registeredNodes.AddRange(registeredNodeIds);
+            return registeredNodeIds;
         }
 
         public NodeId RegisterNode(string nodeToRegister)
@@ -492,30 +430,23 @@ namespace OpcUa.Client.Core
                 new NodeId(nodeToRegister)
             };
 
-            try
-            {
-                _session.RegisterNodes(null, nodeIdToRegister, out var registeredNode);
-                var node = registeredNode.FirstOrDefault();
-                _registeredNodes.Add(node);
+            _session.RegisterNodes(null, nodeIdToRegister, out var registeredNode);
+            var node = registeredNode.FirstOrDefault();
+            _registeredNodes.Add(node);
 
-                return node;
-            }
-            catch (Exception e)
-            {
-                throw e;
-            }
+            return node;
         }
 
         public void UnRegisterNodes()
         {
 
             try
-            {   
-                var response = _session.UnregisterNodes(null, _registeredNodes);
+            {
+                _session.UnregisterNodes(null, _registeredNodes);
             }
             catch (Exception e)
             {
-                throw e;
+                Utils.Trace(Utils.TraceMasks.Error, $"{e.Message}");
             }
         }
 
@@ -539,6 +470,11 @@ namespace OpcUa.Client.Core
         #endregion
 
         #region Public Methods
+
+        public bool SessionIsActive()
+        {
+            return _session.Connected;
+        }
 
         public void CreateDefaultConfiguration()
         {
@@ -674,22 +610,6 @@ namespace OpcUa.Client.Core
 
             return configuration;
         }
-
-        /// <summary>
-        /// Throws new window with error message
-        /// </summary>
-        /// <param name="e"></param>
-        private void ShowErrorMessage(Exception e)
-        {
-            // TODO toto prerobit na tomto leveli len logovat a exceptions hadyat vyssie at am ich vypisovat 
-            IoC.Ui.ShowMessage(new MessageBoxDialogViewModel()
-            {
-                Title = "Error",
-                Message = e.Message,
-                OkText = "Ok"
-            });
-        }
-
         #endregion
 
         #region Event Handling

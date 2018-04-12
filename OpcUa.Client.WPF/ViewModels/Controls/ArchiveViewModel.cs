@@ -118,22 +118,30 @@ namespace OpcUa.Client.WPF
             _messenger.Send(new SendManageArchivedValue(false, variableModel));
             ArchiveVariables.Add(variableModel);
 
-            if (interval != ArchiveInterval.None)
+            try
             {
-                var registeredNode = _uaClientApi.RegisterNode(nodeId);
-                _registeredNodesForRead.Add(new ArchiveReadVariableModel()
+                if (interval != ArchiveInterval.None)
                 {
-                    Interval = interval,
-                    RegisteredNodeId = registeredNode,
-                    Type = type,
-                    VariableId = tmp.Id
-                });
+                    var registeredNode = _uaClientApi.RegisterNode(nodeId);
+                    _registeredNodesForRead.Add(new ArchiveReadVariableModel()
+                    {
+                        Interval = interval,
+                        RegisteredNodeId = registeredNode,
+                        Type = type,
+                        VariableId = tmp.Id
+                    });
+                }
+                else
+                {
+                    var item = _uaClientApi.CreateMonitoredItem(interval.ToString(), nodeId, 1000, null, 2, MonitoringMode.Disabled);
+                    _uaClientApi.AddMonitoredItem(item, _subscription);
+                    item.Notification += Notification_MonitoredItem;
+                }
             }
-            else
+            catch (Exception e)
             {
-                var item = _uaClientApi.CreateMonitoredItem(interval.ToString(), nodeId, 500, null, 2, MonitoringMode.Disabled);
-                _uaClientApi.AddMonitoredItem(item, _subscription);
-                item.Notification += Notification_MonitoredItem;
+                Utils.Trace(Utils.TraceMasks.Error, $"{e.Message}");
+                IoC.AppManager.ShowExceptionErrorMessage(e);
             }
            
             SelectedArchiveInfo.VariablesCount++;
@@ -148,8 +156,6 @@ namespace OpcUa.Client.WPF
                     archive.VariablesCount--;
 
             // Vymazanie z databaze
-
-
             _unitOfWork.Variables.Remove(Mapper.VariableModelToVariableEntity(SelectedArchiveVariable));
             _messenger.Send(new SendManageArchivedValue(true, SelectedArchiveVariable));
 
@@ -158,14 +164,23 @@ namespace OpcUa.Client.WPF
 
             // Vymazanie z tabulky
             ArchiveVariables.Remove(SelectedArchiveVariable);
-            if (interval == ArchiveInterval.None)
-                _uaClientApi.RemoveMonitoredItem(_subscription, SelectedArchiveVariable.Name);
-            else
+
+            try
             {
-                // Odregistrovanie
-                _uaClientApi.UnRegisterNode(_registeredNodesForRead[index].RegisteredNodeId);
-                // Vymazanie z nodes for read
-                _registeredNodesForRead.RemoveAt(index);
+                if (interval == ArchiveInterval.None)
+                    _uaClientApi.RemoveMonitoredItem(_subscription, SelectedArchiveVariable.Name);
+                else
+                {
+                    // Odregistrovanie
+                    _uaClientApi.UnRegisterNode(_registeredNodesForRead[index].RegisteredNodeId);
+                    // Vymazanie z nodes for read
+                    _registeredNodesForRead.RemoveAt(index);
+                }
+            }
+            catch (Exception e)
+            {
+                Utils.Trace(Utils.TraceMasks.Error, $"{e.Message}");
+                IoC.AppManager.ShowExceptionErrorMessage(e);
             }
         }
         #endregion
@@ -205,6 +220,8 @@ namespace OpcUa.Client.WPF
         private void OnLoad()
         {
             _subscription = _uaClientApi.Subscribe(2000, "Archivation", false);
+            if (_subscription == null)
+                IoC.AppManager.ShowWarningMessage("Subscription creation failed, please restart application!");
 
             LoadDataFromDataBase();
             RegisterLoadedNodes();
@@ -226,16 +243,24 @@ namespace OpcUa.Client.WPF
         private void RegisterLoadedNodes()
         {
             var nodeIds = ArchiveVariables.Select(x => x.Name).ToList();
-            var registeredNodes =_uaClientApi.RegisterNodes(nodeIds);
+            try
+            {
+                var registeredNodes = _uaClientApi.RegisterNodes(nodeIds);
 
-            _registeredNodesForRead = ArchiveVariables.Where(x => x.Archive != ArchiveInterval.None)
-                                                      .Zip(registeredNodes, (entity, regNode) => new ArchiveReadVariableModel()
-                                                      {
-                                                          VariableId = entity.Id,
-                                                          RegisteredNodeId = regNode,
-                                                          Type = entity.DataType,
-                                                          Interval = entity.Archive
-                                                      }).ToList();
+                _registeredNodesForRead = ArchiveVariables.Where(x => x.Archive != ArchiveInterval.None)
+                                                          .Zip(registeredNodes, (entity, regNode) => new ArchiveReadVariableModel()
+                                                          {
+                                                              VariableId = entity.Id,
+                                                              RegisteredNodeId = regNode,
+                                                              Type = entity.DataType,
+                                                              Interval = entity.Archive
+                                                          }).ToList();
+            }
+            catch (Exception e)
+            {
+                Utils.Trace(Utils.TraceMasks.Error, $"{e.Message}");
+                IoC.AppManager.ShowExceptionErrorMessage(e);
+            }
 
             foreach (var variable in ArchiveVariables.Where(x => x.Archive == ArchiveInterval.None))
             {
@@ -268,7 +293,15 @@ namespace OpcUa.Client.WPF
 
             // Vytriedenie premennych pre tento interval a ancitanie hodnot
             var variablesForRead = _registeredNodesForRead.Where(x => x.Interval == interval).ToList();
-            _uaClientApi.ReadValues(ref variablesForRead);
+            try
+            {
+                _uaClientApi.ReadValues(ref variablesForRead);
+            }
+            catch (Exception e)
+            {
+                Utils.Trace(Utils.TraceMasks.Error, $"{e.Message}");
+                IoC.AppManager.ShowExceptionErrorMessage(e);
+            }
 
             // Vytvorenie zaznamov
             var records = variablesForRead.Select(x => new RecordEntity()

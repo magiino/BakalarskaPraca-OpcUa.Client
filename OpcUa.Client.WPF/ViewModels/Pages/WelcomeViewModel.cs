@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Security;
 using System.Windows.Input;
+using Opc.Ua;
 using OpcUa.Client.Core;
 
 namespace OpcUa.Client.WPF
@@ -35,8 +36,8 @@ namespace OpcUa.Client.WPF
 
             OnLoad();
 
-            LoadProjectCommand = new MixRelayCommand(LoadProject);
-            DeleteProjectCommand = new MixRelayCommand(DeleteProject);
+            LoadProjectCommand = new MixRelayCommand(LoadProject, LoadAndDeleteProjectCanUse);
+            DeleteProjectCommand = new MixRelayCommand(DeleteProject, LoadAndDeleteProjectCanUse);
             CreateProjectCommand = new MixRelayCommand((obj) => IoC.Application.GoToPage(ApplicationPage.Endpoints));
 
             _messenger.Register<SendCredentials>(msg => Login(msg.UserName, msg.Password));
@@ -60,7 +61,7 @@ namespace OpcUa.Client.WPF
             }
             catch (Exception e)
             {
-                IoC.AppManager.ShowErrorMessage(e);
+                IoC.AppManager.ShowExceptionErrorMessage(e);
             }
         }
 
@@ -88,6 +89,14 @@ namespace OpcUa.Client.WPF
         }
         #endregion
 
+        #region CanUse Methods
+
+        public bool LoadAndDeleteProjectCanUse(object parameter)
+        {
+            return SelectedProject != null;
+        }
+        #endregion
+
         #region Private Methods
         private void Login(string userName, SecureString password)
         {
@@ -96,24 +105,16 @@ namespace OpcUa.Client.WPF
                 var user = _unitOfWork.Auth.Login(userName, password);
                 if (user == null)
                 {
-                    IoC.Ui.ShowMessage(new MessageBoxDialogViewModel()
-                    {
-                        Title = "Error",
-                        Message = "Zadali ste zlé prihlasovacie údaje!",
-                        OkText = "ok"
-                    });
+                    IoC.AppManager.ShowWarningMessage("Zadali ste zlé prihlasovacie údaje!");
+                    return;
                 }
                 var endpoint = _unitOfWork.Endpoints.SingleOrDefault(x => x.Id == SelectedProject.EndpointId);
                 _uaClientApi.Connect(Mapper.CreateEndpointDescription(endpoint), userName, SecureStringHelpers.Unsecure(password), SelectedProject.SessionName);
             }
             catch (Exception e)
             {
-                IoC.Ui.ShowMessage(new MessageBoxDialogViewModel()
-                {
-                    Title = "Error",
-                    Message = e.Message,
-                    OkText = "ok"
-                });
+                Utils.Trace(Utils.TraceMasks.Error, $"{e.Message}");
+                IoC.AppManager.ShowExceptionErrorMessage(e);
             }
             IoC.Application.GoToPage(ApplicationPage.Main);
         }

@@ -94,12 +94,11 @@ namespace OpcUa.Client.WPF
             _iUnitOfWork = iUnitOfWork;
             _uaClientApi = uaClientApi;
             
-            SearchCommand = new MixRelayCommand(SearchEndpoints);
+            SearchCommand = new MixRelayCommand(SearchEndpoints, SearchEndpointsCanUse);
             ConnectCommand = new MixRelayCommand(ConnectToServer);
             StartFilterCommand = new MixRelayCommand(EndpointFilter);
             LoadProjectCommand = new MixRelayCommand(LoadprojectPage);
         }
-
         #endregion
 
         #region Command Methods
@@ -131,7 +130,8 @@ namespace OpcUa.Client.WPF
             }
             catch (Exception e)
             {
-                IoC.AppManager.ShowErrorMessage(e);
+                Utils.Trace(Utils.TraceMasks.Error, $"{e.Message}");
+                IoC.AppManager.ShowExceptionErrorMessage(e);
             }
 
             IoC.Application.GoToPage(ApplicationPage.Main);
@@ -161,12 +161,24 @@ namespace OpcUa.Client.WPF
             }
             catch (Exception e)
             {
-                System.Windows.MessageBox.Show(e.Message, "Error");
+                Utils.Trace(Utils.TraceMasks.Error, $"{e.Message}");
+                IoC.AppManager.ShowExceptionErrorMessage(e);
             }
 
             SelectedServer = FoundedServers?.First();
 
             EndpointFilter(null);
+        }
+        #endregion
+
+        #region CanUse Methods
+        public bool SearchEndpointsCanUse(object parameter)
+        {
+            return DiscoveryUrl != null;
+        }
+        public bool ConnectToServerCanUse(object parameter)
+        {
+            return _selectedEndpoint != null && ProjectName != null && SessionName != null && (AnonymAllowed || UserAllowed);
         }
         #endregion
 

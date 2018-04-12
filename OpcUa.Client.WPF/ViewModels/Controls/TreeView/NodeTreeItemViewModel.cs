@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
 using Opc.Ua;
@@ -87,10 +88,19 @@ namespace OpcUa.Client.WPF
             if (Type == NodeClass.Unspecified)
                 return;
 
-            // Find all children
-            var children = IoC.UaClientApi.BrowseNode(Node);
-            Children = new ObservableCollection<NodeTreeItemViewModel>(
-                                children.Select(content => new NodeTreeItemViewModel(content)).OrderBy(x => x.Name));
+            try
+            {
+                // Find all children
+                var children = IoC.UaClientApi.BrowseNode(Node);
+                Children = new ObservableCollection<NodeTreeItemViewModel>(
+                                    children.Select(content => new NodeTreeItemViewModel(content)).OrderBy(x => x.Name));
+            }
+            catch (Exception e)
+            {
+                Utils.Trace(Utils.TraceMasks.Error, $"{e.Message}");
+                IoC.AppManager.ShowExceptionErrorMessage(e);
+
+            }
         }
         #endregion
 

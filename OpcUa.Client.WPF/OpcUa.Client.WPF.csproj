@@ -82,6 +82,7 @@
     <Compile Include="AttachedProperties\BaseAttachedProperty.cs" />
     <Compile Include="AttachedProperties\PasswordBoxAttachedProperties.cs" />
     <Compile Include="AttachedProperties\NoFrameHistory.cs" />
+    <Compile Include="ValueConverters\BooleanToColorConverter.cs" />
     <Compile Include="ValueConverters\StringRgbToBrushConverter.cs" />
     <Compile Include="View\Controls\Charts\ZoomChart.xaml.cs">
       <DependentUpon>ZoomChart.xaml</DependentUpon>

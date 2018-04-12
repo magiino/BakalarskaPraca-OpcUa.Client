@@ -21,7 +21,7 @@ namespace OpcUa.Client.WPF
         {
             // Set up child view models
             MenuBarViewModel = new MenuBarViewModel(iUnitOfWork);
-            MenuToolBarViewModel = new MenuToolBarViewModel(iUnitOfWork);
+            MenuToolBarViewModel = new MenuToolBarViewModel(iUnitOfWork, uaClientApi);
             NodetreeViewModel = new NodeTreeViewModel();
             NodeAttributesViewModel = new NodeAttributesViewModel(uaClientApi, messenger);
             NotificationViewModel = new NotificationViewModel(iUnitOfWork, uaClientApi, messenger);
