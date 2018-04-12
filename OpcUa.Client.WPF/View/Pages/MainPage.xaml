@@ -24,17 +24,21 @@
                 </Grid.ColumnDefinitions>
 
                 <!-- First Column-->
-                <TabControl Grid.Column="0"
-                            HorizontalAlignment="Left" 
-                            DockPanel.Dock="Left"
-                            >
+                <Grid Grid.Column="0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
 
-                    <TabItem Header="Server Address Space">
-                        <local:TreeView MinWidth="200"
-                                        DataContext="{Binding NodetreeViewModel}"
-                                        />
-                    </TabItem>
-                </TabControl>
+                    <TextBlock Text="Server address space"
+                               FontSize="{StaticResource FontSizeLarge}"/>
+
+                    <local:TreeView Grid.Row="1"
+                                    MinWidth="200"
+                                    DataContext="{Binding NodetreeViewModel}"
+                                    />
+                </Grid>
+               
 
                 <!-- Second Column-->
                 <Grid Grid.Column="1">
@@ -47,7 +51,7 @@
 
                 <!-- Third Column-->
                 <TabControl Grid.Column="2">
-                    <TabItem Header="Subscribed Nodes">
+                    <TabItem Header="Notifications">
                         <local:Notification DataContext="{Binding NotificationViewModel}"/>
                     </TabItem>
 
@@ -55,7 +59,7 @@
                         <local:Archive DataContext="{Binding ArchiveViewModel}"/>
                     </TabItem>
 
-                    <TabItem Header="Zoom Chart">
+                    <TabItem Header="Archive Chart">
                         <local:ZoomChart DataContext="{Binding ZoomChartViewModel}"/>
                     </TabItem>
 

@@ -11,7 +11,7 @@ namespace OpcUa.Client.Core.DAL
             AutomaticMigrationsEnabled = false;
             MigrationsDirectory = @"DAL\Migrations";
             MigrationsNamespace = "OpcUa.Client.Core.DAL.Migrations";
-            AutomaticMigrationDataLossAllowed = true;
+            //AutomaticMigrationDataLossAllowed = true;
         }
 
         protected override void Seed(DataContext context)
