@@ -240,7 +240,6 @@ namespace Opc.Ua
         /// Updates the object from another object (usage is not updated).
         /// </summary>
         /// <param name="certificate">The certificate.</param>
-        //TODO => private not used ?
         public void Paste(CertificateIdentifier certificate)
         {
             this.SubjectName = certificate.SubjectName;
@@ -258,7 +257,6 @@ namespace Opc.Ua
         /// A string containg FriendlyName of the <see cref="X509Certificate2"/> or created using Subject of 
         /// the <see cref="X509Certificate2"/>.
         /// </returns>
-        /// //TODO =&gt; private
         public static string GetDisplayName(X509Certificate2 certificate)
         {
             if (!String.IsNullOrEmpty(certificate.FriendlyName))

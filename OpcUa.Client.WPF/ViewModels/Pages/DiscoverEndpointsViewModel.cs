@@ -109,7 +109,6 @@ namespace OpcUa.Client.WPF
             {
                 if (UserPwIsSelected)
                 {
-                    // TODO ak uz je taky ucet v databaze neregistrovat?
                     _uaClientApi.Connect(_selectedEndpoint, UserName, (parameter as IHavePassword)?.SecurePassword.Unsecure(), SessionName);
                     IoC.AppManager.ProjectId = _iUnitOfWork.Projects.Add(new ProjectEntity()
                     {

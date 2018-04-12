@@ -52,7 +52,6 @@ namespace OpcUa.Client.Core
             }
             catch (Exception e)
             {
-                // TODO handle Exception here
                 throw e;
             }
         }
@@ -77,7 +76,6 @@ namespace OpcUa.Client.Core
             }
             catch (Exception e)
             {
-                // TODO handle Exception here
                 throw e;
             }
         }
@@ -109,7 +107,6 @@ namespace OpcUa.Client.Core
             }
             catch (Exception e)
             {
-                // TODO handle Exception here
                 throw e;
             }
         }
@@ -141,7 +138,6 @@ namespace OpcUa.Client.Core
             }
             catch (Exception e)
             {
-                // TODO handle Exception here
                 throw e;
             }
         }
@@ -326,7 +322,6 @@ namespace OpcUa.Client.Core
             }
             catch (Exception e)
             {
-                // TODO handle Exception here
                 throw e;
             }
         }
@@ -347,7 +342,6 @@ namespace OpcUa.Client.Core
             }
             catch (Exception e)
             {
-                // TODO handle Exception here
                 throw e;
             }
         }
@@ -389,7 +383,6 @@ namespace OpcUa.Client.Core
             }
             catch (Exception e)
             {
-                // TODO handle Exception here
                 Utils.Trace(Utils.TraceMasks.Error, $"{e.Message}");
                 throw e;
             }
@@ -412,7 +405,6 @@ namespace OpcUa.Client.Core
             }
             catch (Exception e)
             {
-                // TODO handle Exception here
                 Utils.Trace(Utils.TraceMasks.Error, $"{e.Message}");
                 throw e;
             }
@@ -445,7 +437,6 @@ namespace OpcUa.Client.Core
             }
             catch (Exception e)
             {
-                // TODO handle exception
                 throw e;
             }
         }
