@@ -33,10 +33,10 @@ namespace OpcUa.Client.WPF
         #endregion
 
         #region Commands
-        public ICommand AddVariableToArchiveCommand { get; set; }
-        public ICommand DeleteVariableFromArchiveCommand { get; set; }
-        public ICommand StartArchiveCommand { get; set; }
-        public ICommand StopArchiveCommand { get; set; }
+        public ICommand AddVariableToArchiveCommand { get; }
+        public ICommand DeleteVariableFromArchiveCommand { get; }
+        public ICommand StartArchiveCommand { get; }
+        public ICommand StopArchiveCommand { get; }
         #endregion
 
         #region Constructor
@@ -279,7 +279,6 @@ namespace OpcUa.Client.WPF
         #endregion
 
         #region CallBack Methods
-
         /// <summary>
         /// Callback method for updating values of subscibed nodes
         /// </summary>
@@ -306,7 +305,6 @@ namespace OpcUa.Client.WPF
 
             //_unitOfWork.Complete();
         }
-
         #endregion
     }
 }

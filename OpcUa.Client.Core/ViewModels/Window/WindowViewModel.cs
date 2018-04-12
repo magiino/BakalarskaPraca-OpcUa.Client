@@ -1,11 +1,8 @@
-﻿using OpcUa.Client.Core;
-
-namespace OpcUa.Client.WPF
+﻿namespace OpcUa.Client.Core
 {
     public class WindowViewModel : BaseViewModel
     {
         #region Public Properties
-
         /// <summary>
         /// The smallest width the window can go to
         /// </summary>
@@ -20,7 +17,6 @@ namespace OpcUa.Client.WPF
         /// True if main window is not focused
         /// </summary>
         public bool DimmableOverlayVisible { get; set; }
-
         #endregion
     }
 }

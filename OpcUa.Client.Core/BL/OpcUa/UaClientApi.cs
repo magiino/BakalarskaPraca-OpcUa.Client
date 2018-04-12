@@ -690,6 +690,7 @@ namespace OpcUa.Client.Core
         /// <param name="e"></param>
         private void ShowErrorMessage(Exception e)
         {
+            // TODO toto prerobit na tomto leveli len logovat a exceptions hadyat vyssie at am ich vypisovat 
             IoC.Ui.ShowMessage(new MessageBoxDialogViewModel()
             {
                 Title = "Error",

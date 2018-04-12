@@ -1,4 +1,5 @@
 ﻿using System.Windows.Controls;
+using OpcUa.Client.Core;
 
 namespace OpcUa.Client.WPF
 {

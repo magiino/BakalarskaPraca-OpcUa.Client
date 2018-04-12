@@ -16,13 +16,13 @@ namespace OpcUa.Client.WPF
             switch ((ApplicationPage)value)
             {
                 case ApplicationPage.Main:
-                    return new MainPage();
+                    return new MainPage(new MainViewModel(IoC.UnitOfWork, IoC.UaClientApi, IoC.Messenger));
 
                 case ApplicationPage.Endpoints:
-                    return new DiscoverEndpoints();
+                    return new DiscoverEndpoints(new DiscoverEndpointsViewModel(IoC.UnitOfWork, IoC.UaClientApi));
 
                 case ApplicationPage.Welcome:
-                    return new WelcomePage();
+                    return new WelcomePage(new WelcomeViewModel(IoC.UnitOfWork, IoC.UaClientApi, IoC.Messenger));
                 default:
                     Debugger.Break();
                     return null;

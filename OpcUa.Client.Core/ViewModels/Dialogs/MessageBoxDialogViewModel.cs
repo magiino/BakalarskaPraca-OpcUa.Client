@@ -7,6 +7,7 @@ namespace OpcUa.Client.Core
     /// </summary>
     public class MessageBoxDialogViewModel : BaseDialogViewModel
     {
+        #region Public Properties
         /// <summary>
         /// The message to display
         /// </summary>
@@ -16,12 +17,17 @@ namespace OpcUa.Client.Core
         /// The text to use for the OK button
         /// </summary>
         public string OkText { get; set; }
+        #endregion
 
-        public ICommand CloseActionCommand { get; set; }
+        #region Commands
+        public ICommand CloseActionCommand { get; }
+        #endregion
 
+        #region Constructor
         public MessageBoxDialogViewModel()
         {
             CloseActionCommand = new RelayCommand((obj) => CloseAction());
-        }
+        } 
+        #endregion
     }
 }

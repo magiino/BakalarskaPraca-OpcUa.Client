@@ -26,7 +26,7 @@ namespace OpcUa.Client.WPF
         #endregion
 
         #region Commands
-        public ICommand ConfirmCommand { get; set; } 
+        public ICommand ConfirmCommand { get; } 
         #endregion
 
         #region Constructor

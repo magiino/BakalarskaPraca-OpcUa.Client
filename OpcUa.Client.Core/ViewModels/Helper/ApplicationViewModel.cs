@@ -17,7 +17,6 @@
         /// <param name="page">The page to go to</param>
         public void GoToPage(ApplicationPage page)
         {
-            // Set the current page
             CurrentPage = page;
         }
     }

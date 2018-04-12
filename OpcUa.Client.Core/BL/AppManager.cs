@@ -5,7 +5,6 @@ namespace OpcUa.Client.Core
     public class AppManager
     {
         public Guid ProjectId { get; set; }
-        public bool IsSaved { get; set; }
         public Action CloseAction { get; set; }
 
         public void CloseApplication()
@@ -14,6 +13,14 @@ namespace OpcUa.Client.Core
             CloseAction();
         }
 
-        // TODO z tadeto vypisovat okná, aspon message dialogy
+        public void ShowErrorMessage(Exception e)
+        {
+            IoC.Ui.ShowMessage(new MessageBoxDialogViewModel()
+            {
+                Title = "Error",
+                Message = e.Message,
+                OkText = "Ok"
+            });
+        }
     }
 }

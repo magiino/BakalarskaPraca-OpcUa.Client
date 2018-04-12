@@ -8,7 +8,7 @@ namespace OpcUa.Client.WPF
     /// </summary>
     public partial class DiscoverEndpoints : BasePage<DiscoverEndpointsViewModel>, IHavePassword
     {
-        public DiscoverEndpoints()
+        public DiscoverEndpoints(DiscoverEndpointsViewModel viewModel) : base(viewModel)
         {
             InitializeComponent();
         }

@@ -10,32 +10,25 @@ namespace OpcUa.Client.WPF
     public class NotificationViewModel : BaseViewModel
     {
         #region Private Fields
-
         private readonly UaClientApi _uaClientApi;
         private readonly Messenger _messenger;
         private readonly IUnitOfWork _unitOfWork;
         private ReferenceDescription _selectedNode;
         private readonly Subscription _subscription; 
-
         #endregion
 
         #region Public Properties
-
         public NotificationListViewModel NotificationListVm { get; set; }
         public ObservableCollection<ExtendedNotificationModel> Notifications { get; set; } = new ObservableCollection<ExtendedNotificationModel>();
         public ExtendedNotificationModel SelectedNotification { get; set; }
-
         #endregion
 
         #region Commands
-
-        public ICommand AddNotificationCommand { get; set; }
-        public ICommand RemoveNotificationCommand { get; set; }
-
+        public ICommand AddNotificationCommand { get; }
+        public ICommand RemoveNotificationCommand { get; }
         #endregion
 
         #region Constructor
-
         public NotificationViewModel(IUnitOfWork unitOfWork, UaClientApi uaClientApi, Messenger messenger)
         {
             _uaClientApi = uaClientApi;
@@ -58,7 +51,6 @@ namespace OpcUa.Client.WPF
         #endregion
 
         #region Command Methods
-
         private void AddNotification(object parameter)
         {
             var isDigital = _uaClientApi.GetBuiltInTypeOfVariableNodeId(_selectedNode.NodeId.ToString()) == BuiltInType.Boolean;
@@ -75,11 +67,9 @@ namespace OpcUa.Client.WPF
             _uaClientApi.RemoveMonitoredItem(_subscription, SelectedNotification.NodeId);
             Notifications.Remove(SelectedNotification);
         }
-
         #endregion
 
         #region Can use methods
-
         public bool AddNotificationCanUse(object parameter)
         {
             if (_selectedNode == null)
@@ -93,11 +83,9 @@ namespace OpcUa.Client.WPF
         {
             return SelectedNotification != null;
         }
-
         #endregion
 
         #region Helpers
-
         private void AddNotificationToSubscription(ExtendedNotificationModel notification)
         {
             notification.DataType = _uaClientApi.GetBuiltInTypeOfVariableNodeId(notification.NodeId);
@@ -151,11 +139,9 @@ namespace OpcUa.Client.WPF
             foreach (var extendedNonotification in extendedNotifications)
                 AddNotificationToSubscription(extendedNonotification);
         }
-
         #endregion
 
         #region CallBack Methods
-
         /// <summary>
         /// Callback method for updating values of subscibed nodes
         /// </summary>
@@ -182,7 +168,6 @@ namespace OpcUa.Client.WPF
 
             _messenger.Send(new SendNotificationAdd(variable.Name, variable.NodeId,message, value.SourceTimestamp));
         }
-
         #endregion
     }
 }

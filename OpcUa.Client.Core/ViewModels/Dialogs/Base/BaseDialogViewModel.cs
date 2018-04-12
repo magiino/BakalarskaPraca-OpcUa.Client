@@ -1,5 +1,4 @@
 ﻿using System;
-using OpcUa.Client.Core;
 
 namespace OpcUa.Client.Core
 {
@@ -8,6 +7,7 @@ namespace OpcUa.Client.Core
     /// </summary>
     public class BaseDialogViewModel : BaseViewModel
     {
+        #region Public Properties
         /// <summary>
         /// The title of the dialog
         /// </summary>
@@ -16,6 +16,7 @@ namespace OpcUa.Client.Core
         /// <summary>
         /// Command for closing dialog window
         /// </summary>
-        public Action CloseAction { get; set; }
+        public Action CloseAction { get; set; } 
+        #endregion
     }
 }

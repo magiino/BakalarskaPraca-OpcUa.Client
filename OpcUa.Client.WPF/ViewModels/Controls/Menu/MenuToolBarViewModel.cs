@@ -4,25 +4,27 @@ using OpcUa.Client.Core;
 namespace OpcUa.Client.WPF
 {
     public class MenuToolBarViewModel : BaseViewModel
-    { 
-        #region Commands
-        public ICommand DisconnectSessionCommand { get; set; }
-        public ICommand SaveProjectCommand { get; set; }
+    {
+        #region Private Fields
+        private readonly IUnitOfWork _iUnitOfWork; 
+        #endregion
 
+        #region Commands
+        public ICommand DisconnectSessionCommand { get; }
+        public ICommand SaveProjectCommand { get; }
         #endregion
 
         #region Constructor
-
-        public MenuToolBarViewModel()
+        public MenuToolBarViewModel(IUnitOfWork iUnitOfWork)
         {
+            _iUnitOfWork = iUnitOfWork;
+
             DisconnectSessionCommand = new MixRelayCommand(DisconnectSession);
             SaveProjectCommand = new MixRelayCommand(SaveProject, SaveprojectCanUse);
         }
-
         #endregion
 
-        #region Command Method
-
+        #region Command Methods
         private void DisconnectSession(object parameter)
         {
             IoC.UaClientApi.Disconnect();
@@ -31,18 +33,15 @@ namespace OpcUa.Client.WPF
 
         private void SaveProject(object parameter)
         {
-            IoC.UnitOfWork.CompleteAsync();
+            _iUnitOfWork.CompleteAsync();
         }
-
         #endregion
 
         #region CanUse methods
-
         private bool SaveprojectCanUse(object parameter)
         {
-            return IoC.UnitOfWork.HasUnsavedChanges();
+            return _iUnitOfWork.HasUnsavedChanges();
         } 
-
         #endregion
     }
 }

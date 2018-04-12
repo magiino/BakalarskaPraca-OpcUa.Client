@@ -6,7 +6,11 @@ namespace OpcUa.Client.Core
 {
     public class AddNotificationDialogViewModel : BaseDialogViewModel
     {
-        private readonly Messenger _messenger;
+        #region Private Fields
+        private readonly Messenger _messenger; 
+        #endregion
+
+        #region Public Properties
         public string Name { get; set; }
         public string NodeId { get; set; }
         public bool IsDigital { get; set; }
@@ -20,16 +24,21 @@ namespace OpcUa.Client.Core
 
         public string IsZeroDescription { get; set; }
         public string IsOneDescription { get; set; }
+        #endregion
 
-        public ICommand AddItemCommand { get; set; }
+        #region Commands
+        public ICommand AddItemCommand { get; } 
+        #endregion
 
+        #region Constructor
         public AddNotificationDialogViewModel(Messenger messenger)
         {
             _messenger = messenger;
-
             AddItemCommand = new RelayCommand(AddItem);
         }
+        #endregion
 
+        #region Command Methods
         private void AddItem(object parameter)
         {
             var notification = new ExtendedNotificationModel();
@@ -48,9 +57,10 @@ namespace OpcUa.Client.Core
 
             notification.Name = Name;
             notification.NodeId = NodeId;
-            
+
             _messenger.Send(new SendNewNotification(notification));
             CloseAction.Invoke();
-        }
+        } 
+        #endregion
     }
 }

@@ -12,17 +12,18 @@ namespace OpcUa.Client.WPF
     public class DiscoverEndpointsViewModel : BaseViewModel
     {
         #region Private Fields
+        private readonly IUnitOfWork _iUnitOfWork;
         private readonly UaClientApi _uaClientApi;
+
         private ApplicationDescription _selectedServer;
+        private EndpointDescription _selectedEndpoint;
         private readonly EndpointDescriptionCollection _discoveredEndpoints = new EndpointDescriptionCollection();
         #endregion
 
         #region Public Properties
-
         public string DiscoveryUrl { get; set; } = "opc.tcp://A05-226b:48010";
 
         public ObservableCollection<ApplicationDescription> FoundedServers { get; set; }
-
         public ApplicationDescription SelectedServer
         {
             get =>_selectedServer;
@@ -34,25 +35,20 @@ namespace OpcUa.Client.WPF
         }
 
         public ObservableCollection<EndpointListModel> FilteredEndpoints { get; set; }
-
         public EndpointListModel SelectedEndpointListModel
         {
             set
             {
-                SelectedEndpoint = value?.EndpointDesciption;
+                _selectedEndpoint = value?.EndpointDesciption;
                 SetMessegeEncoding();
             }
         }
 
-        public EndpointDescription SelectedEndpoint { get; set; }
-
             #region Filter
-
             public string SessionName { get; set; } = "MySession";
             public string ProjectName { get; set; } = "MyProject";
 
             public IEnumerable<TransportProtocol> EProtocols { get; set; } = Enum.GetValues(typeof(TransportProtocol)).Cast<TransportProtocol>();
-
             private TransportProtocol _selectedTransportProtocol;
             public TransportProtocol SelectedTransportProtocol
             {
@@ -78,25 +74,21 @@ namespace OpcUa.Client.WPF
             public bool AnonymousIsSelected { get; set; } = true;
             public bool UserPwIsSelected { get; set; } = false;
             public string UserName { get; set; } 
-
             #endregion
-
         #endregion
 
         #region Commands
-
-        public ICommand SearchCommand { get; set; }
-        public ICommand ConnectCommand { get; set; }
-        public ICommand StartFilterCommand { get; set; }
-        public ICommand LoadProjectCommand { get; set; }
-
+        public ICommand SearchCommand { get; }
+        public ICommand ConnectCommand { get; }
+        public ICommand StartFilterCommand { get; }
+        public ICommand LoadProjectCommand { get; }
         #endregion
 
         #region Constructor
-
-        public DiscoverEndpointsViewModel()
+        public DiscoverEndpointsViewModel(IUnitOfWork iUnitOfWork, UaClientApi uaClientApi)
         {
-            _uaClientApi = IoC.UaClientApi;
+            _iUnitOfWork = iUnitOfWork;
+            _uaClientApi = uaClientApi;
             
             SearchCommand = new MixRelayCommand(SearchEndpoints);
             ConnectCommand = new MixRelayCommand(ConnectToServer);
@@ -107,41 +99,36 @@ namespace OpcUa.Client.WPF
         #endregion
 
         #region Command Methods
-
         private void ConnectToServer(object parameter)
         {
             try
             {
                 if (UserPwIsSelected)
                 {
-                    _uaClientApi.Connect(SelectedEndpoint, UserName, (parameter as IHavePassword)?.SecurePassword.Unsecure(), SessionName);
-                    IoC.AppManager.ProjectId = IoC.UnitOfWork.Projects.Add(new ProjectEntity()
+                    // TODO ak uz je taky ucet v databaze neregistrovat?
+                    _uaClientApi.Connect(_selectedEndpoint, UserName, (parameter as IHavePassword)?.SecurePassword.Unsecure(), SessionName);
+                    IoC.AppManager.ProjectId = _iUnitOfWork.Projects.Add(new ProjectEntity()
                     {
                         Name = ProjectName,
                         SessionName = SessionName,
-                        Endpoint = Mapper.CreateEndpointEntity(SelectedEndpoint),
-                        User = IoC.UnitOfWork.Auth.Register(new UserEntity(){UserName = UserName}, (parameter as IHavePassword)?.SecurePassword)
+                        Endpoint = Mapper.CreateEndpointEntity(_selectedEndpoint),
+                        User = _iUnitOfWork.Auth.Register(new UserEntity(){UserName = UserName}, (parameter as IHavePassword)?.SecurePassword)
                     }).Id;
                 }
                 else
                 {
-                    _uaClientApi.ConnectAnonymous(SelectedEndpoint, SessionName);
-                    IoC.AppManager.ProjectId = IoC.UnitOfWork.Projects.Add(new ProjectEntity()
+                    _uaClientApi.ConnectAnonymous(_selectedEndpoint, SessionName);
+                    IoC.AppManager.ProjectId = _iUnitOfWork.Projects.Add(new ProjectEntity()
                     {
                         Name = ProjectName,
                         SessionName = SessionName,
-                        Endpoint = Mapper.CreateEndpointEntity(SelectedEndpoint),
+                        Endpoint = Mapper.CreateEndpointEntity(_selectedEndpoint),
                     }).Id;
                 }
             }
             catch (Exception e)
             {
-                IoC.Ui.ShowMessage(new MessageBoxDialogViewModel()
-                {
-                    Title = "Error",
-                    Message = e.Message,
-                    OkText = "Ok"
-                });
+                IoC.AppManager.ShowErrorMessage(e);
             }
 
             IoC.Application.GoToPage(ApplicationPage.Main);
@@ -178,7 +165,6 @@ namespace OpcUa.Client.WPF
 
             EndpointFilter(null);
         }
-
         #endregion
 
         #region Endpoints Filter Methods
@@ -228,10 +214,10 @@ namespace OpcUa.Client.WPF
 
         private void SetMessegeEncoding()
         {
-            if (SelectedEndpoint == null) return;
+            if (_selectedEndpoint == null) return;
 
-            var num = SelectedEndpoint.TransportProfileUri.Contains("xml") ? 1 : 0;
-            num = (SelectedEndpoint.TransportProfileUri.Contains("xml") && SelectedEndpoint.TransportProfileUri.Contains("binary")) ? 2 : num;
+            var num = _selectedEndpoint.TransportProfileUri.Contains("xml") ? 1 : 0;
+            num = (_selectedEndpoint.TransportProfileUri.Contains("xml") && _selectedEndpoint.TransportProfileUri.Contains("binary")) ? 2 : num;
 
             switch (num)
             {
@@ -252,7 +238,6 @@ namespace OpcUa.Client.WPF
                     break;
             }
         }
-
         #endregion
     }
 }

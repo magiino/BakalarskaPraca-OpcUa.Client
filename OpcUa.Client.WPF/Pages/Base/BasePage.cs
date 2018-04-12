@@ -7,19 +7,16 @@ namespace OpcUa.Client.WPF
     /// A base page with added ViewModel support
     /// </summary>
     public class BasePage<VM> : Page
-        where VM : BaseViewModel, new()
+        where VM : BaseViewModel
     {
         #region Private Member
-
         /// <summary>
         /// The view model associated with this page
         /// </summary>
         private VM _viewModel;
-
         #endregion
 
         #region Public Properties
-
         /// <summary>
         /// The View Model associated with this page
         /// </summary>
@@ -39,20 +36,31 @@ namespace OpcUa.Client.WPF
                 DataContext = _viewModel;
             }
         }
-
         #endregion
 
         #region Constructor
-
         /// <summary>
         /// Default constructor
         /// </summary>
         public BasePage()
         {
             // Create a default view model
-            ViewModel = new VM();
+            ViewModel = IoC.Get<VM>();
         }
 
+        /// <summary>
+        /// Constructor with specific view model
+        /// </summary>
+        /// <param name="specificViewModel">The specific view model to use, if any</param>
+        public BasePage(VM specificViewModel = null) : base()
+        {
+            // Set specific view model
+            if (specificViewModel != null)
+                ViewModel = specificViewModel;
+            else
+                // Create a default view model
+                ViewModel = IoC.Get<VM>();
+        }
         #endregion
     }
 }

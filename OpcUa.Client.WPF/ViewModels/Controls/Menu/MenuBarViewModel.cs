@@ -7,39 +7,35 @@ namespace OpcUa.Client.WPF
     public class MenuBarViewModel : BaseViewModel
     {
         #region Private Fields
-
+        private readonly IUnitOfWork _iUnitOfWork;
         private ApplicationPage _goTo;
-
         #endregion
 
         #region Commands
-
-        public ICommand NewProjectCommand { get; set; }
-        public ICommand SaveProjectCommand { get; set; }
-        public ICommand OpenProjectCommand { get; set; }
-        public ICommand ExitApplicationCommand { get; set; }
-        public ICommand OpenGitHubCommand { get; set; }
-
+        public ICommand NewProjectCommand { get; }
+        public ICommand SaveProjectCommand { get; }
+        public ICommand OpenProjectCommand { get; }
+        public ICommand ExitApplicationCommand { get; }
+        public ICommand OpenGitHubCommand { get; }
         #endregion
 
         #region Constructor
-
-        public MenuBarViewModel()
+        public MenuBarViewModel(IUnitOfWork iUnitOfWork)
         {
+            _iUnitOfWork = iUnitOfWork;
+
             NewProjectCommand = new MixRelayCommand((obj) => GoToPageIfSaved(ApplicationPage.Endpoints));
-            SaveProjectCommand = new MixRelayCommand((obj) => IoC.UnitOfWork.CompleteAsync(), SaveprojectCanUse);
+            SaveProjectCommand = new MixRelayCommand((obj) => _iUnitOfWork.CompleteAsync(), SaveprojectCanUse);
             OpenProjectCommand = new MixRelayCommand((obj) => GoToPageIfSaved(ApplicationPage.Welcome));
             ExitApplicationCommand = new MixRelayCommand((obj) => IoC.AppManager.CloseApplication());
             OpenGitHubCommand = new MixRelayCommand((obj) => Process.Start("https://github.com/magiino/BakalarskaPraca-OpcUa.Client"));
         }
-
         #endregion
 
         #region Command Methods
-
         public void GoToPageIfSaved(ApplicationPage page)
         {
-            if (!IoC.UnitOfWork.HasUnsavedChanges())
+            if (!_iUnitOfWork.HasUnsavedChanges())
             {
                 IoC.UaClientApi.Disconnect();
                 IoC.Application.GoToPage(page);
@@ -53,7 +49,7 @@ namespace OpcUa.Client.WPF
         private void Save(bool option)
         {
             if (option)
-                IoC.UnitOfWork.CompleteAsync();
+                _iUnitOfWork.CompleteAsync();
 
             IoC.Application.GoToPage(_goTo);
         }
@@ -72,9 +68,8 @@ namespace OpcUa.Client.WPF
 
         private bool SaveprojectCanUse(object parameter)
         {
-            return IoC.UnitOfWork.HasUnsavedChanges();
+            return _iUnitOfWork.HasUnsavedChanges();
         }
-
         #endregion
     }
 }

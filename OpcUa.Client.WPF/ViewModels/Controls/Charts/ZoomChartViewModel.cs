@@ -19,7 +19,6 @@ namespace OpcUa.Client.WPF
         #endregion
 
         #region Public Properties
-
         public SeriesCollection SeriesCollection { get; set; } = new SeriesCollection();
         public ObservableCollection<VariableEntity> Variables { get; set; }
         public List<VariableEntity> SelectedVariables
@@ -34,12 +33,11 @@ namespace OpcUa.Client.WPF
 
         public double YAxisMin { get; set; } = double.NaN;
         public double YAxisMax { get; set; } = double.NaN;
-
         #endregion
 
         #region Commands
-        public ZoomingOptions ZoomingMode { get; set; } = ZoomingOptions.Xy;
-        public ICommand ResetZoomCommand { get; set; }
+        public ZoomingOptions ZoomingMode { get; } = ZoomingOptions.Xy;
+        public ICommand ResetZoomCommand { get; }
         #endregion
 
         #region Constructor

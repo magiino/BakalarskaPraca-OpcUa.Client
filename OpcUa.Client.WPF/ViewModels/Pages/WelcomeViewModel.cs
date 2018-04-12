@@ -8,32 +8,30 @@ namespace OpcUa.Client.WPF
 {
     public class WelcomeViewModel : BaseViewModel
     {
+        #region Private Fields
         private readonly Messenger _messenger;
         private readonly UaClientApi _uaClientApi;
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly IUnitOfWork _unitOfWork; 
+        #endregion
 
         #region Public Properties
-
         public string WelcomeText { get; set; } = "Lorem ipsum dolor, lorem isum dolor, Lorem ipsum dolor sit amet, lorem ipsum dolor sit amet";
         public ObservableCollection<ProjectModel> Projects { get; set; }
         public ProjectModel SelectedProject { get; set; }
-
         #endregion
 
         #region Commands
-
-        public ICommand LoadProjectCommand { get; set; }
-        public ICommand DeleteProjectCommand { get; set; }
-        public ICommand CreateProjectCommand { get; set; }
-        
+        public ICommand LoadProjectCommand { get; }
+        public ICommand DeleteProjectCommand { get; }
+        public ICommand CreateProjectCommand { get; }
         #endregion
 
-        public WelcomeViewModel()
+        #region Constructor
+        public WelcomeViewModel(IUnitOfWork iUnitOfWork, UaClientApi uaClientApi, Messenger messenger)
         {
-            _messenger = IoC.Messenger;
-            // TODO vsetkych pages predavat IoC veci cey konstruktor z Page Convertora !
-            _uaClientApi = IoC.UaClientApi;
-            _unitOfWork = IoC.UnitOfWork;
+            _messenger = messenger;
+            _uaClientApi = uaClientApi;
+            _unitOfWork = iUnitOfWork;
 
             OnLoad();
 
@@ -43,7 +41,9 @@ namespace OpcUa.Client.WPF
 
             _messenger.Register<SendCredentials>(msg => Login(msg.UserName, msg.Password));
         }
+        #endregion
 
+        #region Command Methods
         private void LoadProject(object parameter)
         {
             try
@@ -71,13 +71,13 @@ namespace OpcUa.Client.WPF
 
         private void DeleteProject(object parameter)
         {
-            // TODO opztat sa uyivatela ci si je isty
+            // TODO opytat sa uzivatela ci si je isty
             var project = _unitOfWork.Projects.SingleOrDefault(x => x.Id == SelectedProject.Id);
             _unitOfWork.Endpoints.Remove(project.Endpoint);
-            if(project.UserId != null)
+            if (project.UserId != null)
                 //todo remove user
 
-            _unitOfWork.Projects.Remove(project);
+                _unitOfWork.Projects.Remove(project);
 
             var notifications = _unitOfWork.Notifications.Find(x => x.ProjectId == SelectedProject.Id);
             _unitOfWork.Notifications.RemoveRange(notifications);
@@ -90,10 +90,10 @@ namespace OpcUa.Client.WPF
                 _unitOfWork.Records.RemoveRange(variable.Records);
 
             _unitOfWork.Variables.RemoveRange(variables);
-
-            
         }
+        #endregion
 
+        #region Private Methods
         private void Login(string userName, SecureString password)
         {
             try
@@ -129,6 +129,7 @@ namespace OpcUa.Client.WPF
 
             if (projectsEntities == null) return;
             Projects = new ObservableCollection<ProjectModel>(Mapper.ProjectToListModel(projectsEntities));
-        }
+        } 
+        #endregion
     }
 }

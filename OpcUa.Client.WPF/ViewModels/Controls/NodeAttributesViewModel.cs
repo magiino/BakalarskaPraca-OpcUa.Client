@@ -25,10 +25,8 @@ namespace OpcUa.Client.WPF
         #endregion
 
         #region Commands
-
-        public ICommand WriteValueCommand { get; set; }
-        public ICommand ReadValueCommand { get; set; }
-
+        public ICommand WriteValueCommand { get; }
+        public ICommand ReadValueCommand { get; }
         #endregion
 
         #region Constructor

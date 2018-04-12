@@ -8,21 +8,28 @@ namespace OpcUa.Client.Core
     /// </summary>
     public class OptionDialogViewModel : BaseDialogViewModel
     {
+        #region Public Properties
         public string Message { get; set; }
         public string Option1 { get; set; }
         public string Option2 { get; set; }
 
-        public ICommand Option1Command { get; set; }
-        public ICommand Option2Command { get; set; }
-
         public Action<bool> OptionAction { get; set; }
+        #endregion
 
+        #region Commands
+        public ICommand Option1Command { get; }
+        public ICommand Option2Command { get; }
+        #endregion
+
+        #region Constructor
         public OptionDialogViewModel()
         {
             Option1Command = new RelayCommand(Option1Cmd);
             Option2Command = new RelayCommand(Option2Cmd);
         }
+        #endregion
 
+        #region Command Methods
         private void Option1Cmd(object parameter)
         {
             OptionAction(true);
@@ -33,6 +40,7 @@ namespace OpcUa.Client.Core
         {
             OptionAction(false);
             CloseAction();
-        }
+        } 
+        #endregion
     }
 }

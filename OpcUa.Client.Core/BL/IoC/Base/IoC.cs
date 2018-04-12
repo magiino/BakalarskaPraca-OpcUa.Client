@@ -47,52 +47,66 @@ namespace OpcUa.Client.Core
         #endregion
 
         #region Setup
-
         public static void Configure()
         {
             BindViewModels();
-            BindUaApi();
-            BindUnitOfWork();
-            BindStateManager();
             BindMessenger();
+            BindUaClientApi();
+            BindUnitOfWork();
+            BindAppManager();
         }
 
+        /// <summary>
+        /// ApplicationViewModel handle changing pages of application
+        /// </summary>
         private static void BindViewModels()
         {
             Kernel.Bind<ApplicationViewModel>().ToConstant(new ApplicationViewModel());
         }
 
-        private static void BindUaApi()
-        {
-            Kernel.Bind<UaClientApi>().ToConstant(new UaClientApi());
-        }
-
-        private static void BindUnitOfWork()
-        {
-            Kernel.Bind<IUnitOfWork>().ToConstant(new UnitOfWork(new DataContext()));
-        }
-
+        /// <summary>
+        /// Messenger handle communication between view models
+        /// </summary>
         private static void BindMessenger()
         {
             Kernel.Bind<Messenger>().ToConstant(new Messenger());
         }
 
-        private static void BindStateManager()
+        /// <summary>
+        /// UaClientApi handle communication with OPC UA Server
+        /// </summary>
+        private static void BindUaClientApi()
+        {
+            Kernel.Bind<UaClientApi>().ToConstant(new UaClientApi());
+        }
+
+        /// <summary>
+        /// IUnitOfWork handle work with database and database entities
+        /// </summary>
+        private static void BindUnitOfWork()
+        {
+            Kernel.Bind<IUnitOfWork>().ToConstant(new UnitOfWork(new DataContext()));
+        }
+
+        /// <summary>
+        /// AppManager handle state of application
+        /// </summary>
+        private static void BindAppManager()
         {
             Kernel.Bind<AppManager>().ToConstant(new AppManager());
         }
 
+        /// <summary>
+        /// Dispose all connections and database
+        /// </summary>
         public static void DisposeAll()
         {
-            // TODO UaClientApi spravit ako repository do UnitOfWork
-            UaClientApi?.Disconnect();
+            UaClientApi.Disconnect();
             UnitOfWork.Dispose();
         }
-
         #endregion
 
         #region Public Methods
-
         /// <summary>
         /// Get's a service from the IoC, of the specified type
         /// </summary>
@@ -102,7 +116,6 @@ namespace OpcUa.Client.Core
         {
             return Kernel.Get<T>();
         }
-
         #endregion
     }
 }

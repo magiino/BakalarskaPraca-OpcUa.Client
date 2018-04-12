@@ -129,6 +129,7 @@
     <Compile Include="ViewModels\Helper\IHavePassword.cs" />
     <Compile Include="ViewModels\Helper\ViewModelLocator.cs" />
     <Compile Include="ViewModels\Helper\RelayCommand.cs" />
+    <Compile Include="ViewModels\Window\WindowViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

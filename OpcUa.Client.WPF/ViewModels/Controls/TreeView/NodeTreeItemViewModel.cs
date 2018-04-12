@@ -12,13 +12,10 @@ namespace OpcUa.Client.WPF
     public class NodeTreeItemViewModel : BaseViewModel
     {
         #region Private Fields
-
         private bool _isSelected;
-
         #endregion
 
         #region Public Properties
-
         public ReferenceDescription Node { get; set; }
         public NodeClass Type => Node.NodeClass;
         public string Name => Node.DisplayName.ToString();
@@ -61,30 +58,24 @@ namespace OpcUa.Client.WPF
                     IoC.Messenger.Send(new SendSelectedRefNode(Node));
             }
         }
-
         #endregion
 
         #region Public Commands
-
         /// <summary>
         /// The command to expand this item
         /// </summary>
-        public ICommand ExpandCommand { get; set; }
-
+        public ICommand ExpandCommand { get; }
         #endregion
 
         #region Constructor
-
         public NodeTreeItemViewModel(ReferenceDescription node)
         {
             ExpandCommand = new MixRelayCommand(Expand);
-
             Node = node;
 
             // Setup the children as needed
             ClearChildren();
         }
-
         #endregion
 
         #region Command Methods

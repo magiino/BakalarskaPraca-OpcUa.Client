@@ -10,16 +10,13 @@ namespace OpcUa.Client.WPF
     public class NodeTreeViewModel : BaseViewModel
     {
         #region Public Properties
-
         /// <summary>
         /// A list of root nodes in the address space
         /// </summary>
         public ObservableCollection<NodeTreeItemViewModel> Items { get; set; }
-
         #endregion
 
         #region Constructor
-
         public NodeTreeViewModel()
         {
             // Get the root nodes
@@ -29,7 +26,6 @@ namespace OpcUa.Client.WPF
             Items = new ObservableCollection<NodeTreeItemViewModel>(
                 children.Select(content => new NodeTreeItemViewModel(content)).OrderBy(x => x.Name));
         }
-
         #endregion
     }
 }

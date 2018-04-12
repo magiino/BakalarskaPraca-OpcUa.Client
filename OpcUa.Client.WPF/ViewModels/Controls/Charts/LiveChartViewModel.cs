@@ -33,8 +33,8 @@ namespace OpcUa.Client.WPF
         #endregion
 
         #region Commands
-        public ICommand AddCommand { get; set; }
-        public ICommand RemoveCommand { get; set; }
+        public ICommand AddCommand { get; }
+        public ICommand RemoveCommand { get; }
         #endregion
 
         #region Constructor
@@ -93,7 +93,6 @@ namespace OpcUa.Client.WPF
         #endregion
 
         #region Can use methods
-
         public bool AddNotificationCanUse()
         {
             if (_selectedNode == null)
@@ -107,7 +106,6 @@ namespace OpcUa.Client.WPF
         {
             return SelectedVariable != null;
         }
-
         #endregion
 
         #region Private Methods
@@ -119,7 +117,6 @@ namespace OpcUa.Client.WPF
         #endregion
 
         #region CallBack Methods
-
         /// <summary>
         /// Callback method for updating values of subscibed nodes
         /// </summary>
@@ -154,7 +151,6 @@ namespace OpcUa.Client.WPF
             if (SeriesCollection[index].Values.Count > 100)
                 SeriesCollection[index].Values.RemoveAt(0);
         }
-
         #endregion
     }
 }

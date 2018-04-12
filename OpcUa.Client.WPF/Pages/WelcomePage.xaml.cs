@@ -5,7 +5,7 @@
     /// </summary>
     public partial class WelcomePage : BasePage<WelcomeViewModel>
     {
-        public WelcomePage()
+        public WelcomePage(WelcomeViewModel viewModel) : base(viewModel)
         {
             InitializeComponent();
         }

@@ -11,29 +11,28 @@
         MinHeight="{Binding WindowMinimumHeight}"
         Deactivated="MainWindow_OnDeactivated"
         Activated="MainWindow_OnActivated"
-        Title="OPC UA Client" 
+        Title="OPC Ua Client" 
         Height="auto" 
         Width="auto">
-
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
+        <!-- Dimmed overlay if application is not focused -->
         <Border Grid.RowSpan="1"
                 Opacity="{Binding DimmableOverlayVisible, Converter={local:OpacityConverter}}"
                 Panel.ZIndex="1"
                 Visibility="Collapsed">
             <Border Background="{StaticResource ForegroundVeryDarkBrush}"/>
         </Border>
+
+        <!-- Frame where are changing pages -->
         <Frame
             Grid.Row="0"
             local:NoFrameHistory.Value="True"
             d:DataContext=""
-            DataContext="{Binding ApplicationViewModel.CurrentPage,
-                          Source={x:Static core:ViewModelLocator.Instance},
-                          Converter={local:ApplicationPageValueConverter}}"
-
+            DataContext="{Binding ApplicationViewModel.CurrentPage, Source={x:Static core:ViewModelLocator.Instance}, Converter={local:ApplicationPageValueConverter}}"
             Content="{Binding}"
             Background="Transparent"/>
     </Grid>
