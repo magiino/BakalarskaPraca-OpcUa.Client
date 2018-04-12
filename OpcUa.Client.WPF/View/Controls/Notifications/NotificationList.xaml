@@ -6,8 +6,8 @@
              xmlns:local="clr-namespace:OpcUa.Client.WPF"
              mc:Ignorable="d" 
              d:DesignHeight="600" 
-             d:DesignWidth="400">
-
+             d:DesignWidth="400"
+             >
     <Grid d:DataContext="{x:Static local:NotificationListDesignModel.Instance}">
         <ScrollViewer VerticalScrollBarVisibility="Auto">
             <ItemsControl ItemsSource="{Binding Items}">

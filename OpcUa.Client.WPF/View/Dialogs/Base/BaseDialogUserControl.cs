@@ -12,16 +12,13 @@ namespace OpcUa.Client.WPF
     public class BaseDialogUserControl : UserControl
     {
         #region Private Members
-
         /// <summary>
         /// The dialog window we will be contained within
         /// </summary>
         private readonly DialogWindow _dialogWindow;
-
         #endregion
 
         #region Public Properties
-
         /// <summary>
         /// The minimum width of this dialog
         /// </summary>
@@ -36,11 +33,9 @@ namespace OpcUa.Client.WPF
         /// The title for this dialog
         /// </summary>
         public string Title { get; set; }
-
         #endregion
 
         #region Constructor
-        
         /// <summary>
         /// Default constructor
         /// </summary>
@@ -53,11 +48,9 @@ namespace OpcUa.Client.WPF
                 _dialogWindow.ViewModel = new WindowDialogViewModel();
             }
         }
-
         #endregion
 
         #region Public Dialog Show Methods
-
         /// <summary>
         /// Displays a single message box to the user
         /// </summary>
@@ -102,7 +95,6 @@ namespace OpcUa.Client.WPF
 
             return tcs.Task;
         }
-
         #endregion
     }
 }

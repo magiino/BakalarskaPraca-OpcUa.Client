@@ -6,8 +6,9 @@
       xmlns:local="clr-namespace:OpcUa.Client.WPF"
       xmlns:core="clr-namespace:OpcUa.Client.Core;assembly=OpcUa.Client.Core"
       mc:Ignorable="d"
-      d:DesignHeight="600" d:DesignWidth="1000">
-
+      d:DesignHeight="600" 
+      d:DesignWidth="1000"
+      >
     <Border Background="{StaticResource ForegroundLightBrush}">
         <DockPanel>
             <StackPanel DockPanel.Dock="Top">
@@ -38,16 +39,14 @@
                 <!-- Second Column-->
                 <Grid Grid.Column="1">
                     <ScrollViewer VerticalScrollBarVisibility="Auto">
-                        <local:AttributeInfo2 MinWidth="300"
-                                              DataContext="{Binding NodeAttributesViewModel}"
-                                              />
+                        <local:AttributeInfo MinWidth="300"
+                                             DataContext="{Binding NodeAttributesViewModel}"
+                                             />
                     </ScrollViewer>
                 </Grid>
 
                 <!-- Third Column-->
-                <TabControl Grid.Column="2" 
-                            SelectedIndex="{Binding SelectedIndex}"
-                            >
+                <TabControl Grid.Column="2">
                     <TabItem Header="Subscribed Nodes">
                         <local:Notification DataContext="{Binding NotificationViewModel}"/>
                     </TabItem>
@@ -65,7 +64,6 @@
                     </TabItem>
                 </TabControl>
             </Grid>
-
         </DockPanel>
     </Border>
 </local:BasePage>

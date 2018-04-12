@@ -6,7 +6,8 @@
              xmlns:local="clr-namespace:OpcUa.Client.WPF"
              mc:Ignorable="d" 
              d:DesignHeight="450" 
-             d:DesignWidth="400">
+             d:DesignWidth="400"
+             >
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="4*"/>
@@ -45,43 +46,13 @@
                     <DataTemplate>
                         <Border BorderThickness="1">
                             <TextBlock Padding="10 5"
-                                           VerticalAlignment="Center" 
-                                           Text="{Binding Name}"
-                                           />
+                                       VerticalAlignment="Center" 
+                                       Text="{Binding Name}"
+                                       />
                         </Border>
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
-
         </Grid>
     </Grid>
 </UserControl>
-
-
-<!-- ListView of notifications -->
-<!--
-        <DataGrid ItemsSource="{Binding Notifications}"
-                  Background="{StaticResource BackgroundLightBrush}"
-                  SelectedItem="{Binding SelectedNotification}"
-                  SelectionMode="Single"
-                  HeadersVisibility="None"
-                  BorderThickness="0"
-                  AutoGenerateColumns="false"
-                  RowHeaderWidth="0"
-                  CanUserResizeColumns="False"
-                  CanUserReorderColumns="False"
-                  IsReadOnly="True"
-                  SelectedIndex="0"
-                  IsManipulationEnabled="False"
-                  CanUserAddRows="False"
-                  >
-            <DataGrid.Columns>
-                <DataGridTextColumn Width="*" Binding="{Binding Name}"/>
-                -->
-<!--<DataGridTextColumn Width="*" Binding="{Binding Value}"/>
-                <DataGridTextColumn Width="*" Binding="{Binding DataType}"/>
-                <DataGridTextColumn Width="*" Binding="{Binding StatusCode}"/>
-                <DataGridTextColumn Width="*" Binding="{Binding SourceDateTime}"/>-->
-<!--
-            </DataGrid.Columns>
-        </DataGrid>-->

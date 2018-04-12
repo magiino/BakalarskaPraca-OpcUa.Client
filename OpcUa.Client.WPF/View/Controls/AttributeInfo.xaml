@@ -1,15 +1,15 @@
-﻿<UserControl x:Class="OpcUa.Client.WPF.AttributeInfo2"
+﻿<UserControl x:Class="OpcUa.Client.WPF.AttributeInfo"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:OpcUa.Client.WPF"
              mc:Ignorable="d"
-             d:DesignHeight="700" d:DesignWidth="400">
-
+             d:DesignHeight="700"
+             d:DesignWidth="400"
+             >
     <StackPanel x:Name="Stack">
         <TreeView BorderThickness="0">
-
             <!-- NodeId data  -->
             <TreeViewItem DataContext="{Binding NodeId}">
                 <TreeViewItem.Header>
@@ -386,26 +386,6 @@
                     Command="{Binding WriteValueCommand}"
                     />
             </StackPanel>
-
         </StackPanel>
-
     </StackPanel>
 </UserControl>
-
-
-<!--<Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-
-            <Button Grid.Column="0" 
-                    Content="Read"
-                    Command="{Binding ReadSingleValueCommand}"/>
-            <Button Grid.Column="1" 
-                    Content="Write"
-                    Command="{Binding WriteSingleValueCommand}"/>
-            <TextBox Grid.Column="2"
-                        Text="{Binding ValueToSingleWrite}"/>
-        </Grid>-->

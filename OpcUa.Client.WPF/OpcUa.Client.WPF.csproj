@@ -82,60 +82,57 @@
     <Compile Include="AttachedProperties\BaseAttachedProperty.cs" />
     <Compile Include="AttachedProperties\PasswordBoxAttachedProperties.cs" />
     <Compile Include="AttachedProperties\NoFrameHistory.cs" />
-    <Compile Include="Controls\Charts\ZoomChart.xaml.cs">
+    <Compile Include="View\Controls\Charts\ZoomChart.xaml.cs">
       <DependentUpon>ZoomChart.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\Features\Notification.xaml.cs">
+    <Compile Include="View\Controls\Notifications\Notification.xaml.cs">
       <DependentUpon>Notification.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\Features\Notifications\NotificationList.xaml.cs">
+    <Compile Include="View\Controls\Notifications\NotificationList.xaml.cs">
       <DependentUpon>NotificationList.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\Features\Notifications\NotificationMessage.xaml.cs">
+    <Compile Include="View\Controls\Notifications\NotificationMessage.xaml.cs">
       <DependentUpon>NotificationMessage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\Menu\MenuToolBar.xaml.cs">
+    <Compile Include="View\Controls\Menu\MenuToolBar.xaml.cs">
       <DependentUpon>MenuToolBar.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\Features\Archive.xaml.cs">
+    <Compile Include="View\Controls\Archive.xaml.cs">
       <DependentUpon>Archive.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\Features\AttributeInfo2.xaml.cs">
-      <DependentUpon>AttributeInfo2.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\Features\AttributeInfo.xaml.cs">
+    <Compile Include="View\Controls\AttributeInfo.xaml.cs">
       <DependentUpon>AttributeInfo.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\Charts\LiveChart.xaml.cs">
+    <Compile Include="View\Controls\Charts\LiveChart.xaml.cs">
       <DependentUpon>LiveChart.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\Charts\Chart.xaml.cs">
+    <Compile Include="View\Controls\Charts\Chart.xaml.cs">
       <DependentUpon>Chart.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\Features\TreeView.xaml.cs">
+    <Compile Include="View\Controls\TreeView.xaml.cs">
       <DependentUpon>TreeView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\UaClientSettings.xaml.cs">
+    <Compile Include="View\Controls\UaClientSettings.xaml.cs">
       <DependentUpon>UaClientSettings.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Dialogs\Base\BaseDialogUserControl.cs" />
-    <Compile Include="Dialogs\DialogLogin.xaml.cs">
+    <Compile Include="View\Dialogs\Base\BaseDialogUserControl.cs" />
+    <Compile Include="View\Dialogs\DialogLogin.xaml.cs">
       <DependentUpon>DialogLogin.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Dialogs\DialogAddNotification.xaml.cs">
+    <Compile Include="View\Dialogs\DialogAddNotification.xaml.cs">
       <DependentUpon>DialogAddNotification.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Dialogs\DialogDecide.xaml.cs">
+    <Compile Include="View\Dialogs\DialogDecide.xaml.cs">
       <DependentUpon>DialogDecide.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Dialogs\DialogMessageBox.xaml.cs">
+    <Compile Include="View\Dialogs\DialogMessageBox.xaml.cs">
       <DependentUpon>DialogMessageBox.xaml</DependentUpon>
     </Compile>
     <Compile Include="DialogWindow.xaml.cs">
       <DependentUpon>DialogWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\Base\BasePage.cs" />
-    <Compile Include="Pages\DiscoverEndpoints.xaml.cs">
+    <Compile Include="View\Pages\Base\BasePage.cs" />
+    <Compile Include="View\Pages\DiscoverEndpoints.xaml.cs">
       <DependentUpon>DiscoverEndpoints.xaml</DependentUpon>
     </Compile>
     <Compile Include="IoC\UIManager.cs" />
@@ -145,13 +142,13 @@
     <Compile Include="ValueConverters\ApplicationPageValueConverter.cs" />
     <Compile Include="ValueConverters\Base\BaseValueConverter.cs" />
     <Compile Include="ValueConverters\HeaderToImageConverter.cs" />
-    <Compile Include="Controls\Menu\MenuBar.xaml.cs">
+    <Compile Include="View\Controls\Menu\MenuBar.xaml.cs">
       <DependentUpon>MenuBar.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\MainPage.xaml.cs">
+    <Compile Include="View\Pages\MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\WelcomePage.xaml.cs">
+    <Compile Include="View\Pages\WelcomePage.xaml.cs">
       <DependentUpon>WelcomePage.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewModels\MixRelayCommand.cs" />
@@ -172,67 +169,63 @@
     <Compile Include="ViewModels\Pages\WelcomeViewModel.cs" />
     <Compile Include="ViewModels\Controls\TreeView\NodeTreeItemViewModel.cs" />
     <Compile Include="ViewModels\Controls\TreeView\NodeTreeViewModel.cs" />
-    <Page Include="Controls\Charts\ZoomChart.xaml">
+    <Page Include="View\Controls\Charts\ZoomChart.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Controls\Features\Notification.xaml">
+    <Page Include="View\Controls\Notifications\Notification.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Controls\Features\Notifications\NotificationList.xaml">
+    <Page Include="View\Controls\Notifications\NotificationList.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\Features\Notifications\NotificationMessage.xaml">
+    <Page Include="View\Controls\Notifications\NotificationMessage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\Menu\MenuToolBar.xaml">
+    <Page Include="View\Controls\Menu\MenuToolBar.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\Features\Archive.xaml">
+    <Page Include="View\Controls\Archive.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\Features\AttributeInfo2.xaml">
+    <Page Include="View\Controls\AttributeInfo.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Controls\Features\AttributeInfo.xaml">
+    <Page Include="View\Controls\Charts\LiveChart.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\Charts\LiveChart.xaml">
+    <Page Include="View\Controls\Charts\Chart.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\Charts\Chart.xaml">
+    <Page Include="View\Controls\TreeView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\Features\TreeView.xaml">
+    <Page Include="View\Controls\UaClientSettings.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\UaClientSettings.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Dialogs\DialogLogin.xaml">
+    <Page Include="View\Dialogs\DialogLogin.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Dialogs\DialogAddNotification.xaml">
+    <Page Include="View\Dialogs\DialogAddNotification.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Dialogs\DialogDecide.xaml">
+    <Page Include="View\Dialogs\DialogDecide.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Dialogs\DialogMessageBox.xaml">
+    <Page Include="View\Dialogs\DialogMessageBox.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -252,19 +245,19 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Controls\Menu\MenuBar.xaml">
+    <Page Include="View\Controls\Menu\MenuBar.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\DiscoverEndpoints.xaml">
+    <Page Include="View\Pages\DiscoverEndpoints.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\MainPage.xaml">
+    <Page Include="View\Pages\MainPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\WelcomePage.xaml">
+    <Page Include="View\Pages\WelcomePage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
