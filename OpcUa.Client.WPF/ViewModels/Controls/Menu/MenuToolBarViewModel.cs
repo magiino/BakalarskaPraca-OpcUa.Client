@@ -10,7 +10,6 @@ namespace OpcUa.Client.WPF
         #region Private Fields
         private readonly IUnitOfWork _iUnitOfWork;
         private readonly UaClientApi _uaClientApi;
-        private Timer _timer;
         #endregion
 
         public bool SessionIsActive { get; set; }
@@ -29,7 +28,7 @@ namespace OpcUa.Client.WPF
             DisconnectSessionCommand = new MixRelayCommand(DisconnectSession);
             SaveProjectCommand = new MixRelayCommand(SaveProject, SaveprojectCanUse);
 
-            _timer = new Timer(SessionState, null, TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(5));
+            IoC.AppManager.Timer = new Timer(SessionState, null, TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(5));
         }
         #endregion
 
@@ -37,6 +36,7 @@ namespace OpcUa.Client.WPF
         private void DisconnectSession(object parameter)
         {
             _uaClientApi.Disconnect();
+            IoC.AppManager.Timer.Dispose();
             IoC.Application.GoToPage(ApplicationPage.Welcome);
         }
 

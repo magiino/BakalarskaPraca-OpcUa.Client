@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations;
 
 namespace OpcUa.Client.Core
 {
@@ -7,9 +6,7 @@ namespace OpcUa.Client.Core
     {
         public int VariableId { get; set; }
         public VariableEntity Variable { get; set; }
-        [Required]
         public string Value { get; set; }
-        [Required]
         public DateTime ArchiveTime { get; set; }
     }
 }

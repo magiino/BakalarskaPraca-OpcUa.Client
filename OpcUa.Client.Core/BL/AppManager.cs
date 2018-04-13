@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 
 namespace OpcUa.Client.Core
 {
@@ -6,6 +7,8 @@ namespace OpcUa.Client.Core
     {
         public Guid ProjectId { get; set; }
         public Action CloseAction { get; set; }
+
+        public Timer Timer { get; set; }
 
         public void CloseApplication()
         {

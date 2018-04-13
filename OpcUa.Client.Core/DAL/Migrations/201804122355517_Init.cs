@@ -3,7 +3,7 @@ namespace OpcUa.Client.Core.DAL.Migrations
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class InitialCreate : DbMigration
+    public partial class Init : DbMigration
     {
         public override void Up()
         {
@@ -12,10 +12,10 @@ namespace OpcUa.Client.Core.DAL.Migrations
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
-                        Url = c.String(nullable: false),
-                        SecurityPolicyUri = c.String(nullable: false),
+                        Url = c.String(),
+                        SecurityPolicyUri = c.String(),
                         MessageSecurityMode = c.Int(nullable: false),
-                        TransportProfileUri = c.String(nullable: false),
+                        TransportProfileUri = c.String(),
                     })
                 .PrimaryKey(t => t.Id);
             
@@ -25,25 +25,24 @@ namespace OpcUa.Client.Core.DAL.Migrations
                     {
                         Id = c.Int(nullable: false, identity: true),
                         ProjectId = c.Guid(nullable: false),
-                        Name = c.String(nullable: false),
-                        NodeId = c.String(nullable: false, maxLength: 50),
+                        Name = c.String(),
+                        NodeId = c.String(),
                         FilterValue = c.Double(nullable: false),
                         DeadbandType = c.Int(nullable: false),
                         IsDigital = c.Boolean(nullable: false),
-                        IsZeroDescription = c.String(maxLength: 50),
-                        IsOneDescription = c.String(maxLength: 50),
+                        IsZeroDescription = c.String(),
+                        IsOneDescription = c.String(),
                     })
-                .PrimaryKey(t => t.Id)
-                .Index(t => t.NodeId, unique: true);
+                .PrimaryKey(t => t.Id);
             
             CreateTable(
                 "dbo.ProjectEntities",
                 c => new
                     {
                         Id = c.Guid(nullable: false),
-                        Name = c.String(nullable: false),
+                        Name = c.String(),
                         EndpointId = c.Int(nullable: false),
-                        SessionName = c.String(nullable: false),
+                        SessionName = c.String(),
                         UserId = c.Int(),
                     })
                 .PrimaryKey(t => t.Id)
@@ -57,9 +56,9 @@ namespace OpcUa.Client.Core.DAL.Migrations
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
-                        UserName = c.String(nullable: false),
-                        PasswordHash = c.Binary(nullable: false),
-                        PasswordSalt = c.Binary(nullable: false),
+                        UserName = c.String(),
+                        PasswordHash = c.Binary(),
+                        PasswordSalt = c.Binary(),
                     })
                 .PrimaryKey(t => t.Id);
             
@@ -69,7 +68,7 @@ namespace OpcUa.Client.Core.DAL.Migrations
                     {
                         Id = c.Int(nullable: false, identity: true),
                         VariableId = c.Int(nullable: false),
-                        Value = c.String(nullable: false),
+                        Value = c.String(),
                         ArchiveTime = c.DateTime(nullable: false),
                     })
                 .PrimaryKey(t => t.Id)
@@ -82,13 +81,12 @@ namespace OpcUa.Client.Core.DAL.Migrations
                     {
                         Id = c.Int(nullable: false, identity: true),
                         ProjectId = c.Guid(nullable: false),
-                        Name = c.String(nullable: false, maxLength: 50),
+                        Name = c.String(),
                         Description = c.String(),
                         DataType = c.Int(nullable: false),
                         Archive = c.Int(nullable: false),
                     })
-                .PrimaryKey(t => t.Id)
-                .Index(t => t.Name, unique: true);
+                .PrimaryKey(t => t.Id);
             
         }
         
@@ -97,11 +95,9 @@ namespace OpcUa.Client.Core.DAL.Migrations
             DropForeignKey("dbo.RecordEntities", "VariableId", "dbo.VariableEntities");
             DropForeignKey("dbo.ProjectEntities", "UserId", "dbo.UserEntities");
             DropForeignKey("dbo.ProjectEntities", "EndpointId", "dbo.EndpointEntities");
-            DropIndex("dbo.VariableEntities", new[] { "Name" });
             DropIndex("dbo.RecordEntities", new[] { "VariableId" });
             DropIndex("dbo.ProjectEntities", new[] { "UserId" });
             DropIndex("dbo.ProjectEntities", new[] { "EndpointId" });
-            DropIndex("dbo.NotificationEntities", new[] { "NodeId" });
             DropTable("dbo.VariableEntities");
             DropTable("dbo.RecordEntities");
             DropTable("dbo.UserEntities");

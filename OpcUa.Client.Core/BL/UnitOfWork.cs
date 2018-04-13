@@ -1,6 +1,4 @@
-﻿using System.Threading;
-
-namespace OpcUa.Client.Core
+﻿namespace OpcUa.Client.Core
 {
     public class UnitOfWork : IUnitOfWork
     {

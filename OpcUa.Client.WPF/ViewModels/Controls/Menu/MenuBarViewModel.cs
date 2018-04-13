@@ -27,7 +27,11 @@ namespace OpcUa.Client.WPF
             NewProjectCommand = new MixRelayCommand((obj) => GoToPageIfSaved(ApplicationPage.Endpoints));
             SaveProjectCommand = new MixRelayCommand((obj) => _iUnitOfWork.CompleteAsync(), SaveprojectCanUse);
             OpenProjectCommand = new MixRelayCommand((obj) => GoToPageIfSaved(ApplicationPage.Welcome));
-            ExitApplicationCommand = new MixRelayCommand((obj) => IoC.AppManager.CloseApplication());
+            ExitApplicationCommand = new MixRelayCommand((obj) =>
+            {
+                IoC.AppManager.Timer.Dispose();
+                IoC.AppManager.CloseApplication();
+            });
             OpenGitHubCommand = new MixRelayCommand((obj) => Process.Start("https://github.com/magiino/BakalarskaPraca-OpcUa.Client"));
         }
         #endregion
@@ -51,6 +55,7 @@ namespace OpcUa.Client.WPF
             if (option)
                 _iUnitOfWork.CompleteAsync();
 
+            IoC.AppManager.Timer.Dispose();
             IoC.Application.GoToPage(_goTo);
         }
 

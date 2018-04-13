@@ -213,8 +213,15 @@ namespace OpcUa.Client.WPF
         {
             _selectedEndpoint.UserIdentityTokens.ForEach(x =>
             {
-                AnonymAllowed = x.TokenType == UserTokenType.Anonymous;
-                UserAllowed = x.TokenType == UserTokenType.UserName;
+                switch (x.TokenType)
+                {
+                    case UserTokenType.Anonymous:
+                        AnonymAllowed = true;
+                        break;
+                    case UserTokenType.UserName:
+                        UserAllowed = true;
+                        break;
+                }
             });
         }
 
