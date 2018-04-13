@@ -110,6 +110,7 @@ namespace OpcUa.Client.WPF
                 }
                 var endpoint = _unitOfWork.Endpoints.SingleOrDefault(x => x.Id == SelectedProject.EndpointId);
                 _uaClientApi.Connect(Mapper.CreateEndpointDescription(endpoint), userName, SecureStringHelpers.Unsecure(password), SelectedProject.SessionName);
+                IoC.AppManager.ProjectId = SelectedProject.Id;
             }
             catch (Exception e)
             {

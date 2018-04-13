@@ -58,9 +58,9 @@
     <Compile Include="BL\IoC\Interfaces\IUIManager.cs" />
     <Compile Include="BL\Models\Details\VariableModel.cs" />
     <Compile Include="BL\Models\MeasureModel.cs" />
-    <Compile Include="DAL\Migrations\201804112202122_InitialCreate.cs" />
-    <Compile Include="DAL\Migrations\201804112202122_InitialCreate.Designer.cs">
-      <DependentUpon>201804112202122_InitialCreate.cs</DependentUpon>
+    <Compile Include="DAL\Migrations\201804122355517_Init.cs" />
+    <Compile Include="DAL\Migrations\201804122355517_Init.Designer.cs">
+      <DependentUpon>201804122355517_Init.cs</DependentUpon>
     </Compile>
     <Compile Include="ViewModels\Base\BaseViewModel.cs" />
     <Compile Include="BL\Messenger\IMessenger.cs" />
@@ -150,8 +150,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="DAL\Migrations\201804112202122_InitialCreate.resx">
-      <DependentUpon>201804112202122_InitialCreate.cs</DependentUpon>
+    <EmbeddedResource Include="DAL\Migrations\201804122355517_Init.resx">
+      <DependentUpon>201804122355517_Init.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

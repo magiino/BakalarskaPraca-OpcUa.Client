@@ -20,7 +20,7 @@
         <TextBlock Text="User Name"
                    HorizontalAlignment="Left"
                    />
-        <TextBox Text="{Binding DisplayName}"
+        <TextBox Text="{Binding UserName}"
                   />
 
         <!-- User Password -->
