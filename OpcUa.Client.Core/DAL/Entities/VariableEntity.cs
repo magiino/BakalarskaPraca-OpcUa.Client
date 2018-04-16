@@ -8,7 +8,6 @@ namespace OpcUa.Client.Core
     {
         public Guid ProjectId { get; set; }
         public string Name { get; set; }
-        public string Description { get; set; }
         public BuiltInType DataType { get; set; }
         public ArchiveInterval Archive { get; set; }
         public virtual ICollection<RecordEntity> Records { get; set; } = new List<RecordEntity>();

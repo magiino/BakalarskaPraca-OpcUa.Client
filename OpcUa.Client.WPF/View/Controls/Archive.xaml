@@ -38,9 +38,6 @@
                 <DataGridTextColumn Width="2*" 
                                     Binding="{Binding Name}"
                                     />
-                <DataGridTextColumn Width="3*" 
-                                    Binding="{Binding Description}"
-                />
                 <DataGridTextColumn Width="*" 
                                     Binding="{Binding DataType}"
                                     />

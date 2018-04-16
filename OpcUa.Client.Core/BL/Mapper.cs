@@ -28,7 +28,6 @@ namespace OpcUa.Client.Core
                 Id = x.Id,
                 ProjectId = x.ProjectId,
                 Name = x.Name,
-                Description = x.Description,
                 Archive = x.Archive,
                 DataType = x.DataType
             }).ToList();
@@ -39,7 +38,6 @@ namespace OpcUa.Client.Core
             return new VariableModel()
             {
                 Name = variableEntity.Name,
-                Description = variableEntity.Description,
                 DataType = variableEntity.DataType,
                 ProjectId = variableEntity.ProjectId,
                 Archive = variableEntity.Archive
@@ -52,7 +50,6 @@ namespace OpcUa.Client.Core
             {
                 Id = variableModel.Id,
                 Name = variableModel.Name,
-                Description = variableModel.Description,
                 DataType = variableModel.DataType,
                 ProjectId = variableModel.ProjectId,
                 Archive = variableModel.Archive

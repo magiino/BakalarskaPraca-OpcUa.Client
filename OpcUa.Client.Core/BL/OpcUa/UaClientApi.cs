@@ -555,20 +555,19 @@ namespace OpcUa.Client.Core
             configuration.ClientConfiguration.Validate();
 
             // Add trace config before calling validate
-            configuration.TraceConfiguration = new TraceConfiguration
-            {
-                OutputFilePath = Path.Combine(Environment.ExpandEnvironmentVariables("%userprofile%"),
-                    "Documents\\UaClient\\TraceLogs.txt"),
-                DeleteOnLoad = true,
-                TraceMasks = 0x40,
-            };
-            configuration.TraceConfiguration.ApplySettings();
+            //configuration.TraceConfiguration = new TraceConfiguration
+            //{
+            //    OutputFilePath = Path.Combine(Environment.ExpandEnvironmentVariables("%userprofile%"),
+            //        "Documents\\UaClient\\TraceLogs.txt"),
+            //    DeleteOnLoad = true,
+            //    TraceMasks = 0x40,
+            //};
+            //configuration.TraceConfiguration.ApplySettings();
 
             Utils.SetTraceLog(Path.Combine(Environment.ExpandEnvironmentVariables("%userprofile%"),
                 "Documents\\UaClient\\UtilsTraceLogs.txt"), true);
             Utils.SetTraceMask(Utils.TraceMasks.All);
             Utils.SetTraceOutput(Utils.TraceOutput.DebugAndFile);
-
 
             configuration.SecurityConfiguration = new SecurityConfiguration
             {
