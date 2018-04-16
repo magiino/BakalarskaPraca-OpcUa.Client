@@ -14,10 +14,10 @@
                     Command="{Binding DisconnectSessionCommand}">
                 <fa:ImageAwesome Icon="StopCircle"/>
             </Button>
-            <Button ToolTip="Save Project"
+            <!--<Button ToolTip="Save Project"
                     Command="{Binding SaveProjectCommand}">
                 <fa:ImageAwesome Icon="Save"/>
-            </Button>
+            </Button>-->
         </ToolBar>
         <ToolBar Height="30">
             <TextBlock Text="Session state"

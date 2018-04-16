@@ -20,6 +20,7 @@ namespace OpcUa.Client.Core
             user.PasswordSalt = passwordSalt;
 
              _context.Users.Add(user);
+            _context.SaveChanges();
             return user;
         }
 
@@ -63,7 +64,7 @@ namespace OpcUa.Client.Core
         {
             var user = _context.Users.SingleOrDefault(x => x.Id == id);
             if (user != null) _context.Users.Remove(user);
-            IoC.UnitOfWork.Complete();
+            _context.SaveChanges();
         }
     }
 }

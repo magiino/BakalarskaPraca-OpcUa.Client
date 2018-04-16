@@ -78,7 +78,7 @@ namespace OpcUa.Client.WPF
             };
 
             SeriesCollection.Add(
-                new LineSeries()
+                new StepLineSeries()
                 {
                     Title = variable.Name,
                     Values = new ChartValues<DateTimePoint>(),
@@ -107,7 +107,7 @@ namespace OpcUa.Client.WPF
         } 
         #endregion
 
-        #region Can use methods
+        #region CanUse methods
         public bool AddNotificationCanUse()
         {
             if (_selectedNode == null)
@@ -121,9 +121,7 @@ namespace OpcUa.Client.WPF
         {
             return SelectedVariable != null;
         }
-        #endregion
 
-        #region CanUse Methods
         public bool AddVariableCanUse(object parameter)
         {
             return _selectedNode != null && _selectedNode.NodeClass == NodeClass.Variable;

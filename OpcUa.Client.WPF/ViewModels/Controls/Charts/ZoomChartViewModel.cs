@@ -60,14 +60,14 @@ namespace OpcUa.Client.WPF
 
             foreach (var variable in selectedVariables)
             {
-                var values = new ChartValues<DateTimePoint>(_unityOfWork.Records.Local().Where(x => x.VariableId == variable.Id).OrderBy(x => x.ArchiveTime).Select(x => new DateTimePoint()
+                var values = new ChartValues<DateTimePoint>(_unityOfWork.Records.Find(x => x.VariableId == variable.Id).OrderBy(x => x.ArchiveTime).Select(x => new DateTimePoint()
                 {
                     Value = Convert.ToDouble(x.Value),
                     DateTime = x.ArchiveTime
                 }));
 
                 SeriesCollection.Add(
-                    new LineSeries()
+                    new StepLineSeries()
                     {
                         Title = variable.Name,
                         Values = values,

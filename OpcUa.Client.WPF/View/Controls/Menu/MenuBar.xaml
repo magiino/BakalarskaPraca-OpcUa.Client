@@ -19,7 +19,7 @@
                     <fa:ImageAwesome Icon="File"/>
                 </MenuItem.Icon>
             </MenuItem>
-            <MenuItem x:Name="MenuSave" 
+            <!--<MenuItem x:Name="MenuSave" 
                       Header="_Save" 
                       InputGestureText="Ctrl+S" 
                       Command="{Binding SaveProjectCommand}"
@@ -27,7 +27,7 @@
                 <MenuItem.Icon>
                     <fa:ImageAwesome Icon="Save" />
                 </MenuItem.Icon>
-            </MenuItem>
+            </MenuItem>-->
             <MenuItem x:Name="MenuOpen" 
                       Header="_Open" 
                       InputGestureText="Ctrl+O" 
@@ -91,13 +91,13 @@
                     <fa:ImageAwesome Icon="Codepen"/>
                 </MenuItem.Icon>
             </MenuItem>
-            <MenuItem x:Name="MenuAbout" 
+            <!--<MenuItem x:Name="MenuAbout" 
                       Header="_About"
                       >
                 <MenuItem.Icon>
                     <fa:ImageAwesome Icon="book"/>
                 </MenuItem.Icon>
-            </MenuItem>
+            </MenuItem>-->
             <MenuItem x:Name="GitHub" 
                       Header="_Git Repository"
                       Command="{Binding OpenGitHubCommand}"
