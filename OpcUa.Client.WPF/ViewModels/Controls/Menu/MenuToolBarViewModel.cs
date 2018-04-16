@@ -54,7 +54,7 @@ namespace OpcUa.Client.WPF
 
         private void SessionState(object parameter)
         {
-            SessionIsActive = _uaClientApi.SessionIsActive();
+            SessionIsActive = _uaClientApi.SessionState;
         }
         #endregion
     }

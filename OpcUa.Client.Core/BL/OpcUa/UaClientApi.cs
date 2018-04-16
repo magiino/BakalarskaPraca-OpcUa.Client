@@ -18,6 +18,8 @@ namespace OpcUa.Client.Core
         private readonly NodeIdCollection _registeredNodes = new NodeIdCollection();
         #endregion
 
+        public bool SessionState { get; set; }
+
         #region Constructors
         public UaClientApi()
         {
@@ -161,6 +163,8 @@ namespace OpcUa.Client.Core
                 null,
                 null
                 );
+
+            _session.KeepAlive += new KeepAliveEventHandler(Notification_KeepAlive);
         }
 
         /// <summary>Closes an existing session and disconnects from the server.</summary>
@@ -173,6 +177,7 @@ namespace OpcUa.Client.Core
                 UnRegisterNodes();
                 _session.Close(5000);
                 _session.Dispose();
+                SessionState = false;
                 _session = null;
             }
             catch (Exception e)
@@ -471,11 +476,6 @@ namespace OpcUa.Client.Core
 
         #region Public Methods
 
-        public bool SessionIsActive()
-        {
-            return _session.Connected;
-        }
-
         public void CreateDefaultConfiguration()
         {
             if (_applicationConfig != null) return;
@@ -658,6 +658,33 @@ namespace OpcUa.Client.Core
                 return false;
             }
         }
+
+        private void Notification_KeepAlive(Session sender, KeepAliveEventArgs e)
+        {
+            try
+            {
+                SessionState = true;
+                // check for events from discarded sessions.
+                if (!Object.ReferenceEquals(sender, _session))
+                    return;
+
+                // check for disconnected session.
+                if (ServiceResult.IsBad(e.Status))
+                {
+                    SessionState = false;
+                    // try reconnecting using the existing session state
+                    _session.Reconnect();
+                    var c =_session.Connected;
+                }
+
+                
+            }
+            catch (Exception ex)
+            {
+                Utils.Trace(ex, "Error accepting certificate.");
+            }
+        }
+
         #endregion
     }
 }
