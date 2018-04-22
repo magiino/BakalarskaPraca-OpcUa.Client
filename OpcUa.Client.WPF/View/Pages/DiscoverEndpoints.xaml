@@ -6,12 +6,13 @@
       xmlns:local="clr-namespace:OpcUa.Client.WPF"
       xmlns:core="clr-namespace:OpcUa.Client.Core;assembly=OpcUa.Client.Core"
       xmlns:fa="http://schemas.fontawesome.io/icons/"
+      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
       mc:Ignorable="d" 
       x:Name="Page"
-      d:DesignHeight="600" d:DesignWidth="800">
+      d:DesignHeight="700" d:DesignWidth="800">
 
     <Border Padding="5"
-            >
+            Background="{DynamicResource MaterialDesignLightBackground}">
         <Grid>
             <Grid.RowDefinitions>
                 <!-- First Row -->
@@ -60,8 +61,9 @@
                 <!-- Server Info -->
                 <GroupBox Grid.Row="0"
                           Grid.Column="0"
-                          Header="Server Info" 
-                          Padding="5px">
+                          Header="Server Info"
+                          Style="{DynamicResource MaterialDesignCardGroupBox}"
+                          >
                     <Grid DataContext="{Binding SelectedServer}">
 
                         <Grid.ColumnDefinitions>
@@ -90,9 +92,14 @@
                 <!-- Endpoints List -->
                 <GroupBox Grid.Row="1"
                           Grid.Column="0"
-                          Header="Endpoints" 
-                          Padding="0 5 0 0"
+                          Style="{DynamicResource MaterialDesignCardGroupBox}"
+                          Padding="0"
                           >
+                    <GroupBox.Header>
+                        <TextBlock Text="Endpoints" 
+                                   Padding="10"
+                                   Foreground="AliceBlue"/>
+                    </GroupBox.Header>
                     <ScrollViewer Height="auto" 
                                   VerticalScrollBarVisibility="auto"
                                   >
@@ -149,7 +156,8 @@
 
                     <GroupBox Grid.Row="0"
                               Header="Filter" 
-                              Padding="5px" Grid.ColumnSpan="2"
+                              Style="{DynamicResource MaterialDesignCardGroupBox}"
+                              Grid.ColumnSpan="2"
                               >
                         <StackPanel>
 
@@ -166,11 +174,10 @@
                                     <ListView.ItemTemplate>
                                         <DataTemplate>
                                             <StackPanel Orientation="Horizontal">
-                                                <fa:ImageAwesome 
-                                                        Width="10" 
-                                                        Margin="3"
-                                                        Icon="Server"
-                                                        />
+                                                <materialDesign:PackIcon Kind="Server"
+                                                                         Width="10" 
+                                                                         Margin="3"
+                                                                         />
                                                 <TextBlock VerticalAlignment="Center" 
                                                            Text="{Binding ApplicationName}"
                                                            />
@@ -185,6 +192,9 @@
                             <ComboBox SelectedIndex="0"
                                       ItemsSource="{Binding EProtocols}"
                                       SelectedItem="{Binding SelectedTransportProtocol, Mode=TwoWay}"
+                                      materialDesign:HintAssist.Hint="Choose"
+                                      materialDesign:HintAssist.HintOpacity=".26"
+                                      Style="{StaticResource MaterialDesignFloatingHintComboBox}"
                                       />
 
                             <!-- Security Modes/Policies -->
@@ -236,14 +246,18 @@
                             <ComboBox SelectedIndex="0"
                                       ItemsSource="{Binding EMessageEncodings}"
                                       SelectedItem="{Binding SelectedEncoding, Mode=TwoWay}"
+                                      materialDesign:HintAssist.Hint="Choose"
+                                      materialDesign:HintAssist.HintOpacity=".26"
+                                      Style="{StaticResource MaterialDesignFloatingHintComboBox}"
                                       />
                         </StackPanel>
                     </GroupBox>
 
                     <!-- User Authentication -->
                     <GroupBox Grid.Row="1" 
-                              Header="Project Setup"
                               Grid.Column="0"
+                              Header="Log In"
+                              Style="{DynamicResource MaterialDesignCardGroupBox}"
                               >
                         <StackPanel VerticalAlignment="Stretch">
 
@@ -278,6 +292,8 @@
                                 <TextBox Text="{Binding UserName}"
                                          Tag="User Name"
                                          IsEnabled="{Binding IsChecked, ElementName=UserPasswordChBox}"
+                                         materialDesign:HintAssist.Hint="User Name"
+                                         Style="{StaticResource MaterialDesignFloatingHintTextBox}"
                                          />
                                 <TextBlock Text="Passord"/>
 
@@ -285,6 +301,8 @@
                                 <PasswordBox x:Name="PasswordText"   
                                              Tag="Password"
                                              IsEnabled="{Binding IsChecked, ElementName=UserPasswordChBox}"
+                                             materialDesign:HintAssist.Hint="Password"
+                                             Style="{StaticResource MaterialDesignFloatingHintPasswordBox}"
                                              />
                             </StackPanel>
                             <Button Content="Connect"

@@ -32,7 +32,7 @@
                       Command="{Binding ExitApplicationCommand}"
                       >
                 <MenuItem.Icon>
-                    <materialDesign:PackIcon Kind="ExitToApp" />
+                    <materialDesign:PackIcon Kind="ExitToApp"/>
                 </MenuItem.Icon>
             </MenuItem>
         </MenuItem>

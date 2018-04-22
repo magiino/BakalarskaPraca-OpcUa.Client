@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:OpcUa.Client.WPF"
              xmlns:wpf="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d" 
              d:DesignHeight="450" 
              d:DesignWidth="800"
@@ -66,18 +67,9 @@
                       >
                 <ListView.ItemTemplate>
                     <DataTemplate>
-                        <Border BorderThickness="1">
-                            <StackPanel>
-                                <TextBlock Padding="10 5"
-                                           VerticalAlignment="Center" 
-                                           Text="{Binding Name}"
-                                />
-                                <TextBlock Padding="10 5"
-                                           VerticalAlignment="Center" 
-                                           Text="{Binding Archive}"
-                                />
-                            </StackPanel>
-                        </Border>
+                            <materialDesign:Chip Content="{Binding Name}"
+                                                 Icon="{Binding Archive}"
+                                                 />
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
@@ -92,3 +84,18 @@
         />
     </i:EventTrigger>
 </i:Interaction.Triggers>-->
+
+<!--
+<Border BorderThickness="1">
+    <StackPanel>
+        <TextBlock Padding="10 5"
+                   VerticalAlignment="Center" 
+                   Text="{Binding Name}"
+        />
+        <TextBlock Padding="10 5"
+                   VerticalAlignment="Center" 
+                   Text="{Binding Archive}"
+        />
+    </StackPanel>
+</Border>
+-->

@@ -346,6 +346,7 @@
                                 Command="{Binding ReadValueCommand}"
                                 />
                         <TextBox VerticalAlignment="Stretch"
+                                 Width="50"
                                  Text="{Binding ValueToWrite}"
                                  />
                         <Button Content="Write"

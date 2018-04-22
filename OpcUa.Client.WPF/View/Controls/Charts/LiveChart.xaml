@@ -6,6 +6,7 @@
              xmlns:local="clr-namespace:OpcUa.Client.WPF"
              xmlns:wpf="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
              xmlns:fa="http://schemas.fontawesome.io/icons/"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d" 
              d:DesignHeight="450" 
              d:DesignWidth="800"
@@ -56,31 +57,14 @@
                       >
                 <ListView.ItemTemplate>
                     <DataTemplate>
-                        <Border BorderThickness="1">
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto"/>
-                                    <ColumnDefinition Width="Auto"/>
-                                </Grid.ColumnDefinitions>
-
-                                <fa:ImageAwesome Width="10" 
-                                                 Margin="3"
-                                                 Foreground="{Binding Color, Converter={local:StringRgbToBrushConverter}}"
-                                                 Icon="Times"
-                                                 />
-
-                                <StackPanel Grid.Column="1">
-                                    <TextBlock Padding="10 5"
-                                               VerticalAlignment="Center" 
-                                               Text="{Binding Name}"
-                                    />
-                                    <TextBlock Padding="10 5"
-                                               VerticalAlignment="Center" 
-                                               Text="{Binding NodeId}"
-                                    />
-                                </StackPanel>
-                            </Grid>
-                        </Border>
+                        <materialDesign:Chip Content="{Binding Name}"
+                                             IconBackground="{Binding Color, Converter={local:StringRgbToBrushConverter}}"
+                                             IconForeground="{StaticResource PrimaryHueDarkBrush}"
+                                             >
+                            <materialDesign:Chip.Icon>
+                                <materialDesign:PackIcon Kind="Close"/>
+                            </materialDesign:Chip.Icon>
+                        </materialDesign:Chip>
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
@@ -88,3 +72,29 @@
         </StackPanel>
     </Grid>
 </UserControl>
+
+<!--<Border BorderThickness="1">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+
+        <fa:ImageAwesome Width="10" 
+                         Margin="3"
+                         Foreground="{Binding Color, Converter={local:StringRgbToBrushConverter}}"
+                         Icon="Times"
+        />
+
+        <StackPanel Grid.Column="1">
+            <TextBlock Padding="10 5"
+                       VerticalAlignment="Center" 
+                       Text="{Binding Name}"
+            />
+            <TextBlock Padding="10 5"
+                       VerticalAlignment="Center" 
+                       Text="{Binding NodeId}"
+            />
+        </StackPanel>
+    </Grid>
+</Border>-->
