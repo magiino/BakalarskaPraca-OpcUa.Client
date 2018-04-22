@@ -33,7 +33,10 @@
                 <!-- Text box for URL -->
                 <TextBox Grid.Column="0"
                          Grid.Row="0"
+                         Padding="5 0 0 0"
                          Text="{Binding DiscoveryUrl, Mode=TwoWay}"
+                         materialDesign:HintAssist.Hint="Server endpoint"
+                         Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
                          />
 
                 <!-- Search Button -->
@@ -105,7 +108,6 @@
                                   >
                         <DataGrid AutoGenerateColumns="false"
                                   RowHeaderWidth="0"
-                                  CanUserResizeColumns="False"
                                   CanUserReorderColumns="False"
                                   IsReadOnly="True"
                                   ItemsSource="{Binding FilteredEndpoints}"
@@ -120,15 +122,15 @@
                                                     Header="Endpoint Url"
                                                     Binding="{Binding EndpointUrl}"
                                                     />
-                                <DataGridTextColumn Width="auto" 
+                                <DataGridTextColumn Width="*" 
                                                     Header="Sec. Mode" 
                                                     Binding="{Binding SecurityMode}"
                                                     />
-                                <DataGridTextColumn Width="auto" 
+                                <DataGridTextColumn Width="*" 
                                                     Header="Sec. Policy" 
                                                     Binding="{Binding SecurityPolicy}"
                                                     />
-                                <DataGridTextColumn Width="auto" 
+                                <DataGridTextColumn Width="*" 
                                                     Header="Sec. level" 
                                                     Binding="{Binding SecurityLevel}"
                                                     />
