@@ -11,6 +11,11 @@
         MinHeight="{Binding WindowMinimumHeight}"
         Deactivated="MainWindow_OnDeactivated"
         Activated="MainWindow_OnActivated"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        Background="{DynamicResource MaterialDesignPaper}"
+        TextElement.FontWeight="Medium"
+        TextElement.FontSize="14"
+        FontFamily="pack://application:,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto"
         Title="OPC Ua Client" 
         Height="auto" 
         Width="auto">

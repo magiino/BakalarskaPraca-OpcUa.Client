@@ -3,32 +3,24 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:fa="http://schemas.fontawesome.io/icons/"
              xmlns:local="clr-namespace:OpcUa.Client.WPF"
              mc:Ignorable="d"
              x:Name="Toolbar"
-             d:DesignHeight="30" d:DesignWidth="500">
-    <ToolBarTray >
-        <ToolBar Height="30">
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             d:DesignWidth="500"
+             >
+    <ToolBarTray>
+        <ToolBar Style="{DynamicResource MaterialDesignToolBar}"
+                 ClipToBounds="False">
             <Button ToolTip="Stop communication"
                     Command="{Binding DisconnectSessionCommand}">
-                <fa:ImageAwesome Icon="StopCircle"/>
+                <materialDesign:PackIcon Kind="StopCircle"/>
             </Button>
-            <!--<Button ToolTip="Save Project"
-                    Command="{Binding SaveProjectCommand}">
-                <fa:ImageAwesome Icon="Save"/>
-            </Button>-->
-        </ToolBar>
-        <ToolBar Height="30">
-            <TextBlock Text="Session state"
-                       TextWrapping="Wrap"
-                       Width="50"
-                       VerticalAlignment="Center"
-                       HorizontalAlignment="Center"/>
-
-            <fa:ImageAwesome Icon="Circle"
-                                Foreground="{Binding SessionIsActive, Converter={local:BooleanToColorConverter}}"/>
+            <Separator />
+            <Label Content="Session state" VerticalAlignment="Center"/>
+            <materialDesign:PackIcon Kind="Circle"
+                                     VerticalAlignment="Center"
+                                     Foreground="{Binding SessionIsActive, Converter={local:BooleanToColorConverter}}"/>
         </ToolBar>
     </ToolBarTray>
-
 </UserControl>

@@ -19,11 +19,11 @@ namespace OpcUa.Client.WPF
                     return "archive";
                 case NodeClass.Unspecified:
                     Debugger.Break();
-                    return "envelope";
+                    return "help-circle";
                 case NodeClass.Variable:
                     return "tag";
                 case NodeClass.Method:
-                    return "cubes";
+                    return "cube";
                 case NodeClass.ObjectType:
                     return "flag";
                 case NodeClass.VariableType:

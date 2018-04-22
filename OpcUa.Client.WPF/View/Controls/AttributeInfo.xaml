@@ -4,354 +4,356 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:OpcUa.Client.WPF"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d"
              d:DesignHeight="700"
              d:DesignWidth="400"
              >
-    <StackPanel x:Name="Stack">
-        <TreeView BorderThickness="0">
-            <!-- NodeId data  -->
-            <TreeViewItem DataContext="{Binding NodeId}">
-                <TreeViewItem.Header>
-                    <StackPanel Orientation="Horizontal">
-                        <Label Content="Node Id"
-                            Width="120"/>
-                        <TextBlock Text="{Binding }" 
-                                Width="200"
-                                TextTrimming="WordEllipsis"
-                                VerticalAlignment="Center"/>
-                    </StackPanel>
-                </TreeViewItem.Header>
-
-                <TreeViewItem>
-                    <TreeViewItem.Header >
-                        <StackPanel Orientation="Horizontal">
-                            <Label Content="Namespace Index" 
-                                Width="120"/>
-                            <TextBlock Text="{Binding NamespaceIndex}" 
-                                    Width="200"
-                                    VerticalAlignment="Center"/>
-                        </StackPanel>
-                    </TreeViewItem.Header>
-                </TreeViewItem>
-
-                <TreeViewItem>
-                    <TreeViewItem.Header >
-                        <StackPanel Orientation="Horizontal" >
-                            <Label Content="Type" 
-                                Width="120"/>
-                            <TextBlock Text="{Binding Identifier}" 
-                                    Width="200"
-                                    TextTrimming="WordEllipsis"
-                                    VerticalAlignment="Center"/>
-                        </StackPanel>
-                    </TreeViewItem.Header>
-                </TreeViewItem>
-
-                <TreeViewItem>
-                    <TreeViewItem.Header >
-                        <StackPanel Orientation="Horizontal">
-                            <Label Content="Identifier" Width="120"/>
-                            <Label Content="{Binding IdType}" Width="200"/>
-                        </StackPanel>
-                    </TreeViewItem.Header>
-                </TreeViewItem>
-            </TreeViewItem>
-        </TreeView>
-
-        <!-- ReferenceDescription data -->
-        <Grid DataContext="{Binding ReferenceDescription}"
-              >
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="120"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-
-            <Grid.RowDefinitions>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="auto"/>
-            </Grid.RowDefinitions>
-
-            <TextBlock Grid.Row="1" 
-                    Grid.Column="0"
-                    Text="Node Class"
-                    />
-            <TextBlock Grid.Row="1" 
-                    Grid.Column="1"
-                    Text="{Binding NodeClass}"
-                    />
-
-            <TextBlock Grid.Row="0" 
-                    Grid.Column="0"
-                    Text="Browse Name"
-                    />
-            <TextBlock Grid.Row="0" 
-                    Grid.Column="1"
-                    Text="{Binding BrowseName}"
-                    />
-
-            <TextBlock Grid.Row="2" 
-                    Grid.Column="0"
-                    Text="Display Name"
-                    />
-            <TextBlock Grid.Row="2" 
-                    Grid.Column="1"
-                    Text="{Binding DisplayName}"
-                    />
-        </Grid>
-
-        <!-- Node data -->
-        <Grid DataContext="{Binding Node}"
-            >
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="120"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-
-            <Grid.RowDefinitions>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="auto"/>
-            </Grid.RowDefinitions>
-
-            <TextBlock Grid.Row="0" 
-                    Grid.Column="0"
-                    Text="Description"
-                    />
-            <TextBlock Grid.Row="0" 
-                    Grid.Column="1"
-                    Text="{Binding Description}"
-                    />
-            <!--<TextBlock Text="{Binding Description}"
-                    Width="200"
-                    TextWrapping="Wrap"/>-->
-
-            <TextBlock Grid.Row="1" 
-                    Grid.Column="0"
-                    Text="Write Mask"
-                    />
-            <TextBlock Grid.Row="1" 
-                    Grid.Column="1"
-                    Text="{Binding WriteMask}"
-                    />
-
-            <TextBlock Grid.Row="2" 
-                    Grid.Column="0"
-                    Text="User Write Mask"
-                    />
-            <TextBlock Grid.Row="2" 
-                    Grid.Column="1"
-                    Text="{Binding UserWriteMask}"
-                    />
-        </Grid>
-
-        <StackPanel Visibility="{Binding IsVariableType, Converter={local:BooleanToVisibilityConverter}, Mode=OneWay}"
-                    >
-            <!-- TODO separator a treeview -->
-
-            <TreeView DataContext="{Binding DataTypeNodeId}"
-                      BorderThickness="0"
-                      >
-                <TreeViewItem>
-                    <TreeViewItem.Header >
-                        <StackPanel Orientation="Horizontal">
-                            <Label Content="Data Type" Width="120"/>
-                            <Label Content="{Binding }" Width="200"/>
-                        </StackPanel>
-                    </TreeViewItem.Header>
-
-                    <TreeViewItem>
+    <Grid>
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+            <StackPanel x:Name="Stack">
+                <TreeView BorderThickness="0">
+                    <!-- NodeId data  -->
+                    <TreeViewItem DataContext="{Binding NodeId}">
                         <TreeViewItem.Header>
                             <StackPanel Orientation="Horizontal">
-                                <Label Content="Namespace Index" Width="120"/>
-                                <Label Content="{Binding NamespaceIndex}" Width="200"/>
+                                <Label Content="Node Id"
+                                    Width="120"/>
+                                <TextBlock Text="{Binding }" 
+                                        Width="200"
+                                        TextWrapping="Wrap"
+                                        VerticalAlignment="Center"/>
                             </StackPanel>
                         </TreeViewItem.Header>
+
+                        <TreeViewItem>
+                            <TreeViewItem.Header >
+                                <StackPanel Orientation="Horizontal">
+                                    <Label Content="Namespace Index" 
+                                        Width="120"/>
+                                    <TextBlock Text="{Binding NamespaceIndex}" 
+                                            Width="200"
+                                            VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </TreeViewItem.Header>
+                        </TreeViewItem>
+
+                        <TreeViewItem>
+                            <TreeViewItem.Header >
+                                <StackPanel Orientation="Horizontal" >
+                                    <Label Content="Type" 
+                                        Width="120"/>
+                                    <TextBlock Text="{Binding Identifier}" 
+                                            Width="200"
+                                            TextTrimming="WordEllipsis"
+                                            VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </TreeViewItem.Header>
+                        </TreeViewItem>
+
+                        <TreeViewItem>
+                            <TreeViewItem.Header >
+                                <StackPanel Orientation="Horizontal">
+                                    <Label Content="Identifier" Width="120"/>
+                                    <Label Content="{Binding IdType}" Width="200"/>
+                                </StackPanel>
+                            </TreeViewItem.Header>
+                        </TreeViewItem>
                     </TreeViewItem>
+                </TreeView>
 
-                    <TreeViewItem>
-                        <TreeViewItem.Header >
-                            <StackPanel Orientation="Horizontal">
-                                <Label Content="Identifier" Width="120"/>
-                                <Label Content="{Binding Identifier}" Width="200"/>
-                            </StackPanel>
-                        </TreeViewItem.Header>
-                    </TreeViewItem>
+                <!-- ReferenceDescription data -->
+                <Grid DataContext="{Binding ReferenceDescription}"
+                      >
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="120"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
 
-                    <TreeViewItem>
-                        <TreeViewItem.Header >
-                            <StackPanel Orientation="Horizontal">
-                                <Label Content="Id Type" Width="120"/>
-                                <Label Content="{Binding IdType}" Width="200"/>
-                            </StackPanel>
-                        </TreeViewItem.Header>
-                    </TreeViewItem>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                    </Grid.RowDefinitions>
 
-                </TreeViewItem>
-            </TreeView>
+                    <TextBlock Grid.Row="1" 
+                            Grid.Column="0"
+                            Text="Node Class"
+                            />
+                    <TextBlock Grid.Row="1" 
+                            Grid.Column="1"
+                            Text="{Binding NodeClass}"
+                            />
 
-            <!-- NodeVariable Data -->
-            <Grid DataContext="{Binding VariableNode}"
-                  >
+                    <TextBlock Grid.Row="0" 
+                            Grid.Column="0"
+                            Text="Browse Name"
+                            />
+                    <TextBlock Grid.Row="0" 
+                            Grid.Column="1"
+                            Text="{Binding BrowseName}"
+                            />
 
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="120"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Row="2" 
+                            Grid.Column="0"
+                            Text="Display Name"
+                            />
+                    <TextBlock Grid.Row="2" 
+                            Grid.Column="1"
+                            Text="{Binding DisplayName}"
+                            />
+                </Grid>
 
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition Height="auto"/>
-                </Grid.RowDefinitions>
+                <!-- Node data -->
+                <Grid DataContext="{Binding Node}"
+                    >
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="120"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
 
-                <TextBlock Grid.Row="0" 
-                    Grid.Column="0"
-                    Text="Value Rank"
-                    />
-                <TextBlock Grid.Row="0" 
-                    Grid.Column="1"
-                    Text="{Binding ValueRank}"
-                    />
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                    </Grid.RowDefinitions>
 
-                <TextBlock Grid.Row="1" 
-                    Grid.Column="0"
-                    Text="Array Dimensions"
-                    />
-                <TextBlock Grid.Row="1" 
-                    Grid.Column="1"
-                    Text="{Binding ArrayDimensions}"
-                    />
+                    <TextBlock Grid.Row="0" 
+                            Grid.Column="0"
+                            Text="Description"
+                            TextWrapping="Wrap"
+                            VerticalAlignment="Stretch"
+                            MaxWidth="200"
+                            MaxHeight="80"
+                            />
+                    <TextBlock Grid.Row="0" 
+                            Grid.Column="1"
+                            Text="{Binding Description}"
+                            />
 
-                <TextBlock Grid.Row="2" 
-                    Grid.Column="0"
-                    Text="Access Level"
-                    />
-                <TextBlock Grid.Row="2" 
-                    Grid.Column="1"
-                    Text="{Binding AccessLevel}"
-                    />
+                    <TextBlock Grid.Row="1" 
+                            Grid.Column="0"
+                            Text="Write Mask"
+                            />
+                    <TextBlock Grid.Row="1" 
+                            Grid.Column="1"
+                            Text="{Binding WriteMask}"
+                            />
 
-                <TextBlock Grid.Row="3" 
-                    Grid.Column="0"
-                    Text="User Access Level"
-                    />
-                <TextBlock Grid.Row="3" 
-                    Grid.Column="1"
-                    Text="{Binding UserAccessLevel}"
-                    />
+                    <TextBlock Grid.Row="2" 
+                            Grid.Column="0"
+                            Text="User Write Mask"
+                            />
+                    <TextBlock Grid.Row="2" 
+                            Grid.Column="1"
+                            Text="{Binding UserWriteMask}"
+                            />
+                </Grid>
 
-                <TextBlock Grid.Row="4" 
-                    Grid.Column="0"
-                    Text="Historizing"
-                    />
-                <TextBlock Grid.Row="4" 
-                    Grid.Column="1"
-                    Text="{Binding Historizing}"
-                    />
+                <StackPanel Visibility="{Binding IsVariableType, Converter={local:BooleanToVisibilityConverter}, Mode=OneWay}"
+                            >
+                    <!-- TODO separator a treeview -->
 
-                <TextBlock Grid.Row="5" 
-                    Grid.Column="0"
-                    Text="Min Sampling"
-                    />
-                <TextBlock Grid.Row="5" 
-                    Grid.Column="1"
-                    Text="{Binding MinimumSamplingInterval}"
-                    />
-            </Grid>
+                    <TreeView DataContext="{Binding DataTypeNodeId}"
+                              BorderThickness="0"
+                              >
+                        <TreeViewItem>
+                            <TreeViewItem.Header >
+                                <StackPanel Orientation="Horizontal">
+                                    <Label Content="Data Type" Width="120"/>
+                                    <Label Content="{Binding }" Width="200"/>
+                                </StackPanel>
+                            </TreeViewItem.Header>
 
-            <!-- Value Data -->
-            <Grid DataContext="{Binding DataValue}"
-                  >
+                            <TreeViewItem>
+                                <TreeViewItem.Header>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Label Content="Namespace Index" Width="120"/>
+                                        <Label Content="{Binding NamespaceIndex}" Width="200"/>
+                                    </StackPanel>
+                                </TreeViewItem.Header>
+                            </TreeViewItem>
 
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="120"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
+                            <TreeViewItem>
+                                <TreeViewItem.Header >
+                                    <StackPanel Orientation="Horizontal">
+                                        <Label Content="Identifier" Width="120"/>
+                                        <Label Content="{Binding Identifier}" Width="200"/>
+                                    </StackPanel>
+                                </TreeViewItem.Header>
+                            </TreeViewItem>
 
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition Height="auto"/>
-                </Grid.RowDefinitions>
+                            <TreeViewItem>
+                                <TreeViewItem.Header >
+                                    <StackPanel Orientation="Horizontal">
+                                        <Label Content="Id Type" Width="120"/>
+                                        <Label Content="{Binding IdType}" Width="200"/>
+                                    </StackPanel>
+                                </TreeViewItem.Header>
+                            </TreeViewItem>
 
-                <TextBlock Grid.Row="0" 
-                    Grid.Column="0"
-                    Text="Value"
-                    />
-                <TextBlock Grid.Row="0" 
-                    Grid.Column="1"
-                    Text="{Binding Value}"
-                    />
+                        </TreeViewItem>
+                    </TreeView>
 
-                <TextBlock Grid.Row="1" 
-                    Grid.Column="0"
-                    Text="Status Code"
-                    />
-                <TextBlock Grid.Row="1" 
-                    Grid.Column="1"
-                    Text="{Binding StatusCode}"
-                    />
+                    <!-- NodeVariable Data -->
+                    <Grid DataContext="{Binding VariableNode}"
+                          >
 
-                <TextBlock Grid.Row="2" 
-                    Grid.Column="0"
-                    Text="Source Timestamp"
-                    />
-                <TextBlock Grid.Row="2" 
-                    Grid.Column="1"
-                    Text="{Binding SourceTimestamp}"
-                    />
-            </Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="120"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
 
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="120"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                        </Grid.RowDefinitions>
 
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition Height="auto"/>
-                </Grid.RowDefinitions>
+                        <TextBlock Grid.Row="0" 
+                            Grid.Column="0"
+                            Text="Value Rank"
+                            />
+                        <TextBlock Grid.Row="0" 
+                            Grid.Column="1"
+                            Text="{Binding ValueRank}"
+                            />
 
-                <TextBlock Grid.Row="0" 
-                       Grid.Column="0"
-                       Text="Data type"
-                       />
-                <TextBlock Grid.Row="0" 
-                       Grid.Column="1"
-                       Text="{Binding DataType}"
-                       />
+                        <TextBlock Grid.Row="1" 
+                            Grid.Column="0"
+                            Text="Array Dimensions"
+                            />
+                        <TextBlock Grid.Row="1" 
+                            Grid.Column="1"
+                            Text="{Binding ArrayDimensions}"
+                            />
 
-                <TextBlock Grid.Row="1" 
-                       Grid.Column="0"
-                       Text="BuiltInType"
-                       />
-                <TextBlock Grid.Row="1" 
-                       Grid.Column="1"
-                       Text="{Binding BuiltInType}"
-                       />
-            </Grid>
+                        <TextBlock Grid.Row="2" 
+                            Grid.Column="0"
+                            Text="Access Level"
+                            />
+                        <TextBlock Grid.Row="2" 
+                            Grid.Column="1"
+                            Text="{Binding AccessLevel}"
+                            />
 
-            <StackPanel Orientation="Horizontal"
-                        >
-                <Button Width="50" 
-                    Content="Read"
-                    Command="{Binding ReadValueCommand}"
-                    />
-                <TextBox Margin="100 0 0 0"
-                     Width="50"
-                     Text="{Binding ValueToWrite}"
-                     />
-                <Button Width="50"
-                    Content="Write"
-                    Command="{Binding WriteValueCommand}"
-                    />
+                        <TextBlock Grid.Row="3" 
+                            Grid.Column="0"
+                            Text="User Access Level"
+                            />
+                        <TextBlock Grid.Row="3" 
+                            Grid.Column="1"
+                            Text="{Binding UserAccessLevel}"
+                            />
+
+                        <TextBlock Grid.Row="4" 
+                            Grid.Column="0"
+                            Text="Historizing"
+                            />
+                        <TextBlock Grid.Row="4" 
+                            Grid.Column="1"
+                            Text="{Binding Historizing}"
+                            />
+
+                        <TextBlock Grid.Row="5" 
+                            Grid.Column="0"
+                            Text="Min Sampling"
+                            />
+                        <TextBlock Grid.Row="5" 
+                            Grid.Column="1"
+                            Text="{Binding MinimumSamplingInterval}"
+                            />
+                    </Grid>
+
+                    <!-- Value Data -->
+                    <Grid DataContext="{Binding DataValue}"
+                          >
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="120"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                        </Grid.RowDefinitions>
+
+                        <TextBlock Grid.Row="0" 
+                            Grid.Column="0"
+                            Text="Value"
+                            />
+                        <TextBlock Grid.Row="0" 
+                            Grid.Column="1"
+                            Text="{Binding Value}"
+                            />
+
+                        <TextBlock Grid.Row="1" 
+                            Grid.Column="0"
+                            Text="Status Code"
+                            />
+                        <TextBlock Grid.Row="1" 
+                            Grid.Column="1"
+                            Text="{Binding StatusCode}"
+                            />
+
+                        <TextBlock Grid.Row="2" 
+                            Grid.Column="0"
+                            Text="Source Timestamp"
+                            />
+                        <TextBlock Grid.Row="2" 
+                            Grid.Column="1"
+                            Text="{Binding SourceTimestamp}"
+                            />
+                    </Grid>
+
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="120"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                        </Grid.RowDefinitions>
+
+                        <TextBlock Grid.Row="0" 
+                               Grid.Column="0"
+                               Text="Data type"
+                               />
+                        <TextBlock Grid.Row="0" 
+                               Grid.Column="1"
+                               Text="{Binding DataType}"
+                               />
+
+                        <TextBlock Grid.Row="1" 
+                               Grid.Column="0"
+                               Text="BuiltInType"
+                               />
+                        <TextBlock Grid.Row="1" 
+                               Grid.Column="1"
+                               Text="{Binding BuiltInType}"
+                               />
+                    </Grid>
+
+                    <StackPanel Orientation="Horizontal"
+                                >
+                        <Button Content="Read"
+                                Command="{Binding ReadValueCommand}"
+                                />
+                        <TextBox VerticalAlignment="Stretch"
+                                 Text="{Binding ValueToWrite}"
+                                 />
+                        <Button Content="Write"
+                                Command="{Binding WriteValueCommand}"
+                                />
+                    </StackPanel>
+                </StackPanel>
             </StackPanel>
-        </StackPanel>
-    </StackPanel>
+        </ScrollViewer>
+    </Grid>
 </UserControl>
