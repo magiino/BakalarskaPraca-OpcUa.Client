@@ -11,8 +11,7 @@
         MinWidth="{Binding WindowMinimumWidth}"
         MinHeight="{Binding WindowMinimumHeight}"
         Title="{Binding Title}">
-    <Border Background="{StaticResource ForegroundLightBrush}"
-            Padding="10">
+    <Border Padding="10">
         <ContentControl Content="{Binding Content}"/>
     </Border>
 </Window>

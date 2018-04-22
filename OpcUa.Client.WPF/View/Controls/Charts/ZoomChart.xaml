@@ -68,7 +68,7 @@
                 <ListView.ItemTemplate>
                     <DataTemplate>
                             <materialDesign:Chip Content="{Binding Name}"
-                                                 Icon="{Binding Archive}"
+                                                 Icon="{Binding Archive, Converter={local:AtchiveTypeToNumberConverter}}"
                                                  />
                     </DataTemplate>
                 </ListView.ItemTemplate>
