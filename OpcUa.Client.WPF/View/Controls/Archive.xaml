@@ -4,88 +4,28 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:OpcUa.Client.WPF"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:converters="clr-namespace:MaterialDesignThemes.Wpf.Converters;assembly=MaterialDesignThemes.Wpf"
              mc:Ignorable="d" 
              d:DesignHeight="450" 
-             d:DesignWidth="500"
+             d:DesignWidth="600"
              >
     <Grid>
         <Grid.RowDefinitions >
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="3*"/>
-            <RowDefinition Height="auto"/>
+            <RowDefinition Height="2*"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions >
-        <TextBlock Text="Variables for archive:"/>
-        <!-- ListView of subscribed variables -->
-        <DataGrid Grid.Row="1"
-                  ItemsSource="{Binding ArchiveVariables}"
-                  SelectedItem="{Binding SelectedArchiveVariable}"
-                  x:Name="Variables"
-                  SelectionMode="Single"
-                  HeadersVisibility="None"
-                  BorderThickness="0"
-                  AutoGenerateColumns="false"
-                  RowHeaderWidth="0"
-                  CanUserResizeColumns="False"
-                  CanUserReorderColumns="False"
-                  IsReadOnly="True"
-                  SelectedIndex="0"
-                  IsManipulationEnabled="False"
-                  CanUserAddRows="False"
+        <GroupBox Grid.Row="0"
+                  Header="Variables for archive"
+                  Style="{DynamicResource MaterialDesignCardGroupBox}"
                   >
-            <DataGrid.Columns>
-                <DataGridTextColumn Width="2*" 
-                                    Binding="{Binding Name}"
-                                    />
-                <DataGridTextColumn Width="*" 
-                                    Binding="{Binding DataType}"
-                                    />
-                <DataGridTextColumn Width="*" 
-                                    Binding="{Binding Archive}"
-                                    />
-            </DataGrid.Columns>
-        </DataGrid>
 
-        <!-- Separator -->
-        <Separator Grid.Row="2"
-                   Margin="0 0 0 5"
-                   />
-
-        <!-- Archive control -->
-        <Grid Grid.Row="3">
-            <Grid.ColumnDefinitions >
-                <ColumnDefinition Width="auto"/>
-                <ColumnDefinition Width="auto"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-
-            <StackPanel Grid.Column="0">
-                <Button Content="Start archive"
-                        Padding="10 5"
-                        Command="{Binding StartArchiveCommand}"
-                        />
-                <Button Content="Stop archive"
-                        Padding="10 5"
-                        Command="{Binding StopArchiveCommand}"
-                        />
-            </StackPanel>
-
-            <StackPanel Grid.Column="1">
-                <Button Content="Add Node"
-                        Padding="10 5"
-                        Command="{Binding AddVariableToArchiveCommand}"
-                        />
-                <Button Content="Delete Node"
-                        Padding="10 5"
-                        Command="{Binding DeleteVariableFromArchiveCommand}"
-                        />
-            </StackPanel>
-
-            <!-- DataGrid of archive types -->
-            <DataGrid Grid.Column="2"
-                      ItemsSource="{Binding ArchiveInfo}"
-                      SelectedItem="{Binding SelectedArchiveInfo}"
+            <!-- ListView of subscribed variables -->
+            <DataGrid ItemsSource="{Binding ArchiveVariables}"
+                      SelectedItem="{Binding SelectedArchiveVariable}"
+                      x:Name="Variables"
                       SelectionMode="Single"
+                      HeadersVisibility="None"
                       BorderThickness="0"
                       AutoGenerateColumns="false"
                       RowHeaderWidth="0"
@@ -97,20 +37,90 @@
                       CanUserAddRows="False"
                       >
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Archive Interval" 
-                                        Width="*" 
-                                        Binding="{Binding ArchiveInterval}"
+                    <DataGridTextColumn Width="2*" 
+                                        Binding="{Binding Name}"
                                         />
-                    <DataGridTextColumn Header="Num of Variables"
-                                        Width="*"
-                                        Binding="{Binding VariablesCount}"
+                    <DataGridTextColumn Width="*" 
+                                        Binding="{Binding DataType}"
                                         />
-                    <DataGridTextColumn Header="Status"
-                                        Width="*"
-                                        Binding="{Binding Running}"
+                    <DataGridTextColumn Width="*" 
+                                        Binding="{Binding Archive}"
                                         />
                 </DataGrid.Columns>
             </DataGrid>
-        </Grid>
+        </GroupBox>
+
+        <GroupBox Grid.Row="1"
+                  Padding="0"
+                  Style="{DynamicResource MaterialDesignCardGroupBox}"
+                  >
+            <GroupBox.Header>
+                <TextBlock Text="Archives" 
+                           Padding="10"
+                           Style="{StaticResource MaterialDesignBody1TextBlock}"
+                           Foreground="AliceBlue"/>
+            </GroupBox.Header>
+            <!-- Archive control -->
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0">
+                    <Button Content="Start archive"
+                            Padding="10 5"
+                            Command="{Binding StartArchiveCommand}"
+                            />
+                    <Button Content="Stop archive"
+                            Padding="10 5"
+                            Command="{Binding StopArchiveCommand}"
+                            />
+                </StackPanel>
+
+                <StackPanel Grid.Column="1">
+                    <Button Content="Add Node"
+                            Padding="10 5"
+                            Command="{Binding AddVariableToArchiveCommand}"
+                            />
+                    <Button Content="Delete Node"
+                            Padding="10 5"
+                            Command="{Binding DeleteVariableFromArchiveCommand}"
+                            />
+                </StackPanel>
+
+                <!-- DataGrid of archive types -->
+                <DataGrid Grid.Column="2"
+                          ItemsSource="{Binding ArchiveInfo}"
+                          SelectedItem="{Binding SelectedArchiveInfo}"
+                          SelectionMode="Single"
+                          BorderThickness="0"
+                          AutoGenerateColumns="false"
+                          RowHeaderWidth="0"
+                          CanUserResizeColumns="False"
+                          CanUserReorderColumns="False"
+                          IsReadOnly="True"
+                          SelectedIndex="0"
+                          IsManipulationEnabled="False"
+                          CanUserAddRows="False"
+                          >
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Archive Interval" 
+                                        Width="*" 
+                                        Binding="{Binding ArchiveInterval}"
+                                        />
+                        <DataGridTextColumn Header="Num of Variables"
+                                        Width="*"
+                                        Binding="{Binding VariablesCount}"
+                                        />
+                        <DataGridTextColumn Header="Status"
+                                        Width="*"
+                                        Binding="{Binding Running}"
+                                        />
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
+        </GroupBox>
     </Grid>
 </UserControl>

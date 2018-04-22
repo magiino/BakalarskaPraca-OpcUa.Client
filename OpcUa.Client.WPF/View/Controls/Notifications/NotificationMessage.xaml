@@ -15,7 +15,8 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type ContentControl}">
                         <!-- Content -->
-                        <Border x:Name="background">
+                        <Border x:Name="background"
+                                Margin="0 0 0 5">
                             <!-- Content -->
                             <Grid x:Name="container"
                               Background="Transparent">

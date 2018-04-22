@@ -211,7 +211,7 @@ namespace OpcUa.Client.WPF
 
         private void SetAllowedAuth()
         {
-            _selectedEndpoint.UserIdentityTokens.ForEach(x =>
+            _selectedEndpoint?.UserIdentityTokens.ForEach(x =>
             {
                 switch (x.TokenType)
                 {

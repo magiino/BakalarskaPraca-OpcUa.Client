@@ -11,16 +11,21 @@
              >
     <ToolBarTray>
         <ToolBar Style="{DynamicResource MaterialDesignToolBar}"
-                 ClipToBounds="False">
+                 ClipToBounds="False"
+                 >
             <Button ToolTip="Stop communication"
-                    Command="{Binding DisconnectSessionCommand}">
+                    Command="{Binding DisconnectSessionCommand}"
+                    >
                 <materialDesign:PackIcon Kind="StopCircle"/>
             </Button>
             <Separator />
-            <Label Content="Session state" VerticalAlignment="Center"/>
+            <Label Content="Session state" 
+                   VerticalAlignment="Center"
+                   />
             <materialDesign:PackIcon Kind="Circle"
                                      VerticalAlignment="Center"
-                                     Foreground="{Binding SessionIsActive, Converter={local:BooleanToColorConverter}}"/>
+                                     Foreground="{Binding SessionIsActive, Converter={local:BooleanToColorConverter}}"
+                                     />
         </ToolBar>
     </ToolBarTray>
 </UserControl>
