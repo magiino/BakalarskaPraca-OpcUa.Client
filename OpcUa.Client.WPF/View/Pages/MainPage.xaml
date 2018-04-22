@@ -9,7 +9,7 @@
       d:DesignHeight="600" 
       d:DesignWidth="1000"
       >
-    <Border Background="{StaticResource ForegroundLightBrush}">
+    <Border>
         <DockPanel>
             <StackPanel DockPanel.Dock="Top">
                 <local:MenuBar DataContext="{Binding MenuBarViewModel}"/>
@@ -30,8 +30,7 @@
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
 
-                    <TextBlock Text="Server address space"
-                               FontSize="{StaticResource FontSizeLarge}"/>
+                    <TextBlock Text="Server address space"/>
 
                     <local:TreeView Grid.Row="1"
                                     MinWidth="200"

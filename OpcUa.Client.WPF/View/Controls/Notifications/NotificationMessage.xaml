@@ -15,7 +15,7 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type ContentControl}">
                         <!-- Content -->
-                        <Border x:Name="background" Background="{StaticResource ForegroundLightBrush}">
+                        <Border x:Name="background">
                             <!-- Content -->
                             <Grid x:Name="container"
                               Background="Transparent">
@@ -58,19 +58,15 @@
                                             <!-- Name-->
                                             <TextBlock Text="{Binding Name}"
                                                    Padding="0 0 0 2"
-                                                   Foreground="{StaticResource WordBlueBrush}"
                                                    TextTrimming="CharacterEllipsis"
-                                                   FontFamily="{StaticResource LatoRegular}"
                                                    Margin="0 0 10 0"
                                                    />
                                             <!-- Node Id-->
-                                            <TextBlock Foreground="{StaticResource WordBlueBrush}">
-                                                          [
+                                            <TextBlock>
+                                                       [
                                             <TextBlock Text="{Binding NodeId}"
                                                        Padding="0 0 0 2"
-                                                       Foreground="{StaticResource WordBlueBrush}"
                                                        TextTrimming="CharacterEllipsis"
-                                                       FontFamily="{StaticResource LatoRegular}"
                                                        /> ]
                                         </TextBlock>
                                         </StackPanel>
@@ -78,18 +74,13 @@
                                         <!-- Message -->
                                         <TextBlock Text="{Binding Message}"
                                             Padding="0 2 0 0"
-                                            Foreground="{StaticResource ForegroundDarkBrush}"
                                             TextTrimming="CharacterEllipsis"
-                                            FontFamily="{StaticResource LatoRegular}"
                                             />
                                         <!-- DateTime -->
                                         <TextBlock Text="{Binding Time}"
                                                Padding="0 2 0 0"
-                                               Foreground="{StaticResource ForegroundDarkBrush}"
                                                TextTrimming="CharacterEllipsis"
-                                               FontSize="{StaticResource FontSizeSmaller}"
-                                               FontFamily="{StaticResource LatoRegular}"
-                                    />
+                                               />
 
                                     </StackPanel>
                                 </Border>
@@ -103,7 +94,7 @@
                             </Grid>
                         </Border>
                         <!-- Hover effect -->
-                        <ControlTemplate.Triggers>
+                        <!--<ControlTemplate.Triggers>
 
                             <DataTrigger Binding="{Binding IsSelected}" Value="True">
                                 <Setter Property="Background" TargetName="background" Value="{StaticResource WordVeryVeryLightBlueBrush}"/>
@@ -126,7 +117,7 @@
                             <Trigger Property="IsEnabled" Value="False">
                                 <Setter Property="Background" TargetName="container" Value="{StaticResource ForegroundDarkBrush}"/>
                             </Trigger>
-                        </ControlTemplate.Triggers>
+                        </ControlTemplate.Triggers>-->
 
                     </ControlTemplate>
                 </Setter.Value>

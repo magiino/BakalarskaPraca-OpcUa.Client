@@ -23,7 +23,6 @@
             <TextBlock Text="Session state"
                        TextWrapping="Wrap"
                        Width="50"
-                       FontSize="{StaticResource FontSizeSmall}"
                        VerticalAlignment="Center"
                        HorizontalAlignment="Center"/>
 

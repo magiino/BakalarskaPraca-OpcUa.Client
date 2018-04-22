@@ -19,7 +19,6 @@
         <!-- ListView of subscribed variables -->
         <DataGrid Grid.Row="1"
                   ItemsSource="{Binding ArchiveVariables}"
-                  Background="{StaticResource BackgroundLightBrush}"
                   SelectedItem="{Binding SelectedArchiveVariable}"
                   x:Name="Variables"
                   SelectionMode="Single"
@@ -85,7 +84,6 @@
             <!-- DataGrid of archive types -->
             <DataGrid Grid.Column="2"
                       ItemsSource="{Binding ArchiveInfo}"
-                      Background="{StaticResource BackgroundLightBrush}"
                       SelectedItem="{Binding SelectedArchiveInfo}"
                       SelectionMode="Single"
                       BorderThickness="0"
