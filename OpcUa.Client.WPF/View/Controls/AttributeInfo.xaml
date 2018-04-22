@@ -75,34 +75,28 @@
 
             <TextBlock Grid.Row="1" 
                     Grid.Column="0"
-                    Style="{StaticResource AttributeHeader}"
                     Text="Node Class"
                     />
             <TextBlock Grid.Row="1" 
                     Grid.Column="1"
-                    Style="{StaticResource AttributeValue}"
                     Text="{Binding NodeClass}"
                     />
 
             <TextBlock Grid.Row="0" 
                     Grid.Column="0"
-                    Style="{StaticResource AttributeHeader}"
                     Text="Browse Name"
                     />
             <TextBlock Grid.Row="0" 
                     Grid.Column="1"
-                    Style="{StaticResource AttributeValue}"
                     Text="{Binding BrowseName}"
                     />
 
             <TextBlock Grid.Row="2" 
                     Grid.Column="0"
-                    Style="{StaticResource AttributeHeader}"
                     Text="Display Name"
                     />
             <TextBlock Grid.Row="2" 
                     Grid.Column="1"
-                    Style="{StaticResource AttributeValue}"
                     Text="{Binding DisplayName}"
                     />
         </Grid>
@@ -123,12 +117,10 @@
 
             <TextBlock Grid.Row="0" 
                     Grid.Column="0"
-                    Style="{StaticResource AttributeHeader}"
                     Text="Description"
                     />
             <TextBlock Grid.Row="0" 
                     Grid.Column="1"
-                    Style="{StaticResource AttributeValue}"
                     Text="{Binding Description}"
                     />
             <!--<TextBlock Text="{Binding Description}"
@@ -137,23 +129,19 @@
 
             <TextBlock Grid.Row="1" 
                     Grid.Column="0"
-                    Style="{StaticResource AttributeHeader}"
                     Text="Write Mask"
                     />
             <TextBlock Grid.Row="1" 
                     Grid.Column="1"
-                    Style="{StaticResource AttributeValue}"
                     Text="{Binding WriteMask}"
                     />
 
             <TextBlock Grid.Row="2" 
                     Grid.Column="0"
-                    Style="{StaticResource AttributeHeader}"
                     Text="User Write Mask"
                     />
             <TextBlock Grid.Row="2" 
                     Grid.Column="1"
-                    Style="{StaticResource AttributeValue}"
                     Text="{Binding UserWriteMask}"
                     />
         </Grid>
@@ -223,67 +211,55 @@
 
                 <TextBlock Grid.Row="0" 
                     Grid.Column="0"
-                    Style="{StaticResource AttributeHeader}"
                     Text="Value Rank"
                     />
                 <TextBlock Grid.Row="0" 
                     Grid.Column="1"
-                    Style="{StaticResource AttributeValue}"
                     Text="{Binding ValueRank}"
                     />
 
                 <TextBlock Grid.Row="1" 
                     Grid.Column="0"
-                    Style="{StaticResource AttributeHeader}"
                     Text="Array Dimensions"
                     />
                 <TextBlock Grid.Row="1" 
                     Grid.Column="1"
-                    Style="{StaticResource AttributeValue}"
                     Text="{Binding ArrayDimensions}"
                     />
 
                 <TextBlock Grid.Row="2" 
                     Grid.Column="0"
-                    Style="{StaticResource AttributeHeader}"
                     Text="Access Level"
                     />
                 <TextBlock Grid.Row="2" 
                     Grid.Column="1"
-                    Style="{StaticResource AttributeValue}"
                     Text="{Binding AccessLevel}"
                     />
 
                 <TextBlock Grid.Row="3" 
                     Grid.Column="0"
-                    Style="{StaticResource AttributeHeader}"
                     Text="User Access Level"
                     />
                 <TextBlock Grid.Row="3" 
                     Grid.Column="1"
-                    Style="{StaticResource AttributeValue}"
                     Text="{Binding UserAccessLevel}"
                     />
 
                 <TextBlock Grid.Row="4" 
                     Grid.Column="0"
-                    Style="{StaticResource AttributeHeader}"
                     Text="Historizing"
                     />
                 <TextBlock Grid.Row="4" 
                     Grid.Column="1"
-                    Style="{StaticResource AttributeValue}"
                     Text="{Binding Historizing}"
                     />
 
                 <TextBlock Grid.Row="5" 
                     Grid.Column="0"
-                    Style="{StaticResource AttributeHeader}"
                     Text="Min Sampling"
                     />
                 <TextBlock Grid.Row="5" 
                     Grid.Column="1"
-                    Style="{StaticResource AttributeValue}"
                     Text="{Binding MinimumSamplingInterval}"
                     />
             </Grid>
@@ -305,34 +281,28 @@
 
                 <TextBlock Grid.Row="0" 
                     Grid.Column="0"
-                    Style="{StaticResource AttributeHeader}"
                     Text="Value"
                     />
                 <TextBlock Grid.Row="0" 
                     Grid.Column="1"
-                    Style="{StaticResource AttributeValue}"
                     Text="{Binding Value}"
                     />
 
                 <TextBlock Grid.Row="1" 
                     Grid.Column="0"
-                    Style="{StaticResource AttributeHeader}"
                     Text="Status Code"
                     />
                 <TextBlock Grid.Row="1" 
                     Grid.Column="1"
-                    Style="{StaticResource AttributeValue}"
                     Text="{Binding StatusCode}"
                     />
 
                 <TextBlock Grid.Row="2" 
                     Grid.Column="0"
-                    Style="{StaticResource AttributeHeader}"
                     Text="Source Timestamp"
                     />
                 <TextBlock Grid.Row="2" 
                     Grid.Column="1"
-                    Style="{StaticResource AttributeValue}"
                     Text="{Binding SourceTimestamp}"
                     />
             </Grid>
@@ -350,23 +320,19 @@
 
                 <TextBlock Grid.Row="0" 
                        Grid.Column="0"
-                       Style="{StaticResource AttributeHeader}"
                        Text="Data type"
                        />
                 <TextBlock Grid.Row="0" 
                        Grid.Column="1"
-                       Style="{StaticResource AttributeValue}"
                        Text="{Binding DataType}"
                        />
 
                 <TextBlock Grid.Row="1" 
                        Grid.Column="0"
-                       Style="{StaticResource AttributeHeader}"
                        Text="BuiltInType"
                        />
                 <TextBlock Grid.Row="1" 
                        Grid.Column="1"
-                       Style="{StaticResource AttributeValue}"
                        Text="{Binding BuiltInType}"
                        />
             </Grid>

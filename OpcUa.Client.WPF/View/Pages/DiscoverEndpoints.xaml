@@ -10,9 +10,8 @@
       x:Name="Page"
       d:DesignHeight="600" d:DesignWidth="800">
 
-    <Border  Background="{StaticResource BackgroundLightBrush}"
-             Padding="5"
-             >
+    <Border Padding="5"
+            >
         <Grid>
             <Grid.RowDefinitions>
                 <!-- First Row -->
@@ -101,7 +100,6 @@
                                   RowHeaderWidth="0"
                                   CanUserResizeColumns="False"
                                   CanUserReorderColumns="False"
-                                  Background="{StaticResource BackgroundLightBrush}"
                                   IsReadOnly="True"
                                   ItemsSource="{Binding FilteredEndpoints}"
                                   SelectedItem="{Binding SelectedEndpointListModel, Mode=TwoWay}"
@@ -160,7 +158,6 @@
                             <ScrollViewer VerticalScrollBarVisibility="auto">
                                 <ListView ItemsSource="{Binding FoundedServers}"
                                           SelectedItem="{Binding SelectedServer, Mode=TwoWay}"
-                                          Background="{StaticResource BackgroundLightBrush}"
                                           SelectionMode="Single"
                                           SelectedIndex="0"
                                           MinHeight="75px"
@@ -172,7 +169,6 @@
                                                 <fa:ImageAwesome 
                                                         Width="10" 
                                                         Margin="3"
-                                                        Foreground="{StaticResource WordBlueBrush}"
                                                         Icon="Server"
                                                         />
                                                 <TextBlock VerticalAlignment="Center" 

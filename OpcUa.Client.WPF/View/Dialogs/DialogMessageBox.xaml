@@ -7,15 +7,12 @@
              xmlns:core="clr-namespace:OpcUa.Client.Core;assembly=OpcUa.Client.Core"
              mc:Ignorable="d">
     <StackPanel d:DataContext="{x:Static core:MessageBoxDialogDesignModel.Instance}"
-                Background="{StaticResource ForegroundLightBrush}"
                 >
         <TextBlock Text="{Binding Message}"
                    Padding="5"
-                   Foreground="{StaticResource ForegroundVeryDarkBrush}"
                    />
 
         <Button Content="{Binding OkText}"
-                FontSize="{StaticResource FontSizeRegular}"
                 Command="{Binding CloseActionCommand}"
                 HorizontalAlignment="Center"
                 />

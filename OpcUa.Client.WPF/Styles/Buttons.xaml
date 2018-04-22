@@ -39,7 +39,7 @@
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="Padding" Value="8" />
         <Setter Property="VerticalAlignment" Value="Stretch" />
-        <Setter Property="Foreground" Value="{StaticResource ForegroundMainBrush}" />
+        <!--<Setter Property="Foreground" Value="{StaticResource ForegroundMainBrush}" />-->
 
         <Setter Property="LayoutTransform">
             <Setter.Value>
@@ -59,22 +59,9 @@
 
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="{StaticResource BackgroundLightBrush}" />
+                <!--<Setter Property="Background" Value="{StaticResource BackgroundLightBrush}" />-->
             </Trigger>
         </Style.Triggers>
-
-    </Style>
-
-    <!-- Window Close Button -->
-    <Style TargetType="{x:Type Button}" x:Key="WindowCloseButton" BasedOn="{StaticResource WindowControlButton}">
-
-        <Style.Triggers>
-            <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="Red" />
-                <Setter Property="Foreground" Value="{StaticResource ForegroundLightBrush}" />
-            </Trigger>
-        </Style.Triggers>
-
     </Style>
 
     <!-- Text button -->

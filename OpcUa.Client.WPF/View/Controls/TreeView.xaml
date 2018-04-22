@@ -28,7 +28,6 @@
                         <fa:ImageAwesome 
                             Width="10" 
                             Margin="3"
-                            Foreground="LightSkyBlue"
                             Icon="{Binding Type, Converter={local:HeaderToImageConverter}}"/>
                         <TextBlock VerticalAlignment="Center" Text="{Binding Name}" />
                     </StackPanel>

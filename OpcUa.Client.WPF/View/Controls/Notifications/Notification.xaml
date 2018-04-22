@@ -34,7 +34,6 @@
                 <fa:ImageAwesome 
                     Width="10" 
                     Margin="3"
-                    Foreground="{StaticResource WordBlueBrush}"
                     Icon="Trash"
                     />
             </Button>

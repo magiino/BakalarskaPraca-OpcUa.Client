@@ -3,14 +3,14 @@
                     >
 
     <Style TargetType="{x:Type TextBlock}" x:Key="AttributeValue" BasedOn="{StaticResource BaseTextBlockStyle}">
-        <Setter Property="Foreground" Value="{StaticResource ForegroundVeryDarkBrush}" />
+        <!--<Setter Property="Foreground" Value="{StaticResource ForegroundVeryDarkBrush}" />-->
         <Setter Property="Width" Value="200"/>
         <Setter Property="Padding" Value="0 5 0 5"/>
 
     </Style>
 
     <Style TargetType="{x:Type TextBlock}" x:Key="AttributeHeader" BasedOn="{StaticResource BaseTextBlockStyle}">
-        <Setter Property="Foreground" Value="{StaticResource ForegroundVeryDarkBrush}" />
+        <!--<Setter Property="Foreground" Value="{StaticResource ForegroundVeryDarkBrush}" />-->
         <Setter Property="Padding" Value="5 5 0 5"/>
         <Setter Property="HorizontalAlignment" Value="Stretch"/>
     </Style>

@@ -85,7 +85,6 @@
         <Button Margin="0 10 0 0"
                 Padding="10 3"
                 Content="Add"
-                FontSize="{StaticResource FontSizeRegular}"
                 Command="{Binding AddItemCommand}"
                 HorizontalAlignment="Center"
                 />

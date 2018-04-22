@@ -24,7 +24,7 @@
                 Opacity="{Binding DimmableOverlayVisible, Converter={local:OpacityConverter}}"
                 Panel.ZIndex="1"
                 Visibility="Collapsed">
-            <Border Background="{StaticResource ForegroundVeryDarkBrush}"/>
+            <!--<Border Background="{StaticResource ForegroundVeryDarkBrush}"/>-->
         </Border>
 
         <!-- Frame where are changing pages -->
