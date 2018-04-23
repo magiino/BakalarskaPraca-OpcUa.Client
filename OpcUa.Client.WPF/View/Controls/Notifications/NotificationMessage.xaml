@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:OpcUa.Client.WPF"
-             xmlns:fa="http://schemas.fontawesome.io/icons/"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d"
              Height="60"
              d:DesignWidth="400"
@@ -31,37 +31,33 @@
 
                                 <!-- New Notification Indicator Bar -->
                                 <Border Background="{Binding NotificationColor}" 
-                                    Width="4"
-                                    HorizontalAlignment="Left"
-                                    />
+                                        Width="4"
+                                        HorizontalAlignment="Left"
+                                        />
 
                                 <!-- Profile picture padding -->
                                 <Border Grid.Column="0" 
-                                    Padding="8 15"
-                                    >
-
+                                        Padding="8 15"
+                                        >
                                     <!-- Profile picture initials -->
-                                    <fa:ImageAwesome 
-                                    Width="10" 
-                                    Margin="3"
-                                    Foreground="LightSkyBlue"
-                                    Icon="exclamation"
-                                    />
+                                    <materialDesign:PackIcon Kind="Exclamation"
+                                                             Width="10" 
+                                                             Margin="3"/>
                                 </Border>
 
                                 <!-- Main content -->
                                 <Border Grid.Column="1" 
-                                    Padding="0 0 15 0"
-                                    >
+                                        Padding="0 0 15 0"
+                                        >
                                     <StackPanel VerticalAlignment="Center">
 
                                         <StackPanel Orientation="Horizontal">
                                             <!-- Name-->
                                             <TextBlock Text="{Binding Name}"
-                                                   Padding="0 0 0 2"
-                                                   TextTrimming="CharacterEllipsis"
-                                                   Margin="0 0 10 0"
-                                                   />
+                                                       Padding="0 0 0 2"
+                                                       TextTrimming="CharacterEllipsis"
+                                                       Margin="0 0 10 0"
+                                                       />
                                             <!-- Node Id-->
                                             <TextBlock>
                                                        [
@@ -74,22 +70,22 @@
 
                                         <!-- Message -->
                                         <TextBlock Text="{Binding Message}"
-                                            Padding="0 2 0 0"
-                                            TextTrimming="CharacterEllipsis"
-                                            />
+                                                   Padding="0 2 0 0"
+                                                   TextTrimming="CharacterEllipsis"
+                                                   />
                                         <!-- DateTime -->
                                         <TextBlock Text="{Binding Time}"
-                                               Padding="0 2 0 0"
-                                               TextTrimming="CharacterEllipsis"
-                                               />
+                                                   Padding="0 2 0 0"
+                                                   TextTrimming="CharacterEllipsis"
+                                                   />
 
                                     </StackPanel>
                                 </Border>
                                 <!-- Confirm -->
                                 <CheckBox Grid.Column="2"
-                                      VerticalAlignment="Center"
-                                      Margin="10 0"
-                                      Command="{Binding ConfirmCommand}">
+                                          VerticalAlignment="Center"
+                                          Margin="10 0"
+                                          Command="{Binding ConfirmCommand}">
 
                                 </CheckBox>
                             </Grid>
