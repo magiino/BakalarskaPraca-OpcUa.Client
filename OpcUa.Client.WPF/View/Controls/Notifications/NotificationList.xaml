@@ -13,7 +13,7 @@
             <ItemsControl ItemsSource="{Binding Items}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <local:NotificationMessage/>
+                        <local:NotificationMessage2/>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
