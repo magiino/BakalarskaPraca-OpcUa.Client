@@ -112,7 +112,6 @@ namespace OpcUa.Client.WPF
                 ProjectId = IoC.AppManager.ProjectId
             };
             _unitOfWork.Variables.Add(tmp);
-            //_unitOfWork.Complete();
 
             var variableModel = Mapper.VariableEntityToVariableModel(tmp);
             _messenger.Send(new SendManageArchivedValue(false, variableModel));
@@ -133,7 +132,7 @@ namespace OpcUa.Client.WPF
                 }
                 else
                 {
-                    var item = _uaClientApi.CreateMonitoredItem(interval.ToString(), nodeId, 1000, null, 2, MonitoringMode.Disabled);
+                    var item = _uaClientApi.CreateMonitoredItem(interval.ToString(), nodeId, 100, null, 2, MonitoringMode.Disabled);
                     _uaClientApi.AddMonitoredItem(item, _subscription);
                     item.Notification += Notification_MonitoredItem;
                 }
@@ -264,7 +263,7 @@ namespace OpcUa.Client.WPF
 
             foreach (var variable in ArchiveVariables.Where(x => x.Archive == ArchiveInterval.None))
             {
-                var item = _uaClientApi.CreateMonitoredItem(variable.Name, variable.Name, 500, null, 2, MonitoringMode.Disabled);
+                var item = _uaClientApi.CreateMonitoredItem(variable.Name, variable.Name, 100, null, 2, MonitoringMode.Disabled);
                 _uaClientApi.AddMonitoredItem(item, _subscription);
                 item.Notification += Notification_MonitoredItem;
             }
@@ -313,7 +312,6 @@ namespace OpcUa.Client.WPF
 
             // Archivacia
             _unitOfWork.Records.AddRange(records);
-            //_unitOfWork.Complete();
         }
         #endregion
 
@@ -341,8 +339,6 @@ namespace OpcUa.Client.WPF
                 VariableId = variable.Id,
                 Value = value.Value.ToString()
             });
-
-            //_unitOfWork.Complete();
         }
         #endregion
     }

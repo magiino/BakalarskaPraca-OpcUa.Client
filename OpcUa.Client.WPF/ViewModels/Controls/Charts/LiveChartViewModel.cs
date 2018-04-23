@@ -91,7 +91,7 @@ namespace OpcUa.Client.WPF
                 }
             );
 
-            var item = _uaClientApi.CreateMonitoredItem(variable.Name, variable.NodeId, 500, null, 4);
+            var item = _uaClientApi.CreateMonitoredItem(variable.Name, variable.NodeId, 100, null, 4);
 
             _uaClientApi.AddMonitoredItem(item, _subscription);
             item.Notification += Notification_MonitoredItem;

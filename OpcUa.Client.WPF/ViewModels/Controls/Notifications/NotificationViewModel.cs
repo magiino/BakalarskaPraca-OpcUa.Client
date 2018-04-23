@@ -126,10 +126,13 @@ namespace OpcUa.Client.WPF
                 ProjectId = IoC.AppManager.ProjectId,
             };
 
+            if (notification.Id != null)
+                notificationEntity.Id = notification.Id.Value;
+
 
             if (notification.IsDigital)
             {
-                item = _uaClientApi.CreateMonitoredItem(notification.Name, notification.NodeId, 300);
+                item = _uaClientApi.CreateMonitoredItem(notification.Name, notification.NodeId, 100);
 
                 notificationEntity.IsDigital = true;
                 notificationEntity.IsZeroDescription = notification.IsZeroDescription;
@@ -139,7 +142,7 @@ namespace OpcUa.Client.WPF
             {
                 item = _uaClientApi.CreateMonitoredItem(notification.Name,
                     notification.NodeId,
-                    300,
+                    100,
                     new DataChangeFilter()
                     {
                         DeadbandType = (uint)notification.DeadbandType,
