@@ -121,14 +121,11 @@ namespace OpcUa.Client.WPF
 
             var notificationEntity = new NotificationEntity()
             {
+                Id = notification.Id.Value,
                 Name = notification.Name,
                 NodeId = notification.NodeId,
                 ProjectId = IoC.AppManager.ProjectId,
             };
-
-            if (notification.Id != null)
-                notificationEntity.Id = notification.Id.Value;
-
 
             if (notification.IsDigital)
             {
@@ -159,7 +156,8 @@ namespace OpcUa.Client.WPF
             else
             {
                 item.Notification += Notification_MonitoredItem;
-                _unitOfWork.Notifications.Add(notificationEntity);
+                if (notification.Id == null)
+                    _unitOfWork.Notifications.Add(notificationEntity);
                 Notifications.Add(notification);
             }
         }

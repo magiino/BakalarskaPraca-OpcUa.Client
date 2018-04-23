@@ -64,7 +64,7 @@ namespace OpcUa.Client.WPF
 
             if (interval == ArchiveInterval.None)
             {
-                _subscription.PublishingEnabled = true;
+                //_subscription.PublishingEnabled = true;
                 _subscription.SetMonitoringMode(MonitoringMode.Reporting, _subscription.MonitoredItems.ToList());
                 _subscription.ApplyChanges();
             }
@@ -82,7 +82,7 @@ namespace OpcUa.Client.WPF
             var interval = SelectedArchiveInfo.ArchiveInterval;
             if (interval == ArchiveInterval.None)
             {
-                _subscription.PublishingEnabled = false;
+                //_subscription.PublishingEnabled = false;
                 _subscription.SetMonitoringMode(MonitoringMode.Disabled, _subscription.MonitoredItems.ToList());
                 _subscription.ApplyChanges();
             }
@@ -133,8 +133,8 @@ namespace OpcUa.Client.WPF
                 else
                 {
                     var item = _uaClientApi.CreateMonitoredItem(interval.ToString(), nodeId, 100, null, 2, MonitoringMode.Disabled);
-                    _uaClientApi.AddMonitoredItem(item, _subscription);
                     item.Notification += Notification_MonitoredItem;
+                    _uaClientApi.AddMonitoredItem(item, _subscription);
                 }
             }
             catch (Exception e)
@@ -264,8 +264,8 @@ namespace OpcUa.Client.WPF
             foreach (var variable in ArchiveVariables.Where(x => x.Archive == ArchiveInterval.None))
             {
                 var item = _uaClientApi.CreateMonitoredItem(variable.Name, variable.Name, 100, null, 2, MonitoringMode.Disabled);
-                _uaClientApi.AddMonitoredItem(item, _subscription);
                 item.Notification += Notification_MonitoredItem;
+                _uaClientApi.AddMonitoredItem(item, _subscription);
             }
         }
 

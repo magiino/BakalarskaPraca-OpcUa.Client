@@ -84,6 +84,7 @@ namespace OpcUa.Client.Core
         {
             return notifications.Select(notification => new ExtendedNotificationModel()
                 {
+                    Id = notification.Id,
                     Name = notification.Name,
                     NodeId = notification.NodeId,
                     IsDigital = notification.IsDigital,
