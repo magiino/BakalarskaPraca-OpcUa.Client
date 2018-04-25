@@ -19,7 +19,8 @@
 
         <wpf:CartesianChart Grid.Column="0" 
                             AnimationsSpeed="0:0:0.5" 
-                            Hoverable="True"
+                            Hoverable="false"
+                            DataTooltip="{x:Null}"
                             Zoom="Xy"
                             Series="{Binding SeriesCollection}" 
                             >

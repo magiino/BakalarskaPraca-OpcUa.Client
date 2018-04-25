@@ -218,7 +218,7 @@ namespace OpcUa.Client.WPF
         #region Private Methods
         private void OnLoad()
         {
-            _subscription = _uaClientApi.Subscribe(2000, "Archivation", false);
+            _subscription = _uaClientApi.Subscribe(2000, "Archivation");
             if (_subscription == null)
                 IoC.AppManager.ShowWarningMessage("Subscription creation failed, please restart application!");
 
@@ -263,7 +263,7 @@ namespace OpcUa.Client.WPF
 
             foreach (var variable in ArchiveVariables.Where(x => x.Archive == ArchiveInterval.None))
             {
-                var item = _uaClientApi.CreateMonitoredItem(variable.Name, variable.Name, 100, null, 2, MonitoringMode.Disabled);
+                var item = _uaClientApi.CreateMonitoredItem($"{variable.Name} [{ArchiveInterval.None}]", variable.Name, 100, null, 2, MonitoringMode.Disabled);
                 item.Notification += Notification_MonitoredItem;
                 _uaClientApi.AddMonitoredItem(item, _subscription);
             }
@@ -329,7 +329,7 @@ namespace OpcUa.Client.WPF
             var value = notification.Value;
 
             var variable = ArchiveVariables.FirstOrDefault(x =>
-                x.Name == monitoredItem.StartNodeId && monitoredItem.DisplayName == ArchiveInterval.None.ToString());
+                x.Name == monitoredItem.StartNodeId && monitoredItem.DisplayName == $"{x.Name} [{ArchiveInterval.None}]");
 
             if (variable == null) return;
 
