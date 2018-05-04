@@ -12,25 +12,20 @@
       d:DesignHeight="700" d:DesignWidth="800">
 
     <Border Padding="5"
-            Background="{DynamicResource MaterialDesignLightBackground}">
+            Background="{DynamicResource MaterialDesignLightBackground}"
+            >
         <Grid>
             <Grid.RowDefinitions>
-                <!-- First Row -->
                 <RowDefinition Height="auto"/>
-                <!-- Second Row -->
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
-            <!-- First Row -->
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <!-- Text box for URL -->
                     <ColumnDefinition Width="3*"/>
-                    <!-- Search Button -->
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
-                <!-- Text box for URL -->
                 <TextBox Grid.Column="0"
                          Grid.Row="0"
                          Padding="5 0 0 0"
@@ -38,8 +33,6 @@
                          materialDesign:HintAssist.Hint="Server endpoint"
                          Style="{DynamicResource MaterialDesignFloatingHintTextBox}" 
                          />
-
-                <!-- Search Button -->
                 <Button Grid.Column="1"
                         Grid.Row="0"
                         Content="Search"
@@ -48,9 +41,7 @@
                         />
             </Grid>
 
-            <!-- Second Row -->
             <Grid Grid.Row="1">
-
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto"/>
                     <RowDefinition Height="*"/>
@@ -58,10 +49,10 @@
 
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="2"/>
                     <ColumnDefinition Width="auto"/>
                 </Grid.ColumnDefinitions>
 
-                <!-- Server Info -->
                 <GroupBox Grid.Row="0"
                           Grid.Column="0"
                           Header="Server Info"
@@ -80,7 +71,7 @@
                             <TextBlock Text="Application Uri: "/>
                             <TextBlock Text="Product Uri: "/>
                         </StackPanel>
-  
+
                         <StackPanel Grid.Column="1" >
                             <TextBlock  Text="{Binding ApplicationName}"/>
                             <TextBlock  Text="{Binding ApplicationType}"/>
@@ -90,9 +81,6 @@
                     </Grid>
                 </GroupBox>
 
-                
-
-                <!-- Endpoints List -->
                 <GroupBox Grid.Row="1"
                           Grid.Column="0"
                           Style="{DynamicResource MaterialDesignCardGroupBox}"
@@ -101,7 +89,8 @@
                     <GroupBox.Header>
                         <TextBlock Text="Endpoints" 
                                    Padding="10"
-                                   Foreground="AliceBlue"/>
+                                   Foreground="AliceBlue"
+                                   />
                     </GroupBox.Header>
                     <ScrollViewer Height="auto" 
                                   VerticalScrollBarVisibility="auto"
@@ -143,17 +132,15 @@
                     </ScrollViewer>
                 </GroupBox>
 
-                <!-- Filter -->
                 <Grid Grid.RowSpan="2"
                       Grid.Row="0" 
-                      Grid.Column="1"
+                      Grid.Column="2"
                       >
 
                     <Grid.RowDefinitions>
-                        <!-- First Row -->
                         <RowDefinition Height="auto"/>
-                        <!-- Second Row -->
                         <RowDefinition Height="*"/>
+                        <RowDefinition Height="auto"/>
                     </Grid.RowDefinitions>
 
                     <GroupBox Grid.Row="0"
@@ -163,7 +150,6 @@
                               >
                         <StackPanel>
 
-                            <!-- Server List -->
                             <TextBlock Text="Servers"/>
                             <ScrollViewer VerticalScrollBarVisibility="auto">
                                 <ListView ItemsSource="{Binding FoundedServers}"
@@ -175,7 +161,9 @@
 
                                     <ListView.ItemTemplate>
                                         <DataTemplate>
-                                            <StackPanel Orientation="Horizontal">
+                                            <StackPanel Orientation="Horizontal"
+                                                        DataContext="{Binding }"
+                                                        >
                                                 <materialDesign:PackIcon Kind="Server"
                                                                          Width="10" 
                                                                          Margin="3"
@@ -189,26 +177,21 @@
                                 </ListView>
                             </ScrollViewer>
 
-                            <!-- Protocol Combo Box -->
                             <TextBlock Text="TransportProtocol"/>
                             <ComboBox SelectedIndex="0"
                                       ItemsSource="{Binding EProtocols}"
                                       SelectedItem="{Binding SelectedTransportProtocol, Mode=TwoWay}"
                                       materialDesign:HintAssist.Hint="Choose"
                                       materialDesign:HintAssist.HintOpacity=".26"
-                                      Style="{StaticResource MaterialDesignFloatingHintComboBox}"
+                                      Style="{DynamicResource MaterialDesignFloatingHintComboBox}"
                                       />
 
-                            <!-- Security Modes/Policies -->
                             <Grid Margin="0 10 0 0">
                                 <Grid.ColumnDefinitions>
-                                    <!-- Security Modes -->
                                     <ColumnDefinition Width="*"/>
-                                    <!-- Security Policies -->
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
 
-                                <!-- Security Modes -->
                                 <StackPanel Grid.Column="0">
                                     <TextBlock Text="Security Modes"/>
                                     <CheckBox Content="None"
@@ -225,7 +208,6 @@
                                               />
                                 </StackPanel>
 
-                                <!-- Security Policies -->
                                 <StackPanel Grid.Column="1">
                                     <TextBlock Text="Security Policies"/>
                                     <CheckBox Content="Basic128Rsa15"
@@ -243,19 +225,17 @@
                                 </StackPanel>
                             </Grid>
 
-                            <!-- Message Encoding -->
                             <TextBlock Text="Message Encoding"/>
                             <ComboBox SelectedIndex="0"
                                       ItemsSource="{Binding EMessageEncodings}"
                                       SelectedItem="{Binding SelectedEncoding, Mode=TwoWay}"
                                       materialDesign:HintAssist.Hint="Choose"
                                       materialDesign:HintAssist.HintOpacity=".26"
-                                      Style="{StaticResource MaterialDesignFloatingHintComboBox}"
+                                      Style="{DynamicResource MaterialDesignFloatingHintComboBox}"
                                       />
                         </StackPanel>
                     </GroupBox>
 
-                    <!-- User Authentication -->
                     <GroupBox Grid.Row="1" 
                               Grid.Column="0"
                               Header="Log In"
@@ -263,17 +243,12 @@
                               >
                         <StackPanel VerticalAlignment="Stretch">
 
-                            <!-- Project Name -->
                             <TextBlock Text="Project Name"/>
-                            <TextBox Text="{Binding ProjectName}"
-                                     />
+                            <TextBox Text="{Binding ProjectName}"/>
 
-                            <!-- Session Name -->
                             <TextBlock Text="Session Name"/>
-                            <TextBox Text="{Binding SessionName}"
-                                     />
+                            <TextBox Text="{Binding SessionName}"/>
 
-                            <!-- Radio Buttons -->
                             <RadioButton Content="Anonymous"
                                          GroupName="Group1"
                                          IsChecked="{Binding AnonymousIsSelected}"
@@ -289,42 +264,39 @@
                             <StackPanel Visibility="{Binding Converter={local:BooleanToVisibilityConverter}
                                          ,ElementName=UserPasswordChBox
                                          ,Path=IsChecked}">
-                                <!-- User Name -->
                                 <TextBlock Text="User Name"/>
                                 <TextBox Text="{Binding UserName}"
                                          Tag="User Name"
                                          IsEnabled="{Binding IsChecked, ElementName=UserPasswordChBox}"
                                          materialDesign:HintAssist.Hint="User Name"
-                                         Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                         Style="{DynamicResource MaterialDesignFloatingHintTextBox}"
                                          />
                                 <TextBlock Text="Passord"/>
 
-                                <!-- User Password -->
                                 <PasswordBox x:Name="PasswordText"   
                                              Tag="Password"
                                              IsEnabled="{Binding IsChecked, ElementName=UserPasswordChBox}"
                                              materialDesign:HintAssist.Hint="Password"
-                                             Style="{StaticResource MaterialDesignFloatingHintPasswordBox}"
+                                             Style="{DynamicResource MaterialDesignFloatingHintPasswordBox}"
                                              />
                             </StackPanel>
                             <Button Content="Connect"
+                                    Margin="0 20 0 0"
                                     IsDefault="True"
                                     Command="{Binding ConnectCommand}" 
                                     CommandParameter="{Binding ElementName=Page}"
                                     />
-                            <Button Content="Welcome Page"
-                                    IsDefault="True"
-                                    Command="{Binding LoadProjectCommand}" 
-                                    VerticalContentAlignment="Bottom"
-                                    />
                         </StackPanel>
                     </GroupBox>
-
+                    <Button Grid.Row="2"
+                            Content="Welcome Page"
+                            Margin="10"
+                            IsDefault="True"
+                            Command="{Binding LoadProjectCommand}" 
+                            VerticalContentAlignment="Bottom"
+                            />
                 </Grid>
-                <!-- End Filter -->
             </Grid>
-            <!-- End Second Row -->
         </Grid>
-        <!-- End main Grid -->
     </Border>
 </local:BasePage>
