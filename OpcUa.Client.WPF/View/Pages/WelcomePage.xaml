@@ -11,7 +11,6 @@
                 d:DesignHeight="600" 
                 d:DesignWidth="500"
                 >
-
     <materialDesign:Card VerticalAlignment="Center"
                          HorizontalAlignment="Center"
                          TextBlock.TextAlignment="Center"
@@ -20,20 +19,18 @@
                          Padding="20"
                          >
         <StackPanel>
-            <!-- Welcome header -->
             <TextBlock Text="Welcome!"
                        Style="{DynamicResource MaterialDesignHeadlineTextBlock}"
                        />
 
-            <!-- Welcome multiline text -->
             <StackPanel Orientation="Vertical"
                         Width="250" 
                         Margin="0 10 0 70"
                         >
                 <TextBlock TextWrapping="Wrap"
-                          Style="{DynamicResource MaterialDesignBody1TextBlock}"
-                          Text="{Binding WelcomeText, FallbackValue=Loreipsum}"
-                          />
+                           Style="{DynamicResource MaterialDesignBody1TextBlock}"
+                           Text="{Binding WelcomeText}"
+                           />
             </StackPanel>
 
             <TextBlock Text="Choose Server"
@@ -48,10 +45,10 @@
                           SelectedIndex="0"
                           MinHeight="200px"
                           >
-
                     <ListView.ItemTemplate>
                         <DataTemplate>
-                            <StackPanel Orientation="Horizontal">
+                            <StackPanel Orientation="Horizontal"
+                                        DataContext="{Binding }">
                                 <materialDesign:PackIcon Kind="ArrowRight"
                                                          Width="10" 
                                                          Margin="3"
@@ -64,38 +61,37 @@
                                            VerticalAlignment="Center" 
                                            Text="{Binding EndpointUrl}"
                                            />
+                                <materialDesign:PackIcon Kind="Account"
+                                                         Foreground="{Binding UserId, Converter={local:NullToColorConverter}}"
+                                                         Width="10" 
+                                                         Margin="3"
+                                                         />
                             </StackPanel>
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>
             </ScrollViewer>
 
-
-            <!-- Load setting button -->
             <Button Content="Delete" 
-                IsDefault="True"
-                Command="{Binding DeleteProjectCommand}"
-                HorizontalAlignment="right"
-        />
-            <!-- Load setting button -->
+                    IsDefault="True"
+                    Command="{Binding DeleteProjectCommand}"
+                    HorizontalAlignment="right"
+                    />
             <Button Content="Load Project" 
-                IsDefault="True"
-                Command="{Binding LoadProjectCommand}"
-                HorizontalAlignment="right"
-                />
-
+                    IsDefault="True"
+                    Command="{Binding LoadProjectCommand}"
+                    HorizontalAlignment="right"
+                    />
             <TextBlock Text="OR"
                        HorizontalAlignment="Center"
                        Padding="0 10"
                        Style="{DynamicResource MaterialDesignBody2TextBlock}"
                        />
-            <!-- New setting button -->
             <Button Content="Create Project" 
                     IsDefault="True"
                     Command="{Binding CreateProjectCommand}"
                     HorizontalAlignment="Center"
                     />
-
         </StackPanel>
     </materialDesign:Card>
 </local:BasePage>
