@@ -15,7 +15,7 @@
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="auto"/>
         </Grid.ColumnDefinitions>
-        
+
         <wpf:CartesianChart Grid.Column="0" 
                             Series="{Binding SeriesCollection}" 
                             Zoom="{Binding ZoomingMode}"
@@ -47,14 +47,14 @@
                     Padding="10 5"
                     Command="{Binding ResetZoomCommand}"
                     />
-            <!--<Button Grid.Row="1"
+            <Button Grid.Row="1"
                     Padding="10 5"
-                    Command="{Binding ToogleZoomModeCommand}"
+                    Command="{Binding ToggleZoomOptionCommand}"
                     >
-                <TextBlock>Zoming mode: 
-                    <TextBlock Text="{Binding ZoomingMode, Converter={local:ZoomingModeCoverter}}"/>
+                <TextBlock>Zoming mode:
+                    <TextBlock Text="{Binding ZoomingMode, Converter={local:ZoomingModeConverter}}"/>
                 </TextBlock>
-            </Button>-->
+            </Button>
 
             <ListView Grid.Row="2"
                       ItemsSource="{Binding Variables}"
@@ -67,35 +67,13 @@
                       >
                 <ListView.ItemTemplate>
                     <DataTemplate>
-                            <materialDesign:Chip Content="{Binding Name}"
-                                                 Icon="{Binding Archive, Converter={local:AtchiveTypeToNumberConverter}}"
-                                                 />
+                        <materialDesign:Chip Content="{Binding Name}"
+                                             Icon="{Binding Archive, Converter={local:AtchiveTypeToNumberConverter}}"
+                                             >
+                        </materialDesign:Chip>
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
         </Grid>
     </Grid>
 </UserControl>
-
-<!--<i:Interaction.Triggers>
-    <i:EventTrigger EventName="Click">
-        <i:InvokeCommandAction Command="{Binding DataContext.MyCommand, ElementName=ListViewName}" 
-                               CommandParameter="{Binding}"
-        />
-    </i:EventTrigger>
-</i:Interaction.Triggers>-->
-
-<!--
-<Border BorderThickness="1">
-    <StackPanel>
-        <TextBlock Padding="10 5"
-                   VerticalAlignment="Center" 
-                   Text="{Binding Name}"
-        />
-        <TextBlock Padding="10 5"
-                   VerticalAlignment="Center" 
-                   Text="{Binding Archive}"
-        />
-    </StackPanel>
-</Border>
--->

@@ -36,7 +36,8 @@ namespace OpcUa.Client.WPF
         #endregion
 
         #region Commands
-        public ZoomingOptions ZoomingMode { get; } = ZoomingOptions.Xy;
+        public ZoomingOptions ZoomingMode { get; set; } = ZoomingOptions.Xy;
+        public ICommand ToggleZoomOptionCommand { get; }
         public ICommand ResetZoomCommand { get; }
         #endregion
 
@@ -48,6 +49,7 @@ namespace OpcUa.Client.WPF
             XFormatter = value => new DateTime((long)value).ToString("dd MMM H:mm:ss");
             OnLoad();
 
+            ToggleZoomOptionCommand = new MixRelayCommand(ToggleZoomOption);
             ResetZoomCommand = new MixRelayCommand((obj) => IoC.Messenger.Send(new SendResetAxises()));
             messenger.Register<SendManageArchivedValue>(msg => ManageArchiveVariables(msg.Delete, msg.Variable));
         } 
@@ -92,6 +94,28 @@ namespace OpcUa.Client.WPF
                 Variables.Add(variable);
             }
         }
+
+        private void ToggleZoomOption()
+        {
+            switch (ZoomingMode)
+            {
+                case ZoomingOptions.None:
+                    ZoomingMode = ZoomingOptions.X;
+                    break;
+                case ZoomingOptions.X:
+                    ZoomingMode = ZoomingOptions.Y;
+                    break;
+                case ZoomingOptions.Y:
+                    ZoomingMode = ZoomingOptions.Xy;
+                    break;
+                case ZoomingOptions.Xy:
+                    ZoomingMode = ZoomingOptions.None;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+
         private void OnLoad()
         {
             var variables = Mapper.VariableEntitiesToVariableListModels( _unityOfWork.Variables.Find(x => x.ProjectId == IoC.AppManager.ProjectId) );

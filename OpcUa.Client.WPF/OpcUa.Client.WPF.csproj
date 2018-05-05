@@ -88,6 +88,7 @@
     <Compile Include="ValueConverters\BooleanToColorConverter.cs" />
     <Compile Include="ValueConverters\AtchiveTypeToNumberConverter.cs" />
     <Compile Include="ValueConverters\AccountExistIconConverter.cs" />
+    <Compile Include="ValueConverters\ZoomingModeConverter.cs" />
     <Compile Include="ValueConverters\NullToColorConverter.cs" />
     <Compile Include="ValueConverters\StringRgbToBrushConverter.cs" />
     <Compile Include="View\Controls\Charts\ZoomChart.xaml.cs">
@@ -98,9 +99,6 @@
     </Compile>
     <Compile Include="View\Controls\Notifications\NotificationList.xaml.cs">
       <DependentUpon>NotificationList.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="View\Controls\Notifications\NotificationMessage2.xaml.cs">
-      <DependentUpon>NotificationMessage2.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Controls\Notifications\NotificationMessage.xaml.cs">
       <DependentUpon>NotificationMessage.xaml</DependentUpon>
@@ -190,13 +188,9 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\Controls\Notifications\NotificationMessage2.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="View\Controls\Notifications\NotificationMessage.xaml">
-      <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="View\Controls\Menu\MenuToolBar.xaml">
       <SubType>Designer</SubType>
