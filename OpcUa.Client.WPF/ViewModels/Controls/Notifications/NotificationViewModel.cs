@@ -121,7 +121,7 @@ namespace OpcUa.Client.WPF
 
             var notificationEntity = new NotificationEntity()
             {
-                Id = notification.Id.Value,
+                Id = notification.Id ?? -1,
                 Name = notification.Name,
                 NodeId = notification.NodeId,
                 ProjectId = IoC.AppManager.ProjectId,
@@ -157,7 +157,7 @@ namespace OpcUa.Client.WPF
             {
                 item.Notification += Notification_MonitoredItem;
                 if (notification.Id == null)
-                    _unitOfWork.Notifications.Add(notificationEntity);
+                    notification.Id = _unitOfWork.Notifications.Add(notificationEntity).Id;
                 Notifications.Add(notification);
             }
         }

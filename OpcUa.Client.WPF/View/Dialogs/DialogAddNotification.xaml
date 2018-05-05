@@ -13,6 +13,7 @@
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="10"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
@@ -29,25 +30,29 @@
             <!-- Fields -->
             <TextBlock Grid.Row="0" 
                        Grid.Column="0"
-                       Text="Name"
+                       Text="Name:"
                        HorizontalAlignment="Left"
+                       Margin="0 10 0 0"
                        />
             <TextBlock Grid.Row="1" 
                        Grid.Column="0"
-                       Text="Node Id"
+                       Text="Node Id:"
                        HorizontalAlignment="Left"
+                       Margin="0 10 0 0"
                        />
             <!-- Values -->
             <TextBox Grid.Row="0" 
-                     Grid.Column="1"
+                     Grid.Column="2"
                      Text="{Binding Name}"
                      />
             <TextBox Grid.Row="1" 
-                     Grid.Column="1"
+                     Grid.Column="2"
                      Text="{Binding NodeId}"
+                     IsEnabled="False"
                      />
         </Grid>
         <StackPanel Orientation="Horizontal"
+                    Margin="0 10 0 0"
                     Visibility="{Binding IsDigital 
                                          ,Converter={local:BooleanToVisibilityConverter}
                                          ,ConverterParameter=true}"
@@ -66,9 +71,10 @@
             </ComboBox>
         </StackPanel>
 
-        <StackPanel Visibility="{Binding IsDigital 
+        <StackPanel  Margin="0 10 0 0"
+                     Visibility="{Binding IsDigital 
                                          ,Converter={local:BooleanToVisibilityConverter}}"
-                    >
+                     >
             <TextBlock Text="Hlásanie pri hodnote 0:"
                        HorizontalAlignment="Left"
                        />

@@ -14,57 +14,79 @@
               >
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="4*"/>
-                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
             <local:NotificationList DataContext="{Binding NotificationListVm}"/>
 
             <!-- Buttons -->
-            <Grid Grid.Column="1">
+            <Grid Grid.Column="1"
+                  Margin="5 0 0 0"
+                  >
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition Height="10"/>
-                    <RowDefinition Height="auto"/>
                     <RowDefinition Height="auto"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
 
-                <Button Grid.Row="0"
-                        Padding="10 5"
-                        Command="{Binding DeleteAllNotificationsCommand}"
-                        >
-                    <materialDesign:PackIcon Kind="Delete"
-                                             Width="20" 
-                                             Margin="3"
-                                             />
-                </Button>
-
-                <Button Grid.Row="2"
-                        Content="Add"
-                        Padding="10 5"
-                        Command="{Binding AddNotificationCommand}"
-                        />
-                <Button Grid.Row="3"
-                        Content="Delete"
-                        Padding="10 5"
-                        Command="{Binding RemoveNotificationCommand}"
-                        />
-                <ListView Grid.Row="4"
-                            ItemsSource="{Binding Notifications}"
-                            SelectedItem="{Binding SelectedNotification}"
-                            Background="Transparent"
-                            SelectionMode="Single"
-                            BorderThickness="0"
+                <StackPanel Grid.Row="0"
+                            HorizontalAlignment="Stretch"
                             >
+                    <Button Command="{Binding DeleteAllNotificationsCommand}"
+                            ToolTip="Deletes all notifications in list"
+                            >
+                        <materialDesign:PackIcon Kind="Delete"
+                                                 Width="20" 
+                                                 Height="20"
+                                                 />
+                    </Button>
+
+                    <Button Content="Add"
+                            Command="{Binding AddNotificationCommand}"
+                            ToolTip="Add new notification"
+                            Margin="0 10 0 3"
+                            />
+                    <Button Content="Delete"
+                            Command="{Binding RemoveNotificationCommand}"
+                            ToolTip="Delete notification"
+                            />
+                </StackPanel>
+                
+                <ListView Grid.Row="1"
+                          ItemsSource="{Binding Notifications}"
+                          SelectedItem="{Binding SelectedNotification}"
+                          Background="Transparent"
+                          SelectionMode="Single"
+                          BorderThickness="0"
+                          >
                     <ListView.ItemTemplate>
                         <DataTemplate>
-                            <Border BorderThickness="1">
-                                <TextBlock Padding="10 5"
-                                            VerticalAlignment="Center" 
-                                            Text="{Binding Name}"
-                                            />
-                            </Border>
+                            <Grid DataContext="{Binding }">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <materialDesign:PackIcon Kind="MessageAlert"
+                                                         Height="20"
+                                                         Width="20"
+                                                         Margin="10 5"
+                                                         Foreground="{DynamicResource SecondaryAccentBrush}"
+                                                         />
+                                <TextBlock Grid.Column="1"
+                                           Padding="10 5"
+                                           Text="{Binding Name}"
+                                           />
+                                <TextBlock Grid.Column="2"
+                                           Padding="10 5">
+                                [
+                                <TextBlock 
+                                           
+                                           Text="{Binding NodeId}"
+                                           />
+                                ]
+                                </TextBlock>
+                            </Grid>
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>

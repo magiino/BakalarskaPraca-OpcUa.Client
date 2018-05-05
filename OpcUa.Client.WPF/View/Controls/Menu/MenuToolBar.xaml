@@ -9,8 +9,14 @@
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              d:DesignWidth="500"
              >
+    <UserControl.Resources>
+        <Style TargetType="ToolBar" BasedOn="{StaticResource MaterialDesignToolBar}" x:Key="MyToolbar">
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="Margin" Value="0"/>
+        </Style>
+    </UserControl.Resources>
     <ToolBarTray>
-        <ToolBar Style="{DynamicResource MaterialDesignToolBar}"
+        <ToolBar Style="{StaticResource MyToolbar}"
                  ClipToBounds="False"
                  >
             <Button ToolTip="Stop communication"
