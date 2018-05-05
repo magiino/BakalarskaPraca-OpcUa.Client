@@ -106,7 +106,6 @@ namespace OpcUa.Client.Core
                             0,
                             out var continuationPoint,
                             out var referenceDescriptionCollection);
-
             return referenceDescriptionCollection;
         }
 
@@ -119,7 +118,7 @@ namespace OpcUa.Client.Core
         /// <param name="password">The password</param>
         /// <param name="sessionName">Name of the session</param>
         /// <exception cref="Exception">Throws and forwards any exception with short error description.</exception>
-        public void Connect(EndpointDescription endpointDescription, string userName, string password, string sessionName)
+        public bool Connect(EndpointDescription endpointDescription, string userName, string password, string sessionName)
         {
 
             var endpointConfiguration = EndpointConfiguration.Create(_applicationConfig);
@@ -139,6 +138,8 @@ namespace OpcUa.Client.Core
                 userIdentity,
                 null
                 );
+            _session.KeepAlive += new KeepAliveEventHandler(Notification_KeepAlive);
+            return _session != null;
         }
 
         /// <summary>Establishes the connection to an OPC UA server and creates a session using an EndpointDescription.</summary>
@@ -297,7 +298,6 @@ namespace OpcUa.Client.Core
             try
             {
                 subscription.RemoveItems(subscription.MonitoredItems);
-                
                 subscription.Delete(true);
                 subscription.Dispose();
 
@@ -340,7 +340,6 @@ namespace OpcUa.Client.Core
             var nodeId = new NodeId(nodeIdString);
             try
             {
-                //Read the dataValue
                 var node = _session.ReadNode(nodeId);
                 return node;
             }
@@ -361,7 +360,6 @@ namespace OpcUa.Client.Core
         {
             var nodeId = ExpandedNodeId.ToNodeId(expandedNodeId, new NamespaceTable());
 
-            //Read the dataValue
             var node = _session.ReadNode(nodeId);
             return node;
         }
@@ -423,7 +421,7 @@ namespace OpcUa.Client.Core
             var nodeIdsToRegister = new NodeIdCollection(nodesToRegister.Select(x => new NodeId(x)).ToEnumerable());
 
 
-            var a =_session.RegisterNodes(null, nodeIdsToRegister, out var registeredNodeIds);
+            _session.RegisterNodes(null, nodeIdsToRegister, out var registeredNodeIds);
             _registeredNodes.AddRange(registeredNodeIds);
             return registeredNodeIds;
         }
@@ -438,7 +436,6 @@ namespace OpcUa.Client.Core
             _session.RegisterNodes(null, nodeIdToRegister, out var registeredNode);
             var node = registeredNode.FirstOrDefault();
             _registeredNodes.Add(node);
-
             return node;
         }
 

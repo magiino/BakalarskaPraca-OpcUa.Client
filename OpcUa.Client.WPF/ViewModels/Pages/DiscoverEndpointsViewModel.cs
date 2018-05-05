@@ -108,14 +108,18 @@ namespace OpcUa.Client.WPF
             {
                 if (UserPwIsSelected)
                 {
-                    _uaClientApi.Connect(_selectedEndpoint, UserName, (parameter as IHavePassword)?.SecurePassword.Unsecure(), SessionName);
-                    IoC.AppManager.ProjectId = _iUnitOfWork.Projects.Add(new ProjectEntity()
+                    if (_uaClientApi.Connect(_selectedEndpoint, UserName,
+                            (parameter as IHavePassword)?.SecurePassword.Unsecure(), SessionName))
                     {
-                        Name = ProjectName,
-                        SessionName = SessionName,
-                        Endpoint = Mapper.CreateEndpointEntity(_selectedEndpoint),
-                        User = _iUnitOfWork.Auth.Register(new UserEntity(){UserName = UserName}, (parameter as IHavePassword)?.SecurePassword)
-                    }).Id;
+                        IoC.AppManager.ProjectId = _iUnitOfWork.Projects.Add(new ProjectEntity()
+                        {
+                            Name = ProjectName,
+                            SessionName = SessionName,
+                            Endpoint = Mapper.CreateEndpointEntity(_selectedEndpoint),
+                            User = _iUnitOfWork.Auth.Register(new UserEntity() { UserName = UserName }, (parameter as IHavePassword)?.SecurePassword)
+                        }).Id;
+                        IoC.Application.GoToPage(ApplicationPage.Main);
+                    }
                 }
                 else
                 {
@@ -126,6 +130,7 @@ namespace OpcUa.Client.WPF
                         SessionName = SessionName,
                         Endpoint = Mapper.CreateEndpointEntity(_selectedEndpoint),
                     }).Id;
+                    IoC.Application.GoToPage(ApplicationPage.Main);
                 }
             }
             catch (Exception e)
@@ -133,8 +138,6 @@ namespace OpcUa.Client.WPF
                 Utils.Trace(Utils.TraceMasks.Error, $"{e.Message}");
                 IoC.AppManager.ShowExceptionErrorMessage(e);
             }
-
-            IoC.Application.GoToPage(ApplicationPage.Main);
         }
 
         private void LoadprojectPage(object parameter)

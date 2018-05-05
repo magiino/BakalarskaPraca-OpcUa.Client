@@ -109,15 +109,18 @@ namespace OpcUa.Client.WPF
                     return;
                 }
                 var endpoint = _unitOfWork.Endpoints.SingleOrDefault(x => x.Id == SelectedProject.EndpointId);
-                _uaClientApi.Connect(Mapper.CreateEndpointDescription(endpoint), userName, SecureStringHelpers.Unsecure(password), SelectedProject.SessionName);
+                if (!_uaClientApi.Connect(Mapper.CreateEndpointDescription(endpoint), userName,
+                    SecureStringHelpers.Unsecure(password), SelectedProject.SessionName)) return;
                 IoC.AppManager.ProjectId = SelectedProject.Id;
+                IoC.Application.GoToPage(ApplicationPage.Main);
+
             }
             catch (Exception e)
             {
                 Utils.Trace(Utils.TraceMasks.Error, $"{e.Message}");
                 IoC.AppManager.ShowExceptionErrorMessage(e);
             }
-            IoC.Application.GoToPage(ApplicationPage.Main);
+           
         }
 
         private void OnLoad()
