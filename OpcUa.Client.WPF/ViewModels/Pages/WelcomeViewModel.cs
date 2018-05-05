@@ -16,7 +16,7 @@ namespace OpcUa.Client.WPF
         #endregion
 
         #region Public Properties
-        public string WelcomeText { get; set; } = "Lorem ipsum dolor, lorem isum dolor, Lorem ipsum dolor sit amet, lorem ipsum dolor sit amet";
+        public string WelcomeText { get; set; } = "This application allows you to connect to opc server and gather or observe data.";
         public ObservableCollection<ProjectModel> Projects { get; set; }
         public ProjectModel SelectedProject { get; set; }
         #endregion

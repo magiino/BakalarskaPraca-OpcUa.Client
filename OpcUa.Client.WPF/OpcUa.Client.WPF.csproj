@@ -87,6 +87,7 @@
     <Compile Include="AttachedProperties\NoFrameHistory.cs" />
     <Compile Include="ValueConverters\BooleanToColorConverter.cs" />
     <Compile Include="ValueConverters\AtchiveTypeToNumberConverter.cs" />
+    <Compile Include="ValueConverters\AccountExistIconConverter.cs" />
     <Compile Include="ValueConverters\NullToColorConverter.cs" />
     <Compile Include="ValueConverters\StringRgbToBrushConverter.cs" />
     <Compile Include="View\Controls\Charts\ZoomChart.xaml.cs">
@@ -116,6 +117,7 @@
     <Compile Include="View\Controls\Charts\LiveChart.xaml.cs">
       <DependentUpon>LiveChart.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\Controls\TabControlExtension.cs" />
     <Compile Include="View\Controls\TreeView.xaml.cs">
       <DependentUpon>TreeView.xaml</DependentUpon>
     </Compile>
@@ -143,7 +145,7 @@
       <DependentUpon>DiscoverEndpoints.xaml</DependentUpon>
     </Compile>
     <Compile Include="IoC\UIManager.cs" />
-    <Compile Include="ValueConverters\OpacityConverter.cs" />
+    <Compile Include="ValueConverters\BoolToOpacityConverter.cs" />
     <Compile Include="ValueConverters\BooleanToVisibilityConverter.cs" />
     <Compile Include="ValueConverters\BooleanConverter.cs" />
     <Compile Include="ValueConverters\ApplicationPageValueConverter.cs" />

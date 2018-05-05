@@ -16,27 +16,27 @@ namespace OpcUa.Client.WPF
             switch ((NodeClass)value)
             {
                 case NodeClass.Object:
-                    return "archive";
+                    return "Archive";
                 case NodeClass.Unspecified:
                     Debugger.Break();
-                    return "help-circle";
+                    return "HelpCircle";
                 case NodeClass.Variable:
-                    return "tag";
+                    return "Tag";
                 case NodeClass.Method:
-                    return "cube";
+                    return "Cube";
                 case NodeClass.ObjectType:
-                    return "flag";
+                    return "Arch";
                 case NodeClass.VariableType:
-                    return "database";
+                    return "Database";
                 case NodeClass.ReferenceType:
-                    return "flask";
+                    return "RayStartArrow";
                 case NodeClass.DataType:
-                    return "beer";
+                    return "CodeTags";
                 case NodeClass.View:
-                    return "eye";
+                    return "Eye";
                 default:
                     Debugger.Break();
-                    return "bug";
+                    return "Bug";
             }
         }
 

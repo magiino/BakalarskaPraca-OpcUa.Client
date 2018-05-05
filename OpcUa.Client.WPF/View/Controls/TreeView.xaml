@@ -24,10 +24,12 @@
 
             <TreeView.ItemTemplate>
                 <HierarchicalDataTemplate ItemsSource="{Binding Children}">
-                    <StackPanel Orientation="Horizontal">
+                    <StackPanel Orientation="Horizontal"
+                                DataContext="{Binding }">
                         <materialDesign:PackIcon Kind="{Binding Type, Converter={local:HeaderToImageConverter}}"
-                                                 Width="10" 
-                                                 Margin="3"/>
+                                                 Width="15"
+                                                 Height="15"
+                                                 />
                         <TextBlock VerticalAlignment="Center" Text="{Binding Name}" />
                     </StackPanel>
                 </HierarchicalDataTemplate>

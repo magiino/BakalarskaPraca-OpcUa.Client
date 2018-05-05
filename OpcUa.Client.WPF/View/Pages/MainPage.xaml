@@ -29,8 +29,8 @@
                 <Expander ExpandDirection="Right">
                     <Expander.Header>
                         <TextBlock Text="Server address space"
-                                    RenderTransformOrigin=".5,.5"
-                                    >
+                                   RenderTransformOrigin=".5,.5"
+                                   >
                             <TextBlock.LayoutTransform>
                                 <RotateTransform Angle="90"/>
                             </TextBlock.LayoutTransform>
@@ -71,7 +71,7 @@
                 <!-- Second Item -->
                 <Expander ExpandDirection="Right">
                     <Expander.Header>
-                        <TextBlock Text="Choosen object"
+                        <TextBlock Text="Choosen Node"
                                    RenderTransformOrigin=".5,.5">
                             <TextBlock.LayoutTransform>
                                 <RotateTransform Angle="90"/>
