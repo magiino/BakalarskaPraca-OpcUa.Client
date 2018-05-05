@@ -87,6 +87,7 @@
     <Compile Include="AttachedProperties\BaseAttachedProperty.cs" />
     <Compile Include="AttachedProperties\PasswordBoxAttachedProperties.cs" />
     <Compile Include="AttachedProperties\NoFrameHistory.cs" />
+    <Compile Include="ValueConverters\BooleanToStatusConverter.cs" />
     <Compile Include="ValueConverters\BooleanToColorConverter.cs" />
     <Compile Include="ValueConverters\ArchiveTypeToNumberConverter.cs" />
     <Compile Include="ValueConverters\AccountExistIconConverter.cs" />

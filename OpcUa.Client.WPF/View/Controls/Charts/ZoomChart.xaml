@@ -79,9 +79,13 @@
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
 
-                            <StackPanel Background="{StaticResource PrimaryHueLightBrush}">
+                            <StackPanel Background="{StaticResource PrimaryHueLightBrush}"
+                                        Width="30"
+                                        Height="40"
+                                        >
                                 <TextBlock Text="{Binding Converter={local:ArchiveTypeToNumberConverter}, Path=Archive, Mode=OneWay}"
-                                           Padding="10"/>
+                                           VerticalAlignment="Center"
+                                           HorizontalAlignment="Center"/>
                             </StackPanel>
                             <TextBlock Grid.Column="2"
                                        Text="{Binding Name}"

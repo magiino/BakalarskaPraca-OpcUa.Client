@@ -7,6 +7,7 @@ using System.Windows.Media;
 using LiveCharts;
 using LiveCharts.Defaults;
 using LiveCharts.Wpf;
+using Opc.Ua;
 using OpcUa.Client.Core;
 
 namespace OpcUa.Client.WPF
@@ -62,11 +63,23 @@ namespace OpcUa.Client.WPF
 
             foreach (var variable in selectedVariables)
             {
-                var values = new ChartValues<DateTimePoint>(_unityOfWork.Records.Find(x => x.VariableId == variable.Id).OrderBy(x => x.ArchiveTime).Select(x => new DateTimePoint()
+                ChartValues<DateTimePoint> values;
+                if(variable.DataType != BuiltInType.Boolean)
+                { 
+                    values = new ChartValues<DateTimePoint>(_unityOfWork.Records.Find(x => x.VariableId == variable.Id).OrderBy(x => x.ArchiveTime).Select(x => new DateTimePoint()
+                    {
+                        Value = Convert.ToDouble(x.Value),
+                        DateTime = x.ArchiveTime
+                    }));
+                }
+                else
                 {
-                    Value = Convert.ToDouble(x.Value),
-                    DateTime = x.ArchiveTime
-                }));
+                    values = new ChartValues<DateTimePoint>(_unityOfWork.Records.Find(x => x.VariableId == variable.Id).OrderBy(x => x.ArchiveTime).Select(x => new DateTimePoint()
+                    {
+                        Value = x.Value == "False" ? 0d : 1d,
+                        DateTime = x.ArchiveTime
+                    }));
+                }
 
                 SeriesCollection.Add(
                     new StepLineSeries()

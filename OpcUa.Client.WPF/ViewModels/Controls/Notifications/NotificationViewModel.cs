@@ -74,6 +74,7 @@ namespace OpcUa.Client.WPF
             try
             {
                 _uaClientApi.RemoveMonitoredItem(_subscription, SelectedNotification.NodeId);
+                _unitOfWork.Notifications.Remove(_unitOfWork.Notifications.GetById(SelectedNotification.Id.Value));
                 Notifications.Remove(SelectedNotification);
             }
             catch (Exception e)

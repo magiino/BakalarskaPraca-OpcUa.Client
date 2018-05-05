@@ -37,6 +37,7 @@ namespace OpcUa.Client.Core
         {
             return new VariableModel()
             {
+                Id = variableEntity.Id,
                 Name = variableEntity.Name,
                 DataType = variableEntity.DataType,
                 ProjectId = variableEntity.ProjectId,

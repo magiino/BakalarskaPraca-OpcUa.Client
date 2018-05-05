@@ -107,17 +107,18 @@
                           >
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Archive Interval" 
-                                        Width="*" 
-                                        Binding="{Binding ArchiveInterval}"
-                                        />
+                                            Width="*" 
+                                            Binding="{Binding ArchiveInterval}"
+                                            />
                         <DataGridTextColumn Header="Num of Variables"
-                                        Width="*"
-                                        Binding="{Binding VariablesCount}"
-                                        />
+                                            Width="*"
+                                            Binding="{Binding VariablesCount}"
+                                            />
                         <DataGridTextColumn Header="Status"
-                                        Width="*"
-                                        Binding="{Binding Running}"
-                                        />
+                                            Width="*"
+                                            Binding="{Binding Running, Converter={local:BooleanToStatusConverter}}"
+                                            Foreground="{Binding Running, Converter={local:BooleanToColorConverter}}"
+                                            />
                     </DataGrid.Columns>
                 </DataGrid>
             </Grid>

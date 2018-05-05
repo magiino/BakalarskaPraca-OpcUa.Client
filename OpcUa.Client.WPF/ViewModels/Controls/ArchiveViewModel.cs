@@ -132,7 +132,7 @@ namespace OpcUa.Client.WPF
                 }
                 else
                 {
-                    var item = _uaClientApi.CreateMonitoredItem(interval.ToString(), nodeId, 100, null, 2, MonitoringMode.Disabled);
+                    var item = _uaClientApi.CreateMonitoredItem($"{nodeId} [{ArchiveInterval.None}]", nodeId, 100, null, 2, MonitoringMode.Disabled);
                     item.Notification += Notification_MonitoredItem;
                     _uaClientApi.AddMonitoredItem(item, _subscription);
                 }
@@ -155,14 +155,9 @@ namespace OpcUa.Client.WPF
                     archive.VariablesCount--;
 
             // Vymazanie z databaze
-            _unitOfWork.Variables.Remove(Mapper.VariableModelToVariableEntity(SelectedArchiveVariable));
+            _unitOfWork.Variables.DeleteById(SelectedArchiveVariable.Id);
+            //_unitOfWork.Variables.Remove(Mapper.VariableModelToVariableEntity(SelectedArchiveVariable));
             _messenger.Send(new SendManageArchivedValue(true, SelectedArchiveVariable));
-
-            // Najdenie indexu
-            var index = ArchiveVariables.IndexOf(SelectedArchiveVariable);
-
-            // Vymazanie z tabulky
-            ArchiveVariables.Remove(SelectedArchiveVariable);
 
             try
             {
@@ -171,10 +166,14 @@ namespace OpcUa.Client.WPF
                 else
                 {
                     // Odregistrovanie
-                    _uaClientApi.UnRegisterNode(_registeredNodesForRead[index].RegisteredNodeId);
+                    var var = _registeredNodesForRead.FirstOrDefault(x => x.VariableId == SelectedArchiveVariable.Id);
+                    _uaClientApi.UnRegisterNode(var?.RegisteredNodeId);
                     // Vymazanie z nodes for read
-                    _registeredNodesForRead.RemoveAt(index);
+                    _registeredNodesForRead.Remove(var);
                 }
+                // Vymazanie z tabulky
+                ArchiveVariables.Remove(SelectedArchiveVariable);
+
             }
             catch (Exception e)
             {
@@ -241,7 +240,7 @@ namespace OpcUa.Client.WPF
 
         private void RegisterLoadedNodes()
         {
-            var nodeIds = ArchiveVariables.Select(x => x.Name).ToList();
+            var nodeIds = ArchiveVariables.Where(x => x.Archive != ArchiveInterval.None).Select(x => x.Name).ToList();
             try
             {
                 var registeredNodes = _uaClientApi.RegisterNodes(nodeIds);
@@ -299,7 +298,7 @@ namespace OpcUa.Client.WPF
             catch (Exception e)
             {
                 Utils.Trace(Utils.TraceMasks.Error, $"{e.Message}");
-                IoC.AppManager.ShowExceptionErrorMessage(e);
+                //IoC.AppManager.ShowExceptionErrorMessage(e);
             }
 
             // Vytvorenie zaznamov
