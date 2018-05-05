@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Security;
 using System.Windows.Input;
 using Opc.Ua;
@@ -73,19 +74,18 @@ namespace OpcUa.Client.WPF
             if (project.UserId != null)
                 _unitOfWork.Auth.RemoveUser(project.UserId.Value);
 
-            _unitOfWork.Projects.Remove(project);
-
-            var notifications = _unitOfWork.Notifications.Find(x => x.ProjectId == SelectedProject.Id);
+            var notifications = _unitOfWork.Notifications.Find(x => x.ProjectId == SelectedProject.Id).ToList();
             _unitOfWork.Notifications.RemoveRange(notifications);
 
-            var variables = _unitOfWork.Variables.Find(x => x.ProjectId == SelectedProject.Id);
+            var variables = _unitOfWork.Variables.Find(x => x.ProjectId == SelectedProject.Id).ToList();
 
-            if (variables == null) return;
+            if (variables.Count != 0)
+            {
+                foreach (var variable in variables)
+                    _unitOfWork.Variables.DeleteById(variable.Id);
+            }
 
-            foreach (var variable in variables)
-                _unitOfWork.Records.RemoveRange(variable.Records);
-
-            _unitOfWork.Variables.RemoveRange(variables);
+            Projects.Remove(SelectedProject);
         }
         #endregion
 

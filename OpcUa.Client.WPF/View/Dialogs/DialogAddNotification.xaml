@@ -43,7 +43,7 @@
             <!-- Values -->
             <TextBox Grid.Row="0" 
                      Grid.Column="2"
-                     Text="{Binding Name}"
+                     Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
                      />
             <TextBox Grid.Row="1" 
                      Grid.Column="2"
@@ -61,7 +61,7 @@
                        HorizontalAlignment="Left"
                        />
             <TextBox Width="50"
-                     Text="{Binding FilterValue}"
+                     Text="{Binding FilterValue, UpdateSourceTrigger=PropertyChanged}"
                      />
             <ComboBox SelectedIndex="{Binding SelectedFilterType, Mode=TwoWay}"
                       >
@@ -78,13 +78,13 @@
             <TextBlock Text="Hlásanie pri hodnote 0:"
                        HorizontalAlignment="Left"
                        />
-            <TextBox Text="{Binding IsZeroDescription}"
+            <TextBox Text="{Binding IsZeroDescription, UpdateSourceTrigger=PropertyChanged}"
                      />
 
             <TextBlock Text="Hlásanie pri hodnote 1:"
                        HorizontalAlignment="Left"
                        />
-            <TextBox Text="{Binding IsOneDescription}"
+            <TextBox Text="{Binding IsOneDescription, UpdateSourceTrigger=PropertyChanged}"
                      />
         </StackPanel>
 
