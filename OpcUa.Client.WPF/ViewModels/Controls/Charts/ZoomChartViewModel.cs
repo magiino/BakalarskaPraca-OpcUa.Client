@@ -86,7 +86,8 @@ namespace OpcUa.Client.WPF
                     {
                         Title = variable.Name,
                         Values = values,
-                        PointGeometrySize = 15,
+                        StrokeThickness = 1,
+                        PointGeometrySize = 10,
                         PointGeometry = DefaultGeometries.Cross,
                         Fill = Brushes.Transparent
                     }

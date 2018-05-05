@@ -4,10 +4,5 @@
     {
         private DataContext DataContext => Context as DataContext;
         public RecordRepository(DataContext dataDontext): base(dataDontext) {}
-
-        public void DeleteAllWithVariableId(int id)
-        {
-            
-        }
     }
 }

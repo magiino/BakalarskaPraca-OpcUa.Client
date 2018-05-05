@@ -82,11 +82,11 @@ namespace OpcUa.Client.WPF
                 {
                     Title = variable.Name,
                     Values = new ChartValues<DateTimePoint>(),
-                    PointGeometrySize = 15,
+                    PointGeometrySize = 10,
                     PointGeometry = DefaultGeometries.Circle,
                     Fill = Brushes.Transparent,
                     PointForeground = brush,
-                    StrokeThickness = 3
+                    StrokeThickness = 1
                 }
             );
 
