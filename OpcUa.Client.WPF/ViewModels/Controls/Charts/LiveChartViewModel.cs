@@ -52,7 +52,7 @@ namespace OpcUa.Client.WPF
 
             // Nastavenia grafu
             DateTimeFormatter = value => new DateTime((long)value).ToString("mm:ss");
-            AxisStep = TimeSpan.FromSeconds(10).Ticks;
+            AxisStep = TimeSpan.FromSeconds(15).Ticks;
             AxisUnit = TimeSpan.TicksPerSecond;
             SetAxisLimits(DateTime.Now);
 
@@ -85,9 +85,8 @@ namespace OpcUa.Client.WPF
                     PointGeometrySize = 15,
                     PointGeometry = DefaultGeometries.Circle,
                     Fill = Brushes.Transparent,
-                    PointForeground = Brushes.White,
-                    Stroke = brush,
-                    StrokeThickness = 4
+                    PointForeground = brush,
+                    StrokeThickness = 3
                 }
             );
 
@@ -137,7 +136,7 @@ namespace OpcUa.Client.WPF
         private void SetAxisLimits(DateTime now)
         {
             AxisMax = now.Ticks + TimeSpan.FromSeconds(2).Ticks;
-            AxisMin = now.Ticks - TimeSpan.FromSeconds(60).Ticks;
+            AxisMin = now.Ticks - TimeSpan.FromSeconds(120).Ticks;
         } 
         #endregion
 

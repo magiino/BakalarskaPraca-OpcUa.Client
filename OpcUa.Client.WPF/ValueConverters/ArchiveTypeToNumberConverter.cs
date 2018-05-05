@@ -5,7 +5,7 @@ using OpcUa.Client.Core;
 
 namespace OpcUa.Client.WPF
 {
-    public class AtchiveTypeToNumberConverter : BaseValueConverter<AtchiveTypeToNumberConverter>
+    public class ArchiveTypeToNumberConverter : BaseValueConverter<ArchiveTypeToNumberConverter>
     {
         public override object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {

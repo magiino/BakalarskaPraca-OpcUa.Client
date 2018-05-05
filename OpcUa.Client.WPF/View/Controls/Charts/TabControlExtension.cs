@@ -5,7 +5,7 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Threading;
 
-namespace OpcUa.Client.WPF.View.Controls
+namespace OpcUa.Client.WPF
 {
     // Extended TabControl which saves the displayed item so you dont get the performance hit of
     // unloading and reloading the VisualTree when switching tabs

@@ -17,7 +17,6 @@
                     >
             <Button Content="{Binding Option1}"
                     Command="{Binding Option1Command}"
-                    HorizontalAlignment="Center"
                     />
             <Button Content="{Binding Option2}"
                     Command="{Binding Option2Command}"

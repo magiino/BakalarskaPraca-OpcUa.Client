@@ -107,7 +107,7 @@
         </materialDesign:Card>
 
         <!-- RIGHT -->
-        <TabControl DockPanel.Dock="Right">
+        <local:TabControlExtension DockPanel.Dock="Right">
             <TabItem Header="Notifications">
                 <local:Notification DataContext="{Binding NotificationViewModel}"/>
             </TabItem>
@@ -123,6 +123,6 @@
             <TabItem Header="Live Chart">
                 <local:LiveChart DataContext="{Binding LiveChartViewModel}"/>
             </TabItem>
-        </TabControl>
+        </local:TabControlExtension>
     </DockPanel>
 </local:BasePage>

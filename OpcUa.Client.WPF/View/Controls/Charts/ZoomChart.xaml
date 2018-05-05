@@ -6,6 +6,7 @@
              xmlns:local="clr-namespace:OpcUa.Client.WPF"
              xmlns:wpf="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              mc:Ignorable="d" 
              d:DesignHeight="450" 
              d:DesignWidth="800"
@@ -58,19 +59,36 @@
 
             <ListView Grid.Row="2"
                       ItemsSource="{Binding Variables}"
-                      Background="Transparent"
                       SelectedItem="{Binding SelectedVariable}"
                       SelectionMode="Multiple"
-                      BorderThickness="0"
                       x:Name ="Variables"
                       SelectionChanged="ListView_SelectionChanged"
+                      ItemContainerStyle="{StaticResource ListViewItem}"
                       >
                 <ListView.ItemTemplate>
                     <DataTemplate>
-                        <materialDesign:Chip Content="{Binding Name}"
-                                             Icon="{Binding Archive, Converter={local:AtchiveTypeToNumberConverter}}"
-                                             >
-                        </materialDesign:Chip>
+                        <Grid Height="40"
+                              DataContext="{Binding }"
+                              VerticalAlignment="Center"
+                              HorizontalAlignment="Stretch"
+                              >
+
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="10"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel Background="{StaticResource PrimaryHueLightBrush}">
+                                <TextBlock Text="{Binding Converter={local:ArchiveTypeToNumberConverter}, Path=Archive, Mode=OneWay}"
+                                           Padding="10"/>
+                            </StackPanel>
+                            <TextBlock Grid.Column="2"
+                                       Text="{Binding Name}"
+                                       VerticalAlignment="Center"
+                                       Padding="5"
+                                       />
+                        </Grid>
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>

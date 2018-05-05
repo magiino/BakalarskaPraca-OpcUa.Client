@@ -95,7 +95,7 @@ namespace OpcUa.Client.WPF
             }
         }
 
-        private void ToggleZoomOption()
+        private void ToggleZoomOption(object parameter)
         {
             switch (ZoomingMode)
             {

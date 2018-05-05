@@ -55,6 +55,7 @@
     <Reference Include="MaterialDesignThemes.Wpf, Version=2.4.0.1044, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\MaterialDesignThemes.2.4.0.1044\lib\net45\MaterialDesignThemes.Wpf.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Expression.Interactions, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="Ninject, Version=3.3.4.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
       <HintPath>..\packages\Ninject.3.3.4\lib\net45\Ninject.dll</HintPath>
     </Reference>
@@ -64,6 +65,7 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -86,7 +88,7 @@
     <Compile Include="AttachedProperties\PasswordBoxAttachedProperties.cs" />
     <Compile Include="AttachedProperties\NoFrameHistory.cs" />
     <Compile Include="ValueConverters\BooleanToColorConverter.cs" />
-    <Compile Include="ValueConverters\AtchiveTypeToNumberConverter.cs" />
+    <Compile Include="ValueConverters\ArchiveTypeToNumberConverter.cs" />
     <Compile Include="ValueConverters\AccountExistIconConverter.cs" />
     <Compile Include="ValueConverters\ZoomingModeConverter.cs" />
     <Compile Include="ValueConverters\NullToColorConverter.cs" />
@@ -115,7 +117,7 @@
     <Compile Include="View\Controls\Charts\LiveChart.xaml.cs">
       <DependentUpon>LiveChart.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\Controls\TabControlExtension.cs" />
+    <Compile Include="View\Controls\Charts\TabControlExtension.cs" />
     <Compile Include="View\Controls\TreeView.xaml.cs">
       <DependentUpon>TreeView.xaml</DependentUpon>
     </Compile>
