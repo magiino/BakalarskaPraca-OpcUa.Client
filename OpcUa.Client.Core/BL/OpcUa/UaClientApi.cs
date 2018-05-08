@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Net;
 using System.Security.Cryptography.X509Certificates;
@@ -13,12 +12,14 @@ namespace OpcUa.Client.Core
     public class UaClientApi
     {
         #region Private Fields
-        private ApplicationConfiguration _applicationConfig;
+        private readonly ApplicationConfiguration _applicationConfig;
         private Session _session;
         private readonly NodeIdCollection _registeredNodes = new NodeIdCollection();
         #endregion
 
+        #region Public Fields
         public bool SessionState { get; set; }
+        #endregion
 
         #region Constructors
         public UaClientApi()
@@ -29,10 +30,6 @@ namespace OpcUa.Client.Core
         #endregion
 
         #region Discovery Client
-        /// <summary>Finds Servers based on a discovery url</summary>
-        /// <param name="discoveryUrl">The discovery url</param>
-        /// <returns>ApplicationDescriptionCollection containing found servers</returns>
-        /// <exception cref="Exception">Throws and forwards any exception with short error description.</exception>
         public ApplicationDescriptionCollection FindServers(string discoveryUrl)
         {
             var uri = new Uri(discoveryUrl);
@@ -45,10 +42,6 @@ namespace OpcUa.Client.Core
             }
         }
 
-        /// <summary>Finds Endpoints based on a server's url</summary>
-        /// <param name="serverUrl">The server's url for discovery endpoints</param>
-        /// <returns>EndpointDescriptionCollection containing found Endpoints</returns>
-        /// <exception cref="Exception">Throws and forwards any exception with short error description.</exception>
         public EndpointDescriptionCollection GetEndpoints(string serverUrl)
         {
             //Create a URI using the server's URL
@@ -65,13 +58,8 @@ namespace OpcUa.Client.Core
         #endregion
 
         #region Browse
-
-        /// <summary>Browses the root folder of an OPC UA server.</summary>
-        /// <returns>ReferenceDescriptionCollection of found nodes</returns>
-        /// <exception cref="Exception">Throws and forwards any exception with short error description.</exception>
         public ReferenceDescriptionCollection BrowseRoot()
         {
-            //Browse the RootFolder for variables, objects and methods
             _session.Browse(null,
                             null,
                             ObjectIds.RootFolder,
@@ -112,12 +100,6 @@ namespace OpcUa.Client.Core
         #endregion
 
         #region Connect / Disconnect
-        /// <summary>Establishes the connection to an OPC UA server and creates a session using an EndpointDescription.</summary>
-        /// <param name="endpointDescription">The EndpointDescription of the server's endpoint</param>
-        /// <param name="userName">The user name</param>
-        /// <param name="password">The password</param>
-        /// <param name="sessionName">Name of the session</param>
-        /// <exception cref="Exception">Throws and forwards any exception with short error description.</exception>
         public bool Connect(EndpointDescription endpointDescription, string userName, string password, string sessionName)
         {
 
@@ -189,17 +171,9 @@ namespace OpcUa.Client.Core
 
         #endregion
 
-        #region Subscription / MonitoredItem
-
-        /// <summary>Creats a Subscription object to a server</summary>
-        /// <param name="publishingInterval">The publishing interval</param>
-        /// <param name="displayName"></param>
-        /// <param name="enablePublishing"></param>
-        /// <returns>Subscription</returns>
-        /// <exception cref="Exception">Throws and forwards any exception with short error description.</exception>
+        #region Subscription / Monitored Item
         public Subscription Subscribe(int publishingInterval, string displayName, bool enablePublishing = true)
         {
-            //Create a Subscription object
             var subscription = new Subscription(_session.DefaultSubscription)
             {
                 PublishingEnabled = enablePublishing,
@@ -211,7 +185,6 @@ namespace OpcUa.Client.Core
 
             try
             {
-                //Create/Activate the subscription
                 subscription.Create();
                 return subscription;
             }
@@ -220,27 +193,6 @@ namespace OpcUa.Client.Core
                 Utils.Trace(Utils.TraceMasks.Error, $"{e.Message}");
                 return null;
             }
-        }
-
-        /// <summary>Creats a Subscription object to a server</summary>
-        /// <returns>Subscription</returns>
-        /// <exception cref="Exception">Throws and forwards any exception with short error description.</exception>
-        private Subscription CreateSubscriptionFromTemplate(Subscription template)
-        {
-            //Create a Subscription object
-            var subscription = new Subscription(template);
-
-            try
-            {
-                subscription.Create();
-                _session.AddSubscription(subscription);
-                return subscription;
-            }
-            catch (Exception e)
-            {
-                Utils.Trace(Utils.TraceMasks.Error, $"{e.Message}");
-            }
-            return null;
         }
 
         public bool AddMonitoredItem(MonitoredItem monitoredItem, Subscription subscription)
@@ -259,7 +211,7 @@ namespace OpcUa.Client.Core
             return false;
         }
 
-        public MonitoredItem CreateMonitoredItem(string displayName, string nodeId,int samplingInterval ,MonitoringFilter filterValue=null, int queueSize=1, MonitoringMode mode = MonitoringMode.Reporting)
+        public MonitoredItem CreateMonitoredItem(string displayName, string nodeId, int samplingInterval, MonitoringFilter filterValue = null, int queueSize = 1, MonitoringMode mode = MonitoringMode.Reporting)
         {
             var monitoredItem = new MonitoredItem
             {
@@ -279,83 +231,15 @@ namespace OpcUa.Client.Core
             return monitoredItem;
         }
 
-        /// <summary>Removs a monitored item from an existing subscription</summary>
-        /// <param name="subscription">The subscription</param>
-        /// <param name="monitoredItemNodeId"></param>
-        /// <exception cref="Exception">Throws and forwards any exception with short error description.</exception>
         public void RemoveMonitoredItem(Subscription subscription, string monitoredItemNodeId)
         {
             var tmp = subscription.MonitoredItems.FirstOrDefault(x => x.StartNodeId.ToString() == monitoredItemNodeId);
             subscription.RemoveItem(tmp);
             subscription.ApplyChanges();
         }
-
-        /// <summary>Removes an existing Subscription.</summary>
-        /// <param name="subscription">The subscription</param>
-        /// <exception cref="Exception">Throws and forwards any exception with short error description.</exception>
-        public void RemoveSubscription(Subscription subscription)
-        {
-            try
-            {
-                subscription.RemoveItems(subscription.MonitoredItems);
-                subscription.Delete(true);
-                subscription.Dispose();
-
-                _session.RemoveSubscription(subscription);
-            }
-            catch (Exception e)
-            {
-                throw e;
-            }
-        }
-
-        public void SaveSubsciption()
-        {
-            _session.Save(Path.Combine(Environment.ExpandEnvironmentVariables("%userprofile%"), "Documents\\UaClient\\Subscriptions.xml"));
-        }
-
-        public Subscription LoadSubsciption()
-        {
-            var subscription = _session.Load(Path.Combine(Environment.ExpandEnvironmentVariables("%userprofile%"), "Documents\\UaClient\\Subscriptions.xml")).FirstOrDefault();
-            return CreateSubscriptionFromTemplate(subscription);
-        }
-
-        public List<Subscription> LoadSubsciptions()
-        {
-            return _session.Load(Path.Combine(Environment.ExpandEnvironmentVariables("%userprofile%"), "Documents\\UaClient\\Subscriptions.xml")).ToList();
-        }
-
         #endregion
 
         #region Read / Write
-
-        /// <summary>
-        /// Reads a node by node Id from server address space
-        /// </summary>
-        /// <param name="nodeIdString"></param>
-        /// <returns>The read node</returns>
-        /// <exception cref="Exception">Throws and forwards any exception with short error description.</exception>
-        public Node ReadNode(string nodeIdString)
-        {
-            var nodeId = new NodeId(nodeIdString);
-            try
-            {
-                var node = _session.ReadNode(nodeId);
-                return node;
-            }
-            catch (Exception e)
-            {
-                Utils.Trace(Utils.TraceMasks.Error, $"{e.Message}");
-                throw e;
-            }
-        }
-
-        /// <summary>
-        /// Reads a node by node Id from server address space
-        /// </summary>
-        /// <param name="expandedNodeId"></param>
-        /// <returns>The read node</returns>
-        /// <exception cref="Exception">Throws and forwards any exception with short error description.</exception>
         public Node ReadNode(ExpandedNodeId expandedNodeId)
         {
             var nodeId = ExpandedNodeId.ToNodeId(expandedNodeId, new NamespaceTable());
@@ -441,7 +325,6 @@ namespace OpcUa.Client.Core
 
         public void UnRegisterNodes()
         {
-
             try
             {
                 _session.UnregisterNodes(null, _registeredNodes);
@@ -468,27 +351,9 @@ namespace OpcUa.Client.Core
                 throw e;
             }
         }
-
         #endregion
 
-        #region Public Methods
-
-        public void CreateDefaultConfiguration()
-        {
-            if (_applicationConfig != null) return;
-            _applicationConfig = CreateClientConfiguration();
-        }
-
-        public void SaveConfiguration()
-        {
-            _applicationConfig?.SaveToFile(Path.Combine(Environment.ExpandEnvironmentVariables("%userprofile%"), "Documents\\UaClient\\Configuration.xml"));
-        }
-
-        /// <summary>
-        /// Reads Node of <see cref="nodeId"/> dataType in server address space.
-        /// </summary>
-        /// <param name="nodeId"></param>
-        /// <returns></returns>
+        #region Helper Methods
         public Node GetDataTypeOfVariableNodeId(NodeId nodeId)
         {
             var node = _session.ReadNode(nodeId);
@@ -497,11 +362,6 @@ namespace OpcUa.Client.Core
             return dataTypeNode;
         }
 
-        /// <summary>
-        /// Reads Node of <see cref="nodeId"/> dataType in server address space.
-        /// </summary>
-        /// <param name="nodeId"></param>
-        /// <returns></returns>
         public BuiltInType GetBuiltInTypeOfVariableNodeId(string nodeId)
         {
             var node = _session.ReadNode(new NodeId(nodeId));
@@ -509,14 +369,9 @@ namespace OpcUa.Client.Core
             var dataTypeNode = _session.ReadNode(dataTypeNodeId);
             return TypeInfo.GetBuiltInType(dataTypeNode.NodeId);
         }
-
         #endregion
 
         #region Private methods
-
-        /// <summary>Creates a default application configuration.</summary>
-        /// <returns>The ApplicationConfiguration</returns>
-        /// <exception cref="Exception">Throws and forwards any exception with short error description.</exception>
         private ApplicationConfiguration CreateClientConfiguration()
         {
             var configuration = new ApplicationConfiguration
@@ -551,7 +406,9 @@ namespace OpcUa.Client.Core
 
             configuration.ClientConfiguration.Validate();
 
-            // Add trace config before calling validate
+
+            // Set up for Trace
+            //Add trace config before calling validate
             //configuration.TraceConfiguration = new TraceConfiguration
             //{
             //    OutputFilePath = Path.Combine(Environment.ExpandEnvironmentVariables("%userprofile%"),
@@ -561,10 +418,10 @@ namespace OpcUa.Client.Core
             //};
             //configuration.TraceConfiguration.ApplySettings();
 
-            Utils.SetTraceLog(Path.Combine(Environment.ExpandEnvironmentVariables("%userprofile%"),
-                "Documents\\UaClient\\UtilsTraceLogs.txt"), true);
-            Utils.SetTraceMask(Utils.TraceMasks.All);
-            Utils.SetTraceOutput(Utils.TraceOutput.DebugAndFile);
+            //Utils.SetTraceLog(Path.Combine(Environment.ExpandEnvironmentVariables("%userprofile%"),
+            //    "Documents\\UaClient\\UtilsTraceLogs.txt"), true);
+            //Utils.SetTraceMask(Utils.TraceMasks.All);
+            //Utils.SetTraceOutput(Utils.TraceOutput.DebugAndFile);
 
             configuration.SecurityConfiguration = new SecurityConfiguration
             {
@@ -598,7 +455,7 @@ namespace OpcUa.Client.Core
             configuration.CertificateValidator = new CertificateValidator();
             configuration.CertificateValidator.Update(configuration.SecurityConfiguration);
             // Set certificate validation
-            //configuration.CertificateValidator.CertificateValidation += CertificateValidation;
+            configuration.CertificateValidator.CertificateValidation += CertificateValidation;
             // Set Https certificate validation
             ServicePointManager.ServerCertificateValidationCallback = HttpsCertificateValidation;
 
@@ -609,10 +466,6 @@ namespace OpcUa.Client.Core
         #endregion
 
         #region Event Handling
-
-        /// <summary>
-        /// Eventhandler to validate the server certificate forwards this event
-        /// </summary>
         private static void CertificateValidation(CertificateValidator certificate, CertificateValidationEventArgs e)
         {
             try
@@ -635,9 +488,6 @@ namespace OpcUa.Client.Core
             }  
         }
 
-        /// <summary>
-        /// HTTPS certificates validation.
-        /// </summary>
         private bool HttpsCertificateValidation(
             object sender,
             X509Certificate cert,
@@ -661,27 +511,20 @@ namespace OpcUa.Client.Core
             try
             {
                 SessionState = true;
-                // check for events from discarded sessions.
                 if (!Object.ReferenceEquals(sender, _session))
                     return;
 
-                // check for disconnected session.
                 if (ServiceResult.IsBad(e.Status))
                 {
                     SessionState = false;
-                    // try reconnecting using the existing session state
                     _session.Reconnect();
-                    var c =_session.Connected;
                 }
-
-                
             }
             catch (Exception ex)
             {
                 Utils.Trace(ex, "Error accepting certificate.");
             }
         }
-
         #endregion
     }
 }

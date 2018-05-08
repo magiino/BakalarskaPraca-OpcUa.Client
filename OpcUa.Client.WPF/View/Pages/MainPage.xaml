@@ -96,7 +96,7 @@
                         </TextBlock>
                     </Expander.Header>
                     <GroupBox Height="{Binding ActualHeight, ElementName=Expanders}"
-                              Header="Choosen object"
+                              Header="Choosen Node"
                               Style="{DynamicResource MaterialDesignCardGroupBox}">
                         <local:AttributeInfo MinWidth="200"
                                              DataContext="{Binding NodeAttributesViewModel}"
