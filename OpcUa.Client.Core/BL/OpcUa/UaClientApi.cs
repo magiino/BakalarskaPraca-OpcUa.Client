@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Security.Cryptography.X509Certificates;
-using Ninject.Infrastructure.Language;
 using Opc.Ua;
 using Opc.Ua.Client;
 
@@ -36,7 +35,6 @@ namespace OpcUa.Client.Core
 
             using (var client = DiscoveryClient.Create(uri))
             {
-                //Find servers
                 var servers = client.FindServers(null);
                 return servers;
             }
@@ -44,13 +42,10 @@ namespace OpcUa.Client.Core
 
         public EndpointDescriptionCollection GetEndpoints(string serverUrl)
         {
-            //Create a URI using the server's URL
             var uri = new Uri(serverUrl);
 
-            ////Create a DiscoveryClient
             using (var discoveryClient = DiscoveryClient.Create(uri))
             {
-                //Search for available endpoints
                 var endpoints = discoveryClient.GetEndpoints(null);
                 return endpoints;
             }
@@ -74,16 +69,11 @@ namespace OpcUa.Client.Core
             return referenceDescriptionCollection;
         }
 
-        /// <summary>Browses a node ID provided by a ReferenceDescription</summary>
-        /// <param name="referenceDescription">The ReferenceDescription</param>
-        /// <returns>ReferenceDescriptionCollection of found nodes</returns>
-        /// <exception cref="Exception">Throws and forwards any exception with short error description.</exception>
         public ReferenceDescriptionCollection BrowseNode(ReferenceDescription referenceDescription)
         {
             var expNodeId = referenceDescription.NodeId;
             var nodeId = ExpandedNodeId.ToNodeId(expNodeId, new NamespaceTable());
 
-            //Browse from starting point for all object types
             _session.Browse(null, 
                             null, 
                             nodeId, 
@@ -124,10 +114,6 @@ namespace OpcUa.Client.Core
             return _session != null;
         }
 
-        /// <summary>Establishes the connection to an OPC UA server and creates a session using an EndpointDescription.</summary>
-        /// <param name="endpointDescription">The EndpointDescription of the server's endpoint</param>
-        /// <param name="sessionName"></param>
-        /// <exception cref="Exception">Throws and forwards any exception with short error description.</exception>
         public void ConnectAnonymous(EndpointDescription endpointDescription, string sessionName)
         {
 
@@ -150,8 +136,6 @@ namespace OpcUa.Client.Core
             _session.KeepAlive += new KeepAliveEventHandler(Notification_KeepAlive);
         }
 
-        /// <summary>Closes an existing session and disconnects from the server.</summary>
-        /// <exception cref="Exception">Throws and forwards any exception with short error description.</exception>
         public void Disconnect()
         {
             if (_session == null) return;
@@ -168,7 +152,6 @@ namespace OpcUa.Client.Core
                 Utils.Trace(Utils.TraceMasks.Error, $"{e.Message}");
             }
         } 
-
         #endregion
 
         #region Subscription / Monitored Item
@@ -302,8 +285,7 @@ namespace OpcUa.Client.Core
         public List<NodeId> RegisterNodes(List<string> nodesToRegister)
         {
             if (nodesToRegister.Count == 0) return new List<NodeId>();
-            var nodeIdsToRegister = new NodeIdCollection(nodesToRegister.Select(x => new NodeId(x)).ToEnumerable());
-
+            var nodeIdsToRegister = new NodeIdCollection(nodesToRegister.Select(x => new NodeId(x)).ToList());
 
             _session.RegisterNodes(null, nodeIdsToRegister, out var registeredNodeIds);
             _registeredNodes.AddRange(registeredNodeIds);
@@ -348,7 +330,8 @@ namespace OpcUa.Client.Core
             }
             catch (Exception e)
             {
-                throw e;
+                Utils.Trace(Utils.TraceMasks.Error, $"{e.Message}");
+                return false;
             }
         }
         #endregion
