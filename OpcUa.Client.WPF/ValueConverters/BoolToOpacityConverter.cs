@@ -3,11 +3,11 @@ using System.Globalization;
 
 namespace OpcUa.Client.WPF
 {
-    public class OpacityConverter : BaseValueConverter<OpacityConverter>
+    public class NullToOpacityConverter : BaseValueConverter<NullToOpacityConverter>
     {
         public override object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            var val = value != null && (bool)value ? 0.3d : 0d;
+            var val = value == null ? 0.3d : 1d;
             return val;
         }
 

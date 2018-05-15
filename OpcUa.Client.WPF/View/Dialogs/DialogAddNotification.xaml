@@ -13,6 +13,7 @@
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="10"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
@@ -29,34 +30,40 @@
             <!-- Fields -->
             <TextBlock Grid.Row="0" 
                        Grid.Column="0"
-                       Text="Name"
+                       Text="Name:"
                        HorizontalAlignment="Left"
+                       Margin="0 10 0 0"
                        />
             <TextBlock Grid.Row="1" 
                        Grid.Column="0"
-                       Text="Node Id"
+                       Text="Node Id:"
                        HorizontalAlignment="Left"
+                       Margin="0 10 0 0"
                        />
             <!-- Values -->
             <TextBox Grid.Row="0" 
-                     Grid.Column="1"
-                     Text="{Binding Name}"
+                     Grid.Column="2"
+                     Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
                      />
             <TextBox Grid.Row="1" 
-                     Grid.Column="1"
+                     Grid.Column="2"
                      Text="{Binding NodeId}"
+                     IsEnabled="False"
                      />
         </Grid>
         <StackPanel Orientation="Horizontal"
+                    Margin="0 10 0 0"
                     Visibility="{Binding IsDigital 
                                          ,Converter={local:BooleanToVisibilityConverter}
                                          ,ConverterParameter=true}"
                     >
             <TextBlock Text="Hlasit zmenu hodnoty o"
                        HorizontalAlignment="Left"
+                       Margin="0 10 0 0"
                        />
             <TextBox Width="50"
-                     Text="{Binding FilterValue}"
+                     Text="{Binding FilterValue, UpdateSourceTrigger=PropertyChanged}"
+                     Margin="10 0 10 0"
                      />
             <ComboBox SelectedIndex="{Binding SelectedFilterType, Mode=TwoWay}"
                       >
@@ -66,26 +73,26 @@
             </ComboBox>
         </StackPanel>
 
-        <StackPanel Visibility="{Binding IsDigital 
+        <StackPanel  Margin="0 10 0 0"
+                     Visibility="{Binding IsDigital 
                                          ,Converter={local:BooleanToVisibilityConverter}}"
-                    >
+                     >
             <TextBlock Text="Hlásanie pri hodnote 0:"
                        HorizontalAlignment="Left"
                        />
-            <TextBox Text="{Binding IsZeroDescription}"
+            <TextBox Text="{Binding IsZeroDescription, UpdateSourceTrigger=PropertyChanged}"
                      />
 
             <TextBlock Text="Hlásanie pri hodnote 1:"
                        HorizontalAlignment="Left"
                        />
-            <TextBox Text="{Binding IsOneDescription}"
+            <TextBox Text="{Binding IsOneDescription, UpdateSourceTrigger=PropertyChanged}"
                      />
         </StackPanel>
 
         <Button Margin="0 10 0 0"
                 Padding="10 3"
                 Content="Add"
-                FontSize="{StaticResource FontSizeRegular}"
                 Command="{Binding AddItemCommand}"
                 HorizontalAlignment="Center"
                 />

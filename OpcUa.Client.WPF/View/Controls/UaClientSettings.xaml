@@ -8,8 +8,7 @@
              d:DesignHeight="200"
              d:DesignWidth="300"
              >
-    <Border Background="{StaticResource BackgroundLightBrush}"
-            Padding="5">
+    <Border Padding="5">
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="auto"/>

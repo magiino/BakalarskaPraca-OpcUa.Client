@@ -3,107 +3,79 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:fa="http://schemas.fontawesome.io/icons/"
              xmlns:local="clr-namespace:OpcUa.Client.WPF"
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d">
-    <Menu>
+
+    <Menu IsMainMenu="True">
         <!-- File items -->
         <MenuItem Header="_File">
-            <MenuItem x:Name="MenuNew" 
-                      Header="_new" 
+            <MenuItem Header="_new" 
                       InputGestureText="Ctrl+N" 
                       Command="{Binding NewProjectCommand}"
                       >
                 <MenuItem.Icon>
-                    <fa:ImageAwesome Icon="File"/>
+                    <materialDesign:PackIcon Kind="File" />
                 </MenuItem.Icon>
             </MenuItem>
-            <MenuItem x:Name="MenuSave" 
-                      Header="_Save" 
-                      InputGestureText="Ctrl+S" 
-                      Command="{Binding SaveProjectCommand}"
-                      >
-                <MenuItem.Icon>
-                    <fa:ImageAwesome Icon="Save" />
-                </MenuItem.Icon>
-            </MenuItem>
-            <MenuItem x:Name="MenuOpen" 
-                      Header="_Open" 
+            <MenuItem Header="_Open" 
                       InputGestureText="Ctrl+O" 
                       Command="{Binding OpenProjectCommand}"
                       >
                 <MenuItem.Icon>
-                    <fa:ImageAwesome Icon="FolderOpen"/>
+                    <materialDesign:PackIcon Kind="FolderOpen" />
                 </MenuItem.Icon>
             </MenuItem>
-            <MenuItem x:Name="MenuExit" 
-                      Header="_Exit" 
+            <MenuItem Header="_Exit" 
                       InputGestureText="Alt+F4" 
                       Command="{Binding ExitApplicationCommand}"
                       >
                 <MenuItem.Icon>
-                    <fa:ImageAwesome Icon="SignOut"/>
+                    <materialDesign:PackIcon Kind="ExitToApp"/>
                 </MenuItem.Icon>
             </MenuItem>
         </MenuItem>
         <!-- Edit items -->
         <MenuItem Header="_Edit">
-            <MenuItem x:Name="MenuCut" 
-                      Header="_Cut" 
+            <MenuItem Header="_Cut" 
                       InputGestureText="Ctrl+X" 
                       Command="ApplicationCommands.Cut"
                       >
                 <MenuItem.Icon>
-                    <fa:ImageAwesome Icon="Cut"/>
+                    <materialDesign:PackIcon Kind="ContentCut" />
                 </MenuItem.Icon>
             </MenuItem>
-            <MenuItem x:Name="MenuCopy" 
-                      Header="_Copy" 
+            <MenuItem Header="_Copy" 
                       InputGestureText="Ctrl+C" 
                       Command="ApplicationCommands.Copy"
                       >
                 <MenuItem.Icon>
-                    <fa:ImageAwesome Icon="Copy"/>
+                    <materialDesign:PackIcon Kind="ContentCopy" />
                 </MenuItem.Icon>
             </MenuItem>
-            <MenuItem x:Name="MenuPaste" 
-                      Header="_Paste" 
+            <MenuItem Header="_Paste" 
                       InputGestureText="Ctrl+V" 
                       Command="ApplicationCommands.Paste"
                       >
                 <MenuItem.Icon>
-                    <fa:ImageAwesome Icon="paste"/>
+                    <materialDesign:PackIcon Kind="ContentPaste" />
                 </MenuItem.Icon>
             </MenuItem>
-            <!--<MenuItem x:Name="MenuFont" Header="_Font" InputGestureText="Ctrl+F">
-                <MenuItem.Icon>
-                    <fa:ImageAwesome Icon="Font"/>
-                </MenuItem.Icon>
-            </MenuItem>-->
         </MenuItem>
         <!-- Help items -->
         <MenuItem Header="_Help">
-            <MenuItem x:Name="MenuVersion" 
-                      Header="_Version"
+            <MenuItem Header="_Version 1.0"
                       >
                 <MenuItem.Icon>
-                    <fa:ImageAwesome Icon="Codepen"/>
+                    <materialDesign:PackIcon Kind="Codepen" />
                 </MenuItem.Icon>
             </MenuItem>
-            <MenuItem x:Name="MenuAbout" 
-                      Header="_About"
-                      >
-                <MenuItem.Icon>
-                    <fa:ImageAwesome Icon="book"/>
-                </MenuItem.Icon>
-            </MenuItem>
-            <MenuItem x:Name="GitHub" 
-                      Header="_Git Repository"
+            <MenuItem Header="_Git Repository"
                       Command="{Binding OpenGitHubCommand}"
                       >
                 <MenuItem.Icon>
-                    <fa:ImageAwesome Icon="Github"/>
+                    <materialDesign:PackIcon Kind="GithubBox" />
                 </MenuItem.Icon>
             </MenuItem>
         </MenuItem>

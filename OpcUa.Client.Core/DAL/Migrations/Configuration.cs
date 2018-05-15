@@ -96,7 +96,6 @@ namespace OpcUa.Client.Core.DAL
                 Id = 1,
                 ProjectId = new Guid("db93cbda-e293-41db-ad54-bee5a4c254a3"),
                 Name = "ns=2;s=Demo.Dynamic.Scalar.Int16",
-                Description = "Test Int16 Value",
                 Archive = ArchiveInterval.ThirtySecond,
                 DataType = BuiltInType.Int16,
             };
@@ -106,7 +105,6 @@ namespace OpcUa.Client.Core.DAL
                 Id = 2,
                 ProjectId = new Guid("db93cbda-e293-41db-ad54-bee5a4c254a3"),
                 Name = "ns=2;s=Demo.Dynamic.Scalar.SByte",
-                Description = "Test Short Byte Value",
                 Archive = ArchiveInterval.ThirtySecond,
                 DataType = BuiltInType.SByte,
             };
@@ -116,7 +114,6 @@ namespace OpcUa.Client.Core.DAL
                 Id = 3,
                 ProjectId = new Guid("db93cbda-e293-41db-ad54-bee5a4c254a3"),
                 Name = "ns=2;s=Demo.Dynamic.Scalar.UInt64",
-                Description = "Test Unsigned Int64 Value",
                 Archive = ArchiveInterval.ThirtySecond,
                 DataType = BuiltInType.UInt64,
             };
@@ -143,6 +140,8 @@ namespace OpcUa.Client.Core.DAL
                 SessionName = "TestProjectSession"
             };
             context.Projects.AddOrUpdate(x => x.Id, project);
+
+            context.SaveChanges();
         }
     }
 }

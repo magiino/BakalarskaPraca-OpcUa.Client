@@ -5,387 +5,444 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:OpcUa.Client.WPF"
              mc:Ignorable="d"
-             d:DesignHeight="700"
-             d:DesignWidth="400"
              >
-    <StackPanel x:Name="Stack">
-        <TreeView BorderThickness="0">
-            <!-- NodeId data  -->
-            <TreeViewItem DataContext="{Binding NodeId}">
-                <TreeViewItem.Header>
-                    <StackPanel Orientation="Horizontal">
-                        <Label Content="Node Id"
-                            Width="120"/>
-                        <TextBlock Text="{Binding }" 
-                                Width="200"
-                                TextTrimming="WordEllipsis"
-                                VerticalAlignment="Center"/>
+    <UserControl.Resources>
+        <Style TargetType="{x:Type TextBlock}" x:Key="AttributeValue">
+            <Setter Property="Width" Value="200"/>
+            <Setter Property="Padding" Value="0 5 0 5"/>
+        </Style>
+        <Style TargetType="{x:Type TextBlock}" x:Key="AttributeHeader">
+            <Setter Property="Padding" Value="5 5 0 5"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+        </Style>
+    </UserControl.Resources>
+
+        <Grid>
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <StackPanel x:Name="Stack">
+                <!-- NodeId data  -->
+                <Grid DataContext="{Binding NodeId}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="120"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Row="0" 
+                               Grid.Column="0"
+                               Text="Node Id"
+                               Style="{StaticResource AttributeHeader}"
+                               />
+                    <TextBlock Grid.Row="0" 
+                               Grid.Column="1"
+                               Text="{Binding }" 
+                               Style="{StaticResource AttributeValue}"
+                               />
+
+                    <TextBlock Grid.Row="1" 
+                               Grid.Column="0"
+                               Text="Namespace index"
+                               Style="{StaticResource AttributeHeader}"
+                               />
+                    <TextBlock Grid.Row="1" 
+                               Grid.Column="1"
+                               Text="{Binding NamespaceIndex}" 
+                               Style="{StaticResource AttributeValue}"
+                               />
+
+                    <TextBlock Grid.Row="2" 
+                               Grid.Column="0"
+                               Text="Identifier"
+                               Style="{StaticResource AttributeHeader}"
+                               />
+                    <TextBlock Grid.Row="2" 
+                               Grid.Column="1"
+                               Text="{Binding Identifier}"
+                               Style="{StaticResource AttributeValue}"
+                               />
+                    <TextBlock Grid.Row="3" 
+                               Grid.Column="0"
+                               Text="Id type"
+                               Style="{StaticResource AttributeHeader}"
+                               />
+                    <TextBlock Grid.Row="3" 
+                               Grid.Column="1"
+                               Text="{Binding IdType}"
+                               Style="{StaticResource AttributeValue}"
+                               />
+                </Grid>
+                <Border Background="{DynamicResource MaterialDesignDivider}"
+                        Height="2"
+                        HorizontalAlignment="Stretch"
+                        SnapsToDevicePixels="True"
+                        />
+
+                <!-- ReferenceDescription data -->
+                    <Grid DataContext="{Binding ReferenceDescription}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="120"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                        </Grid.RowDefinitions>
+
+                        <TextBlock Grid.Row="1" 
+                                   Grid.Column="0"
+                                   Text="Node Class"
+                                   Style="{StaticResource AttributeHeader}"
+                                   />
+                        <TextBlock Grid.Row="1" 
+                                   Grid.Column="1"
+                                   Text="{Binding NodeClass}"
+                                   Style="{StaticResource AttributeValue}"
+                                   />
+
+                        <TextBlock Grid.Row="0" 
+                                   Grid.Column="0"
+                                   Text="Browse Name"
+                                   Style="{StaticResource AttributeHeader}"
+                                   />
+                        <TextBlock Grid.Row="0" 
+                                   Grid.Column="1"
+                                   Text="{Binding BrowseName}"
+                                   Style="{StaticResource AttributeValue}"
+                                   />
+
+                        <TextBlock Grid.Row="2" 
+                                   Grid.Column="0"
+                                   Text="Display Name"
+                                   Style="{StaticResource AttributeHeader}"
+                                   />
+                        <TextBlock Grid.Row="2" 
+                                   Grid.Column="1"
+                                   Text="{Binding DisplayName}"
+                                   Style="{StaticResource AttributeValue}"
+                                   />
+                    </Grid>
+
+                    <!-- Node data -->
+                    <Grid DataContext="{Binding Node}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="120"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                        </Grid.RowDefinitions>
+
+                        <TextBlock Grid.Row="0" 
+                                   Grid.Column="0"
+                                   Text="Description"
+                                   Style="{StaticResource AttributeHeader}"
+                                   />
+                        <TextBlock Grid.Row="0" 
+                                   Grid.Column="1"
+                                   TextWrapping="Wrap"
+                                   VerticalAlignment="Stretch"
+                                   MaxWidth="200"
+                                   MaxHeight="80"
+                                   Text="{Binding Description}"
+                                   Style="{StaticResource AttributeValue}"
+                                   />
+
+                        <TextBlock Grid.Row="1" 
+                                   Grid.Column="0"
+                                   Text="Write Mask"
+                                   Style="{StaticResource AttributeHeader}"
+                                   />
+                        <TextBlock Grid.Row="1" 
+                                   Grid.Column="1"
+                                   Text="{Binding WriteMask}"
+                                   Style="{StaticResource AttributeValue}"
+                                   />
+
+                        <TextBlock Grid.Row="2" 
+                                   Grid.Column="0"
+                                   Text="User Write Mask"
+                                   Style="{StaticResource AttributeHeader}"
+                                   />
+                        <TextBlock Grid.Row="2" 
+                                   Grid.Column="1"
+                                   Text="{Binding UserWriteMask}"
+                                   Style="{StaticResource AttributeValue}"
+                                   />
+                    </Grid>
+
+                    <Border Background="{DynamicResource MaterialDesignDivider}"
+                            Height="2"
+                            HorizontalAlignment="Stretch"
+                            SnapsToDevicePixels="True"
+                            />
+
+                    <StackPanel Visibility="{Binding IsVariableType, Converter={local:BooleanToVisibilityConverter}, Mode=OneWay}">
+                    <Grid DataContext="{Binding DataTypeNodeId}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="120"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                        </Grid.RowDefinitions>
+
+                        <TextBlock Grid.Row="0" 
+                                   Grid.Column="0"
+                                   Text="Data Type"
+                                   Style="{StaticResource AttributeHeader}"
+                                   />
+                        <TextBlock Grid.Row="0" 
+                                   Grid.Column="1"
+                                   Text="{Binding }" 
+                                   Style="{StaticResource AttributeValue}"
+                                   />
+
+                        <TextBlock Grid.Row="1" 
+                                   Grid.Column="0"
+                                   Text="Namespace index"
+                                   Style="{StaticResource AttributeHeader}"
+                                   />
+                        <TextBlock Grid.Row="1" 
+                                   Grid.Column="1"
+                                   Text="{Binding NamespaceIndex}" 
+                                   Style="{StaticResource AttributeValue}"
+                                   />
+
+                        <TextBlock Grid.Row="2" 
+                                   Grid.Column="0"
+                                   Text="Identifier"
+                                   Style="{StaticResource AttributeHeader}"
+                                   />
+                        <TextBlock Grid.Row="2" 
+                                       Grid.Column="1"
+                                       Text="{Binding Identifier}"
+                                       Style="{StaticResource AttributeValue}"
+                                       />
+                        <TextBlock Grid.Row="3" 
+                                       Grid.Column="0"
+                                       Text="Id type"
+                                       Style="{StaticResource AttributeHeader}"
+                                       />
+                        <TextBlock Grid.Row="3" 
+                                       Grid.Column="1"
+                                       Text="{Binding IdType}"
+                                       Style="{StaticResource AttributeValue}"
+                                       />
+                    </Grid>
+                    <Border Background="{DynamicResource MaterialDesignDivider}"
+                            Height="2"
+                            HorizontalAlignment="Stretch"
+                            SnapsToDevicePixels="True"
+                            />
+
+                    <!-- NodeVariable Data -->
+                        <Grid DataContext="{Binding VariableNode}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="120"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="auto"/>
+                            </Grid.RowDefinitions>
+
+                            <TextBlock Grid.Row="0" 
+                                       Grid.Column="0"
+                                       Text="Value Rank"
+                                       Style="{StaticResource AttributeHeader}"
+                                       />
+                            <TextBlock Grid.Row="0" 
+                                       Grid.Column="1"
+                                       Text="{Binding ValueRank}"
+                                       Style="{StaticResource AttributeValue}"
+                                       />
+                            <TextBlock Grid.Row="1" 
+                                       Grid.Column="0"
+                                       Text="Array Dimensions"
+                                       Style="{StaticResource AttributeHeader}"
+                                       />
+                            <TextBlock Grid.Row="1" 
+                                       Grid.Column="1"
+                                       Text="{Binding ArrayDimensions}"
+                                       Style="{StaticResource AttributeValue}"
+                                       />
+
+                            <TextBlock Grid.Row="2" 
+                                       Grid.Column="0"
+                                       Text="Access Level"
+                                       Style="{StaticResource AttributeHeader}"
+                                       />
+                            <TextBlock Grid.Row="2" 
+                                       Grid.Column="1"
+                                       Text="{Binding AccessLevel}"
+                                       Style="{StaticResource AttributeValue}"
+                                       />
+
+                            <TextBlock Grid.Row="3" 
+                                       Grid.Column="0"
+                                       Text="User Access Level"
+                                       Style="{StaticResource AttributeHeader}"
+                                       />
+                            <TextBlock Grid.Row="3" 
+                                       Grid.Column="1"
+                                       Text="{Binding UserAccessLevel}"
+                                       Style="{StaticResource AttributeValue}"
+                                       />
+
+                            <TextBlock Grid.Row="4" 
+                                       Grid.Column="0"
+                                       Text="Historizing"
+                                       Style="{StaticResource AttributeHeader}"
+                                       />
+                            <TextBlock Grid.Row="4" 
+                                       Grid.Column="1"
+                                       Text="{Binding Historizing}"
+                                       Style="{StaticResource AttributeValue}"
+                                       />
+
+                            <TextBlock Grid.Row="5" 
+                                       Grid.Column="0"
+                                       Text="Min Sampling"
+                                       Style="{StaticResource AttributeHeader}"
+                                       />
+                            <TextBlock Grid.Row="5" 
+                                       Grid.Column="1"
+                                       Text="{Binding MinimumSamplingInterval}"
+                                       Style="{StaticResource AttributeValue}"
+                                       />
+                        </Grid>
+
+                        <Border Background="{DynamicResource MaterialDesignDivider}"
+                                Height="2"
+                                HorizontalAlignment="Stretch"
+                                SnapsToDevicePixels="True"
+                        />
+
+                        <!-- Value Data -->
+                        <Grid DataContext="{Binding DataValue}"
+                              >
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="120"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="auto"/>
+                            </Grid.RowDefinitions>
+
+                            <TextBlock Grid.Row="0" 
+                                       Grid.Column="0"
+                                       Text="Value"
+                                       Style="{StaticResource AttributeHeader}"
+                                       />
+                            <TextBlock Grid.Row="0" 
+                                       Grid.Column="1"
+                                       Text="{Binding Value}"
+                                       Style="{StaticResource AttributeValue}"
+                                       />
+
+                            <TextBlock Grid.Row="1" 
+                                       Grid.Column="0"
+                                       Text="Status Code"
+                                       Style="{StaticResource AttributeHeader}"
+                                       />
+                            <TextBlock Grid.Row="1" 
+                                       Grid.Column="1"
+                                       Text="{Binding StatusCode}"
+                                       Style="{StaticResource AttributeValue}"
+                                       />
+
+                            <TextBlock Grid.Row="2" 
+                                       Grid.Column="0"
+                                       Text="Source Timestamp"
+                                       Style="{StaticResource AttributeHeader}"
+                                       />
+                            <TextBlock Grid.Row="2" 
+                                       Grid.Column="1"
+                                       Text="{Binding SourceTimestamp}"
+                                       Style="{StaticResource AttributeValue}"
+                                       />
+                        </Grid>
+
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="120"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="auto"/>
+                            </Grid.RowDefinitions>
+
+                            <TextBlock Grid.Row="0" 
+                                       Grid.Column="0"
+                                       Text="Data type"
+                                       Style="{StaticResource AttributeHeader}"
+                                       />
+                            <TextBlock Grid.Row="0" 
+                                       Grid.Column="1"
+                                       Text="{Binding DataType}"
+                                       Style="{StaticResource AttributeValue}"
+                                       />
+
+                            <TextBlock Grid.Row="1" 
+                                       Grid.Column="0"
+                                       Text="BuiltInType"
+                                       Style="{StaticResource AttributeHeader}"
+                                       />
+                            <TextBlock Grid.Row="1" 
+                                       Grid.Column="1"
+                                       Text="{Binding BuiltInType}"
+                                       Style="{StaticResource AttributeValue}"
+                                       />
+                        </Grid>
+
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="50"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="10"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Button Grid.Column="0"
+                                        Content="Read"
+                                        Command="{Binding ReadValueCommand}"
+                                        />
+                            <TextBox Grid.Column="2"
+                                     VerticalAlignment="Stretch"
+                                     Text="{Binding ValueToWrite}"
+                                     />
+                            <Button Grid.Column="4"
+                                    Content="Write"
+                                    Command="{Binding WriteValueCommand}"
+                                    />
+                        </Grid>
                     </StackPanel>
-                </TreeViewItem.Header>
-
-                <TreeViewItem>
-                    <TreeViewItem.Header >
-                        <StackPanel Orientation="Horizontal">
-                            <Label Content="Namespace Index" 
-                                Width="120"/>
-                            <TextBlock Text="{Binding NamespaceIndex}" 
-                                    Width="200"
-                                    VerticalAlignment="Center"/>
-                        </StackPanel>
-                    </TreeViewItem.Header>
-                </TreeViewItem>
-
-                <TreeViewItem>
-                    <TreeViewItem.Header >
-                        <StackPanel Orientation="Horizontal" >
-                            <Label Content="Type" 
-                                Width="120"/>
-                            <TextBlock Text="{Binding Identifier}" 
-                                    Width="200"
-                                    TextTrimming="WordEllipsis"
-                                    VerticalAlignment="Center"/>
-                        </StackPanel>
-                    </TreeViewItem.Header>
-                </TreeViewItem>
-
-                <TreeViewItem>
-                    <TreeViewItem.Header >
-                        <StackPanel Orientation="Horizontal">
-                            <Label Content="Identifier" Width="120"/>
-                            <Label Content="{Binding IdType}" Width="200"/>
-                        </StackPanel>
-                    </TreeViewItem.Header>
-                </TreeViewItem>
-            </TreeViewItem>
-        </TreeView>
-
-        <!-- ReferenceDescription data -->
-        <Grid DataContext="{Binding ReferenceDescription}"
-              >
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="120"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-
-            <Grid.RowDefinitions>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="auto"/>
-            </Grid.RowDefinitions>
-
-            <TextBlock Grid.Row="1" 
-                    Grid.Column="0"
-                    Style="{StaticResource AttributeHeader}"
-                    Text="Node Class"
-                    />
-            <TextBlock Grid.Row="1" 
-                    Grid.Column="1"
-                    Style="{StaticResource AttributeValue}"
-                    Text="{Binding NodeClass}"
-                    />
-
-            <TextBlock Grid.Row="0" 
-                    Grid.Column="0"
-                    Style="{StaticResource AttributeHeader}"
-                    Text="Browse Name"
-                    />
-            <TextBlock Grid.Row="0" 
-                    Grid.Column="1"
-                    Style="{StaticResource AttributeValue}"
-                    Text="{Binding BrowseName}"
-                    />
-
-            <TextBlock Grid.Row="2" 
-                    Grid.Column="0"
-                    Style="{StaticResource AttributeHeader}"
-                    Text="Display Name"
-                    />
-            <TextBlock Grid.Row="2" 
-                    Grid.Column="1"
-                    Style="{StaticResource AttributeValue}"
-                    Text="{Binding DisplayName}"
-                    />
+                </StackPanel>
+            </ScrollViewer>
         </Grid>
-
-        <!-- Node data -->
-        <Grid DataContext="{Binding Node}"
-            >
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="120"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-
-            <Grid.RowDefinitions>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="auto"/>
-            </Grid.RowDefinitions>
-
-            <TextBlock Grid.Row="0" 
-                    Grid.Column="0"
-                    Style="{StaticResource AttributeHeader}"
-                    Text="Description"
-                    />
-            <TextBlock Grid.Row="0" 
-                    Grid.Column="1"
-                    Style="{StaticResource AttributeValue}"
-                    Text="{Binding Description}"
-                    />
-            <!--<TextBlock Text="{Binding Description}"
-                    Width="200"
-                    TextWrapping="Wrap"/>-->
-
-            <TextBlock Grid.Row="1" 
-                    Grid.Column="0"
-                    Style="{StaticResource AttributeHeader}"
-                    Text="Write Mask"
-                    />
-            <TextBlock Grid.Row="1" 
-                    Grid.Column="1"
-                    Style="{StaticResource AttributeValue}"
-                    Text="{Binding WriteMask}"
-                    />
-
-            <TextBlock Grid.Row="2" 
-                    Grid.Column="0"
-                    Style="{StaticResource AttributeHeader}"
-                    Text="User Write Mask"
-                    />
-            <TextBlock Grid.Row="2" 
-                    Grid.Column="1"
-                    Style="{StaticResource AttributeValue}"
-                    Text="{Binding UserWriteMask}"
-                    />
-        </Grid>
-
-        <StackPanel Visibility="{Binding IsVariableType, Converter={local:BooleanToVisibilityConverter}, Mode=OneWay}"
-                    >
-            <!-- TODO separator a treeview -->
-
-            <TreeView DataContext="{Binding DataTypeNodeId}"
-                      BorderThickness="0"
-                      >
-                <TreeViewItem>
-                    <TreeViewItem.Header >
-                        <StackPanel Orientation="Horizontal">
-                            <Label Content="Data Type" Width="120"/>
-                            <Label Content="{Binding }" Width="200"/>
-                        </StackPanel>
-                    </TreeViewItem.Header>
-
-                    <TreeViewItem>
-                        <TreeViewItem.Header>
-                            <StackPanel Orientation="Horizontal">
-                                <Label Content="Namespace Index" Width="120"/>
-                                <Label Content="{Binding NamespaceIndex}" Width="200"/>
-                            </StackPanel>
-                        </TreeViewItem.Header>
-                    </TreeViewItem>
-
-                    <TreeViewItem>
-                        <TreeViewItem.Header >
-                            <StackPanel Orientation="Horizontal">
-                                <Label Content="Identifier" Width="120"/>
-                                <Label Content="{Binding Identifier}" Width="200"/>
-                            </StackPanel>
-                        </TreeViewItem.Header>
-                    </TreeViewItem>
-
-                    <TreeViewItem>
-                        <TreeViewItem.Header >
-                            <StackPanel Orientation="Horizontal">
-                                <Label Content="Id Type" Width="120"/>
-                                <Label Content="{Binding IdType}" Width="200"/>
-                            </StackPanel>
-                        </TreeViewItem.Header>
-                    </TreeViewItem>
-
-                </TreeViewItem>
-            </TreeView>
-
-            <!-- NodeVariable Data -->
-            <Grid DataContext="{Binding VariableNode}"
-                  >
-
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="120"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition Height="auto"/>
-                </Grid.RowDefinitions>
-
-                <TextBlock Grid.Row="0" 
-                    Grid.Column="0"
-                    Style="{StaticResource AttributeHeader}"
-                    Text="Value Rank"
-                    />
-                <TextBlock Grid.Row="0" 
-                    Grid.Column="1"
-                    Style="{StaticResource AttributeValue}"
-                    Text="{Binding ValueRank}"
-                    />
-
-                <TextBlock Grid.Row="1" 
-                    Grid.Column="0"
-                    Style="{StaticResource AttributeHeader}"
-                    Text="Array Dimensions"
-                    />
-                <TextBlock Grid.Row="1" 
-                    Grid.Column="1"
-                    Style="{StaticResource AttributeValue}"
-                    Text="{Binding ArrayDimensions}"
-                    />
-
-                <TextBlock Grid.Row="2" 
-                    Grid.Column="0"
-                    Style="{StaticResource AttributeHeader}"
-                    Text="Access Level"
-                    />
-                <TextBlock Grid.Row="2" 
-                    Grid.Column="1"
-                    Style="{StaticResource AttributeValue}"
-                    Text="{Binding AccessLevel}"
-                    />
-
-                <TextBlock Grid.Row="3" 
-                    Grid.Column="0"
-                    Style="{StaticResource AttributeHeader}"
-                    Text="User Access Level"
-                    />
-                <TextBlock Grid.Row="3" 
-                    Grid.Column="1"
-                    Style="{StaticResource AttributeValue}"
-                    Text="{Binding UserAccessLevel}"
-                    />
-
-                <TextBlock Grid.Row="4" 
-                    Grid.Column="0"
-                    Style="{StaticResource AttributeHeader}"
-                    Text="Historizing"
-                    />
-                <TextBlock Grid.Row="4" 
-                    Grid.Column="1"
-                    Style="{StaticResource AttributeValue}"
-                    Text="{Binding Historizing}"
-                    />
-
-                <TextBlock Grid.Row="5" 
-                    Grid.Column="0"
-                    Style="{StaticResource AttributeHeader}"
-                    Text="Min Sampling"
-                    />
-                <TextBlock Grid.Row="5" 
-                    Grid.Column="1"
-                    Style="{StaticResource AttributeValue}"
-                    Text="{Binding MinimumSamplingInterval}"
-                    />
-            </Grid>
-
-            <!-- Value Data -->
-            <Grid DataContext="{Binding DataValue}"
-                  >
-
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="120"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition Height="auto"/>
-                </Grid.RowDefinitions>
-
-                <TextBlock Grid.Row="0" 
-                    Grid.Column="0"
-                    Style="{StaticResource AttributeHeader}"
-                    Text="Value"
-                    />
-                <TextBlock Grid.Row="0" 
-                    Grid.Column="1"
-                    Style="{StaticResource AttributeValue}"
-                    Text="{Binding Value}"
-                    />
-
-                <TextBlock Grid.Row="1" 
-                    Grid.Column="0"
-                    Style="{StaticResource AttributeHeader}"
-                    Text="Status Code"
-                    />
-                <TextBlock Grid.Row="1" 
-                    Grid.Column="1"
-                    Style="{StaticResource AttributeValue}"
-                    Text="{Binding StatusCode}"
-                    />
-
-                <TextBlock Grid.Row="2" 
-                    Grid.Column="0"
-                    Style="{StaticResource AttributeHeader}"
-                    Text="Source Timestamp"
-                    />
-                <TextBlock Grid.Row="2" 
-                    Grid.Column="1"
-                    Style="{StaticResource AttributeValue}"
-                    Text="{Binding SourceTimestamp}"
-                    />
-            </Grid>
-
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="120"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition Height="auto"/>
-                </Grid.RowDefinitions>
-
-                <TextBlock Grid.Row="0" 
-                       Grid.Column="0"
-                       Style="{StaticResource AttributeHeader}"
-                       Text="Data type"
-                       />
-                <TextBlock Grid.Row="0" 
-                       Grid.Column="1"
-                       Style="{StaticResource AttributeValue}"
-                       Text="{Binding DataType}"
-                       />
-
-                <TextBlock Grid.Row="1" 
-                       Grid.Column="0"
-                       Style="{StaticResource AttributeHeader}"
-                       Text="BuiltInType"
-                       />
-                <TextBlock Grid.Row="1" 
-                       Grid.Column="1"
-                       Style="{StaticResource AttributeValue}"
-                       Text="{Binding BuiltInType}"
-                       />
-            </Grid>
-
-            <StackPanel Orientation="Horizontal"
-                        >
-                <Button Width="50" 
-                    Content="Read"
-                    Command="{Binding ReadValueCommand}"
-                    />
-                <TextBox Margin="100 0 0 0"
-                     Width="50"
-                     Text="{Binding ValueToWrite}"
-                     />
-                <Button Width="50"
-                    Content="Write"
-                    Command="{Binding WriteValueCommand}"
-                    />
-            </StackPanel>
-        </StackPanel>
-    </StackPanel>
 </UserControl>

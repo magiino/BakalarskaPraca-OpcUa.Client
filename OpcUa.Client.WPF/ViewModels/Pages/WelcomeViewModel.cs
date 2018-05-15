@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Security;
 using System.Windows.Input;
 using Opc.Ua;
@@ -16,7 +17,7 @@ namespace OpcUa.Client.WPF
         #endregion
 
         #region Public Properties
-        public string WelcomeText { get; set; } = "Lorem ipsum dolor, lorem isum dolor, Lorem ipsum dolor sit amet, lorem ipsum dolor sit amet";
+        public string WelcomeText { get; set; } = "This application allows you to connect to opc server and gather or observe data.";
         public ObservableCollection<ProjectModel> Projects { get; set; }
         public ProjectModel SelectedProject { get; set; }
         #endregion
@@ -73,19 +74,18 @@ namespace OpcUa.Client.WPF
             if (project.UserId != null)
                 _unitOfWork.Auth.RemoveUser(project.UserId.Value);
 
-            _unitOfWork.Projects.Remove(project);
-
-            var notifications = _unitOfWork.Notifications.Find(x => x.ProjectId == SelectedProject.Id);
+            var notifications = _unitOfWork.Notifications.Find(x => x.ProjectId == SelectedProject.Id).ToList();
             _unitOfWork.Notifications.RemoveRange(notifications);
 
-            var variables = _unitOfWork.Variables.Find(x => x.ProjectId == SelectedProject.Id);
+            var variables = _unitOfWork.Variables.Find(x => x.ProjectId == SelectedProject.Id).ToList();
 
-            if (variables == null) return;
+            if (variables.Count != 0)
+            {
+                foreach (var variable in variables)
+                    _unitOfWork.Variables.DeleteById(variable.Id);
+            }
 
-            foreach (var variable in variables)
-                _unitOfWork.Records.RemoveRange(variable.Records);
-
-            _unitOfWork.Variables.RemoveRange(variables);
+            Projects.Remove(SelectedProject);
         }
         #endregion
 
@@ -109,15 +109,18 @@ namespace OpcUa.Client.WPF
                     return;
                 }
                 var endpoint = _unitOfWork.Endpoints.SingleOrDefault(x => x.Id == SelectedProject.EndpointId);
-                _uaClientApi.Connect(Mapper.CreateEndpointDescription(endpoint), userName, SecureStringHelpers.Unsecure(password), SelectedProject.SessionName);
+                if (!_uaClientApi.Connect(Mapper.CreateEndpointDescription(endpoint), userName,
+                    SecureStringHelpers.Unsecure(password), SelectedProject.SessionName)) return;
                 IoC.AppManager.ProjectId = SelectedProject.Id;
+                IoC.Application.GoToPage(ApplicationPage.Main);
+
             }
             catch (Exception e)
             {
                 Utils.Trace(Utils.TraceMasks.Error, $"{e.Message}");
                 IoC.AppManager.ShowExceptionErrorMessage(e);
             }
-            IoC.Application.GoToPage(ApplicationPage.Main);
+           
         }
 
         private void OnLoad()

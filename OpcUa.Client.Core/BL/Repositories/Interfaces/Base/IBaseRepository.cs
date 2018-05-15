@@ -12,7 +12,7 @@ namespace OpcUa.Client.Core
         TEntity SingleOrDefault(Expression<Func<TEntity, bool>> predicate);
 
         TEntity Add(TEntity entity);
-        void AddRange(IEnumerable<TEntity> entities);
+        IEnumerable<TEntity> AddRange(IEnumerable<TEntity> entities);
         
         void Remove(TEntity entity);
         void RemoveRange(IEnumerable<TEntity> entities);

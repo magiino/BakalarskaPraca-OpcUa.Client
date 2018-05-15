@@ -64,7 +64,7 @@ namespace OpcUa.Client.WPF
 
             if (interval == ArchiveInterval.None)
             {
-                _subscription.PublishingEnabled = true;
+                //_subscription.PublishingEnabled = true;
                 _subscription.SetMonitoringMode(MonitoringMode.Reporting, _subscription.MonitoredItems.ToList());
                 _subscription.ApplyChanges();
             }
@@ -82,7 +82,7 @@ namespace OpcUa.Client.WPF
             var interval = SelectedArchiveInfo.ArchiveInterval;
             if (interval == ArchiveInterval.None)
             {
-                _subscription.PublishingEnabled = false;
+                //_subscription.PublishingEnabled = false;
                 _subscription.SetMonitoringMode(MonitoringMode.Disabled, _subscription.MonitoredItems.ToList());
                 _subscription.ApplyChanges();
             }
@@ -112,7 +112,6 @@ namespace OpcUa.Client.WPF
                 ProjectId = IoC.AppManager.ProjectId
             };
             _unitOfWork.Variables.Add(tmp);
-            //_unitOfWork.Complete();
 
             var variableModel = Mapper.VariableEntityToVariableModel(tmp);
             _messenger.Send(new SendManageArchivedValue(false, variableModel));
@@ -133,9 +132,9 @@ namespace OpcUa.Client.WPF
                 }
                 else
                 {
-                    var item = _uaClientApi.CreateMonitoredItem(interval.ToString(), nodeId, 1000, null, 2, MonitoringMode.Disabled);
-                    _uaClientApi.AddMonitoredItem(item, _subscription);
+                    var item = _uaClientApi.CreateMonitoredItem($"{nodeId} [{ArchiveInterval.None}]", nodeId, 100, null, 2, MonitoringMode.Disabled);
                     item.Notification += Notification_MonitoredItem;
+                    _uaClientApi.AddMonitoredItem(item, _subscription);
                 }
             }
             catch (Exception e)
@@ -156,14 +155,9 @@ namespace OpcUa.Client.WPF
                     archive.VariablesCount--;
 
             // Vymazanie z databaze
-            _unitOfWork.Variables.Remove(Mapper.VariableModelToVariableEntity(SelectedArchiveVariable));
+            _unitOfWork.Variables.DeleteById(SelectedArchiveVariable.Id);
+            //_unitOfWork.Variables.Remove(Mapper.VariableModelToVariableEntity(SelectedArchiveVariable));
             _messenger.Send(new SendManageArchivedValue(true, SelectedArchiveVariable));
-
-            // Najdenie indexu
-            var index = ArchiveVariables.IndexOf(SelectedArchiveVariable);
-
-            // Vymazanie z tabulky
-            ArchiveVariables.Remove(SelectedArchiveVariable);
 
             try
             {
@@ -172,10 +166,14 @@ namespace OpcUa.Client.WPF
                 else
                 {
                     // Odregistrovanie
-                    _uaClientApi.UnRegisterNode(_registeredNodesForRead[index].RegisteredNodeId);
+                    var var = _registeredNodesForRead.FirstOrDefault(x => x.VariableId == SelectedArchiveVariable.Id);
+                    _uaClientApi.UnRegisterNode(var?.RegisteredNodeId);
                     // Vymazanie z nodes for read
-                    _registeredNodesForRead.RemoveAt(index);
+                    _registeredNodesForRead.Remove(var);
                 }
+                // Vymazanie z tabulky
+                ArchiveVariables.Remove(SelectedArchiveVariable);
+
             }
             catch (Exception e)
             {
@@ -219,7 +217,7 @@ namespace OpcUa.Client.WPF
         #region Private Methods
         private void OnLoad()
         {
-            _subscription = _uaClientApi.Subscribe(2000, "Archivation", false);
+            _subscription = _uaClientApi.Subscribe(2000, "Archivation");
             if (_subscription == null)
                 IoC.AppManager.ShowWarningMessage("Subscription creation failed, please restart application!");
 
@@ -242,7 +240,7 @@ namespace OpcUa.Client.WPF
 
         private void RegisterLoadedNodes()
         {
-            var nodeIds = ArchiveVariables.Select(x => x.Name).ToList();
+            var nodeIds = ArchiveVariables.Where(x => x.Archive != ArchiveInterval.None).Select(x => x.Name).ToList();
             try
             {
                 var registeredNodes = _uaClientApi.RegisterNodes(nodeIds);
@@ -264,9 +262,9 @@ namespace OpcUa.Client.WPF
 
             foreach (var variable in ArchiveVariables.Where(x => x.Archive == ArchiveInterval.None))
             {
-                var item = _uaClientApi.CreateMonitoredItem(variable.Name, variable.Name, 500, null, 2, MonitoringMode.Disabled);
-                _uaClientApi.AddMonitoredItem(item, _subscription);
+                var item = _uaClientApi.CreateMonitoredItem($"{variable.Name} [{ArchiveInterval.None}]", variable.Name, 100, null, 2, MonitoringMode.Disabled);
                 item.Notification += Notification_MonitoredItem;
+                _uaClientApi.AddMonitoredItem(item, _subscription);
             }
         }
 
@@ -300,7 +298,7 @@ namespace OpcUa.Client.WPF
             catch (Exception e)
             {
                 Utils.Trace(Utils.TraceMasks.Error, $"{e.Message}");
-                IoC.AppManager.ShowExceptionErrorMessage(e);
+                //IoC.AppManager.ShowExceptionErrorMessage(e);
             }
 
             // Vytvorenie zaznamov
@@ -313,7 +311,6 @@ namespace OpcUa.Client.WPF
 
             // Archivacia
             _unitOfWork.Records.AddRange(records);
-            //_unitOfWork.Complete();
         }
         #endregion
 
@@ -331,7 +328,7 @@ namespace OpcUa.Client.WPF
             var value = notification.Value;
 
             var variable = ArchiveVariables.FirstOrDefault(x =>
-                x.Name == monitoredItem.StartNodeId && monitoredItem.DisplayName == ArchiveInterval.None.ToString());
+                x.Name == monitoredItem.StartNodeId && monitoredItem.DisplayName == $"{x.Name} [{ArchiveInterval.None}]");
 
             if (variable == null) return;
 
@@ -341,8 +338,6 @@ namespace OpcUa.Client.WPF
                 VariableId = variable.Id,
                 Value = value.Value.ToString()
             });
-
-            //_unitOfWork.Complete();
         }
         #endregion
     }

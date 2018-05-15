@@ -74,6 +74,7 @@ namespace OpcUa.Client.WPF
             try
             {
                 _uaClientApi.RemoveMonitoredItem(_subscription, SelectedNotification.NodeId);
+                _unitOfWork.Notifications.Remove(_unitOfWork.Notifications.GetById(SelectedNotification.Id.Value));
                 Notifications.Remove(SelectedNotification);
             }
             catch (Exception e)
@@ -121,15 +122,15 @@ namespace OpcUa.Client.WPF
 
             var notificationEntity = new NotificationEntity()
             {
+                Id = notification.Id ?? -1,
                 Name = notification.Name,
                 NodeId = notification.NodeId,
                 ProjectId = IoC.AppManager.ProjectId,
             };
 
-
             if (notification.IsDigital)
             {
-                item = _uaClientApi.CreateMonitoredItem(notification.Name, notification.NodeId, 300);
+                item = _uaClientApi.CreateMonitoredItem(notification.Name, notification.NodeId, 100);
 
                 notificationEntity.IsDigital = true;
                 notificationEntity.IsZeroDescription = notification.IsZeroDescription;
@@ -139,7 +140,7 @@ namespace OpcUa.Client.WPF
             {
                 item = _uaClientApi.CreateMonitoredItem(notification.Name,
                     notification.NodeId,
-                    300,
+                    100,
                     new DataChangeFilter()
                     {
                         DeadbandType = (uint)notification.DeadbandType,
@@ -156,7 +157,8 @@ namespace OpcUa.Client.WPF
             else
             {
                 item.Notification += Notification_MonitoredItem;
-                _unitOfWork.Notifications.Add(notificationEntity);
+                if (notification.Id == null)
+                    notification.Id = _unitOfWork.Notifications.Add(notificationEntity).Id;
                 Notifications.Add(notification);
             }
         }

@@ -62,6 +62,10 @@
     <Compile Include="DAL\Migrations\201804122355517_Init.Designer.cs">
       <DependentUpon>201804122355517_Init.cs</DependentUpon>
     </Compile>
+    <Compile Include="DAL\Migrations\201804161847024_DescriptionDeleted.cs" />
+    <Compile Include="DAL\Migrations\201804161847024_DescriptionDeleted.Designer.cs">
+      <DependentUpon>201804161847024_DescriptionDeleted.cs</DependentUpon>
+    </Compile>
     <Compile Include="ViewModels\Base\BaseViewModel.cs" />
     <Compile Include="BL\Messenger\IMessenger.cs" />
     <Compile Include="BL\IoC\Base\IoC.cs" />
@@ -152,6 +156,9 @@
   <ItemGroup>
     <EmbeddedResource Include="DAL\Migrations\201804122355517_Init.resx">
       <DependentUpon>201804122355517_Init.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DAL\Migrations\201804161847024_DescriptionDeleted.resx">
+      <DependentUpon>201804161847024_DescriptionDeleted.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

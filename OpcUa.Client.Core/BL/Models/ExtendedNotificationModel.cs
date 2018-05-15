@@ -5,6 +5,7 @@ namespace OpcUa.Client.Core
 {
     public class ExtendedNotificationModel : BaseViewModel
     {
+        public int? Id { get; set; }
         public string Name { get; set; }
         public string NodeId { get; set; }
 

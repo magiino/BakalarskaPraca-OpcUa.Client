@@ -7,6 +7,7 @@ using System.Windows.Media;
 using LiveCharts;
 using LiveCharts.Defaults;
 using LiveCharts.Wpf;
+using Opc.Ua;
 using OpcUa.Client.Core;
 
 namespace OpcUa.Client.WPF
@@ -36,7 +37,8 @@ namespace OpcUa.Client.WPF
         #endregion
 
         #region Commands
-        public ZoomingOptions ZoomingMode { get; } = ZoomingOptions.Xy;
+        public ZoomingOptions ZoomingMode { get; set; } = ZoomingOptions.Xy;
+        public ICommand ToggleZoomOptionCommand { get; }
         public ICommand ResetZoomCommand { get; }
         #endregion
 
@@ -48,6 +50,7 @@ namespace OpcUa.Client.WPF
             XFormatter = value => new DateTime((long)value).ToString("dd MMM H:mm:ss");
             OnLoad();
 
+            ToggleZoomOptionCommand = new MixRelayCommand(ToggleZoomOption);
             ResetZoomCommand = new MixRelayCommand((obj) => IoC.Messenger.Send(new SendResetAxises()));
             messenger.Register<SendManageArchivedValue>(msg => ManageArchiveVariables(msg.Delete, msg.Variable));
         } 
@@ -60,18 +63,31 @@ namespace OpcUa.Client.WPF
 
             foreach (var variable in selectedVariables)
             {
-                var values = new ChartValues<DateTimePoint>(_unityOfWork.Records.Local().Where(x => x.VariableId == variable.Id).OrderBy(x => x.ArchiveTime).Select(x => new DateTimePoint()
+                ChartValues<DateTimePoint> values;
+                if(variable.DataType != BuiltInType.Boolean)
+                { 
+                    values = new ChartValues<DateTimePoint>(_unityOfWork.Records.Find(x => x.VariableId == variable.Id).OrderBy(x => x.ArchiveTime).Select(x => new DateTimePoint()
+                    {
+                        Value = Convert.ToDouble(x.Value),
+                        DateTime = x.ArchiveTime
+                    }));
+                }
+                else
                 {
-                    Value = Convert.ToDouble(x.Value),
-                    DateTime = x.ArchiveTime
-                }));
+                    values = new ChartValues<DateTimePoint>(_unityOfWork.Records.Find(x => x.VariableId == variable.Id).OrderBy(x => x.ArchiveTime).Select(x => new DateTimePoint()
+                    {
+                        Value = x.Value == "False" ? 0d : 1d,
+                        DateTime = x.ArchiveTime
+                    }));
+                }
 
                 SeriesCollection.Add(
-                    new LineSeries()
+                    new StepLineSeries()
                     {
                         Title = variable.Name,
                         Values = values,
-                        PointGeometrySize = 15,
+                        StrokeThickness = 1,
+                        PointGeometrySize = 10,
                         PointGeometry = DefaultGeometries.Cross,
                         Fill = Brushes.Transparent
                     }
@@ -92,6 +108,28 @@ namespace OpcUa.Client.WPF
                 Variables.Add(variable);
             }
         }
+
+        private void ToggleZoomOption(object parameter)
+        {
+            switch (ZoomingMode)
+            {
+                case ZoomingOptions.None:
+                    ZoomingMode = ZoomingOptions.X;
+                    break;
+                case ZoomingOptions.X:
+                    ZoomingMode = ZoomingOptions.Y;
+                    break;
+                case ZoomingOptions.Y:
+                    ZoomingMode = ZoomingOptions.Xy;
+                    break;
+                case ZoomingOptions.Xy:
+                    ZoomingMode = ZoomingOptions.None;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+
         private void OnLoad()
         {
             var variables = Mapper.VariableEntitiesToVariableListModels( _unityOfWork.Variables.Find(x => x.ProjectId == IoC.AppManager.ProjectId) );

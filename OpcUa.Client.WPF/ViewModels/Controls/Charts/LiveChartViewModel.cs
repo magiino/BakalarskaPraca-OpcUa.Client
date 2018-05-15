@@ -52,7 +52,7 @@ namespace OpcUa.Client.WPF
 
             // Nastavenia grafu
             DateTimeFormatter = value => new DateTime((long)value).ToString("mm:ss");
-            AxisStep = TimeSpan.FromSeconds(10).Ticks;
+            AxisStep = TimeSpan.FromSeconds(15).Ticks;
             AxisUnit = TimeSpan.TicksPerSecond;
             SetAxisLimits(DateTime.Now);
 
@@ -78,20 +78,19 @@ namespace OpcUa.Client.WPF
             };
 
             SeriesCollection.Add(
-                new LineSeries()
+                new StepLineSeries()
                 {
                     Title = variable.Name,
                     Values = new ChartValues<DateTimePoint>(),
-                    PointGeometrySize = 15,
+                    PointGeometrySize = 10,
                     PointGeometry = DefaultGeometries.Circle,
                     Fill = Brushes.Transparent,
-                    PointForeground = Brushes.White,
-                    Stroke = brush,
-                    StrokeThickness = 4
+                    PointForeground = brush,
+                    StrokeThickness = 1
                 }
             );
 
-            var item = _uaClientApi.CreateMonitoredItem(variable.Name, variable.NodeId, 500, null, 4);
+            var item = _uaClientApi.CreateMonitoredItem(variable.Name, variable.NodeId, 100, null, 4);
 
             _uaClientApi.AddMonitoredItem(item, _subscription);
             item.Notification += Notification_MonitoredItem;
@@ -107,7 +106,7 @@ namespace OpcUa.Client.WPF
         } 
         #endregion
 
-        #region Can use methods
+        #region CanUse methods
         public bool AddNotificationCanUse()
         {
             if (_selectedNode == null)
@@ -121,9 +120,7 @@ namespace OpcUa.Client.WPF
         {
             return SelectedVariable != null;
         }
-        #endregion
 
-        #region CanUse Methods
         public bool AddVariableCanUse(object parameter)
         {
             return _selectedNode != null && _selectedNode.NodeClass == NodeClass.Variable;
@@ -139,7 +136,7 @@ namespace OpcUa.Client.WPF
         private void SetAxisLimits(DateTime now)
         {
             AxisMax = now.Ticks + TimeSpan.FromSeconds(2).Ticks;
-            AxisMin = now.Ticks - TimeSpan.FromSeconds(60).Ticks;
+            AxisMin = now.Ticks - TimeSpan.FromSeconds(120).Ticks;
         } 
         #endregion
 

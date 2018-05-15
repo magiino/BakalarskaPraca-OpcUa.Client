@@ -3,15 +3,15 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:fa="http://schemas.fontawesome.io/icons/"
              xmlns:local="clr-namespace:OpcUa.Client.WPF"
              xmlns:core="clr-namespace:OpcUa.Client.Core;assembly=OpcUa.Client.Core"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d" 
              d:DesignHeight="500"
              d:DesignWidth="300"
              >
     <ScrollViewer VerticalScrollBarVisibility="Auto">
-        <TreeView x:Name="FolderView" 
+        <TreeView VerticalAlignment="Stretch"
                   Padding="0 5px 10px 5px" 
                   ItemsSource="{Binding Items}">
             <TreeView.ItemContainerStyle>
@@ -24,12 +24,12 @@
 
             <TreeView.ItemTemplate>
                 <HierarchicalDataTemplate ItemsSource="{Binding Children}">
-                    <StackPanel Orientation="Horizontal">
-                        <fa:ImageAwesome 
-                            Width="10" 
-                            Margin="3"
-                            Foreground="LightSkyBlue"
-                            Icon="{Binding Type, Converter={local:HeaderToImageConverter}}"/>
+                    <StackPanel Orientation="Horizontal"
+                                DataContext="{Binding }">
+                        <materialDesign:PackIcon Kind="{Binding Type, Converter={local:HeaderToImageConverter}}"
+                                                 Width="15"
+                                                 Height="15"
+                                                 />
                         <TextBlock VerticalAlignment="Center" Text="{Binding Name}" />
                     </StackPanel>
                 </HierarchicalDataTemplate>

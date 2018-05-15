@@ -39,22 +39,28 @@ namespace OpcUa.Client.Core
 
         public TEntity Add(TEntity entity)
         {
-            return DbSet.Add(entity);
+            var addedEntity = DbSet.Add(entity);
+            Context.SaveChanges();
+            return addedEntity;
         }
 
-        public void AddRange(IEnumerable<TEntity> entities)
+        public IEnumerable<TEntity> AddRange(IEnumerable<TEntity> entities)
         {
-            DbSet.AddRange(entities);
+            var addedEntities = DbSet.AddRange(entities);
+            Context.SaveChanges();
+            return addedEntities;
         }
 
         public void Remove(TEntity entity)
         {
             DbSet.Remove(entity);
+            Context.SaveChanges();
         }
 
         public void RemoveRange(IEnumerable<TEntity> entities)
         {
             DbSet.RemoveRange(entities);
+            Context.SaveChanges();
         }
     }
 }

@@ -5,69 +5,124 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:local="clr-namespace:OpcUa.Client.WPF"
       xmlns:core="clr-namespace:OpcUa.Client.Core;assembly=OpcUa.Client.Core"
+      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
       mc:Ignorable="d"
       d:DesignHeight="600" 
       d:DesignWidth="1000"
       >
-    <Border Background="{StaticResource ForegroundLightBrush}">
-        <DockPanel>
-            <StackPanel DockPanel.Dock="Top">
-                <local:MenuBar DataContext="{Binding MenuBarViewModel}"/>
-                <local:MenuToolBar DataContext="{Binding MenuToolBarViewModel}"/>
-            </StackPanel>
+    <Page.Resources>
+        <Style TargetType="{x:Type TabItem}">
+            <Setter Property="HeaderTemplate">
+                <Setter.Value>
+                    <DataTemplate>
+                        <ContentPresenter>
+                            <ContentPresenter.Content>
+                                <TextBlock Padding="10 10"
+                                           Text="{TemplateBinding Content}"
+                                           />
+                            </ContentPresenter.Content>
+                        </ContentPresenter>
+                    </DataTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Page.Resources>
+    <DockPanel Background="{StaticResource MaterialDesignLightBackground}">
+        <!-- TOP -->
+        <StackPanel DockPanel.Dock="Top">
+            <local:MenuBar DataContext="{Binding MenuBarViewModel}"/>
+            <local:MenuToolBar DataContext="{Binding MenuToolBarViewModel}"/>
+        </StackPanel>
 
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
+        <!-- LEFT -->
+        <materialDesign:Card Background="{DynamicResource MaterialDesignBackground}"
+                             VerticalAlignment="Stretch"
+                             x:Name="Expanders">
+            <StackPanel DockPanel.Dock="Left"
+                        Orientation="Horizontal"
+                        >
 
-                <!-- First Column-->
-                <Grid Grid.Column="0">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
+                <!-- First Item -->
+                <Expander ExpandDirection="Right">
+                    <Expander.Header>
+                        <TextBlock Text="Server address space"
+                                   RenderTransformOrigin=".5,.5"
+                                   >
+                            <TextBlock.LayoutTransform>
+                                <RotateTransform Angle="90"/>
+                            </TextBlock.LayoutTransform>
+                        </TextBlock>
+                    </Expander.Header>
+                    <GroupBox Height="{Binding ActualHeight, ElementName=Expanders}"
+                              Header="Server address space"
+                              Style="{DynamicResource MaterialDesignCardGroupBox}"
+                              VerticalAlignment="Stretch">
+                        <GroupBox.HeaderTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon Kind="Server"
+                                                             Height="16"
+                                                             Width="24"
+                                                             VerticalAlignment="Center"
+                                                             />
+                                    <TextBlock Margin="8,0,0,0" 
+                                               VerticalAlignment="Center"
+                                               Style="{DynamicResource MaterialDesignSubheadingTextBlock}"
+                                               Text="{Binding}"
+                                               />
+                                </StackPanel>
+                            </DataTemplate>
+                        </GroupBox.HeaderTemplate>
+                        <local:TreeView MinWidth="200"
+                                        DataContext="{Binding NodetreeViewModel}"
+                                        />
+                    </GroupBox>
+                </Expander>
 
-                    <TextBlock Text="Server address space"
-                               FontSize="{StaticResource FontSizeLarge}"/>
+                <Border Background="{DynamicResource MaterialDesignDivider}"
+                        Width="1"
+                        VerticalAlignment="Stretch"
+                        SnapsToDevicePixels="True"
+                        />
 
-                    <local:TreeView Grid.Row="1"
-                                    MinWidth="200"
-                                    DataContext="{Binding NodetreeViewModel}"
-                                    />
-                </Grid>
-               
-
-                <!-- Second Column-->
-                <Grid Grid.Column="1">
-                    <ScrollViewer VerticalScrollBarVisibility="Auto">
-                        <local:AttributeInfo MinWidth="300"
+                <!-- Second Item -->
+                <Expander ExpandDirection="Right">
+                    <Expander.Header>
+                        <TextBlock Text="Choosen Node"
+                                   RenderTransformOrigin=".5,.5">
+                            <TextBlock.LayoutTransform>
+                                <RotateTransform Angle="90"/>
+                            </TextBlock.LayoutTransform>
+                        </TextBlock>
+                    </Expander.Header>
+                    <GroupBox Height="{Binding ActualHeight, ElementName=Expanders}"
+                              Header="Choosen Node"
+                              Style="{DynamicResource MaterialDesignCardGroupBox}">
+                        <local:AttributeInfo MinWidth="200"
                                              DataContext="{Binding NodeAttributesViewModel}"
                                              />
-                    </ScrollViewer>
-                </Grid>
+                    </GroupBox>
+                </Expander>
+            </StackPanel>
+        </materialDesign:Card>
 
-                <!-- Third Column-->
-                <TabControl Grid.Column="2">
-                    <TabItem Header="Notifications">
-                        <local:Notification DataContext="{Binding NotificationViewModel}"/>
-                    </TabItem>
+        <!-- RIGHT -->
+        <local:TabControlExtension DockPanel.Dock="Right">
+            <TabItem Header="Notifications">
+                <local:Notification DataContext="{Binding NotificationViewModel}"/>
+            </TabItem>
 
-                    <TabItem Header="Archive">
-                        <local:Archive DataContext="{Binding ArchiveViewModel}"/>
-                    </TabItem>
+            <TabItem Header="Archive">
+                <local:Archive DataContext="{Binding ArchiveViewModel}"/>
+            </TabItem>
 
-                    <TabItem Header="Archive Chart">
-                        <local:ZoomChart DataContext="{Binding ZoomChartViewModel}"/>
-                    </TabItem>
+            <TabItem Header="Archive Chart">
+                <local:ZoomChart DataContext="{Binding ZoomChartViewModel}"/>
+            </TabItem>
 
-                    <TabItem Header="Live Chart">
-                        <local:LiveChart DataContext="{Binding LiveChartViewModel}"/>
-                    </TabItem>
-                </TabControl>
-            </Grid>
-        </DockPanel>
-    </Border>
+            <TabItem Header="Live Chart">
+                <local:LiveChart DataContext="{Binding LiveChartViewModel}"/>
+            </TabItem>
+        </local:TabControlExtension>
+    </DockPanel>
 </local:BasePage>

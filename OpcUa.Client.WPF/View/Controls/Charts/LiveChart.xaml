@@ -5,28 +5,26 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:OpcUa.Client.WPF"
              xmlns:wpf="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
-             xmlns:fa="http://schemas.fontawesome.io/icons/"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d" 
              d:DesignHeight="450" 
              d:DesignWidth="800"
              >
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"></ColumnDefinition>
-            <ColumnDefinition Width="auto"></ColumnDefinition>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="auto"/>
         </Grid.ColumnDefinitions>
 
         <wpf:CartesianChart Grid.Column="0" 
-                            AnimationsSpeed="0:0:0.5" 
-                            Hoverable="True"
-                            Zoom="Xy"
-                            Series="{Binding SeriesCollection}" 
+                            AnimationsSpeed="0:0:1" 
+                            Series="{Binding SeriesCollection, Mode=TwoWay}" 
                             >
 
             <wpf:CartesianChart.AxisX>
                 <wpf:Axis LabelFormatter="{Binding DateTimeFormatter}" 
-                          MaxValue="{Binding AxisMax}" 
-                          MinValue="{Binding AxisMin}"
+                          MaxValue="{Binding AxisMax, Mode=TwoWay}" 
+                          MinValue="{Binding AxisMin, Mode=TwoWay}"
                           Unit="{Binding AxisUnit}"
                           >
                     <wpf:Axis.Separator>
@@ -36,55 +34,63 @@
             </wpf:CartesianChart.AxisX>
         </wpf:CartesianChart>
 
-        <StackPanel Grid.Column="1">
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
             <Button Content="Add"
                     Padding="10 5"
                     Command="{Binding AddCommand}"
                     />
-            <Button Content="Remove"
+            <Button Grid.Row="1"
+                    Content="Remove"
                     Padding="10 5"
                     Command="{Binding RemoveCommand}"
                     />
 
-            <ListView ItemsSource="{Binding Variables}"
+            <ListView Grid.Row="2"
+                      ItemsSource="{Binding Variables}"
                       SelectedItem="{Binding SelectedVariable}"
-                      Background="Transparent"
-                      BorderThickness="0"
                       SelectionMode="Single"
                       SelectedIndex="0"
-                      MinHeight="75px"
+                      ItemContainerStyle="{StaticResource ListViewItem}"
                       >
                 <ListView.ItemTemplate>
                     <DataTemplate>
-                        <Border BorderThickness="1">
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto"/>
-                                    <ColumnDefinition Width="Auto"/>
-                                </Grid.ColumnDefinitions>
+                        <Grid Height="40"
+                              DataContext="{Binding }"
+                              VerticalAlignment="Center"
+                              HorizontalAlignment="Stretch"
+                              >
 
-                                <fa:ImageAwesome Width="10" 
-                                                 Margin="3"
-                                                 Foreground="{Binding Color, Converter={local:StringRgbToBrushConverter}}"
-                                                 Icon="Times"
-                                                 />
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="5"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
 
-                                <StackPanel Grid.Column="1">
-                                    <TextBlock Padding="10 5"
-                                               VerticalAlignment="Center" 
-                                               Text="{Binding Name}"
-                                    />
-                                    <TextBlock Padding="10 5"
-                                               VerticalAlignment="Center" 
-                                               Text="{Binding NodeId}"
-                                    />
-                                </StackPanel>
-                            </Grid>
-                        </Border>
+                            <materialDesign:PackIcon Kind="Close"
+                                                     Foreground="{Binding Color, Converter={local:StringRgbToBrushConverter}}"
+                                                     Background="{StaticResource PrimaryHueLightBrush}"
+                                                     HorizontalAlignment="Stretch"
+                                                     VerticalAlignment="Stretch"
+                                                     Height="40"
+                                                     Width="40"
+                                                     >
+
+                            </materialDesign:PackIcon>
+                            <TextBlock Grid.Column="2"
+                                       Text="{Binding Name}"
+                                       VerticalAlignment="Center"
+                                       Padding="5"
+                                       />
+                        </Grid>
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
-
-        </StackPanel>
+        </Grid>
     </Grid>
 </UserControl>

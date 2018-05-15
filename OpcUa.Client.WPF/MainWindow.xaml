@@ -11,7 +11,12 @@
         MinHeight="{Binding WindowMinimumHeight}"
         Deactivated="MainWindow_OnDeactivated"
         Activated="MainWindow_OnActivated"
-        Title="OPC Ua Client" 
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        Background="{DynamicResource MaterialDesignPaper}"
+        TextElement.FontWeight="Medium"
+        TextElement.FontSize="14"
+        FontFamily="pack://application:,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto"
+        Title="Opc Ua Client" 
         Height="auto" 
         Width="auto">
     <Grid>
@@ -20,12 +25,16 @@
         </Grid.RowDefinitions>
 
         <!-- Dimmed overlay if application is not focused -->
+        <!--
         <Border Grid.RowSpan="1"
-                Opacity="{Binding DimmableOverlayVisible, Converter={local:OpacityConverter}}"
+                Opacity="{Binding DimmableOverlayVisible, Converter={local:BoolToOpacityConverter}}"
                 Panel.ZIndex="1"
-                Visibility="Collapsed">
-            <Border Background="{StaticResource ForegroundVeryDarkBrush}"/>
-        </Border>
+                Visibility="Collapsed"
+                >
+            -->
+        <!--<Border Background="{StaticResource ForegroundVeryDarkBrush}"/>-->
+        <!--
+        </Border>-->
 
         <!-- Frame where are changing pages -->
         <Frame
