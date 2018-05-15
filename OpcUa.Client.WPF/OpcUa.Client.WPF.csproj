@@ -27,9 +27,12 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
+    <SupportUrl>https://github.com/magiino/BakalarskaPraca-OpcUa.Client</SupportUrl>
+    <ErrorReportUrl>https://github.com/magiino/BakalarskaPraca-OpcUa.Client</ErrorReportUrl>
     <TargetCulture>en</TargetCulture>
     <ProductName>OpcUaClient</ProductName>
     <PublisherName>Marek Magáth</PublisherName>
+    <SuiteName>OpcUaClient</SuiteName>
     <ApplicationRevision>0</ApplicationRevision>
     <ApplicationVersion>1.0.0.0</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
